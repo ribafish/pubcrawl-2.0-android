@@ -1,4 +1,4 @@
-package com.ws1617.iosl.pubcrawl20;
+package com.ws1617.iosl.pubcrawl20.NewEvent;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
@@ -10,29 +10,22 @@ import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ImageSpan;
 
-import com.ws1617.iosl.pubcrawl20.Chat.ChatFragment;
-import com.ws1617.iosl.pubcrawl20.CrawlSearch.CrawlSearchFragment;
-import com.ws1617.iosl.pubcrawl20.Current.CurrentFragment;
-import com.ws1617.iosl.pubcrawl20.Profile.ProfileFragment;
+import com.ws1617.iosl.pubcrawl20.R;
 
 /**
- * Created by gaspe on 8. 11. 2016.
+ * Created by gaspe on 9. 11. 2016.
  */
-/**
- * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
- * one of the sections/tabs/pages.
- */
-public class MainFragmentPagerAdapter extends FragmentPagerAdapter {
-    private static int PAGES_NUM  = 4;
+
+public class NewEventPagerAdapter extends FragmentPagerAdapter{
+    private static int PAGES_NUM  = 3;
     private Context context;
     private int[] imageResId = {
-            R.drawable.ic_search_24dp,
-            R.drawable.ic_chat_bubble_24dp,
-            R.drawable.ic_info_outline_24dp,
-            R.drawable.ic_person
+            R.drawable.ic_assignment,
+            R.drawable.ic_pin_drop,
+            R.drawable.ic_share
     };
 
-    public MainFragmentPagerAdapter(FragmentManager fm, Context context) {
+    public NewEventPagerAdapter(FragmentManager fm, Context context) {
         super(fm);
         this.context = context;
     }
@@ -41,15 +34,13 @@ public class MainFragmentPagerAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             case 0:
-                return new CrawlSearchFragment();
+                return new NewEventSettingsFragment();
             case 1:
-                return new ChatFragment();
+                return new NewEventRouteFragment();
             case 2:
-                return new CurrentFragment();
-            case 3:
-                return new ProfileFragment();
+                return new NewEventShareFragment();
             default:
-                return new CrawlSearchFragment();
+                return new NewEventSettingsFragment();
         }
     }
 
@@ -69,4 +60,5 @@ public class MainFragmentPagerAdapter extends FragmentPagerAdapter {
         sb.setSpan(imageSpan, 0, 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         return sb;
     }
+
 }

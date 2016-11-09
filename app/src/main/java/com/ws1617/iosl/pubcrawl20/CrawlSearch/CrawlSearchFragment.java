@@ -38,6 +38,8 @@ public class CrawlSearchFragment extends Fragment implements OnMapReadyCallback{
 
         mapFragment.getMapAsync(this);
 
+        setRetainInstance(true);
+
         return rootView;
     }
 

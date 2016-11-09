@@ -2,31 +2,30 @@
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/chat_content"
+    android:id="@+id/new_event_content"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="false"
-    tools:context="com.ws1617.iosl.pubcrawl20.Chat.ChatFragment" >
-
+    android:fitsSystemWindows="true"
+    tools:context="com.ws1617.iosl.pubcrawl20.NewEvent.NewEventActivity" >
 
     <android.support.design.widget.AppBarLayout
-        android:id="@+id/chat_appbar"
+        android:id="@+id/new_event_appbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="0dp"
-        android:theme="@style/AppTheme.NoActionBar">
+        android:paddingTop="@dimen/appbar_padding_top"
+        android:theme="@style/AppTheme.AppBarOverlay">
 
         <android.support.design.widget.TabLayout
-            android:id="@+id/chat_tabs"
+            android:id="@+id/new_event_tabs"
             style="@style/MyCustomTabLayout"
             app:tabTextAppearance="@style/MyCustomTextAppearance"
             android:layout_width="match_parent"
-            android:layout_height="30dp" />
+            android:layout_height="34dp" />
 
     </android.support.design.widget.AppBarLayout>
 
     <android.support.v4.view.ViewPager
-        android:id="@+id/chat_pager"
+        android:id="@+id/new_event_pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />

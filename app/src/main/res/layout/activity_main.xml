@@ -20,7 +20,7 @@
             style="@style/MyCustomTabLayout"
             app:tabTextAppearance="@style/MyCustomTextAppearance"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="34dp" />
 
     </android.support.design.widget.AppBarLayout>
 
