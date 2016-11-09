@@ -1,4 +1,4 @@
-package com.ws1617.iosl.pubcrawl20.Home;
+package com.ws1617.iosl.pubcrawl20.CrawlSearch;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -20,13 +20,13 @@ import com.ws1617.iosl.pubcrawl20.R;
  * Created by gaspe on 8. 11. 2016.
  */
 
-public class HomeFragment extends Fragment implements OnMapReadyCallback{
+public class CrawlSearchFragment extends Fragment implements OnMapReadyCallback{
     public static final String TITLE = "Home";
-    private static final String TAG = "HomeFragment";
+    private static final String TAG = "CrawlSearchFragment";
     private View rootView;
     private GoogleMap map;
 
-    public HomeFragment () {}
+    public CrawlSearchFragment() {}
 
     @Nullable
     @Override
@@ -34,7 +34,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback{
         SupportMapFragment mapFragment = new SupportMapFragment();
         FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
         fragmentTransaction.add(R.id.homeMapView, mapFragment).commit();
-        rootView = inflater.inflate(R.layout.fragment_home, container, false);
+        rootView = inflater.inflate(R.layout.fragment_crawl_search, container, false);
 
         mapFragment.getMapAsync(this);
 
