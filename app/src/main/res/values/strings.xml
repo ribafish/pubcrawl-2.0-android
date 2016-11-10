@@ -5,4 +5,10 @@
     <string name="chat_fragment_title">Chat</string>
     <string name="profile_fragment_title">Profile</string>
     <string name="new_event_toolbar_title">New PubCrawl</string>
+
+
+    <!--Create new event strings-->
+    <string name="event_title">Event title</string>
+    <string name="event_public">public event</string>
+    <string name="event_description">Event description</string>
 </resources>
