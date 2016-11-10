@@ -21,7 +21,7 @@
             style="@style/MyCustomTabLayout"
             app:tabTextAppearance="@style/MyCustomTextAppearance"
             android:layout_width="match_parent"
-            android:layout_height="30dp" />
+            android:layout_height="@dimen/second_bar_height" />
 
     </android.support.design.widget.AppBarLayout>
 

@@ -17,9 +17,10 @@ public class NewEventActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_event);
 
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setTitle(R.string.new_event_toolbar_title);
-        actionBar.setDisplayHomeAsUpEnabled(true);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.new_event_toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
