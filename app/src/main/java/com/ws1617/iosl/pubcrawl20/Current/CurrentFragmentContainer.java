@@ -13,9 +13,9 @@ import com.ws1617.iosl.pubcrawl20.R;
  * Created by gaspe on 9. 11. 2016.
  */
 
-public class CurrentFragment extends Fragment {
+public class CurrentFragmentContainer extends Fragment {
     public static final String TITLE = "Current";
-    private static final String TAG = "CurrentFragment";
+    private static final String TAG = "CurrentFragmentContainer";
     private View rootView;
 
     @Nullable

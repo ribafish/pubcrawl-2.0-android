@@ -5,4 +5,10 @@
     <string name="chat_fragment_title">Chat</string>
     <string name="profile_fragment_title">Profile</string>
     <string name="new_event_toolbar_title">New PubCrawl</string>
+
+
+    <!-- Preferences titles -->
+    <string name="pref_profile_title">Profile</string>
+    <string name="pref_settings_title">Application settings</string>
+    <string name="pref_notifications">Notifications</string>
 </resources>

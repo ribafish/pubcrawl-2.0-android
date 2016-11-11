@@ -12,8 +12,8 @@ import android.text.style.ImageSpan;
 
 import com.ws1617.iosl.pubcrawl20.Chat.ChatFragment;
 import com.ws1617.iosl.pubcrawl20.CrawlSearch.CrawlSearchFragment;
-import com.ws1617.iosl.pubcrawl20.Current.CurrentFragment;
-import com.ws1617.iosl.pubcrawl20.Profile.ProfileFragment;
+import com.ws1617.iosl.pubcrawl20.Current.CurrentFragmentContainer;
+import com.ws1617.iosl.pubcrawl20.Settings.SettingsFragmentContainer;
 
 /**
  * Created by gaspe on 8. 11. 2016.
@@ -29,7 +29,7 @@ public class MainFragmentPagerAdapter extends FragmentPagerAdapter {
             R.drawable.ic_search_24dp,
             R.drawable.ic_chat_bubble_24dp,
             R.drawable.ic_info_outline_24dp,
-            R.drawable.ic_person
+            R.drawable.ic_settings
     };
 
     public MainFragmentPagerAdapter(FragmentManager fm, Context context) {
@@ -45,9 +45,9 @@ public class MainFragmentPagerAdapter extends FragmentPagerAdapter {
             case 1:
                 return new ChatFragment();
             case 2:
-                return new CurrentFragment();
+                return new CurrentFragmentContainer();
             case 3:
-                return new ProfileFragment();
+                return new SettingsFragmentContainer();
             default:
                 return new CrawlSearchFragment();
         }
