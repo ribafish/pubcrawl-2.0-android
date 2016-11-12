@@ -1,5 +1,6 @@
 package com.ws1617.iosl.pubcrawl20.CrawlSearch;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -7,6 +8,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -14,6 +16,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.ws1617.iosl.pubcrawl20.Event.EventDetailsActivity;
 import com.ws1617.iosl.pubcrawl20.R;
 
 /**
@@ -28,6 +31,8 @@ public class CrawlSearchFragment extends Fragment implements OnMapReadyCallback{
 
     public CrawlSearchFragment() {}
 
+
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -39,6 +44,15 @@ public class CrawlSearchFragment extends Fragment implements OnMapReadyCallback{
         mapFragment.getMapAsync(this);
 
         setRetainInstance(true);
+
+        Button button = (Button) rootView.findViewById(R.id.btn1);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getContext(), EventDetailsActivity.class);
+                startActivity(intent);
+            }
+        });
 
         return rootView;
     }

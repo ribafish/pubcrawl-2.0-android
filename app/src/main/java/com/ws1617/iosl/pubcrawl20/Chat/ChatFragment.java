@@ -25,13 +25,6 @@ public class ChatFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_chat, container, false);
 
-        // Set up the ViewPager with the sections adapter.
-        ViewPager mViewPager = (ViewPager) rootView.findViewById(R.id.chat_pager);
-        mViewPager.setAdapter(new ChatFragmentPagerAdapter(getChildFragmentManager(), getContext()));
-
-        TabLayout tabLayout = (TabLayout) rootView.findViewById(R.id.chat_tabs);
-        tabLayout.setupWithViewPager(mViewPager);
-
         return rootView;
     }
 
