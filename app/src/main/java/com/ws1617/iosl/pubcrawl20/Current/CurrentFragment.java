@@ -1,4 +1,4 @@
-package com.ws1617.iosl.pubcrawl20.Settings;
+package com.ws1617.iosl.pubcrawl20.Current;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -10,19 +10,18 @@ import android.view.ViewGroup;
 import com.ws1617.iosl.pubcrawl20.R;
 
 /**
- * Created by gaspe on 10. 11. 2016.
+ * Created by gaspe on 9. 11. 2016.
  */
 
-public class SettingsFragmentContainer extends Fragment {
-    private static final String TAG = "SettingsFragmentContainer";
+public class CurrentFragment extends Fragment {
+    public static final String TITLE = "Current";
+    private static final String TAG = "CurrentFragment";
     private View rootView;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.fragment_settings, container, false);
+        rootView = inflater.inflate(R.layout.fragment_current, container, false);
         return rootView;
     }
-
-
 }
