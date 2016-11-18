@@ -24,14 +24,14 @@ public class NewEventActivity extends AppCompatActivity {
 
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
-        FragmentPagerAdapter fpa = new NewEventPagerAdapter(getSupportFragmentManager(), getApplicationContext());
+        FragmentPagerAdapter fragmentPagerAdapter = new NewEventPagerAdapter(getSupportFragmentManager(), getApplicationContext());
 
         // Set up the ViewPager with the sections adapter.
-        ViewPager vp = (ViewPager) findViewById(R.id.new_event_pager);
-        vp.setAdapter(fpa);
+        ViewPager viewPager = (ViewPager) findViewById(R.id.new_event_pager);
+        viewPager.setAdapter(fragmentPagerAdapter);
 //        mViewPager.setOffscreenPageLimit(mainFragmentPagerAdapter.getCount());
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.new_event_tabs);
-        tabLayout.setupWithViewPager(vp);
+        tabLayout.setupWithViewPager(viewPager);
     }
 }

@@ -17,6 +17,8 @@ public class NewEventRouteFragment extends Fragment {
 
     public NewEventRouteFragment() {
         // Required empty public constructor
+
+
     }
 
 
