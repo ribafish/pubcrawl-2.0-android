@@ -13,7 +13,7 @@ import android.text.style.ImageSpan;
 import com.ws1617.iosl.pubcrawl20.Chat.ChatFragment;
 import com.ws1617.iosl.pubcrawl20.CrawlSearch.CrawlSearchFragment;
 import com.ws1617.iosl.pubcrawl20.Current.CurrentFragment;
-import com.ws1617.iosl.pubcrawl20.Profile.ProfileFragment;
+import com.ws1617.iosl.pubcrawl20.NotificationHistory.NotificationHistoryFragment;
 
 /**
  * Created by gaspe on 8. 11. 2016.
@@ -26,10 +26,10 @@ public class MainFragmentPagerAdapter extends FragmentPagerAdapter {
     private static int PAGES_NUM  = 4;
     private Context context;
     private int[] imageResId = {
-            R.drawable.ic_search_24dp,
-            R.drawable.ic_chat_bubble_24dp,
+            R.drawable.beer_white,
             R.drawable.ic_info_outline_24dp,
-            R.drawable.ic_person
+            R.drawable.ic_chat_bubble_24dp,
+            R.drawable.ic_assignment
     };
 
     public MainFragmentPagerAdapter(FragmentManager fm, Context context) {
@@ -43,11 +43,11 @@ public class MainFragmentPagerAdapter extends FragmentPagerAdapter {
             case 0:
                 return new CrawlSearchFragment();
             case 1:
-                return new ChatFragment();
-            case 2:
                 return new CurrentFragment();
+            case 2:
+                return new ChatFragment();
             case 3:
-                return new ProfileFragment();
+                return new NotificationHistoryFragment();
             default:
                 return new CrawlSearchFragment();
         }
