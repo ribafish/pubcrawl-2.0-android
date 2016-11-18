@@ -41,7 +41,12 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.ws1617.iosl.pubcrawl20.MainActivity" />
         </activity>
-        <activity android:name=".Event.EventDetailsActivity"></activity>
+        <activity android:name=".Event.EventDetailsActivity" />
+
+        <activity android:name=".ScanQR.ScanQrActivity"
+            android:theme="@style/AppTheme">
+
+        </activity>
     </application>
 
 </manifest>

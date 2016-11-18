@@ -16,6 +16,7 @@ import android.view.View;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 import com.ws1617.iosl.pubcrawl20.NewEvent.NewEventActivity;
+import com.ws1617.iosl.pubcrawl20.ScanQR.ScanQrActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -83,7 +84,8 @@ public class MainActivity extends AppCompatActivity {
         fabScanQR.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "TODO", Snackbar.LENGTH_SHORT).show();
+                Intent intent = new Intent(context, ScanQrActivity.class);
+                context.startActivity(intent);
                 fabMenu.close(true);
             }
         });
