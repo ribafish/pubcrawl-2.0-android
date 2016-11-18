@@ -26,6 +26,13 @@
             android:text="Go to event details"
             android:id="@+id/btn1"/>
 
+        <Button
+            android:text="Refresh"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/btn_refresh"
+            android:layout_weight="1" />
+
     </LinearLayout>
 
 </LinearLayout>
