@@ -17,4 +17,9 @@
         android:icon="@drawable/ic_sync_black_24dp"
         android:title="@string/pref_header_data_sync" />
 
+    <header
+        android:fragment="com.ws1617.iosl.pubcrawl20.SettingsActivity$DevelopmentFragment"
+        android:icon="@drawable/ic_code_black_24dp"
+        android:title="Development" />
+
 </preference-headers>

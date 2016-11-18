@@ -1,0 +1,14 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <EditTextPreference
+        android:capitalize="none"
+        android:inputType="textAutoComplete"
+        android:key="server_ip"
+        android:maxLines="1"
+        android:selectAllOnFocus="true"
+        android:hint="localhost:8080"
+        android:singleLine="true"
+        android:title="Server address" />
+
+
+</PreferenceScreen>
