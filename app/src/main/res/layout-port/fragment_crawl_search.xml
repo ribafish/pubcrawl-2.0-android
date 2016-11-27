@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:animateLayoutChanges="true"
     xmlns:tools="http://schemas.android.com/tools">
 
     <FrameLayout
@@ -10,12 +11,14 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
+        android:animateLayoutChanges="true"
         class="com.google.android.gms.maps.SupportMapFragment"/>
 
     <LinearLayout
         android:layout_below="@id/homeMapView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:animateLayoutChanges="true"
         android:layout_weight="1">
 
         <Button
@@ -25,6 +28,20 @@
             android:gravity="center_horizontal"
             android:text="Go to event details"
             android:id="@+id/btn1"/>
+
+        <Button
+            android:text="Refresh"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/btn_refresh"
+            android:layout_weight="1" />
+
+        <Button
+            android:text="Hide/Show"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/btn_hide"
+            android:layout_weight="1" />
 
     </LinearLayout>
 
