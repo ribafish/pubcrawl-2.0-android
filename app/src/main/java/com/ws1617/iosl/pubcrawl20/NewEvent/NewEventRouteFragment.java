@@ -30,8 +30,9 @@ public class NewEventRouteFragment extends Fragment {
     }
 
 
-    public Event.EventPubInfo CollectPublInfo(){
-        Event.EventPubInfo
+    public Event.EventPubInfo CollectPublInfo() {
+        Event.EventPubInfo eventPubInfo = new Event().new EventPubInfo();
+        return eventPubInfo;
     }
 
 }
