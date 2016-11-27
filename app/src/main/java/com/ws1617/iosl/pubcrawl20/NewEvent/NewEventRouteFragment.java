@@ -29,4 +29,9 @@ public class NewEventRouteFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_new_event_route, container, false);
     }
 
+
+    public Event.EventPubInfo CollectPublInfo(){
+        Event.EventPubInfo
+    }
+
 }

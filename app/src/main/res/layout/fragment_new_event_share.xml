@@ -10,4 +10,10 @@
         android:layout_height="match_parent"
         android:text="new Event Share / Invite screen" />
 
+   <android.support.v7.widget.RecyclerView
+       android:id="@+id/new_event_create_new_share"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content">
+
+   </android.support.v7.widget.RecyclerView>
 </FrameLayout>
