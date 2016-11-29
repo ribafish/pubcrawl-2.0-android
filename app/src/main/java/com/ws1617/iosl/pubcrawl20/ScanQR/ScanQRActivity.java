@@ -5,7 +5,7 @@ import android.os.Bundle;
 
 import com.ws1617.iosl.pubcrawl20.R;
 
-public class ScanQrActivity extends AppCompatActivity {
+public class ScanQRActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

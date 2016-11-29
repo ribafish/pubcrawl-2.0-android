@@ -1,4 +1,4 @@
-package com.ws1617.iosl.pubcrawl20.CrawlSearch;
+package com.ws1617.iosl.pubcrawl20.Models;
 
 /**
  * Created by gaspe on 18. 11. 2016.

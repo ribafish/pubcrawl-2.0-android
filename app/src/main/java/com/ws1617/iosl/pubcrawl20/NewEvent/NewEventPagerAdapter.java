@@ -18,7 +18,7 @@ import java.util.List;
  * Created by gaspe on 9. 11. 2016.
  */
 
-public class NewEventPagerAdapter extends FragmentPagerAdapter {
+public class NewEventPagerAdapter extends FragmentPagerAdapter  {
 
     List<Fragment> fragmentsList;
 
@@ -69,5 +69,6 @@ public class NewEventPagerAdapter extends FragmentPagerAdapter {
         sb.setSpan(imageSpan, 0, 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         return sb;
     }
+
 
 }

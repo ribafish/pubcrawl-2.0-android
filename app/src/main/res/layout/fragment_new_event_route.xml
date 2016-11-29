@@ -1,13 +1,27 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.ws1617.iosl.pubcrawl20.NewEvent.NewEventRouteFragment">
 
-    <!-- TODO: Update blank fragment layout -->
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="New event route" />
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="selected pubs list:" />
 
-</FrameLayout>
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/event_new_selected_pub_list"
+        android:layout_width="wrap_content"
+
+        android:layout_height="wrap_content"
+        android:background="@android:color/holo_blue_bright"></android.support.v7.widget.RecyclerView>
+
+    <Button
+        android:id="@+id/event_new_add_pub"
+        android:layout_below="@id/event_new_selected_pub_list"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@android:drawable/ic_input_add" />
+</RelativeLayout>

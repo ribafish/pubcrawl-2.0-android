@@ -2,33 +2,49 @@ package com.ws1617.iosl.pubcrawl20.NewEvent;
 
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
+import com.ws1617.iosl.pubcrawl20.Models.Event;
 import com.ws1617.iosl.pubcrawl20.R;
 
-public class NewEventActivity extends AppCompatActivity {
+import java.util.ArrayList;
+import java.util.List;
+
+public class NewEventActivity extends AppCompatActivity  {
 
     FloatingActionButton mCreateEventBtn;
-    NewEventController eventController;
+    NewEventPagerAdapter mFragmentPagerAdapter;
+    private  Event mEvent;
+    private List<Fragment> fragmentsList;
+     final static String EVENT_TAG = "EVENT_TAG";
+
+
+    public void initFragmentList() {
+
+        fragmentsList = new ArrayList<>();
+        fragmentsList.add(new NewEventGeneralFragment());
+        fragmentsList.add(new NewEventRouteFragment());
+        fragmentsList.add(new NewEventShareFragment());
+
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_event);
-        eventController = new NewEventController();
 
         if (savedInstanceState == null)
-            eventController.initNewEvent();
-
+            mEvent = new Event();
         else {
-            Event oldEvent = (Event) savedInstanceState.getSerializable(eventController.EVENT_TAG);
-            eventController.restoreOldEvent(oldEvent);
+            mEvent = (Event) savedInstanceState.getSerializable(EVENT_TAG);
         }
+        initFragmentList();
         initView();
 
     }
@@ -42,13 +58,13 @@ public class NewEventActivity extends AppCompatActivity {
 
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
-        NewEventPagerAdapter fragmentPagerAdapter = new NewEventPagerAdapter
+         mFragmentPagerAdapter = new NewEventPagerAdapter
                 (getSupportFragmentManager(), getApplicationContext(),
-                        eventController.getFragmentList());
+                        fragmentsList);
 
         // Set up the ViewPager with the sections adapter.
         ViewPager viewPager = (ViewPager) findViewById(R.id.new_event_pager);
-        viewPager.setAdapter(fragmentPagerAdapter);
+        viewPager.setAdapter(mFragmentPagerAdapter);
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.new_event_tabs);
         tabLayout.setupWithViewPager(viewPager);
@@ -60,7 +76,15 @@ public class NewEventActivity extends AppCompatActivity {
     View.OnClickListener newEventClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            eventController.collectEventData();
+           onCollectDataClicked();
         }
     };
+
+
+    public void onCollectDataClicked() {
+        Event mEvent = new Event();
+        mEvent = ((NewEventGeneralFragment) fragmentsList.get(0)).updateGeneralInfo();
+        mEvent = ((NewEventRouteFragment) fragmentsList.get(1)).updatePubListInfo();
+
+    }
 }

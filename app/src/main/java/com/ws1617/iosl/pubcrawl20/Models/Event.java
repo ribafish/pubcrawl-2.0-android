@@ -1,4 +1,4 @@
-package com.ws1617.iosl.pubcrawl20.CrawlSearch;
+package com.ws1617.iosl.pubcrawl20.Models;
 
 import java.util.ArrayList;
 import java.util.Date;

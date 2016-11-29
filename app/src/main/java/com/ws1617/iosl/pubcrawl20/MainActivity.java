@@ -16,7 +16,7 @@ import android.view.View;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 import com.ws1617.iosl.pubcrawl20.NewEvent.NewEventActivity;
-import com.ws1617.iosl.pubcrawl20.ScanQR.ScanQrActivity;
+import com.ws1617.iosl.pubcrawl20.ScanQR.ScanQRActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -84,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
         fabScanQR.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(context, ScanQrActivity.class);
+                Intent intent = new Intent(context, ScanQRActivity.class);
                 context.startActivity(intent);
                 fabMenu.close(true);
             }
