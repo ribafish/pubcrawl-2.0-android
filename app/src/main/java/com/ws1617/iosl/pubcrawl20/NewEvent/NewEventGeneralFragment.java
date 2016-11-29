@@ -75,7 +75,7 @@ public class NewEventGeneralFragment extends Fragment {
         //outState.putSerializable(TAG, mEventPublicInfo);
     }
 
-    public Event updateGeneralInfo() {
+    public Event updateGeneralInfo(Event event) {
         String eventTitle = mEventTitleTxt.getText().toString();
         String eventDesc = mEventDescription.getText().toString();
         Date date = new Date();
@@ -85,7 +85,14 @@ public class NewEventGeneralFragment extends Fragment {
             e.printStackTrace();
         }
         boolean tracked = mTrackedSwitch.isChecked() ? true : false;
-        return new Event(eventTitle, date, eventDesc, tracked);
+
+        event.setDate(date);
+        event.setEventName(eventTitle);
+        event.setDescription(eventDesc);
+        event.setTracked(tracked);
+
+
+        return event;
     }
 
 

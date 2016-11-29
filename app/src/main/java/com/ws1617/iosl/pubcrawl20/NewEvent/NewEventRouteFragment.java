@@ -56,7 +56,7 @@ public class NewEventRouteFragment extends Fragment {
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         mSelectedPupListView.setLayoutManager(linearLayoutManager);
-        
+
         adapter = new SelectedPupListAdapter(mSelectedPupsList);
         mSelectedPupListView.setAdapter(adapter);
 
@@ -72,8 +72,8 @@ public class NewEventRouteFragment extends Fragment {
         }
     };
 
-    public Event updatePubListInfo() {
-        Event event = new Event();
+    public Event updatePubListInfo(Event event) {
+         event.addPubs(mSelectedPupsList);
         return event;
     }
 

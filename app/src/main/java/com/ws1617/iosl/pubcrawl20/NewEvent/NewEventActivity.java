@@ -83,8 +83,8 @@ public class NewEventActivity extends AppCompatActivity  {
 
     public void onCollectDataClicked() {
         Event mEvent = new Event();
-        mEvent = ((NewEventGeneralFragment) fragmentsList.get(0)).updateGeneralInfo();
-        mEvent = ((NewEventRouteFragment) fragmentsList.get(1)).updatePubListInfo();
+        mEvent = ((NewEventGeneralFragment) fragmentsList.get(0)).updateGeneralInfo(mEvent);
+        mEvent = ((NewEventRouteFragment) fragmentsList.get(1)).updatePubListInfo(mEvent);
 
     }
 }

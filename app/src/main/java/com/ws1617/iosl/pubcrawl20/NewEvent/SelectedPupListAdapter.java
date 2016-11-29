@@ -36,8 +36,9 @@ public class SelectedPupListAdapter extends RecyclerView.Adapter<SelectedPupList
     @Override
     public void onBindViewHolder(pupViewHolder holder, int position) {
         Pub pub = selectedPups.get(position);
-        holder.pubTime.setText(pub.getPubName());
         holder.pubName.setText(pub.getPubName());
+        holder.pubTime.setText("Date");
+
     }
 
     @Override
