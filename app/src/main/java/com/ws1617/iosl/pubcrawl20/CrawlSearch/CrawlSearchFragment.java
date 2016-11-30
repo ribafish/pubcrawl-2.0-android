@@ -245,7 +245,7 @@ public class CrawlSearchFragment extends Fragment implements OnMapReadyCallback,
      * @param pubs
      */
     private void drawEventOnMap(final long eventId, ArrayList<Pub> pubs) {
-        if (map != null) {
+        if (map != null && pubs != null) {
             ArrayList<LatLng> latLngs = new ArrayList<>();
             for (Pub pub : pubs) {
                 latLngs.add(pub.getLatLng());

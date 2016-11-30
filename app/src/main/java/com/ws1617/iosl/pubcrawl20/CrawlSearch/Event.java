@@ -178,13 +178,18 @@ public class Event {
     }
 
     public void setSelected(boolean selected) {
-        this.selected = selected;
 
-        if (polyline == null) return;
 
-        if (selected) {
+        if (polyline == null) {
+            this.selected = selected;
+            return;
+        }
+
+        if (selected && !this.selected) {
+            this.selected = true;
             this.polyline.setColor(Color.BLUE);
         } else {
+            this.selected = false;
             this.polyline.setColor(Color.GRAY);
         }
     }
