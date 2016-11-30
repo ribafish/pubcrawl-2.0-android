@@ -1,6 +1,7 @@
 package com.ws1617.iosl.pubcrawl20.CrawlSearch;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 
 import org.json.JSONObject;
 
@@ -14,6 +15,7 @@ public class Pub {
     private LatLng latLng;
     private int size;
     private JSONObject rawJson;
+    private Marker marker;
 
     public Pub(long id, String pubName, LatLng latLng, int size) {
         this.id = id;
@@ -63,5 +65,13 @@ public class Pub {
                 ", latLng=" + latLng +
                 ", size=" + size +
                 '}';
+    }
+
+    public Marker getMarker() {
+        return marker;
+    }
+
+    public void setMarker(Marker marker) {
+        this.marker = marker;
     }
 }

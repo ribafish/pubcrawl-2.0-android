@@ -1,5 +1,9 @@
 package com.ws1617.iosl.pubcrawl20.CrawlSearch;
 
+import android.graphics.Color;
+
+import com.google.android.gms.maps.model.Polyline;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -17,8 +21,11 @@ public class Event {
     private ArrayList<Pub> pubs;
     private Person owner;
     private ArrayList<Person> participants;
+    private Polyline polyline;
+    private boolean selected;
 
     public Event() {
+        this.selected = false;
     }
 
     public Event(String eventName, Date date, String description, boolean tracked) {
@@ -26,6 +33,7 @@ public class Event {
         this.date = date;
         this.description = description;
         this.tracked = tracked;
+        this.selected = false;
     }
 
     public Event(String eventName, Date date, String description, boolean tracked, ArrayList<Pub> pubs, Person owner, ArrayList<Person> participants) {
@@ -36,6 +44,7 @@ public class Event {
         this.pubs = pubs;
         this.owner = owner;
         this.participants = participants;
+        this.selected = false;
     }
 
     public Event addPub (Pub pub) {
@@ -156,4 +165,27 @@ public class Event {
 
     }
 
+    public Polyline getPolyline() {
+        return polyline;
+    }
+
+    public void setPolyline(Polyline polyline) {
+        this.polyline = polyline;
+    }
+
+    public boolean isSelected() {
+        return selected;
+    }
+
+    public void setSelected(boolean selected) {
+        this.selected = selected;
+
+        if (polyline == null) return;
+
+        if (selected) {
+            this.polyline.setColor(Color.BLUE);
+        } else {
+            this.polyline.setColor(Color.GRAY);
+        }
+    }
 }
