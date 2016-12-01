@@ -86,21 +86,6 @@ public class CrawlSearchFragment extends Fragment implements OnMapReadyCallback,
 
         setRetainInstance(true);
 
-        Button button = (Button) rootView.findViewById(R.id.btn1);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getContext(), EventDetailsActivity.class);
-                for (Event e:eventList){
-                    if (e.isSelected()) {
-                        intent.putExtra("eventId", e.getEventId());
-                        intent.putExtra("name", e.getEventName());
-                    }
-                }
-                startActivity(intent);
-            }
-        });
-
         Button refresh = (Button) rootView.findViewById(R.id.btn_refresh);
         refresh.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -129,24 +114,24 @@ public class CrawlSearchFragment extends Fragment implements OnMapReadyCallback,
         eventAdapter = new EventAdapter(eventList);
         recyclerView.addItemDecoration(new RecyclerViewDivider(getContext(), LinearLayoutManager.VERTICAL));
         recyclerView.setAdapter(eventAdapter);
-        recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getContext(), recyclerView, new ClickListener() {
-            @Override
-            public void onClick(View view, int position) {
-                for (Event e : eventList) {
-                    if (e.getEventId() == eventList.get(position).getEventId()) {
-                        e.setSelected(true);
-                    } else {
-                        e.setSelected(false);
-                    }
-                }
-                eventAdapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onLongClick(View view, int position) {
-
-            }
-        }));
+//        recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getContext(), recyclerView, new ClickListener() {
+//            @Override
+//            public void onClick(View view, int position) {
+//                for (Event e : eventList) {
+//                    if (e.getEventId() == eventList.get(position).getEventId()) {
+//                        e.setSelected(true);
+//                    } else {
+//                        e.setSelected(false);
+//                    }
+//                }
+//                eventAdapter.notifyDataSetChanged();
+//            }
+//
+//            @Override
+//            public void onLongClick(View view, int position) {
+//
+//            }
+//        }));
 
         return rootView;
     }
@@ -232,7 +217,8 @@ public class CrawlSearchFragment extends Fragment implements OnMapReadyCallback,
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Log.e(TAG, "eventsRequest: " + error.getLocalizedMessage());
+                        Log.e(TAG, "eventsRequest Error: " + error.toString());
+                        error.printStackTrace();
                     }
                 });
         // Add the request to the RequestQueue.
