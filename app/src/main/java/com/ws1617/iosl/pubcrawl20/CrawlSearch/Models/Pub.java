@@ -1,4 +1,4 @@
-package com.ws1617.iosl.pubcrawl20.CrawlSearch;
+package com.ws1617.iosl.pubcrawl20.CrawlSearch.Models;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;

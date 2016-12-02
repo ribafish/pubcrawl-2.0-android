@@ -1,6 +1,5 @@
 package com.ws1617.iosl.pubcrawl20.CrawlSearch;
 
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -28,7 +27,6 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -39,11 +37,12 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.maps.model.PolygonOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
-import com.ws1617.iosl.pubcrawl20.Event.EventDetailsActivity;
+import com.ws1617.iosl.pubcrawl20.CrawlSearch.Models.Event;
+import com.ws1617.iosl.pubcrawl20.CrawlSearch.Models.EventComparator;
+import com.ws1617.iosl.pubcrawl20.CrawlSearch.Models.Person;
+import com.ws1617.iosl.pubcrawl20.CrawlSearch.Models.Pub;
 import com.ws1617.iosl.pubcrawl20.R;
 
 import org.json.JSONArray;
@@ -54,6 +53,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Locale;
 
 /**
@@ -114,25 +114,6 @@ public class CrawlSearchFragment extends Fragment implements OnMapReadyCallback,
         eventAdapter = new EventAdapter(eventList);
         recyclerView.addItemDecoration(new RecyclerViewDivider(getContext(), LinearLayoutManager.VERTICAL));
         recyclerView.setAdapter(eventAdapter);
-//        recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getContext(), recyclerView, new ClickListener() {
-//            @Override
-//            public void onClick(View view, int position) {
-//                for (Event e : eventList) {
-//                    if (e.getEventId() == eventList.get(position).getEventId()) {
-//                        e.setSelected(true);
-//                    } else {
-//                        e.setSelected(false);
-//                    }
-//                }
-//                eventAdapter.notifyDataSetChanged();
-//            }
-//
-//            @Override
-//            public void onLongClick(View view, int position) {
-//
-//            }
-//        }));
-
         return rootView;
     }
 
@@ -248,7 +229,6 @@ public class CrawlSearchFragment extends Fragment implements OnMapReadyCallback,
                 }
             }
         }
-
         eventAdapter.notifyDataSetChanged();
     }
 
@@ -280,6 +260,8 @@ public class CrawlSearchFragment extends Fragment implements OnMapReadyCallback,
             Log.d(TAG, "Parsed event [" + i + "]: " + event);
             eventList.add(event);
         }
+        Collections.sort(eventList, new EventComparator(true, EventComparator.NAME));
+        eventAdapter.notifyDataSetChanged();
     }
 
     private Event parseJSONEvent (JSONObject jsonEvent) throws JSONException, ParseException {

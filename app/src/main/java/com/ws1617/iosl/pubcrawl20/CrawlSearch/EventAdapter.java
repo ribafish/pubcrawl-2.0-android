@@ -11,12 +11,11 @@ import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.ws1617.iosl.pubcrawl20.CrawlSearch.Models.Event;
 import com.ws1617.iosl.pubcrawl20.Event.EventDetailsActivity;
 import com.ws1617.iosl.pubcrawl20.R;
 
 import java.util.List;
-
-import static java.security.AccessController.getContext;
 
 /**
  * Created by gaspe on 30. 11. 2016.
@@ -75,6 +74,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
                 for (Event e : eventList) {
                     if (e.getEventId() == event.getEventId()) {
                         e.setSelected(true);
+
                     } else {
                         e.setSelected(false);
                     }
