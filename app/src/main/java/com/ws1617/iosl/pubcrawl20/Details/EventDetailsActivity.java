@@ -1,7 +1,11 @@
 package com.ws1617.iosl.pubcrawl20.Details;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.TabLayout;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -11,6 +15,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.ws1617.iosl.pubcrawl20.R;
+
+import java.util.ArrayList;
 
 public class EventDetailsActivity extends AppCompatActivity implements AppBarLayout.OnOffsetChangedListener {
 
@@ -25,10 +31,10 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
 
     private LinearLayout mCollapasableTitleContainer;
     private TextView mTitle;
-    private TextView mToolbarTitle;
     private TextView mSubtitle;
     private AppBarLayout mAppBarLayout;
     private Toolbar mToolbar;
+    private ImageCarouselPager imageCarouselPager;
 
     private long eventId;
     private String eventName;
@@ -42,9 +48,11 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
         mToolbar = (Toolbar) findViewById(R.id.event_details_toolbar);
         mAppBarLayout = (AppBarLayout) findViewById(R.id.event_details_appbar);
         mTitle = (TextView) findViewById(R.id.event_details_title);
-//        mToolbarTitle = (TextView) findViewById(R.id.event_details_toolbar_title);
         mSubtitle = (TextView) findViewById(R.id.event_details_subtitle);
         mCollapasableTitleContainer = (LinearLayout) findViewById(R.id.event_details_layout_title);
+        ViewPager viewPager = (ViewPager) findViewById(R.id.event_details_pager);
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.event_details_tabDots);
+
 
         mAppBarLayout.addOnOffsetChangedListener(this);
         mToolbar.setNavigationIcon(R.drawable.ic_arrow_back);
@@ -64,6 +72,15 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
             mSubtitle.setText("Loading...");  //TODO
 
         } catch (Exception e) { e.printStackTrace(); }
+
+        ArrayList<Bitmap> images = new ArrayList<Bitmap>();
+        images.add(BitmapFactory.decodeResource(getResources(), R.mipmap.bestpub));
+        images.add(BitmapFactory.decodeResource(getResources(), R.mipmap.bestpub));
+        imageCarouselPager = new ImageCarouselPager(this, images);
+        viewPager.setAdapter(imageCarouselPager);
+        viewPager.setOffscreenPageLimit(2);
+        tabLayout.setupWithViewPager(viewPager, true);
+
 
         startAlphaAnimation(mToolbar, 0, View.INVISIBLE);
     }
