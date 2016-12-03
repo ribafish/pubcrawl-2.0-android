@@ -21,7 +21,7 @@ public class Event {
     private boolean tracked;
     private long ownerId;
 
-    private ArrayList<TimeSlot> timeSlotList = new ArrayList<>();     // TODO: When we know what exactly this is and how it looks like
+    private ArrayList<TimeSlot> timeSlotList = new ArrayList<>();
     private ArrayList<Long> participantIds = new ArrayList<>();
     private ArrayList<Long> pubIds = new ArrayList<>();
     private Polyline polyline;
