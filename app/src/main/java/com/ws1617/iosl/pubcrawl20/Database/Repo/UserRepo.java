@@ -53,11 +53,14 @@ public class UserRepo implements DatabaseDefI, DBRepoHelper<User> {
     SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
 
     Cursor cursor = db.query(User.DATABASE_TABLE_NAME, new String[]{User.ID,
-        User.NAME, User.MAIL, User.EVENTLIST, User.FRIENDLIST}, User.ID + "=?",
+        User.NAME, User.MAIL, User.DESCRIPTION, User.EVENTLIST, User.FRIENDLIST}, User.ID + "=?",
       new String[]{String.valueOf(id)}, null, null, null, null);
-    if (cursor != null)
-      cursor.moveToFirst();
+    if (cursor == null)
+      return null;
+    cursor.moveToFirst();
     DatabaseManager.getInstance().closeDatabase();
+    System.out.println(cursor.getColumnIndex(User.ID));
+    System.out.println(cursor.getInt(cursor.getColumnIndex(User.ID)));
     return new User(
       cursor.getInt(cursor.getColumnIndex(User.ID)),
       cursor.getString(cursor.getColumnIndex(User.NAME)),
@@ -96,10 +99,15 @@ public class UserRepo implements DatabaseDefI, DBRepoHelper<User> {
 
   @Override
   public void delete(User user) {
+
+  }
+
+  @Override
+  public void deletebyID(int id) {
     SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
     db.delete(User.DATABASE_TABLE_NAME,
       User.ID+" = ?",
-      new String[] { String.valueOf(user.getId())});
+      new String[] { String.valueOf(id)});
     DatabaseManager.getInstance().closeDatabase();
   }
 

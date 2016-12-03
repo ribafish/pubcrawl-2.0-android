@@ -121,6 +121,11 @@ public class MainActivity extends AppCompatActivity {
       test.clearDB();
       test.insertTestUsers();
       List<User> users = test.getAll(null, true);
+      //System.out.println(test.getbyID(1));
+      System.out.println(test.getbyID(users.get(1).getId()));
+      test.deletebyID(users.get(1).getId());
+      List<User> users2 = test.getAll(null, true);
+      System.out.println(test.getbyID(users2.get(1).getId()));
     }
 
 }

@@ -14,6 +14,8 @@ public interface DBRepoHelper<T> {
 
   void delete(T object);
 
+  void deletebyID(int id);
+
   int update(T object);
 
   void clearDB();
