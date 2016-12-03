@@ -16,7 +16,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.ws1617.iosl.pubcrawl20.Event.EventDetailsActivity;
+import com.ws1617.iosl.pubcrawl20.Details.EventDetailsActivity;
 import com.ws1617.iosl.pubcrawl20.R;
 
 /**
@@ -50,6 +50,8 @@ public class CrawlSearchFragment extends Fragment implements OnMapReadyCallback{
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getContext(), EventDetailsActivity.class);
+                intent.putExtra("name", "Test Event");
+                intent.putExtra("eventID", (long) 0);
                 startActivity(intent);
             }
         });

@@ -1,21 +1,107 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_event_details"
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.ws1617.iosl.pubcrawl20.Event.EventDetailsActivity">
+    android:fitsSystemWindows="true" >
 
-    <TextView
-        android:text="Details about the event, maybe with cards or something"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="87dp"
-        android:id="@+id/textView"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
-</RelativeLayout>
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/event_details_appbar"
+        android:layout_width="match_parent"
+        android:layout_height="350dp"
+        android:fitsSystemWindows="true"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" >
+
+        <android.support.design.widget.CollapsingToolbarLayout
+            android:id="@+id/event_details_collapsing_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fitsSystemWindows="true"
+            app:contentScrim="?attr/colorPrimary"
+            app:expandedTitleMarginBottom="32dp"
+            app:expandedTitleMarginEnd="64dp"
+            app:expandedTitleMarginStart="48dp"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed" >
+
+
+            <ImageView
+                android:id="@+id/event_details_header"
+                android:layout_width="match_parent"
+                android:layout_height="275dp"
+                android:layout_weight="1"
+                android:background="@mipmap/bestpub"
+                android:fitsSystemWindows="true"
+                android:scaleType="fitCenter"
+                app:layout_collapseMode="parallax"
+                app:layout_collapseParallaxMultiplier="0.9" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start|bottom"
+                android:layout_weight="1"
+                android:id="@+id/event_details.layout.title"
+                android:padding="8dp"
+                android:orientation="vertical"
+                android:background="@color/colorPrimary"
+                app:layout_collapseMode="parallax"
+                app:layout_collapseParallaxMultiplier="0.3">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/white"
+                    android:text="Title"
+                    android:textSize="30sp"
+                    android:id="@+id/event_details.title" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/white"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginBottom="4dp"
+                    android:text="Subtitle"
+                    android:id="@+id/event_details.subtitle" />
+
+            </LinearLayout>
+
+        </android.support.design.widget.CollapsingToolbarLayout>
+    </android.support.design.widget.AppBarLayout>
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="4dp"
+        android:scrollbars="none"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" >
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardElevation="8dp"
+            app:contentPadding="16dp" >
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:lineSpacingExtra="8dp"
+                android:text="BLABLABLABLABLABLABLA"
+                android:textSize="18sp"
+                />
+
+        </android.support.v7.widget.CardView>
+
+    </android.support.v4.widget.NestedScrollView>
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/event_details.toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/colorPrimary"
+        app:layout_collapseMode="pin"
+        app:theme="@style/ThemeOverlay.AppCompat.Dark" >
+
+    </android.support.v7.widget.Toolbar>
+
+
+</android.support.design.widget.CoordinatorLayout>
