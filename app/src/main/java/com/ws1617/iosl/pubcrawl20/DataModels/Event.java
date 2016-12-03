@@ -21,7 +21,7 @@ public class Event {
     private boolean tracked;
     private long ownerId;
 
-    private ArrayList<Object> timeSlotList = new ArrayList<>();     // TODO: When we know what exactly this is and how it looks like
+    private ArrayList<TimeSlot> timeSlotList = new ArrayList<>();     // TODO: When we know what exactly this is and how it looks like
     private ArrayList<Long> participantIds = new ArrayList<>();
     private ArrayList<Long> pubIds = new ArrayList<>();
     private Polyline polyline;
@@ -163,11 +163,11 @@ public class Event {
 
     }
 
-    public ArrayList<Object> getTimeSlotList() {
+    public ArrayList<TimeSlot> getTimeSlotList() {
         return timeSlotList;
     }
 
-    public void setTimeSlotList(ArrayList<Object> timeSlotList) {
+    public void setTimeSlotList(ArrayList<TimeSlot> timeSlotList) {
         this.timeSlotList = timeSlotList;
     }
 
