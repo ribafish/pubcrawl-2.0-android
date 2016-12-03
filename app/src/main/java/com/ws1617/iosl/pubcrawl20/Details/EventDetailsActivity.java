@@ -14,6 +14,7 @@ import android.view.animation.AlphaAnimation;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.ws1617.iosl.pubcrawl20.DataModels.Event;
 import com.ws1617.iosl.pubcrawl20.R;
 
 import java.util.ArrayList;
@@ -36,8 +37,6 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
     private Toolbar mToolbar;
     private ImageCarouselPager imageCarouselPager;
 
-    private long eventId;
-    private String eventName;
     private Event event;
 
 
@@ -64,9 +63,10 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
             }
         });
 
+        long id = getIntent().getLongExtra("id", -1);
+
         try{
-            eventId = getIntent().getLongExtra("id", -1);
-            eventName = getIntent().getStringExtra("name");
+            String eventName = getIntent().getStringExtra("name");
 
             mToolbar.setTitle(eventName);
             mTitle.setText(eventName);
@@ -82,7 +82,7 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
         viewPager.setOffscreenPageLimit(2);
         tabLayout.setupWithViewPager(viewPager, true);
 
-
+        getEvent(id);
 
         startAlphaAnimation(mToolbar, 0, View.INVISIBLE);
     }
