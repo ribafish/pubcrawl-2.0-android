@@ -7,14 +7,14 @@
     android:fitsSystemWindows="true" >
 
     <android.support.design.widget.AppBarLayout
-        android:id="@+id/event_details_appbar"
+        android:id="@+id/pub_details_appbar"
         android:layout_width="match_parent"
         android:layout_height="350dp"
         android:fitsSystemWindows="true"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" >
 
         <android.support.design.widget.CollapsingToolbarLayout
-            android:id="@+id/event_details_collapsing_toolbar"
+            android:id="@+id/pub_details_collapsing_toolbar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fitsSystemWindows="true"
@@ -36,16 +36,16 @@
                 <android.support.v4.view.ViewPager
                     xmlns:android="http://schemas.android.com/apk/res/android"
                     android:visibility="visible"
-                    android:id="@+id/event_details.pager"
+                    android:id="@+id/pub_details.pager"
                     android:layout_width="match_parent"
                     android:layout_height="270dp"
                     app:layout_collapseMode="parallax"
                     app:layout_collapseParallaxMultiplier="0.9"
                     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-                     />
+                    />
 
                 <android.support.design.widget.TabLayout
-                    android:id="@+id/event_details.tabDots"
+                    android:id="@+id/pub_details.tabDots"
                     android:layout_alignParentBottom="true"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -56,7 +56,7 @@
                     />
 
                 <ImageButton
-                    android:id="@+id/event_details.collapsable.back"
+                    android:id="@+id/pub_details.collapsable.back"
                     android:visibility="gone"
                     android:layout_marginStart="16dp"
                     android:layout_marginLeft="16dp"
@@ -78,7 +78,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|bottom"
                 android:layout_weight="1"
-                android:id="@+id/event_details.layout.title"
+                android:id="@+id/pub_details.layout.title"
                 android:padding="8dp"
                 android:orientation="vertical"
                 android:background="@color/colorPrimary"
@@ -90,7 +90,7 @@
                     android:textColor="@android:color/white"
                     android:text="Title"
                     android:textSize="30sp"
-                    android:id="@+id/event_details.title" />
+                    android:id="@+id/pub_details.title" />
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -98,7 +98,7 @@
                     android:layout_marginTop="4dp"
                     android:layout_marginBottom="4dp"
                     android:text="Subtitle"
-                    android:id="@+id/event_details.subtitle" />
+                    android:id="@+id/pub_details.subtitle" />
 
             </LinearLayout>
 
@@ -132,7 +132,7 @@
     </android.support.v4.widget.NestedScrollView>
 
     <android.support.v7.widget.Toolbar
-        android:id="@+id/event_details.collapsable.toolbar"
+        android:id="@+id/pub_details.collapsable.toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="top"
@@ -141,7 +141,7 @@
         />
 
     <android.support.v7.widget.Toolbar
-        android:id="@+id/event_details.toolbar"
+        android:id="@+id/pub_details.toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="@color/colorPrimary"

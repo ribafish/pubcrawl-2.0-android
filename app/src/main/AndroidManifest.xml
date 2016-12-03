@@ -36,16 +36,17 @@
             android:name=".SettingsActivity"
             android:label="@string/title_activity_settings"
             android:theme="@style/AppTheme">
-            <!--<meta-data-->
-                <!--android:name="android.support.PARENT_ACTIVITY"-->
-                <!--android:value="com.ws1617.iosl.pubcrawl20.MainActivity" />-->
-        </activity>
-        <activity android:name=".Event.EventDetailsActivity" />
 
-        <activity android:name=".ScanQR.ScanQrActivity"
-            android:theme="@style/AppTheme">
-
+            <!-- <meta-data -->
+            <!-- android:name="android.support.PARENT_ACTIVITY" -->
+            <!-- android:value="com.ws1617.iosl.pubcrawl20.MainActivity" /> -->
         </activity>
+        <activity android:name=".Details.EventDetailsActivity" />
+        <activity
+            android:name=".ScanQR.ScanQrActivity"
+            android:theme="@style/AppTheme" />
+        <activity android:name=".Details.PubDetailsActivity" />
+        <activity android:name=".Details.PersonDetailsActivity"></activity>
     </application>
 
 </manifest>
