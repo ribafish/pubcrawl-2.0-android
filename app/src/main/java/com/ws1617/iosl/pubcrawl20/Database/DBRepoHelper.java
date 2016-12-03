@@ -10,11 +10,13 @@ public interface DBRepoHelper<T> {
 
   T getbyID(int id);
 
-  void insert(T object);
+  T insert(T object);
 
   void delete(T object);
 
   int update(T object);
+
+  void clearDB();
 
   List<T> getAll(String orderby, boolean asc);
 }

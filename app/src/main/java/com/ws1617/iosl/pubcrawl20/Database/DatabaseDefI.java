@@ -21,7 +21,7 @@ package com.ws1617.iosl.pubcrawl20.Database;
 public interface DatabaseDefI {
 
   String DATABASE_NAME = "PUB.db";
-  int DATABASE_VERSION = 1;
+  int DATABASE_VERSION = 2;
 
   String TYPE_TEXT            = " TEXT";
   String TYPE_INT             = " INTEGER";
@@ -34,6 +34,9 @@ public interface DatabaseDefI {
   String CLOSE_INSTRUCTION    = ");";
   String CREATE_TABLE         = "CREATE TABLE IF NOT EXISTS ";
   String DROP_TABLE           = "drop table if exists ";
+  String ALTER_TABLE          = "ALTER TABLE ";
+  String ADD_COLUMN           = "ADD COLUMN ";
+  String DEFAULT              = "DEFAULT ";
   String ORDER_ASC            = " ASC";
   String ORDER_DESC           = " DESC";
 

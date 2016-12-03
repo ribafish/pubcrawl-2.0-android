@@ -10,13 +10,20 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 
 
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
+import com.ws1617.iosl.pubcrawl20.Database.DBHelper;
+import com.ws1617.iosl.pubcrawl20.Database.Models.DatabaseManager;
+import com.ws1617.iosl.pubcrawl20.Database.Models.User;
+import com.ws1617.iosl.pubcrawl20.Database.Repo.UserRepo;
 import com.ws1617.iosl.pubcrawl20.NewEvent.NewEventActivity;
 import com.ws1617.iosl.pubcrawl20.ScanQR.ScanQRActivity;
+
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -29,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
      * {@link android.support.v4.app.FragmentStatePagerAdapter}.
      */
     private MainFragmentPagerAdapter mainFragmentPagerAdapter;
+    private static DBHelper dbHelper;
 
     /**
      * The {@link ViewPager} that will host the section contents.
@@ -97,7 +105,22 @@ public class MainActivity extends AppCompatActivity {
                 fabMenu.close(true);
             }
         });
+      createDB();
+      testDB();
+    }
 
+    private void createDB()
+    {
+      dbHelper = new DBHelper(this.context);
+      DatabaseManager.initializeInstance(dbHelper);
+    }
+
+    private void testDB()
+    {
+      UserRepo test = new UserRepo();
+      test.clearDB();
+      test.insertTestUsers();
+      List<User> users = test.getAll(null, true);
     }
 
 }

@@ -15,15 +15,26 @@ public class User {
   public static final String ID = "_id";
   public static final String NAME = "name";
   public static final String MAIL = "mail";
+  public static final String DESCRIPTION = "description";
   public static final String EVENTLIST = "eventlist";
   public static final String FRIENDLIST = "friendlist";
 
   private User()  {}
 
-  public User(int id, String name, String events, String description, String friends)
+  public User(int id, String name, String mail, String events, String description, String friends)
   {
     this.id = id;
     this.name = name;
+    this.email = mail;
+    this.events = events;
+    this.description = description;
+    this.friends = friends;
+  }
+
+  public User(String name, String mail, String events, String description, String friends)
+  {
+    this.name = name;
+    this.email = mail;
     this.events = events;
     this.description = description;
     this.friends = friends;
