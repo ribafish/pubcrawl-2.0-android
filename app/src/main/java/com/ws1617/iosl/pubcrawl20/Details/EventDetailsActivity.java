@@ -38,6 +38,7 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
 
     private long eventId;
     private String eventName;
+    private Event event;
 
 
     @Override
@@ -64,7 +65,7 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
         });
 
         try{
-            eventId = getIntent().getLongExtra("eventId", -1);
+            eventId = getIntent().getLongExtra("id", -1);
             eventName = getIntent().getStringExtra("name");
 
             mToolbar.setTitle(eventName);
@@ -80,6 +81,7 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
         viewPager.setAdapter(imageCarouselPager);
         viewPager.setOffscreenPageLimit(2);
         tabLayout.setupWithViewPager(viewPager, true);
+
 
 
         startAlphaAnimation(mToolbar, 0, View.INVISIBLE);
@@ -136,4 +138,10 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
         alphaAnimation.setFillAfter(true);
         v.startAnimation(alphaAnimation);
     }
+
+    private void getEvent(long id) {
+
+    }
+
+
 }

@@ -17,6 +17,8 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.ws1617.iosl.pubcrawl20.Details.EventDetailsActivity;
+import com.ws1617.iosl.pubcrawl20.Details.PersonDetailsActivity;
+import com.ws1617.iosl.pubcrawl20.Details.PubDetailsActivity;
 import com.ws1617.iosl.pubcrawl20.R;
 
 /**
@@ -31,8 +33,6 @@ public class CrawlSearchFragment extends Fragment implements OnMapReadyCallback{
 
     public CrawlSearchFragment() {}
 
-
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -45,16 +45,36 @@ public class CrawlSearchFragment extends Fragment implements OnMapReadyCallback{
 
         setRetainInstance(true);
 
-        Button button = (Button) rootView.findViewById(R.id.btn1);
-        button.setOnClickListener(new View.OnClickListener() {
+        ((Button) rootView.findViewById(R.id.btn1)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getContext(), EventDetailsActivity.class);
                 intent.putExtra("name", "Test Event");
-                intent.putExtra("eventID", (long) 0);
+                intent.putExtra("id", (long) 14);
                 startActivity(intent);
             }
         });
+
+        ((Button) rootView.findViewById(R.id.btn2)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getContext(), PubDetailsActivity.class);
+                intent.putExtra("name", "Test Pub");
+                intent.putExtra("id", (long) 9);
+                startActivity(intent);
+            }
+        });
+
+        ((Button) rootView.findViewById(R.id.btn3)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getContext(), PersonDetailsActivity.class);
+                intent.putExtra("name", "Test Person");
+                intent.putExtra("id", (long) 1);
+                startActivity(intent);
+            }
+        });
+
 
         return rootView;
     }
