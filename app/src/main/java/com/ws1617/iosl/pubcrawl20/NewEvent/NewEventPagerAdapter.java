@@ -13,7 +13,8 @@ import android.text.style.ImageSpan;
 import com.ws1617.iosl.pubcrawl20.R;
 
 /**
- * Created by gaspe on 9. 11. 2016.
+ * Created by Gasper Kojek on 9. 11. 2016.
+ * Github: https://github.com/ribafish/
  */
 
 public class NewEventPagerAdapter extends FragmentPagerAdapter{

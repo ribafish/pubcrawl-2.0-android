@@ -18,6 +18,11 @@ import com.github.clans.fab.FloatingActionMenu;
 import com.ws1617.iosl.pubcrawl20.NewEvent.NewEventActivity;
 import com.ws1617.iosl.pubcrawl20.ScanQR.ScanQrActivity;
 
+/**
+ * Created by Gasper Kojek on 9. 11. 2016.
+ * Github: https://github.com/ribafish/
+ */
+
 public class MainActivity extends AppCompatActivity {
 
     /**

@@ -11,6 +11,28 @@
     <string name="new_event">New event</string>
     <string name="search">Search</string>
 
+    <string name="lorem">Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+        Proin vitae consectetur nulla. Donec eu lacus vehicula, ultrices metus a, iaculis dui.
+        Donec posuere tempus consectetur. Mauris sapien justo, vehicula et purus a, auctor
+        pharetra nisi. Duis quam diam, sollicitudin convallis egestas vel, laoreet eget elit.
+        Sed dignissim laoreet risus quis ultrices. Ut non libero commodo mi tincidunt maximus.
+        Phasellus pharetra, purus ut aliquam sodales, enim ante ullamcorper mi, quis maximus
+        dui orci quis sem. Aenean sodales leo vitae urna lacinia, nec euismod diam viverra. Ut
+        venenatis, purus ultricies hendrerit commodo, arcu lorem faucibus elit, eget vulputate
+        mi erat non neque. Curabitur tincidunt dictum enim in pellentesque.</string>
+
+    <string name="description">Description</string>
+    <string name="info">Info</string>
+    <string name="route">Route</string>
+    <string name="participants">Participants</string>
+    <string name="owner">Owner</string>
+    <string name="tracked">Tracked</string>
+    <string name="unknown">Unknown</string>
+    <string name="id">Id</string>
+
+
+
+
 
     <!-- Preferences titles -->
     <string name="pref_profile_title">Profile</string>

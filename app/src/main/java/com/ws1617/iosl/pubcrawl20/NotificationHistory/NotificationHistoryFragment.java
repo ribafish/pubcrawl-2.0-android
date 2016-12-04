@@ -11,7 +11,8 @@ import android.view.ViewGroup;
 import com.ws1617.iosl.pubcrawl20.R;
 
 /**
- * Created by gaspe on 11. 11. 2016.
+ * Created by Gasper Kojek on 11. 11. 2016.
+ * Github: https://github.com/ribafish/
  */
 
 public class NotificationHistoryFragment extends Fragment {

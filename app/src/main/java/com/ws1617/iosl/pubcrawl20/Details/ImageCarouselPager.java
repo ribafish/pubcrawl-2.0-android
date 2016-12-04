@@ -14,7 +14,8 @@ import com.ws1617.iosl.pubcrawl20.R;
 import java.util.ArrayList;
 
 /**
- * Created by gaspe on 3. 12. 2016.
+ * Created by Gasper Kojek on 3. 12. 2016.
+ * Github: https://github.com/ribafish/
  */
 
 public class ImageCarouselPager extends PagerAdapter {

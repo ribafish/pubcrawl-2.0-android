@@ -22,7 +22,8 @@ import com.ws1617.iosl.pubcrawl20.Details.PubDetailsActivity;
 import com.ws1617.iosl.pubcrawl20.R;
 
 /**
- * Created by gaspe on 8. 11. 2016.
+ * Created by Gasper Kojek on 8. 11. 2016.
+ * Github: https://github.com/ribafish/
  */
 
 public class CrawlSearchFragment extends Fragment implements OnMapReadyCallback{

@@ -16,7 +16,8 @@ import com.ws1617.iosl.pubcrawl20.Current.CurrentFragment;
 import com.ws1617.iosl.pubcrawl20.NotificationHistory.NotificationHistoryFragment;
 
 /**
- * Created by gaspe on 8. 11. 2016.
+ * Created by Gasper Kojek on 8. 11. 2016.
+ * Github: https://github.com/ribafish/
  */
 /**
  * A {@link FragmentPagerAdapter} that returns a fragment corresponding to

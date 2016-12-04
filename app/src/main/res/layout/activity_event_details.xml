@@ -2,6 +2,7 @@
 <android.support.design.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true" >
@@ -106,31 +107,6 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <android.support.v4.widget.NestedScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="4dp"
-        android:scrollbars="none"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" >
-
-        <android.support.v7.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:cardElevation="8dp"
-            app:contentPadding="16dp" >
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:lineSpacingExtra="8dp"
-                android:text="BLABLABLABLABLABLABLA"
-                android:textSize="18sp"
-                />
-
-        </android.support.v7.widget.CardView>
-
-    </android.support.v4.widget.NestedScrollView>
-
     <android.support.v7.widget.Toolbar
         android:id="@+id/event_details.collapsable.toolbar"
         android:layout_width="match_parent"
@@ -139,6 +115,201 @@
         app:layout_collapseMode="pin"
         app:navigationIcon="@drawable/ic_arrow_back"
         />
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="4dp"
+        android:scrollbars="none"
+        android:animateLayoutChanges="true"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" >
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:animateLayoutChanges="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                app:cardElevation="8dp"
+                app:contentPadding="16dp" >
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" >
+
+                    <TextView
+                        android:id="@+id/event_details.info.title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentTop="true"
+                        android:text="@string/info"
+                        android:layout_marginBottom="8dp"
+                        android:textSize="20sp"
+                        />
+
+                    <TextView
+                        android:id="@+id/event_details.id.title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/event_details.info.title"
+                        android:text="@string/id"
+                        android:layout_marginBottom="6dp"
+                        android:textSize="16sp"
+                        />
+                    <TextView
+                        android:id="@+id/event_details.id"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginRight="8dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignBottom="@+id/event_details.id.title"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:text="@string/unknown"
+                        />
+
+                    <TextView
+                        android:id="@+id/event_details.owner.title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/event_details.id.title"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:text="@string/owner"
+                        android:textSize="16sp"
+                        android:layout_marginBottom="6dp"
+                        />
+                    <TextView
+                        android:id="@+id/event_details.owner"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginRight="8dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignBottom="@+id/event_details.owner.title"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:text="@string/unknown"
+                        />
+
+                    <TextView
+                        android:id="@+id/event_details.tracked.title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/event_details.owner.title"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:text="@string/tracked"
+                        android:textSize="16sp"
+                        android:layout_marginBottom="6dp"
+                        />
+
+                    <TextView
+                        android:id="@+id/event_details.tracked"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginRight="8dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignBottom="@+id/event_details.tracked.title"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:text="@string/unknown"
+                        />
+
+                </RelativeLayout>
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
+                android:animateLayoutChanges="true"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                app:cardElevation="8dp"
+                android:id="@+id/event_details.description.card"
+                >
+
+                <RelativeLayout
+                    android:animateLayoutChanges="true"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <RelativeLayout
+                        android:id="@+id/event_details.description.layout"
+                        android:animateLayoutChanges="true"
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp"
+                        android:paddingTop="16dp"
+                        android:paddingLeft="16dp"
+                        android:paddingStart="16dp"
+                        android:paddingRight="16dp"
+                        android:paddingEnd="16dp"
+                        >
+
+                        <TextView
+                            android:id="@+id/event_details.description.title"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentLeft="true"
+                            android:layout_alignParentStart="true"
+                            android:layout_alignParentTop="true"
+                            android:text="@string/description"
+                            android:layout_marginBottom="8dp"
+                            android:textSize="20sp"
+                            />
+
+                        <TextView
+                            android:id="@+id/event_details.description"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/event_details.description.title"
+                            android:layout_alignParentLeft="true"
+                            android:layout_alignParentStart="true"
+                            android:text="@string/lorem"
+                            android:ellipsize="end"
+                            android:layout_margin="4dp"
+                            />
+
+                    </RelativeLayout>
+
+                    <ImageView
+                        android:visibility="visible"
+                        android:id="@+id/event_details.description.gradient"
+                        android:layout_width="match_parent"
+                        android:layout_height="28dp"
+                        android:layout_alignParentBottom="true"
+                        android:alpha="1"
+                        android:src="@drawable/text_truncate_shadow"/>
+
+                </RelativeLayout>
+
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                app:cardElevation="8dp"
+                app:contentPadding="16dp" >
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+
+
+
+                </RelativeLayout>
+
+            </android.support.v7.widget.CardView>
+
+        </LinearLayout>
+
+    </android.support.v4.widget.NestedScrollView>
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/event_details.toolbar"
