@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.ws1617.iosl.pubcrawl20.ScanQR.UI;
+package com.ws1617.iosl.pubcrawl20.ScanQR;
 
 import android.Manifest;
 import android.content.Context;

@@ -15,10 +15,10 @@
  */
 package com.ws1617.iosl.pubcrawl20.ScanQR;
 
-import berlin.htw.verleihsystem.Barcode.UI.GraphicOverlay;
 import com.google.android.gms.vision.Detector;
 import com.google.android.gms.vision.Tracker;
 import com.google.android.gms.vision.barcode.Barcode;
+
 
 /**
  * Generic tracker which is used for tracking or reading a barcode (and can really be used for

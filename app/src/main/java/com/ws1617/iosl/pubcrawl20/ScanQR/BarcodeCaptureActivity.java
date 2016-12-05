@@ -15,44 +15,41 @@ package com.ws1617.iosl.pubcrawl20.ScanQR;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-        import android.Manifest;
-        import android.annotation.SuppressLint;
-        import android.app.Activity;
-        import android.app.AlertDialog;
-        import android.app.Dialog;
-        import android.content.Context;
-        import android.content.DialogInterface;
-        import android.content.Intent;
-        import android.content.IntentFilter;
-        import android.content.pm.PackageManager;
-        import android.hardware.Camera;
-        import android.os.Build;
-        import android.os.Bundle;
-        import android.support.annotation.NonNull;
-        import android.support.design.widget.Snackbar;
-        import android.support.v4.app.ActivityCompat;
-        import android.support.v7.app.AppCompatActivity;
-        import android.util.Log;
-        import android.view.GestureDetector;
-        import android.view.MotionEvent;
-        import android.view.ScaleGestureDetector;
-        import android.view.View;
-        import android.widget.Toast;
 
-        import com.google.android.gms.common.ConnectionResult;
-        import com.google.android.gms.common.GoogleApiAvailability;
-        import com.google.android.gms.common.api.CommonStatusCodes;
-        import berlin.htw.verleihsystem.Barcode.UI.CameraSource;
-        import berlin.htw.verleihsystem.Barcode.UI.CameraSourcePreview;
+import android.Manifest;
+import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.pm.PackageManager;
+import android.hardware.Camera;
+import android.os.Build;
+import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
+import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
+import android.view.ScaleGestureDetector;
+import android.view.View;
+import android.widget.Toast;
 
-        import berlin.htw.verleihsystem.Barcode.UI.GraphicOverlay;
-        import berlin.htw.verleihsystem.R;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.android.gms.common.api.CommonStatusCodes;
+import com.google.android.gms.vision.MultiProcessor;
+import com.google.android.gms.vision.barcode.Barcode;
+import com.google.android.gms.vision.barcode.BarcodeDetector;
+import com.ws1617.iosl.pubcrawl20.R;
 
-        import com.google.android.gms.vision.MultiProcessor;
-        import com.google.android.gms.vision.barcode.Barcode;
-        import com.google.android.gms.vision.barcode.BarcodeDetector;
+import java.io.IOException;
 
-        import java.io.IOException;
 
 /**
  * Activity for the multi-tracker app.  This app detects barcodes and displays the value with the
@@ -87,7 +84,7 @@ public final class BarcodeCaptureActivity extends AppCompatActivity {
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
-        setContentView(R.layout.barcode_capture);
+        setContentView(R.layout.activity_qr_scan);
 
         mPreview = (CameraSourcePreview) findViewById(R.id.preview);
         mGraphicOverlay = (GraphicOverlay<BarcodeGraphic>) findViewById(R.id.graphicOverlay);

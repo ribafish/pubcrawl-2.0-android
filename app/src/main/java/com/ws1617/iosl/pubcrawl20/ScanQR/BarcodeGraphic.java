@@ -20,8 +20,8 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
 
-import berlin.htw.verleihsystem.Barcode.UI.GraphicOverlay;
 import com.google.android.gms.vision.barcode.Barcode;
+
 
 /**
  * Graphic instance for rendering barcode position, size, and ID within an associated graphic
@@ -43,7 +43,7 @@ public class BarcodeGraphic extends GraphicOverlay.Graphic {
     private Paint mTextPaint;
     private volatile Barcode mBarcode;
 
-    BarcodeGraphic(GraphicOverlay overlay) {
+    public BarcodeGraphic(GraphicOverlay overlay) {
         super(overlay);
 
         mCurrentColorIndex = (mCurrentColorIndex + 1) % COLOR_CHOICES.length;
