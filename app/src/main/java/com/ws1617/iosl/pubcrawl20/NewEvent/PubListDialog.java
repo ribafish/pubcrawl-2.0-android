@@ -59,7 +59,7 @@ public class PubListDialog extends DialogFragment {
     View.OnClickListener mDoneBtnClickedListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            Pub pub = new Pub(1,"no",new LatLng(1,1),1);
+            Pub pub = new Pub("no",new LatLng(1,1),1);
             onSelectPubDialogDismissed.addPubToList(pub);
             dismiss();
         }

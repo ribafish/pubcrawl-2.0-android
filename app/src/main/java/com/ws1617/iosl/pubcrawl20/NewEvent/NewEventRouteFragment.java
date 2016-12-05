@@ -47,7 +47,7 @@ public class NewEventRouteFragment extends Fragment {
     private void initView() {
         // init pups list
         mSelectedPupsList = new ArrayList<>();
-        mSelectedPupsList.add( new Pub(1,"no",new LatLng(1,1),1));
+       // mSelectedPupsList.add( new Pub(1,"Date",new LatLng(1,1),1));
 
         mAddPubBtn = (Button) rootView.findViewById(R.id.event_new_add_pub);
         mAddPubBtn.setOnClickListener(addPubClickListener);

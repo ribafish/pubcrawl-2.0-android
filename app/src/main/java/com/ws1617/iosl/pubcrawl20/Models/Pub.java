@@ -15,8 +15,13 @@ public class Pub {
     private int size;
     private JSONObject rawJson;
 
-    public Pub(long id, String pubName, LatLng latLng, int size) {
-        this.id = id;
+    public Pub( String pubName, LatLng latLng, int size) {
+        this.pubName = pubName;
+        this.latLng = latLng;
+        this.size = size;
+    }
+
+    public Pub( long id , String pubName, LatLng latLng, int size) {
         this.pubName = pubName;
         this.latLng = latLng;
         this.size = size;
