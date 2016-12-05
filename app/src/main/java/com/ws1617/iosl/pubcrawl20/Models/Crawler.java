@@ -4,18 +4,18 @@ package com.ws1617.iosl.pubcrawl20.Models;
  * Created by gaspe on 18. 11. 2016.
  */
 
-public class Person {
+public class Crawler {
     private long id;
     private String name;
     private String email;
     private String description;
 
-    public Person(long id, String name) {
+    public Crawler(long id, String name) {
         this.id = id;
         this.name = name;
     }
 
-    public Person(long id, String name, String email, String description) {
+    public Crawler(long id, String name, String email, String description) {
         this.id = id;
         this.name = name;
         this.email = email;
@@ -56,7 +56,7 @@ public class Person {
 
     @Override
     public String toString() {
-        return "Person{" +
+        return "Crawler{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +

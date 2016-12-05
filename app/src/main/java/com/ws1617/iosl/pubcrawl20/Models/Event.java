@@ -9,14 +9,19 @@ import java.util.List;
  */
 
 public class Event {
+    // general info
     private long eventId;
     private String eventName;
     private Date date;
     private String description;
     private boolean tracked;
+
+
     private ArrayList<Pub> pubs;
-    private Person owner;
-    private ArrayList<Person> participants;
+
+    private Crawler owner;
+
+    private ArrayList<Crawler> participantsList;
 
     public Event() {
     }
@@ -28,14 +33,14 @@ public class Event {
         this.tracked = tracked;
     }
 
-    public Event(String eventName, Date date, String description, boolean tracked, ArrayList<Pub> pubs, Person owner, ArrayList<Person> participants) {
+    public Event(String eventName, Date date, String description, boolean tracked, ArrayList<Pub> pubs, Crawler owner, ArrayList<Crawler> participantsList) {
         this.eventName = eventName;
         this.date = date;
         this.description = description;
         this.tracked = tracked;
         this.pubs = pubs;
         this.owner = owner;
-        this.participants = participants;
+        this.participantsList = participantsList;
     }
 
     public Event addPub (Pub pub) {
@@ -59,8 +64,8 @@ public class Event {
     }
 
 
-    public Event addParticipant(Person participant) {
-        participants.add(participant);
+    public Event addParticipant(Crawler participant) {
+        participantsList.add(participant);
         return this;
     }
 
@@ -104,21 +109,21 @@ public class Event {
         this.pubs = pubs;
     }
 
-    public Person getOwner() {
+    public Crawler getOwner() {
         return owner;
     }
 
-    public void setOwner(Person owner) {
+    public void setOwner(Crawler owner) {
         this.owner = owner;
     }
 
-    public ArrayList<Person> getParticipants() {
-        return participants;
+    public ArrayList<Crawler> getParticipantsList() {
+        return participantsList;
     }
 
 
-    public void setParticipants(ArrayList<Person> participants) {
-        this.participants = participants;
+    public void setParticipantsList(ArrayList<Crawler> participantsList) {
+        this.participantsList = participantsList;
 
 
     }
@@ -141,7 +146,7 @@ public class Event {
                 ", tracked=" + tracked +
                 ", pubs=" + pubs +
                 ", owner=" + owner +
-                ", participants=" + participants +
+                ", participantsList=" + participantsList +
                 '}';
     }
 
