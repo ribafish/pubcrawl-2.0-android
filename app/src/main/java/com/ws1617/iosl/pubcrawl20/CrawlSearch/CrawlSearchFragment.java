@@ -1,12 +1,21 @@
 package com.ws1617.iosl.pubcrawl20.CrawlSearch;
 
-import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,12 +32,17 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
-import com.ws1617.iosl.pubcrawl20.Event.EventDetailsActivity;
-import com.ws1617.iosl.pubcrawl20.Models.Event;
-import com.ws1617.iosl.pubcrawl20.Models.Person;
-import com.ws1617.iosl.pubcrawl20.Models.Pub;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
+import com.ws1617.iosl.pubcrawl20.CrawlSearch.Models.Event;
+import com.ws1617.iosl.pubcrawl20.CrawlSearch.Models.EventComparator;
+import com.ws1617.iosl.pubcrawl20.CrawlSearch.Models.Person;
+import com.ws1617.iosl.pubcrawl20.CrawlSearch.Models.Pub;
 import com.ws1617.iosl.pubcrawl20.R;
 
 import org.json.JSONArray;
@@ -39,21 +53,22 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Collections;
 import java.util.Locale;
 
 /**
  * Created by gaspe on 8. 11. 2016.
  */
 
-public class CrawlSearchFragment extends Fragment implements OnMapReadyCallback{
+public class CrawlSearchFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnPolylineClickListener, GoogleMap.OnMarkerClickListener{
     public static final String TITLE = "Home";
     private static final String TAG = "CrawlSearchFragment";
     private View rootView;
     private GoogleMap map;
     private SharedPreferences prefs;
     private RequestQueue requestQueue;
-    private HashMap<Long, Event> eventsMap = new HashMap<>();
+    private ArrayList<Event> eventList = new ArrayList<>();
+    private EventAdapter eventAdapter;
 
     public CrawlSearchFragment() {}
 
@@ -70,15 +85,6 @@ public class CrawlSearchFragment extends Fragment implements OnMapReadyCallback{
         mapFragment.getMapAsync(this);
 
         setRetainInstance(true);
-
-        Button button = (Button) rootView.findViewById(R.id.btn1);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getContext(), EventDetailsActivity.class);
-                startActivity(intent);
-            }
-        });
 
         Button refresh = (Button) rootView.findViewById(R.id.btn_refresh);
         refresh.setOnClickListener(new View.OnClickListener() {
@@ -101,6 +107,13 @@ public class CrawlSearchFragment extends Fragment implements OnMapReadyCallback{
             }
         });
 
+        RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.eventsRecyclerView);
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
+        recyclerView.setLayoutManager(mLayoutManager);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        eventAdapter = new EventAdapter(eventList);
+        recyclerView.addItemDecoration(new RecyclerViewDivider(getContext(), LinearLayoutManager.VERTICAL));
+        recyclerView.setAdapter(eventAdapter);
         return rootView;
     }
 
@@ -108,9 +121,39 @@ public class CrawlSearchFragment extends Fragment implements OnMapReadyCallback{
     public void onMapReady(GoogleMap googleMap) {
         map = googleMap;
 
-        LatLng tub = new LatLng(52.512626, 13.322238);
-        map.addMarker(new MarkerOptions().position(tub).title("TUB - TEL"));
-        map.moveCamera(CameraUpdateFactory.newLatLng(tub));
+        LatLng startpos = new LatLng(52.525387,13.38595);
+//        map.addMarker(new MarkerOptions().position(tub).title("TUB - TEL"));
+        map.moveCamera(CameraUpdateFactory.newCameraPosition( new CameraPosition.Builder().target(startpos).zoom(13).build()));
+        map.setOnPolylineClickListener(this);
+        map.setOnMarkerClickListener(this);
+
+        for (Event e : eventList) {
+            drawEventOnMap(e.getEventId(), e.getPubs());
+        }
+    }
+
+    @Override
+    public void onPolylineClick(Polyline polyline) {
+        Log.d(TAG, "onPolylineClick" + polyline);
+        for (Event event : eventList) {
+            Polyline p = event.getPolyline();
+            if (p==null) {
+                event.setSelected(false);
+                continue;
+            }
+            if (event.getPolyline().equals(polyline)) {
+                Log.d(TAG, "Clicked event: " + event);
+                event.setSelected(true);
+            } else {
+                event.setSelected(false);
+            }
+        }
+        eventAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public boolean onMarkerClick(Marker marker) {
+        return true;
     }
 
     @Override
@@ -134,6 +177,11 @@ public class CrawlSearchFragment extends Fragment implements OnMapReadyCallback{
             return;
         }
 
+        if (map != null){
+            map.clear();
+        }
+        eventList.clear();
+
 
         JsonObjectRequest eventsRequest = new JsonObjectRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONObject>() {
@@ -150,11 +198,57 @@ public class CrawlSearchFragment extends Fragment implements OnMapReadyCallback{
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Log.e(TAG, "eventsRequest: " + error.getLocalizedMessage());
+                        Log.e(TAG, "eventsRequest Error: " + error.toString());
+                        error.printStackTrace();
                     }
                 });
         // Add the request to the RequestQueue.
         requestQueue.add(eventsRequest);
+    }
+
+    /**
+     * drawEventOnMap
+     * @param eventId
+     * @param pubs
+     */
+    private void drawEventOnMap(final long eventId, ArrayList<Pub> pubs) {
+        if (map != null && pubs != null) {
+            ArrayList<LatLng> latLngs = new ArrayList<>();
+            for (Pub pub : pubs) {
+                latLngs.add(pub.getLatLng());
+            }
+
+            Polyline polyline = map.addPolyline(new PolylineOptions()
+                    .addAll(latLngs)
+                    .width(10)
+                    .clickable(true)
+                    .color(Color.GRAY));
+            for (Event e : eventList) {
+                if (e.getEventId() == eventId) {
+                    eventList.get(eventList.indexOf(e)).setPolyline(polyline);
+                }
+            }
+        }
+        eventAdapter.notifyDataSetChanged();
+    }
+
+    /**
+     * getMarkerIconFromDrawable
+     * @param resId int resource ID
+     * @param color int Color
+     * @param size int size
+     * @return BitmapDescriptor to be used for Marker.setIcon
+     */
+    @NonNull
+    private BitmapDescriptor getMarkerIconFromDrawable(int resId, int color, int size) {
+        Drawable drawable = ContextCompat.getDrawable(getActivity(), resId);
+        drawable.setColorFilter(color, PorterDuff.Mode.MULTIPLY);
+        Canvas canvas = new Canvas();
+        Bitmap bitmap = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888);
+        canvas.setBitmap(bitmap);
+        drawable.setBounds(0, 0, size, size);
+        drawable.draw(canvas);
+        return BitmapDescriptorFactory.fromBitmap(bitmap);
     }
 
     private void parseJSONResponseEvents (JSONObject response) throws JSONException, ParseException  {
@@ -164,8 +258,10 @@ public class CrawlSearchFragment extends Fragment implements OnMapReadyCallback{
             JSONObject jsonEvent = jsonEvents.getJSONObject(i);
             Event event = parseJSONEvent(jsonEvent);
             Log.d(TAG, "Parsed event [" + i + "]: " + event);
-            eventsMap.put(event.getEventId(), event);
+            eventList.add(event);
         }
+        Collections.sort(eventList, new EventComparator(true, EventComparator.NAME));
+        eventAdapter.notifyDataSetChanged();
     }
 
     private Event parseJSONEvent (JSONObject jsonEvent) throws JSONException, ParseException {
@@ -198,9 +294,12 @@ public class CrawlSearchFragment extends Fragment implements OnMapReadyCallback{
                             e.printStackTrace();
                         }
 
-                        eventsMap.get(eventId).setParticipants(participants);
-                        Log.d(TAG, "parsed participants, event id: " + eventId + "; Event: " + eventsMap.get(eventId));
-
+                        try {
+                            eventList.get(getEventListIndex(eventId)).setParticipants(participants);
+                            Log.d(TAG, "parsed participants, event id: " + eventId + "; Event: " + eventList.get(getEventListIndex(eventId)));
+                        } catch (IndexOutOfBoundsException e) {
+                            e.printStackTrace();
+                        }
                     }
                 },
                 new Response.ErrorListener() {
@@ -219,14 +318,21 @@ public class CrawlSearchFragment extends Fragment implements OnMapReadyCallback{
                             JSONArray pubsJson = response.getJSONObject("_embedded").getJSONArray("pubs");
                             for (int i=0; i < pubsJson.length(); i++) {
                                 JSONObject jsonPub = pubsJson.getJSONObject(i);
-                                pubs.add(parsePubJson(jsonPub));
+                                Pub pub = parsePubJson(jsonPub);
+                                pubs.add(pub);
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
 
-                        eventsMap.get(eventId).setPubs(pubs);
-                        Log.d(TAG, "parsed pubs, event id: " + eventId + "; Event: " + eventsMap.get(eventId));
+                        try {
+                            eventList.get(getEventListIndex(eventId)).setPubs(pubs);
+
+                            drawEventOnMap(eventId, pubs);
+                            Log.d(TAG, "parsed pubs, event id: " + eventId + "; Event: " + eventList.get(getEventListIndex(eventId)));
+                        } catch (IndexOutOfBoundsException e) {
+                            e.printStackTrace();
+                        }
                     }
                 },
                 new Response.ErrorListener() {
@@ -241,7 +347,7 @@ public class CrawlSearchFragment extends Fragment implements OnMapReadyCallback{
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
-                            eventsMap.get(eventId).setOwner(parsePersonJson(response));
+                            eventList.get(getEventListIndex(eventId)).setOwner(parsePersonJson(response));
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -285,8 +391,16 @@ public class CrawlSearchFragment extends Fragment implements OnMapReadyCallback{
         return new Person(id, name, email, description);
     }
 
-
     private long parseIdFromHref(String href) {
         return Long.parseLong(href.split("\\/+")[3]);
+    }
+
+    public int getEventListIndex (long eventId) throws IndexOutOfBoundsException {
+        for (Event e : eventList) {
+            if (e.getEventId() == eventId) {
+                return eventList.indexOf(e);
+            }
+        }
+        throw new IndexOutOfBoundsException("Can't find eventId " + eventId);
     }
 }
