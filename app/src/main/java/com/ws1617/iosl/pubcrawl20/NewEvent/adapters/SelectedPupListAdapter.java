@@ -1,4 +1,4 @@
-package com.ws1617.iosl.pubcrawl20.NewEvent;
+package com.ws1617.iosl.pubcrawl20.NewEvent.adapters;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;

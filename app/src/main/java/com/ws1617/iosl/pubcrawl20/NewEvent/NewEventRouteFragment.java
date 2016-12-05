@@ -10,9 +10,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-import com.google.android.gms.maps.model.LatLng;
 import com.ws1617.iosl.pubcrawl20.Models.Event;
 import com.ws1617.iosl.pubcrawl20.Models.Pub;
+import com.ws1617.iosl.pubcrawl20.NewEvent.adapters.SelectedPupListAdapter;
 import com.ws1617.iosl.pubcrawl20.R;
 
 import java.util.ArrayList;
@@ -24,10 +24,13 @@ import java.util.List;
 public class NewEventRouteFragment extends Fragment {
 
     static final String TAG = "NewEventRouteFragment";
+    //Views
     View rootView;
     Button mAddPubBtn;
     RecyclerView mSelectedPupListView;
     SelectedPupListAdapter adapter;
+
+    //Data
     List<Pub> mSelectedPupsList;
 
     public NewEventRouteFragment() {

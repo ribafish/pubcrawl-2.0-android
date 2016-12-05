@@ -8,10 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.ws1617.iosl.pubcrawl20.NewEvent.adapters.ShareEventAdapter;
 import com.ws1617.iosl.pubcrawl20.R;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.

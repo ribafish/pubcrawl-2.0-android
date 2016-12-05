@@ -10,8 +10,19 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"/>-->
 
+    <Spinner
+        android:id="@+id/pub_dialog_pubs_list"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.1">
+    </Spinner>
+
     <com.google.android.gms.maps.MapView xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/map"
+        android:id="@+id/pub_dialog_map"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1" />
@@ -27,14 +38,17 @@
             android:id="@+id/view_pup_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Pup name:" />
+            android:text="Pup name:"
+            android:layout_marginBottom="10dp"/>
 
         <TextView
-            android:id="@+id/pub_name"
+            android:id="@+id/pub_dialog_pub_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toLeftOf="@id/view_pup_name"
-            android:text="Pup name:" />
+            android:layout_toRightOf="@id/view_pup_name"
+            android:layout_marginLeft="10dp"
+            android:text="Pup name:"
+            android:layout_marginBottom="10dp"/>
 
         <TextView
             android:id="@+id/view_pup_size"
@@ -44,14 +58,16 @@
             android:text="Pup Size:" />
 
         <TextView
-            android:id="@+id/pub_size"
+            android:id="@+id/pub_dialog_pub_size"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toLeftOf="@id/view_pup_size"
+            android:layout_marginLeft="10dp"
+            android:layout_below="@id/pub_dialog_pub_name"
+            android:layout_toRightOf="@id/view_pup_size"
             android:text="Pup size:" />
 
         <LinearLayout
-            android:id="@+id/date_placeholder"
+            android:id="@+id/date_from_placeholder"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/view_pup_size"
@@ -60,25 +76,48 @@
             android:padding="5dp">
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="10dp"
-                android:text="Event date: " />
+                android:text="Visit From date : " />
 
             <Button
-                android:id="@+id/event_new_date_picker"
+                android:id="@+id/pub_dialog_visit_from_date_picker"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="02.01.1990" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_below="@id/date_from_placeholder"
+            android:id="@+id/date_to_placeholder"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:orientation="horizontal"
+            android:padding="5dp">
+
+            <TextView
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                android:text="Visit To date : " />
+
+            <Button
+                android:id="@+id/pub_dialog_visit_to_date_picker"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="02.01.1990" />
         </LinearLayout>
 
         <Button
-            android:layout_below="@id/date_placeholder"
-            android:id="@+id/pub_done"
+            android:layout_below="@id/date_to_placeholder"
+            android:id="@+id/pub_dialog_pub_done"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:text="Done" />
+            android:text="Done"
+            android:layout_marginTop="40dp"/>
     </RelativeLayout>
 
 </LinearLayout>
