@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
@@ -27,7 +26,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.ws1617.iosl.pubcrawl20.Event.EventDetailsActivity;
 import com.ws1617.iosl.pubcrawl20.Models.Event;
-import com.ws1617.iosl.pubcrawl20.Models.Person;
+import com.ws1617.iosl.pubcrawl20.Models.Crawler;
 import com.ws1617.iosl.pubcrawl20.Models.Pub;
 import com.ws1617.iosl.pubcrawl20.R;
 
@@ -59,9 +58,8 @@ public class CrawlSearchFragment extends Fragment implements OnMapReadyCallback{
 
 
 
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater,  ViewGroup container,  Bundle savedInstanceState) {
         SupportMapFragment mapFragment = new SupportMapFragment();
         FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
         fragmentTransaction.add(R.id.homeMapView, mapFragment).commit();
@@ -114,7 +112,7 @@ public class CrawlSearchFragment extends Fragment implements OnMapReadyCallback{
     }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         // Instantiate the RequestQueue.
@@ -187,7 +185,7 @@ public class CrawlSearchFragment extends Fragment implements OnMapReadyCallback{
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        ArrayList<Person> participants = new ArrayList<>();
+                        ArrayList<Crawler> participants = new ArrayList<>();
                         try {
                             JSONArray participantsJson = response.getJSONObject("_embedded").getJSONArray("crawlers");
                             for (int i=0; i < participantsJson.length(); i++) {
@@ -198,7 +196,7 @@ public class CrawlSearchFragment extends Fragment implements OnMapReadyCallback{
                             e.printStackTrace();
                         }
 
-                        eventsMap.get(eventId).setParticipants(participants);
+                       // eventsMap.get(eventId).setParticipants(participants);
                         Log.d(TAG, "parsed participants, event id: " + eventId + "; Event: " + eventsMap.get(eventId));
 
                     }
@@ -274,7 +272,7 @@ public class CrawlSearchFragment extends Fragment implements OnMapReadyCallback{
         return new Pub(id, name, new LatLng(lat, lng), size);
     }
 
-    private Person parsePersonJson (JSONObject jsonPerson) throws JSONException {
+    private Crawler parsePersonJson (JSONObject jsonPerson) throws JSONException {
         String name = jsonPerson.getString("userName");
         String email = jsonPerson.getString("email");
         String description = jsonPerson.getString("description");
@@ -282,7 +280,7 @@ public class CrawlSearchFragment extends Fragment implements OnMapReadyCallback{
                 .getJSONObject("_links")
                 .getJSONObject("self")
                 .getString("href"));
-        return new Person(id, name, email, description);
+        return new Crawler(id, name, email, description);
     }
 
 

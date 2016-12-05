@@ -10,7 +10,7 @@ import java.util.ArrayList;
  * Github: https://github.com/ribafish/
  */
 
-public class Person {
+public class Crawler {
     private long id;
     private String name;
     private String email;
@@ -23,12 +23,12 @@ public class Person {
     private ArrayList<Long> ownedEventIds = new ArrayList<>();
 
 
-    public Person(long id, String name) {
+    public Crawler(long id, String name) {
         this.id = id;
         this.name = name;
     }
 
-    public Person(long id, String name, String email, String description) {
+    public Crawler(long id, String name, String email, String description) {
         this.id = id;
         this.name = name;
         this.email = email;
@@ -36,13 +36,13 @@ public class Person {
     }
 
 
-    public Person(long id, String name, String email, String description,
-                  @NonNull ArrayList<Bitmap> images,
-                  @NonNull ArrayList<Long> friendIds,
-                  @NonNull ArrayList<Long> eventIds,
-                  @NonNull ArrayList<Long> favouriteIds,
-                  @NonNull ArrayList<Long> ownedPubIds,
-                  @NonNull ArrayList<Long> ownedEventIds) {
+    public Crawler(long id, String name, String email, String description,
+                   @NonNull ArrayList<Bitmap> images,
+                   @NonNull ArrayList<Long> friendIds,
+                   @NonNull ArrayList<Long> eventIds,
+                   @NonNull ArrayList<Long> favouriteIds,
+                   @NonNull ArrayList<Long> ownedPubIds,
+                   @NonNull ArrayList<Long> ownedEventIds) {
         this.id = id;
         this.name = name;
         this.email = email;
@@ -89,7 +89,7 @@ public class Person {
 
     @Override
     public String toString() {
-        return "Person{" +
+        return "Crawler{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
