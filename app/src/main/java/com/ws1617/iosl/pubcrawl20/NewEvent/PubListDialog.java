@@ -1,10 +1,13 @@
 package com.ws1617.iosl.pubcrawl20.NewEvent;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +19,12 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.ws1617.iosl.pubcrawl20.Models.Pub;
 import com.ws1617.iosl.pubcrawl20.NewEvent.adapters.PubsListAdapter;
 import com.ws1617.iosl.pubcrawl20.R;
@@ -40,11 +48,12 @@ public class PubListDialog extends DialogFragment {
     Spinner mPubsListView;
     TextView mPubName, mPubSize;
 
-
+    SupportMapFragment mapFragment;
     //Data
     Pub selectedPub;
     List<Pub> pubsList;
     List<String> pubsListString;
+    GoogleMap mGoogleMap;
 
 
     public PubListDialog() {
@@ -63,7 +72,44 @@ public class PubListDialog extends DialogFragment {
         View view = inflater.inflate(R.layout.view_pup_list, null);
         alertBuilder.setView(view);
         initView(view);
+
         return alertBuilder.create();
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        //initMapView();
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        initMapView();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (null != getChildFragmentManager())
+            getActivity().getSupportFragmentManager().beginTransaction()
+                    .remove(mapFragment)
+                    .commit();
+    }
+    private void initMapView()
+    {
+        mapFragment = new SupportMapFragment();
+        FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
+        fragmentTransaction.add(R.id.pub_dialog_map,mapFragment,TAG).commit();
+        mapFragment.getMapAsync(new OnMapReadyCallback() {
+            @Override
+            public void onMapReady(GoogleMap googleMap) {
+                mGoogleMap = googleMap;
+                LatLng sydney = new LatLng(-34, 151);
+                mGoogleMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
+                mGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+            }
+        });
     }
 
 
