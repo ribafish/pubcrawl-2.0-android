@@ -28,7 +28,6 @@ public class SelectedPupListAdapter extends RecyclerView.Adapter<SelectedPupList
 
         View rootView = LayoutInflater.from(parent.getContext()).
                 inflate(R.layout.view_selected_pup_item, parent, false);
-
         pupViewHolder pupViewHolder = new pupViewHolder(rootView);
         return pupViewHolder;
     }
@@ -53,8 +52,8 @@ public class SelectedPupListAdapter extends RecyclerView.Adapter<SelectedPupList
 
         public pupViewHolder(View itemView) {
             super(itemView);
-            pubName = (TextView) itemView.findViewById(R.id.pub_item_title);
-            pubTime = (TextView) itemView.findViewById(R.id.pub_item_time);
+            pubName = (TextView) itemView.findViewById(R.id.selected_pub_item_title);
+            pubTime = (TextView) itemView.findViewById(R.id.selected_pub_item_time);
         }
     }
 }

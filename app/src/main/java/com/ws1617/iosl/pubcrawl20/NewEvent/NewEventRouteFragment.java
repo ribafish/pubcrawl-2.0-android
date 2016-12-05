@@ -85,6 +85,7 @@ public class NewEventRouteFragment extends Fragment {
         public void addPubToList(Pub newPub) {
             mSelectedPupsList.add(newPub);
             adapter.notifyItemChanged(mSelectedPupsList.size());
+           //adapter.notifyDataSetChanged();
         }
     };
 }

@@ -42,6 +42,7 @@ public class PubListDialog extends DialogFragment {
 
 
     //Data
+    Pub selectedPub;
     List<Pub> pubsList;
     List<String> pubsListString;
 
@@ -117,26 +118,25 @@ public class PubListDialog extends DialogFragment {
     View.OnClickListener mDoneBtnClickedListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
+
+            Calendar calendar = Calendar.getInstance();
+            int year = calendar.get(Calendar.YEAR);
+            int month = calendar.get(Calendar.MONTH);
+            int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+
             switch (view.getId()) {
                 case R.id.pub_dialog_pub_done: {
-                    Pub pub = new Pub("no", new LatLng(1, 1), 1);
-                    onSelectPubDialogDismissed.addPubToList(pub);
+                    if(selectedPub != null)
+                    onSelectPubDialogDismissed.addPubToList(selectedPub);
                     dismiss();
                     break;
                 }
                 case R.id.pub_dialog_visit_from_date_picker: {
-                    Calendar calendar = Calendar.getInstance();
-                    int year = calendar.get(Calendar.YEAR);
-                    int month = calendar.get(Calendar.MONTH);
-                    int day = calendar.get(Calendar.DAY_OF_MONTH);
-                    new DatePickerDialog(getContext(), onDateFromSetListener, year, month, day).show();
+                     new DatePickerDialog(getContext(), onDateFromSetListener, year, month, day).show();
                     break;
                 }
                 case R.id.pub_dialog_visit_to_date_picker: {
-                    Calendar calendar = Calendar.getInstance();
-                    int year = calendar.get(Calendar.YEAR);
-                    int month = calendar.get(Calendar.MONTH);
-                    int day = calendar.get(Calendar.DAY_OF_MONTH);
                     new DatePickerDialog(getContext(), onDatToSetListener, year, month, day).show();
                     break;
                 }
@@ -165,7 +165,7 @@ public class PubListDialog extends DialogFragment {
     AdapterView.OnItemSelectedListener pubListOnItemSelectedListener = new AdapterView.OnItemSelectedListener() {
         @Override
         public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long id) {
-            Pub selectedPub = pubsList.get(pos);
+            selectedPub = pubsList.get(pos);
             mPubName.setText(selectedPub.getPubName());
             mPubSize.setText(String.valueOf(selectedPub.getSize()));
         }
