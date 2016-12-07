@@ -71,7 +71,7 @@ public class NewEventRouteFragment extends Fragment {
         public void onClick(View view) {
             PubListDialog dialog = new PubListDialog();
             dialog.setPubListListener(onSelectPubDialogDismissed);
-            dialog.show(getFragmentManager(), TAG);
+            dialog.show(getChildFragmentManager(), TAG+"pub");
         }
     };
 
