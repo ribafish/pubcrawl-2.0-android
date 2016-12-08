@@ -1,4 +1,4 @@
-package com.ws1617.iosl.pubcrawl20.CrawlSearch.Models;
+package com.ws1617.iosl.pubcrawl20.DisplayEvents.Models;
 
 import android.graphics.Color;
 

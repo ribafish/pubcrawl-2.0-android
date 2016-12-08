@@ -1,4 +1,4 @@
-package com.ws1617.iosl.pubcrawl20.CrawlSearch;
+package com.ws1617.iosl.pubcrawl20.DisplayEvents;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;

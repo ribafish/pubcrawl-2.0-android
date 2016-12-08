@@ -1,7 +1,6 @@
-package com.ws1617.iosl.pubcrawl20.CrawlSearch;
+package com.ws1617.iosl.pubcrawl20.DisplayEvents;
 
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 
 /**
  * Created by gaspe on 30. 11. 2016.

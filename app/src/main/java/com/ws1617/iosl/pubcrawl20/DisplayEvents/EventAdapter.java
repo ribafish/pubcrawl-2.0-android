@@ -1,4 +1,4 @@
-package com.ws1617.iosl.pubcrawl20.CrawlSearch;
+package com.ws1617.iosl.pubcrawl20.DisplayEvents;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -11,7 +11,7 @@ import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.ws1617.iosl.pubcrawl20.CrawlSearch.Models.Event;
+import com.ws1617.iosl.pubcrawl20.DisplayEvents.Models.Event;
 import com.ws1617.iosl.pubcrawl20.Event.EventDetailsActivity;
 import com.ws1617.iosl.pubcrawl20.R;
 

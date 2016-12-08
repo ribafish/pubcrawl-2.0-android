@@ -1,5 +1,6 @@
-package com.ws1617.iosl.pubcrawl20.CrawlSearch;
+package com.ws1617.iosl.pubcrawl20.DisplayEvents;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -21,6 +22,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -39,10 +41,10 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
-import com.ws1617.iosl.pubcrawl20.CrawlSearch.Models.Event;
-import com.ws1617.iosl.pubcrawl20.CrawlSearch.Models.EventComparator;
-import com.ws1617.iosl.pubcrawl20.CrawlSearch.Models.Person;
-import com.ws1617.iosl.pubcrawl20.CrawlSearch.Models.Pub;
+import com.ws1617.iosl.pubcrawl20.DisplayEvents.Models.Event;
+import com.ws1617.iosl.pubcrawl20.DisplayEvents.Models.EventComparator;
+import com.ws1617.iosl.pubcrawl20.DisplayEvents.Models.Person;
+import com.ws1617.iosl.pubcrawl20.DisplayEvents.Models.Pub;
 import com.ws1617.iosl.pubcrawl20.R;
 
 import org.json.JSONArray;
@@ -60,9 +62,9 @@ import java.util.Locale;
  * Created by gaspe on 8. 11. 2016.
  */
 
-public class CrawlSearchFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnPolylineClickListener, GoogleMap.OnMarkerClickListener{
+public class DisplayEventsFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnPolylineClickListener, GoogleMap.OnMarkerClickListener{
     public static final String TITLE = "Home";
-    private static final String TAG = "CrawlSearchFragment";
+    private static final String TAG = "DisplayEventsFragment";
     private View rootView;
     private GoogleMap map;
     private SharedPreferences prefs;
@@ -70,7 +72,7 @@ public class CrawlSearchFragment extends Fragment implements OnMapReadyCallback,
     private ArrayList<Event> eventList = new ArrayList<>();
     private EventAdapter eventAdapter;
 
-    public CrawlSearchFragment() {}
+    public DisplayEventsFragment() {}
 
 
 
@@ -80,7 +82,7 @@ public class CrawlSearchFragment extends Fragment implements OnMapReadyCallback,
         SupportMapFragment mapFragment = new SupportMapFragment();
         FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
         fragmentTransaction.add(R.id.homeMapView, mapFragment).commit();
-        rootView = inflater.inflate(R.layout.fragment_crawl_search, container, false);
+        rootView = inflater.inflate(R.layout.fragment_display_events, container, false);
 
         mapFragment.getMapAsync(this);
 
@@ -182,6 +184,8 @@ public class CrawlSearchFragment extends Fragment implements OnMapReadyCallback,
         }
         eventList.clear();
 
+        final Context context = getActivity();
+
 
         JsonObjectRequest eventsRequest = new JsonObjectRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONObject>() {
@@ -200,6 +204,7 @@ public class CrawlSearchFragment extends Fragment implements OnMapReadyCallback,
                     public void onErrorResponse(VolleyError error) {
                         Log.e(TAG, "eventsRequest Error: " + error.toString());
                         error.printStackTrace();
+                        Toast.makeText(context, "Can't connect to server.", Toast.LENGTH_SHORT).show();
                     }
                 });
         // Add the request to the RequestQueue.
