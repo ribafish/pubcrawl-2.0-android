@@ -2,6 +2,8 @@ package com.ws1617.iosl.pubcrawl20;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -11,12 +13,15 @@ import android.support.v4.view.ViewPager;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.Toast;
 
 
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
+import com.google.android.gms.common.api.CommonStatusCodes;
+import com.google.android.gms.vision.barcode.Barcode;
 import com.ws1617.iosl.pubcrawl20.NewEvent.NewEventActivity;
-import com.ws1617.iosl.pubcrawl20.ScanQR.ScanQRActivity;
+import com.ws1617.iosl.pubcrawl20.ScanQR.BarcodeCaptureActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -35,6 +40,8 @@ public class MainActivity extends AppCompatActivity {
      */
     private ViewPager mViewPager;
     private Context context;
+    private static final int RC_BARCODE_CAPTURE = 9001;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,8 +91,12 @@ public class MainActivity extends AppCompatActivity {
         fabScanQR.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(context, ScanQRActivity.class);
-                context.startActivity(intent);
+                Intent intent = new Intent(context, BarcodeCaptureActivity.class);
+                //TODO Add preferences for camera ui
+                //SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+                //intent.putExtra(BarcodeCaptureActivity.AutoFocus, sharedPrefs.getBoolean("barcode_focus", false));
+                //intent.putExtra(BarcodeCaptureActivity.UseFlash, sharedPrefs.getBoolean("barcode_flash", false));
+                startActivityForResult(intent, RC_BARCODE_CAPTURE);
                 fabMenu.close(true);
             }
         });
@@ -98,6 +109,24 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == RC_BARCODE_CAPTURE) {
+            if (resultCode == CommonStatusCodes.SUCCESS) {
+                if (data != null) {
+                    Barcode barcode = data.getParcelableExtra(BarcodeCaptureActivity.BarcodeObject);
+                    Toast.makeText(this, barcode.displayValue, Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(this, "failed", Toast.LENGTH_LONG).show();
+                }
+            } else {
+                Toast.makeText(this, "complete fail", Toast.LENGTH_LONG).show();
+            }
+        } else {
+            super.onActivityResult(requestCode, resultCode, data);
+        }
     }
 
 }
