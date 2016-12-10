@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="com.ws1617.iosl.pubcrawl20.NewEvent.NewEventActivity" >
+    tools:context="com.ws1617.iosl.pubcrawl20.NewEvent.NewEventActivity">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/new_event_appbar"
@@ -15,21 +15,20 @@
         android:paddingTop="@dimen/appbar_padding_top"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
-        <android.support.v7.widget.Toolbar
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            android:background="?attr/colorPrimary"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        <android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/new_event_toolbar"
             android:layout_width="match_parent"
             android:layout_height="@dimen/first_bar_height"
-            android:title="@string/new_event_toolbar_title" />
+            android:background="?attr/colorPrimary"
+            android:title="@string/new_event_toolbar_title"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
         <android.support.design.widget.TabLayout
             android:id="@+id/new_event_tabs"
             style="@style/MyCustomTabLayout"
-            app:tabTextAppearance="@style/MyCustomTextAppearance"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/second_bar_height" />
+            android:layout_height="@dimen/second_bar_height"
+            app:tabTextAppearance="@style/MyCustomTextAppearance" />
 
     </android.support.design.widget.AppBarLayout>
 
@@ -38,5 +37,16 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/new_event_create_new"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:layout_gravity="end|bottom"
+        android:layout_margin="@dimen/fab_margin"
+        android:background="@color/wallet_highlighted_text_holo_dark"
+        android:src="@drawable/check" />
+
 
 </android.support.design.widget.CoordinatorLayout>

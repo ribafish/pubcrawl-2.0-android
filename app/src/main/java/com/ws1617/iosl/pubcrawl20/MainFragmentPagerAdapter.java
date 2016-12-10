@@ -11,7 +11,7 @@ import android.text.SpannableString;
 import android.text.style.ImageSpan;
 
 import com.ws1617.iosl.pubcrawl20.Chat.ChatFragment;
-import com.ws1617.iosl.pubcrawl20.CrawlSearch.CrawlSearchFragment;
+import com.ws1617.iosl.pubcrawl20.DisplayEvents.DisplayEventsFragment;
 import com.ws1617.iosl.pubcrawl20.Current.CurrentFragment;
 import com.ws1617.iosl.pubcrawl20.NotificationHistory.NotificationHistoryFragment;
 
@@ -42,7 +42,7 @@ public class MainFragmentPagerAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             case 0:
-                return new CrawlSearchFragment();
+                return new DisplayEventsFragment();
             case 1:
                 return new CurrentFragment();
             case 2:
@@ -50,7 +50,7 @@ public class MainFragmentPagerAdapter extends FragmentPagerAdapter {
             case 3:
                 return new NotificationHistoryFragment();
             default:
-                return new CrawlSearchFragment();
+                return new DisplayEventsFragment();
         }
     }
 
