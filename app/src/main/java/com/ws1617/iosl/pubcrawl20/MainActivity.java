@@ -19,6 +19,7 @@ import com.github.clans.fab.FloatingActionMenu;
 import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.vision.barcode.Barcode;
 import com.ws1617.iosl.pubcrawl20.NewEvent.NewEventActivity;
+import com.ws1617.iosl.pubcrawl20.ScanQR.BarcodeCaptureActivity;
 import com.ws1617.iosl.pubcrawl20.ScanQR.ScanQrActivity;
 
 /**

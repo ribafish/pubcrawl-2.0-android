@@ -47,15 +47,16 @@
             android:configChanges="orientation"
             android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".Event.EventDetailsActivity"
-                  android:configChanges="orientation"
-                  android:screenOrientation="portrait" />
         <activity
             android:name=".ScanQR.BarcodeCaptureActivity"
             android:theme="@style/AppTheme"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
             android:label="Read Barcode"/>
+
+        <activity android:name=".Details.EventDetailsActivity" />
+        <activity android:name=".Details.PubDetailsActivity" />
+        <activity android:name=".Details.PersonDetailsActivity" />
     </application>
 
 </manifest>

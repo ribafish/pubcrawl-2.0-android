@@ -1,6 +1,7 @@
 package com.ws1617.iosl.pubcrawl20.DisplayEvents;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -41,6 +42,9 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.ws1617.iosl.pubcrawl20.Details.EventDetailsActivity;
+import com.ws1617.iosl.pubcrawl20.Details.PersonDetailsActivity;
+import com.ws1617.iosl.pubcrawl20.Details.PubDetailsActivity;
 import com.ws1617.iosl.pubcrawl20.DisplayEvents.Models.Event;
 import com.ws1617.iosl.pubcrawl20.DisplayEvents.Models.EventComparator;
 import com.ws1617.iosl.pubcrawl20.DisplayEvents.Models.Person;
@@ -106,6 +110,36 @@ public class DisplayEventsFragment extends Fragment implements OnMapReadyCallbac
                 } else {
                     map.setVisibility(View.GONE);
                 }
+            }
+        });
+
+        ((Button) rootView.findViewById(R.id.btn1)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getContext(), EventDetailsActivity.class);
+                intent.putExtra("name", "Test Event");
+                intent.putExtra("id", (long) 14);
+                startActivity(intent);
+            }
+        });
+
+        ((Button) rootView.findViewById(R.id.btn2)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getContext(), PubDetailsActivity.class);
+                intent.putExtra("name", "Test Pub");
+                intent.putExtra("id", (long) 9);
+                startActivity(intent);
+            }
+        });
+
+        ((Button) rootView.findViewById(R.id.btn3)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getContext(), PersonDetailsActivity.class);
+                intent.putExtra("name", "Test Person");
+                intent.putExtra("id", (long) 1);
+                startActivity(intent);
             }
         });
 

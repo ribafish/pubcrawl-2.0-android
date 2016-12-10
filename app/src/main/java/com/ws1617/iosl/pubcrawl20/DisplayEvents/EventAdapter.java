@@ -11,8 +11,8 @@ import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.ws1617.iosl.pubcrawl20.Details.EventDetailsActivity;
 import com.ws1617.iosl.pubcrawl20.DisplayEvents.Models.Event;
-import com.ws1617.iosl.pubcrawl20.Event.EventDetailsActivity;
 import com.ws1617.iosl.pubcrawl20.R;
 
 import java.util.List;
