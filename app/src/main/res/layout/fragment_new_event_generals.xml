@@ -1,0 +1,57 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="20dp"
+    tools:context="com.ws1617.iosl.pubcrawl20.NewEvent.NewEventGeneralFragment">
+
+
+    <android.support.v7.widget.SwitchCompat
+        android:id="@+id/event_new_tracked"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:checked="true"
+        android:clickable="true"
+        android:elevation="1dp"
+        android:text="@string/event_tracked" />
+
+    <EditText
+        android:id="@+id/event_new_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/event_new_tracked"
+        android:hint="@string/event_title" />
+
+
+    <LinearLayout
+        android:id="@+id/date_placholder"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/event_new_title"
+        android:gravity="left"
+        android:orientation="horizontal"
+        android:padding="5dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:text="Event date: " />
+
+        <Button
+            android:id="@+id/event_new_date_picker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="02.01.1990" />
+    </LinearLayout>
+
+    <EditText
+        android:id="@+id/event_new_description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/date_placholder"
+        android:hint="@string/event_description"
+        android:lines="5" />
+</RelativeLayout>
