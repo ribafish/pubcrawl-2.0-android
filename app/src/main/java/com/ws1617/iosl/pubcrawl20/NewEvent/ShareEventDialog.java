@@ -33,46 +33,25 @@ public class ShareEventDialog extends DialogFragment {
 
 
     @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
-
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
-        rootView = LayoutInflater.from(getActivity()).inflate(R.layout.view_invite_dialog
-                , null);
-        alertDialog.setView(rootView);
-
-        return alertDialog.create();
-    }
-
-
-    @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        initDialogView(rootView);
-    }
-
-    void initDialogView(View rootView) {
+    public Dialog onCreateDialog(Bundle savedInstanceState) {€    void initDialogView(View rootView) {
 
         mQrCodeImg = (ImageView) rootView.findViewById(R.id.invite_barcode);
         QRCodeWriter writer = new QRCodeWriter();
         String content = "test";
         // this is a small sample use of the QRCodeEncoder class from zxing
         try {
-            // generate a 150x150 QR code
-            BitMatrix bitMatrix = writer.encode(content, BarcodeFormat.QR_CODE, 512, 512);
-
-            int width = bitMatrix.getWidth();
-            int height = bitMatrix.getHeight();
-
-            Bitmap bmp = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);
+            // generate a 150x150 QR code== €Bitmap.Config.RGB_565);
             for (int x = 0; x < width; x++) {
-                for (int y = 0; y < height; y++) {
-                    bmp.setPixel(x, y, bitMatrix.get(x, y) ? Color.BLACK : Color.WHITE);
-                }
-            }
-            if (bmp != null) {
+                for (int y = 0; y < height; y++) {<*
+                    bmp.setPixel(x, y, bitMatrix.get(x, y) ? Colo≉
                 mQrCodeImg.setImageBitmap(bmp);
             }
         } catch (WriterException e) { //eek }
         }
-    }
+    }ckedListener);
+
+
+        mPubsListView = (Spinner) view.findViewById(R.id.pub_dialog_pubs_list);
+        mPubsListView.setOnItemSelectedListener(pubListOnItemSelectedListener);
+        //TODO should be fetched from the DB
 }

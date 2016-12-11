@@ -125,11 +125,7 @@ public class PubListDialog extends DialogFragment {
         mDateFrom.setOnClickListener(mDoneBtnClickedListener);
 
         mDateTo = (Button) view.findViewById(R.id.pub_dialog_visit_to_date_picker);
-        mDateTo.setOnClickListener(mDoneBtnClickedListener);
-
-        mPubsListView = (Spinner) view.findViewById(R.id.pub_dialog_pubs_list);
-        mPubsListView.setOnItemSelectedListener(pubListOnItemSelectedListener);
-        //TODO should be fetched from the DB
+        mDateTo.setOnClickListener(mDoneBtnCli
         initPubList();
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, pubsListString);
         mPubsListView.setAdapter(adapter);
