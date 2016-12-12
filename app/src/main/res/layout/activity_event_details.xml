@@ -431,7 +431,7 @@
                         android:visibility="visible"
                         android:id="@+id/event_details.participants.show_all_btn"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="36dp"
                         android:gravity="center"
                         android:textAlignment="center"
                         android:layout_alignParentBottom="true"
@@ -446,6 +446,11 @@
                 </RelativeLayout>
 
             </android.support.v7.widget.CardView>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="8dp"
+                />
 
         </LinearLayout>
 

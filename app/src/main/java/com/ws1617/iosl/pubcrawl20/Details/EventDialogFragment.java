@@ -102,7 +102,7 @@ public class EventDialogFragment extends DialogFragment {
                                 for (EventMini e : events) {
                                     if (e.getName().toLowerCase().contains(newText.toLowerCase())
                                             || String.valueOf(e.getId()).contains(newText)
-                                            || e.getDate().toString().contains(newText)) {
+                                            || e.getDate().toString().toLowerCase().contains(newText.toLowerCase())) {
                                         eventsDisplayed.add(e);
                                     }
                                 }

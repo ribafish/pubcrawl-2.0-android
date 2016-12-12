@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentTransaction;
@@ -36,6 +37,7 @@ import com.ws1617.iosl.pubcrawl20.R;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 public class PubDetailsActivity extends AppCompatActivity implements AppBarLayout.OnOffsetChangedListener {
 
@@ -86,6 +88,7 @@ public class PubDetailsActivity extends AppCompatActivity implements AppBarLayou
 
         setupTopPersons();
         setupFutureEvents();
+        setupPastEvents();
 
         populateFields();
 
@@ -117,12 +120,42 @@ public class PubDetailsActivity extends AppCompatActivity implements AppBarLayou
             ((TextView) findViewById(R.id.pub_details_id)).setText(String.valueOf(pub.getId()));
             ((TextView) findViewById(R.id.pub_details_address)).setText(address);
             ((TextView) findViewById(R.id.pub_details_latlng)).setText(
-                    String.format("%.2f, %.2f",
+                    String.format(Locale.ENGLISH, "%.2f, %.2f",
                             pub.getLatLng().latitude,
                             pub.getLatLng().longitude));
             ((TextView) findViewById(R.id.pub_details_size)).setText(String.valueOf(pub.getSize()));
             ((TextView) findViewById(R.id.pub_details_prices)).setText(String.valueOf(pub.getPrices()));
             ((TextView) findViewById(R.id.pub_details_rating)).setText(String.valueOf(pub.getRating()));
+
+            ((TextView) findViewById(R.id.pub_details_address)).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    // "geo:<lat>,<long>?q=<lat>,<long>(Label+Name)"
+                    String command = String.format(Locale.ENGLISH, "geo:%f,%f?q=%f,%f(%s)",
+                            pub.getLatLng().latitude,
+                            pub.getLatLng().longitude,
+                            pub.getLatLng().latitude,
+                            pub.getLatLng().longitude,
+                            pub.getPubName());
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(command));
+                    startActivity(intent);
+                }
+            });
+            ((TextView) findViewById(R.id.pub_details_latlng)).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    // "geo:<lat>,<long>?q=<lat>,<long>(Label+Name)"
+                    String command = String.format(Locale.ENGLISH, "geo:%f,%f?q=%f,%f(%s)",
+                            pub.getLatLng().latitude,
+                            pub.getLatLng().longitude,
+                            pub.getLatLng().latitude,
+                            pub.getLatLng().longitude,
+                            pub.getPubName());
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(command));
+                    startActivity(intent);
+                }
+            });
+
 
             // Opening times card
             ((TextView) findViewById(R.id.pub_details_times)).setText(pub.getClosingTime());
@@ -139,7 +172,8 @@ public class PubDetailsActivity extends AppCompatActivity implements AppBarLayou
         } else Log.e(TAG, "futureEventsList empty");
 
         if (pastEventsList.size() > 0) {
-            // TODO
+            pastEventsAdapter.notifyDataSetChanged();
+            setListViewHeightBasedOnItems(pastEventsListView);
         } else Log.e(TAG, "pastEventsList empty");
     }
 
@@ -297,10 +331,10 @@ public class PubDetailsActivity extends AppCompatActivity implements AppBarLayou
     }
 
     private void setupFutureEvents() {
-        if (this.futureEventsList.size() < 6) {
+        if (this.futureEventsList.size() < 8) {
             futureEventsAdapter = new EventAdapter(this, futureEventsList);
         } else {
-            ArrayList<EventMini> p = new ArrayList<>(futureEventsList.subList(0, 6));
+            ArrayList<EventMini> p = new ArrayList<>(futureEventsList.subList(0, 8));
             futureEventsAdapter = new EventAdapter(this, p);
         }
         futureEventsListView = (ListView) findViewById(R.id.pub_details_events_future_listView);
@@ -314,16 +348,16 @@ public class PubDetailsActivity extends AppCompatActivity implements AppBarLayou
                 startActivity(intent);
             }
         });
-        if (futureEventsList.size() < 4) {
+        if (futureEventsList.size() < 6) {
             ((Button)findViewById(R.id.pub_details_events_future_show_all_btn)).setVisibility(View.GONE);
             ((ImageView)findViewById(R.id.pub_details_events_future_gradient)).setVisibility(View.GONE);
             ((RelativeLayout) findViewById(R.id.pub_details_events_future_layout)).getLayoutParams().height = RelativeLayout.LayoutParams.WRAP_CONTENT;
             setListViewHeightBasedOnItems(futureEventsListView);
         } else {
-            final int height280 = (int) (280 * getResources().getDisplayMetrics().density);
+            final int height260 = (int) (260 * getResources().getDisplayMetrics().density);
             ((Button)findViewById(R.id.pub_details_events_future_show_all_btn)).setVisibility(View.VISIBLE);
             ((ImageView)findViewById(R.id.pub_details_events_future_gradient)).setVisibility(View.VISIBLE);
-            ((RelativeLayout) findViewById(R.id.pub_details_events_future_layout)).getLayoutParams().height = height280;
+            ((RelativeLayout) findViewById(R.id.pub_details_events_future_layout)).getLayoutParams().height = height260;
             findViewById(R.id.pub_details_events_future_show_all_btn).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -340,6 +374,58 @@ public class PubDetailsActivity extends AppCompatActivity implements AppBarLayou
             // Disable scrolling
             futureEventsListView.setScrollContainer(false);
             futureEventsListView.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View view, MotionEvent motionEvent) {
+                    return (motionEvent.getAction() == MotionEvent.ACTION_MOVE);
+                }
+            });
+        }
+    }
+
+    private void setupPastEvents() {
+        if (this.pastEventsList.size() < 8) {
+            pastEventsAdapter = new EventAdapter(this, pastEventsList);
+        } else {
+            ArrayList<EventMini> p = new ArrayList<>(pastEventsList.subList(0, 8));
+            pastEventsAdapter = new EventAdapter(this, p);
+        }
+        pastEventsListView = (ListView) findViewById(R.id.pub_details_events_past_listView);
+        pastEventsListView.setAdapter(pastEventsAdapter);
+        pastEventsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Intent intent = new Intent(context, EventDetailsActivity.class);
+                intent.putExtra("name", pastEventsList.get(i).getName());
+                intent.putExtra("id", pastEventsList.get(i).getId());
+                startActivity(intent);
+            }
+        });
+        if (pastEventsList.size() < 6) {
+            ((Button)findViewById(R.id.pub_details_events_past_show_all_btn)).setVisibility(View.GONE);
+            ((ImageView)findViewById(R.id.pub_details_events_past_gradient)).setVisibility(View.GONE);
+            ((RelativeLayout) findViewById(R.id.pub_details_events_past_layout)).getLayoutParams().height = RelativeLayout.LayoutParams.WRAP_CONTENT;
+            setListViewHeightBasedOnItems(pastEventsListView);
+        } else {
+            final int height260 = (int) (260 * getResources().getDisplayMetrics().density);
+            ((Button)findViewById(R.id.pub_details_events_past_show_all_btn)).setVisibility(View.VISIBLE);
+            ((ImageView)findViewById(R.id.pub_details_events_past_gradient)).setVisibility(View.VISIBLE);
+            ((RelativeLayout) findViewById(R.id.pub_details_events_past_layout)).getLayoutParams().height = height260;
+            findViewById(R.id.pub_details_events_past_show_all_btn).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Log.d(TAG, "expand participants onClick");
+                    Bundle args = new Bundle();
+                    args.putString("title", getString(R.string.past_events));
+                    FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                    EventDialogFragment eventDialogFragment = new EventDialogFragment();
+                    eventDialogFragment.setEvents(pastEventsList);
+                    eventDialogFragment.setArguments(args);
+                    eventDialogFragment.show(ft, "map_dialog_fragment");
+                }
+            });
+            // Disable scrolling
+            pastEventsListView.setScrollContainer(false);
+            pastEventsListView.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View view, MotionEvent motionEvent) {
                     return (motionEvent.getAction() == MotionEvent.ACTION_MOVE);

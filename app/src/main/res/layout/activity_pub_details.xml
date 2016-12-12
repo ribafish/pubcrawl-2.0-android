@@ -118,7 +118,8 @@
             android:orientation="vertical"
             android:animateLayoutChanges="true"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            >
 
             <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
@@ -476,7 +477,7 @@
                         android:visibility="visible"
                         android:id="@+id/pub_details.top.participants.show_all_btn"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="36dp"
                         android:gravity="center"
                         android:textAlignment="center"
                         android:layout_alignParentBottom="true"
@@ -510,7 +511,7 @@
                         android:id="@+id/pub_details.events.future.layout"
                         android:animateLayoutChanges="true"
                         android:layout_width="match_parent"
-                        android:layout_height="280dp"
+                        android:layout_height="265dp"
                         android:paddingTop="16dp"
                         android:paddingLeft="16dp"
                         android:paddingStart="16dp"
@@ -547,7 +548,7 @@
                         android:visibility="visible"
                         android:id="@+id/pub_details.events.future.gradient"
                         android:layout_width="match_parent"
-                        android:layout_height="28dp"
+                        android:layout_height="32dp"
                         android:layout_alignParentBottom="true"
                         android:alpha="1"
                         android:src="@drawable/text_truncate_shadow"/>
@@ -556,7 +557,7 @@
                         android:visibility="visible"
                         android:id="@+id/pub_details.events.future.show_all_btn"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="36dp"
                         android:gravity="center"
                         android:textAlignment="center"
                         android:layout_alignParentBottom="true"
@@ -564,7 +565,6 @@
                         android:textAllCaps="true"
                         android:text="@string/show_all"
                         android:textColor="#2196F3"
-                        android:layout_marginBottom="8dp"
                         android:clickable="true"
                         style="@style/Widget.AppCompat.Button.Borderless" />
 
@@ -590,7 +590,7 @@
                         android:id="@+id/pub_details.events.past.layout"
                         android:animateLayoutChanges="true"
                         android:layout_width="match_parent"
-                        android:layout_height="280dp"
+                        android:layout_height="265dp"
                         android:paddingTop="16dp"
                         android:paddingLeft="16dp"
                         android:paddingStart="16dp"
@@ -627,7 +627,7 @@
                         android:visibility="visible"
                         android:id="@+id/pub_details.events.past.gradient"
                         android:layout_width="match_parent"
-                        android:layout_height="28dp"
+                        android:layout_height="32dp"
                         android:layout_alignParentBottom="true"
                         android:alpha="1"
                         android:src="@drawable/text_truncate_shadow"/>
@@ -636,7 +636,7 @@
                         android:visibility="visible"
                         android:id="@+id/pub_details.events.past.show_all_btn"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="36dp"
                         android:gravity="center"
                         android:textAlignment="center"
                         android:layout_alignParentBottom="true"
@@ -644,13 +644,19 @@
                         android:textAllCaps="true"
                         android:text="@string/show_all"
                         android:textColor="#2196F3"
-                        android:layout_marginBottom="8dp"
                         android:clickable="true"
-                        style="@style/Widget.AppCompat.Button.Borderless" />
+                        android:padding="8dp"
+                        style="@style/Widget.AppCompat.Button.Borderless"
+                        />
 
                 </RelativeLayout>
 
             </android.support.v7.widget.CardView>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="8dp"
+                />
             
         </LinearLayout>
 
