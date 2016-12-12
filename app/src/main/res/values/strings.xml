@@ -123,4 +123,14 @@
     <string name="no_description">No description</string>
     <string name="starts">Starts</string>
     <string name="show_all">Show all</string>
+    <string name="address">Address</string>
+    <string name="coordinates">Coordinates</string>
+    <string name="size">Size</string>
+    <string name="prices">Prices</string>
+    <string name="rating">Rating</string>
+    <string name="opening_times">Opening times</string>
+    <string name="no_data">No data</string>
+    <string name="top_participants">Top participants</string>
+    <string name="past_events">Past events</string>
+    <string name="future_events">Future events</string>
 </resources>

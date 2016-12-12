@@ -111,23 +111,548 @@
         android:layout_height="match_parent"
         android:layout_marginTop="4dp"
         android:scrollbars="none"
+        android:animateLayoutChanges="true"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" >
 
-        <android.support.v7.widget.CardView
+        <LinearLayout
+            android:orientation="vertical"
+            android:animateLayoutChanges="true"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:cardElevation="8dp"
-            app:contentPadding="16dp" >
+            android:layout_height="wrap_content">
 
-            <TextView
+            <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:lineSpacingExtra="8dp"
-                android:text="BLABLABLABLABLABLABLA"
-                android:textSize="18sp"
-                />
+                android:layout_marginTop="8dp"
+                app:cardElevation="8dp"
+                app:contentPadding="16dp" >
 
-        </android.support.v7.widget.CardView>
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" >
+
+                    <TextView
+                        android:id="@+id/pub_details.info.title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentTop="true"
+                        android:text="@string/info"
+                        android:layout_marginBottom="8dp"
+                        android:textSize="20sp"
+                        />
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:id="@+id/pub_details.id"
+                            android:layout_marginLeft="8dp"
+                            android:layout_marginRight="8dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignBottom="@+id/pub_details.id.title"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentRight="true"
+                            android:text="@string/unknown"
+                            />
+
+                        <TextView
+                            android:id="@+id/pub_details.id.title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/id"
+                            android:layout_marginBottom="6dp"
+                            android:textSize="16sp"
+                            />
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:id="@+id/pub_details.address"
+                            android:layout_marginLeft="8dp"
+                            android:layout_marginRight="8dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignBottom="@+id/pub_details.address.title"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentRight="true"
+                            android:text="@string/unknown"
+                            />
+
+                        <TextView
+                            android:id="@+id/pub_details.address.title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/address"
+                            android:layout_marginBottom="6dp"
+                            android:textSize="16sp"
+                            />
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:id="@+id/pub_details.latlng.title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/coordinates"
+                            android:layout_marginBottom="6dp"
+                            android:textSize="16sp"
+                            />
+
+                        <TextView
+                            android:id="@+id/latlng.address"
+                            android:layout_marginLeft="8dp"
+                            android:layout_marginRight="8dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignBottom="@+id/pub_details.latlng.title"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentRight="true"
+                            android:text="@string/unknown"
+                            />
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:id="@+id/pub_details.owner.title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentLeft="true"
+                            android:layout_alignParentStart="true"
+                            android:text="@string/owner"
+                            android:textSize="16sp"
+                            android:layout_marginBottom="6dp"
+                            />
+
+                        <TextView
+                            android:id="@+id/pub_details.owner"
+                            android:layout_marginLeft="8dp"
+                            android:layout_marginRight="8dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignBottom="@+id/pub_details.owner.title"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentRight="true"
+                            android:text="@string/unknown"
+                            />
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:id="@+id/pub_details.size.title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentLeft="true"
+                            android:layout_alignParentStart="true"
+                            android:text="@string/size"
+                            android:textSize="16sp"
+                            android:layout_marginBottom="6dp"
+                            />
+
+                        <TextView
+                            android:id="@+id/pub_details.size"
+                            android:layout_marginLeft="8dp"
+                            android:layout_marginRight="8dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignBottom="@+id/pub_details.size.title"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentRight="true"
+                            android:text="@string/unknown"
+                            />
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:id="@+id/pub_details.prices.title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentLeft="true"
+                            android:layout_alignParentStart="true"
+                            android:text="@string/prices"
+                            android:textSize="16sp"
+                            android:layout_marginBottom="6dp"
+                            />
+
+                        <TextView
+                            android:id="@+id/pub_details.prices"
+                            android:layout_marginLeft="8dp"
+                            android:layout_marginRight="8dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignBottom="@+id/pub_details.prices.title"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentRight="true"
+                            android:text="@string/unknown"
+                            />
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:id="@+id/pub_details.rating.title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentLeft="true"
+                            android:layout_alignParentStart="true"
+                            android:text="@string/rating"
+                            android:textSize="16sp"
+                            android:layout_marginBottom="6dp"
+                            />
+
+                        <TextView
+                            android:id="@+id/pub_details.rating"
+                            android:layout_marginLeft="8dp"
+                            android:layout_marginRight="8dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignBottom="@+id/pub_details.rating.title"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentRight="true"
+                            android:text="@string/unknown"
+                            />
+                    </RelativeLayout>
+
+                </LinearLayout>
+
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
+                android:animateLayoutChanges="true"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                app:cardElevation="8dp"
+                android:id="@+id/pub_details.description.card"
+                >
+
+                <RelativeLayout
+                    android:animateLayoutChanges="true"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+    
+                    <RelativeLayout
+                        android:id="@+id/pub_details.times.layout"
+                        android:animateLayoutChanges="true"
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp"
+                        android:maxHeight="200dp"
+                        android:paddingTop="16dp"
+                        android:paddingLeft="16dp"
+                        android:paddingStart="16dp"
+                        android:paddingRight="16dp"
+                        android:paddingEnd="16dp"
+                        >
+    
+                        <TextView
+                            android:id="@+id/pub_details.times.title"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentLeft="true"
+                            android:layout_alignParentStart="true"
+                            android:layout_alignParentTop="true"
+                            android:text="@string/opening_times"
+                            android:layout_marginBottom="8dp"
+                            android:textSize="20sp"
+                            />
+    
+                        <TextView
+                            android:id="@+id/pub_details.times"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/pub_details.times.title"
+                            android:layout_alignParentLeft="true"
+                            android:layout_alignParentStart="true"
+                            android:text="@string/no_data"
+                            android:ellipsize="end"
+                            android:layout_margin="4dp"
+                            />
+    
+                    </RelativeLayout>
+    
+                    <ImageView
+                        android:visibility="visible"
+                        android:id="@+id/pub_details.times.gradient"
+                        android:layout_width="match_parent"
+                        android:layout_height="28dp"
+                        android:layout_alignParentBottom="true"
+                        android:alpha="1"
+                        android:src="@drawable/text_truncate_shadow"/>
+    
+                    <ImageView
+                        android:visibility="visible"
+                        android:id="@+id/pub_details.times.arrow"
+                        android:layout_width="match_parent"
+                        android:layout_height="22dp"
+                        android:layout_alignParentBottom="true"
+                        android:alpha="1"
+                        android:src="@drawable/ic_expand_more"/>
+    
+                </RelativeLayout>
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
+                android:animateLayoutChanges="true"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                app:cardElevation="8dp"
+                android:id="@+id/pub_details.top.participants.card"
+                >
+
+                <RelativeLayout
+                    android:animateLayoutChanges="true"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <RelativeLayout
+                        android:id="@+id/pub_details.top.participants.layout"
+                        android:animateLayoutChanges="true"
+                        android:layout_width="match_parent"
+                        android:layout_height="280dp"
+                        android:paddingTop="16dp"
+                        android:paddingLeft="16dp"
+                        android:paddingStart="16dp"
+                        android:paddingRight="16dp"
+                        android:paddingEnd="16dp"
+                        >
+
+                        <TextView
+                            android:id="@+id/pub_details.top.participants.title"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentLeft="true"
+                            android:layout_alignParentStart="true"
+                            android:layout_alignParentTop="true"
+                            android:text="@string/top_participants"
+                            android:layout_marginBottom="8dp"
+                            android:textSize="20sp"
+                            />
+
+                        <ListView
+                            android:id="@+id/pub_details.top.participants.listView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/pub_details.top.participants.title"
+                            android:layout_alignParentLeft="true"
+                            android:layout_alignParentStart="true"
+                            android:layout_margin="4dp"
+                            android:scrollbars="none"
+                            />
+
+                    </RelativeLayout>
+
+                    <ImageView
+                        android:visibility="visible"
+                        android:id="@+id/pub_details.top.participants.gradient"
+                        android:layout_width="match_parent"
+                        android:layout_height="28dp"
+                        android:layout_alignParentBottom="true"
+                        android:alpha="1"
+                        android:src="@drawable/text_truncate_shadow"/>
+
+                    <Button
+                        android:visibility="visible"
+                        android:id="@+id/pub_details.top.participants.show_all_btn"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:textAlignment="center"
+                        android:layout_alignParentBottom="true"
+                        android:background="?android:attr/selectableItemBackground"
+                        android:textAllCaps="true"
+                        android:text="@string/show_all"
+                        android:textColor="#2196F3"
+                        android:layout_marginBottom="8dp"
+                        android:clickable="true"
+                        style="@style/Widget.AppCompat.Button.Borderless" />
+
+                </RelativeLayout>
+
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
+                android:animateLayoutChanges="true"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                app:cardElevation="8dp"
+                android:id="@+id/pub_details.events.future.card"
+                >
+
+                <RelativeLayout
+                    android:animateLayoutChanges="true"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <RelativeLayout
+                        android:id="@+id/pub_details.events.future.layout"
+                        android:animateLayoutChanges="true"
+                        android:layout_width="match_parent"
+                        android:layout_height="280dp"
+                        android:paddingTop="16dp"
+                        android:paddingLeft="16dp"
+                        android:paddingStart="16dp"
+                        android:paddingRight="16dp"
+                        android:paddingEnd="16dp"
+                        >
+
+                        <TextView
+                            android:id="@+id/pub_details.events.future.title"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentLeft="true"
+                            android:layout_alignParentStart="true"
+                            android:layout_alignParentTop="true"
+                            android:text="@string/future_events"
+                            android:layout_marginBottom="8dp"
+                            android:textSize="20sp"
+                            />
+
+                        <ListView
+                            android:id="@+id/pub_details.events.future.listView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/pub_details.events.future.title"
+                            android:layout_alignParentLeft="true"
+                            android:layout_alignParentStart="true"
+                            android:layout_margin="4dp"
+                            android:scrollbars="none"
+                            />
+
+                    </RelativeLayout>
+
+                    <ImageView
+                        android:visibility="visible"
+                        android:id="@+id/pub_details.events.future.gradient"
+                        android:layout_width="match_parent"
+                        android:layout_height="28dp"
+                        android:layout_alignParentBottom="true"
+                        android:alpha="1"
+                        android:src="@drawable/text_truncate_shadow"/>
+
+                    <Button
+                        android:visibility="visible"
+                        android:id="@+id/pub_details.events.future.show_all_btn"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:textAlignment="center"
+                        android:layout_alignParentBottom="true"
+                        android:background="?android:attr/selectableItemBackground"
+                        android:textAllCaps="true"
+                        android:text="@string/show_all"
+                        android:textColor="#2196F3"
+                        android:layout_marginBottom="8dp"
+                        android:clickable="true"
+                        style="@style/Widget.AppCompat.Button.Borderless" />
+
+                </RelativeLayout>
+
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
+                android:animateLayoutChanges="true"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                app:cardElevation="8dp"
+                android:id="@+id/pub_details.events.past.card"
+                >
+
+                <RelativeLayout
+                    android:animateLayoutChanges="true"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <RelativeLayout
+                        android:id="@+id/pub_details.events.past.layout"
+                        android:animateLayoutChanges="true"
+                        android:layout_width="match_parent"
+                        android:layout_height="280dp"
+                        android:paddingTop="16dp"
+                        android:paddingLeft="16dp"
+                        android:paddingStart="16dp"
+                        android:paddingRight="16dp"
+                        android:paddingEnd="16dp"
+                        >
+
+                        <TextView
+                            android:id="@+id/pub_details.events.past.title"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentLeft="true"
+                            android:layout_alignParentStart="true"
+                            android:layout_alignParentTop="true"
+                            android:text="@string/past_events"
+                            android:layout_marginBottom="8dp"
+                            android:textSize="20sp"
+                            />
+
+                        <ListView
+                            android:id="@+id/pub_details.events.past.listView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/pub_details.events.past.title"
+                            android:layout_alignParentLeft="true"
+                            android:layout_alignParentStart="true"
+                            android:layout_margin="4dp"
+                            android:scrollbars="none"
+                            />
+
+                    </RelativeLayout>
+
+                    <ImageView
+                        android:visibility="visible"
+                        android:id="@+id/pub_details.events.past.gradient"
+                        android:layout_width="match_parent"
+                        android:layout_height="28dp"
+                        android:layout_alignParentBottom="true"
+                        android:alpha="1"
+                        android:src="@drawable/text_truncate_shadow"/>
+
+                    <Button
+                        android:visibility="visible"
+                        android:id="@+id/pub_details.events.past.show_all_btn"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:textAlignment="center"
+                        android:layout_alignParentBottom="true"
+                        android:background="?android:attr/selectableItemBackground"
+                        android:textAllCaps="true"
+                        android:text="@string/show_all"
+                        android:textColor="#2196F3"
+                        android:layout_marginBottom="8dp"
+                        android:clickable="true"
+                        style="@style/Widget.AppCompat.Button.Borderless" />
+
+                </RelativeLayout>
+
+            </android.support.v7.widget.CardView>
+            
+        </LinearLayout>
 
     </android.support.v4.widget.NestedScrollView>
 
