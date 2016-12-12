@@ -1,5 +1,7 @@
 package com.ws1617.iosl.pubcrawl20.Details;
 
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.design.widget.AppBarLayout;
@@ -7,15 +9,29 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
+import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListAdapter;
+import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.google.android.gms.maps.model.LatLng;
+import com.ws1617.iosl.pubcrawl20.DataModels.Pub;
+import com.ws1617.iosl.pubcrawl20.Details.MiniDataModels.EventMini;
+import com.ws1617.iosl.pubcrawl20.Details.MiniDataModels.PersonMini;
 import com.ws1617.iosl.pubcrawl20.R;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 public class PubDetailsActivity extends AppCompatActivity implements AppBarLayout.OnOffsetChangedListener {
 
@@ -35,15 +51,88 @@ public class PubDetailsActivity extends AppCompatActivity implements AppBarLayou
     private Toolbar mToolbar;
     private ImageCarouselPager imageCarouselPager;
 
-    private long pubId;
-    private String pubName;
+    private Context context;
+
+    private Pub pub;
+    private PersonMini owner;
+    private String address = "Unknown";
+    private ArrayList<PersonMini> topPersonsList = new ArrayList<>();
+    private ArrayList<EventMini> futureEventsList = new ArrayList<>();
+    private ArrayList<EventMini> pastEventsList = new ArrayList<>();
+
+    private ParticipantAdapter topPersonsAdapter;
+    private ListView topPersonsListView;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pub_details);
+        context = getApplicationContext();
 
+        long id = getIntent().getLongExtra("id", -1);
+        getPub(id);
+        setupToolbar();
+
+        populateFields();
+
+        initOpeningTimesExpanding();
+    }
+
+    private void populateFields() {
+        if (owner != null) {
+            ((TextView) findViewById(R.id.pub_details_owner)).setText(owner.getName());
+            findViewById(R.id.pub_details_owner).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(context, PersonDetailsActivity.class);
+                    intent.putExtra("name", owner.getName());
+                    intent.putExtra("id", owner.getId());
+                    startActivity(intent);
+                }
+            });
+        }
+
+        if (pub != null) {
+            // Toolbar
+            mTitle.setText(pub.getPubName());
+            mToolbar.setTitle(pub.getPubName());
+
+            // Info card
+            ((TextView) findViewById(R.id.pub_details_id)).setText(String.valueOf(pub.getId()));
+            ((TextView) findViewById(R.id.pub_details_address)).setText(address);
+            ((TextView) findViewById(R.id.pub_details_latlng)).setText(
+                    String.format("%.2f, %.2f",
+                            pub.getLatLng().latitude,
+                            pub.getLatLng().longitude));
+            ((TextView) findViewById(R.id.pub_details_size)).setText(String.valueOf(pub.getSize()));
+            ((TextView) findViewById(R.id.pub_details_prices)).setText(String.valueOf(pub.getPrices()));
+            ((TextView) findViewById(R.id.pub_details_rating)).setText(String.valueOf(pub.getRating()));
+
+            // Opening times card
+            ((TextView) findViewById(R.id.pub_details_times)).setText(pub.getClosingTime());
+        }
+
+        if (topPersonsList.size() > 0) {
+            // TODO
+        }
+
+        if (futureEventsList.size() > 0) {
+            // TODO
+        }
+
+        if (pastEventsList.size() > 0) {
+            // TODO
+        }
+    }
+
+    /*
+
+        View control setup functions
+
+     */
+
+    private void setupToolbar() {
         mToolbar = (Toolbar) findViewById(R.id.pub_details_toolbar);
         mAppBarLayout = (AppBarLayout) findViewById(R.id.pub_details_appbar);
         mTitle = (TextView) findViewById(R.id.pub_details_title);
@@ -63,8 +152,7 @@ public class PubDetailsActivity extends AppCompatActivity implements AppBarLayou
         });
 
         try{
-            pubId = getIntent().getLongExtra("id", -1);
-            pubName = getIntent().getStringExtra("name");
+            String pubName = getIntent().getStringExtra("name");
 
             mToolbar.setTitle(pubName);
             mTitle.setText(pubName);
@@ -83,6 +171,169 @@ public class PubDetailsActivity extends AppCompatActivity implements AppBarLayou
 
         startAlphaAnimation(mToolbar, 0, View.INVISIBLE);
     }
+
+    private void initOpeningTimesExpanding() {
+        final CardView descriptionCard = (CardView) findViewById(R.id.pub_details_times_card);
+        final RelativeLayout descriptionLayout = (RelativeLayout) findViewById(R.id.pub_details_times_layout);
+        final ImageView descriptionGradient = (ImageView) findViewById(R.id.pub_details_times_gradient);
+        final ImageView descriptionArrow = (ImageView) findViewById(R.id.pub_details_times_arrow);
+        final int height200 = (int) (200 * getResources().getDisplayMetrics().density);
+        final int padding16 = (int) (16 * getResources().getDisplayMetrics().density + 0.5f);
+
+        DisplayMetrics metrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(metrics);
+
+        TextView description = (TextView) findViewById(R.id.pub_details_times);
+        description.requestLayout();
+        description.measure(0, 0);
+        int textHeight = (int) (description.getMeasuredHeight() / getResources().getDisplayMetrics().density + 0.5f);
+        int textWidth = (int) (description.getMeasuredWidth() / getResources().getDisplayMetrics().density + 0.5f);
+        int width = (int) (metrics.widthPixels / getResources().getDisplayMetrics().density + 0.5f) - 40;
+        int height = textHeight + textWidth / width * 18;
+        Log.d(TAG, String.format("textHeight: %d; textWidth: %d; width: %d; height: %d", textHeight, textWidth, width, height));
+
+        // 200dp - 2*16dp (padding) - 8dp (title margin) - 20sp (title text size) = 140dp
+        if (height > 140) {
+            descriptionLayout.getLayoutParams().height = height200;
+            descriptionGradient.setVisibility(View.VISIBLE);
+            descriptionLayout.setPadding(padding16, padding16, padding16, 0);
+            descriptionArrow.setImageResource(R.drawable.ic_expand_more);
+            descriptionArrow.setVisibility(View.VISIBLE);
+
+            descriptionCard.setClickable(true);
+            descriptionCard.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Log.d(TAG, "Description onclick");
+                    if (descriptionGradient.getVisibility() == View.VISIBLE) {      // Expand
+                        descriptionGradient.setVisibility(View.GONE);
+                        descriptionLayout.setPadding(padding16, padding16, padding16, padding16);
+                        descriptionLayout.getLayoutParams().height = RelativeLayout.LayoutParams.WRAP_CONTENT;
+                        descriptionArrow.setImageResource(R.drawable.ic_expand_less);
+                    } else {                                                        // Collapse
+                        descriptionLayout.getLayoutParams().height = height200;
+                        descriptionGradient.setVisibility(View.VISIBLE);
+                        descriptionLayout.setPadding(padding16, padding16, padding16, 0);
+                        descriptionArrow.setImageResource(R.drawable.ic_expand_more);
+                    }
+                }
+            });
+        } else {
+            descriptionGradient.setVisibility(View.GONE);
+            descriptionLayout.setPadding(padding16, padding16, padding16, padding16);
+            descriptionLayout.getLayoutParams().height = RelativeLayout.LayoutParams.WRAP_CONTENT;
+            descriptionArrow.setVisibility(View.GONE);
+            descriptionCard.setClickable(false);
+        }
+    }
+
+    /**
+     * Sets ListView height to show all items
+     * @param listView ListView to change height
+     * @return the raw height set to the listView
+     */
+    public static int setListViewHeightBasedOnItems(ListView listView) {
+        ListAdapter listAdapter = listView.getAdapter();
+
+        if (listAdapter != null) {
+
+            int numberOfItems = listAdapter.getCount();
+
+            // Get total height of all items.
+            int totalItemsHeight = 0;
+            for (int itemPos = 0; itemPos < numberOfItems; itemPos++) {
+                View item = listAdapter.getView(itemPos, null, listView);
+                item.measure(0, 0);
+                totalItemsHeight += item.getMeasuredHeight();
+            }
+
+            // Get total height of all item dividers.
+            int totalDividersHeight = listView.getDividerHeight() * (numberOfItems - 1);
+
+            // Set list height.
+            ViewGroup.LayoutParams params = listView.getLayoutParams();
+            params.height = totalItemsHeight + totalDividersHeight;
+            listView.setLayoutParams(params);
+            listView.requestLayout();
+
+            return totalItemsHeight + totalDividersHeight;
+
+        } else {
+            return 0;
+        }
+
+    }
+
+    /*
+
+        Data load functions
+
+     */
+
+    private void getPub(long id) {
+        ArrayList<Long> p = new ArrayList<Long>();
+        ArrayList<Long> e = new ArrayList<Long>();
+        for (Long i = 0l; i< 20; i++) {
+            p.add(i);
+            e.add(i);
+        }
+
+        pub = new Pub(id,
+                "Dummy pub "+id,
+                new LatLng(52.5 + Math.random()*0.1, 13.35 + Math.random()*0.1),
+                50,
+                5,
+                4.5,
+                "Mo - Fri: 16.00 - 01.00\nSat: 16.00 - 03.00",
+//                getResources().getString(R.string.lorem),
+                p,
+                e,
+                17l);
+
+        address = "Nonexistant street -1";
+
+        getTopPeople(pub.getTopsListIds());
+        getEvents(pub.getEventsListIds());
+        owner = getPersonMini(pub.getOwnerId());
+    }
+
+    private PersonMini getPersonMini(long id) {
+        return new PersonMini("Person " + id, id);
+    }
+
+    private EventMini getEventMini(long id) {
+        Date date = Calendar.getInstance().getTime();
+        int newdate = (int) (Math.random() * 30);
+        date.setDate(newdate);
+
+        return new EventMini("Dummy event " + id, id, date);
+
+    }
+
+    private void getTopPeople(ArrayList<Long> ids) {
+        for (long id : ids) {
+            topPersonsList.add(getPersonMini(id));
+        }
+    }
+
+    private void getEvents(ArrayList<Long> ids) {
+        Date rightNow = Calendar.getInstance().getTime();
+
+        for (long id : ids) {
+            EventMini e = getEventMini(id);
+            if (e.getDate().compareTo(rightNow) > 1) {
+                futureEventsList.add(e);
+            } else {
+                pastEventsList.add(e);
+            }
+        }
+    }
+
+     /*
+
+        Expandable / Collapsable toolbar animation functions
+
+     */
 
     @Override
     public void onOffsetChanged(AppBarLayout appBarLayout, int offset) {

@@ -210,7 +210,7 @@
                             />
 
                         <TextView
-                            android:id="@+id/latlng.address"
+                            android:id="@+id/pub_details.latlng"
                             android:layout_marginLeft="8dp"
                             android:layout_marginRight="8dp"
                             android:layout_width="wrap_content"
@@ -344,7 +344,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 app:cardElevation="8dp"
-                android:id="@+id/pub_details.description.card"
+                android:id="@+id/pub_details.times.card"
                 >
 
                 <RelativeLayout
