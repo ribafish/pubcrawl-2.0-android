@@ -34,14 +34,18 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.Transformation;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListAdapter;
+import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -66,6 +70,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.android.gms.vision.text.Text;
 import com.ws1617.iosl.pubcrawl20.DataModels.Event;
 import com.ws1617.iosl.pubcrawl20.DataModels.Person;
 import com.ws1617.iosl.pubcrawl20.DataModels.TimeSlot;
@@ -122,6 +127,9 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
     private GoogleMap map;
     private Context context = this;
 
+    private PubAdapter pubAdapter;
+    private ListView pubListView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -133,12 +141,17 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
 
         long id = getIntent().getLongExtra("id", -1);
         getEvent(id);
+        initDescriptionExpanding();
+
         setupToolbar();
-        initOnClickListeners();
         setupMap();
+        setupPubsListView();
+
+
 
         // TODO: change to the data load listener or smtn when database is ready
         populateFields();
+        initDescriptionExpanding();
     }
 
     private void setupToolbar() {
@@ -181,34 +194,61 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
     }
 
 
-    private void initOnClickListeners() {
+    private void initDescriptionExpanding() {
         final CardView descriptionCard = (CardView) findViewById(R.id.event_details_description_card);
-        descriptionCard.setClickable(true);
         final RelativeLayout descriptionLayout = (RelativeLayout) findViewById(R.id.event_details_description_layout);
         final ImageView descriptionGradient = (ImageView) findViewById(R.id.event_details_description_gradient);
         final ImageView descriptionArrow = (ImageView) findViewById(R.id.event_details_description_arrow);
-        final int descriptionInitialHeight = descriptionLayout.getLayoutParams().height;
+        final int height200 = (int) (200 * getResources().getDisplayMetrics().density);
         final int padding16 = (int) (16 * getResources().getDisplayMetrics().density + 0.5f);
 
-        descriptionCard.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.d(TAG, "Description onclick");
-                if (descriptionGradient.getVisibility() == View.VISIBLE) {      // Expand
-                    descriptionGradient.setVisibility(View.GONE);
-                    descriptionLayout.setPadding(padding16, padding16, padding16, padding16);
-                    descriptionLayout.getLayoutParams().height = RelativeLayout.LayoutParams.WRAP_CONTENT;
-                    descriptionArrow.setImageResource(R.drawable.ic_expand_less);
-                } else {                                                        // Collapse
-                    descriptionLayout.getLayoutParams().height = descriptionInitialHeight;
-                    descriptionGradient.setVisibility(View.VISIBLE);
-                    descriptionLayout.setPadding(padding16,padding16,padding16, 0);
-                    descriptionArrow.setImageResource(R.drawable.ic_expand_more);
-                }
-            }
-        });
+        DisplayMetrics metrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(metrics);
 
+        TextView description = (TextView) findViewById(R.id.event_details_description);
+        description.requestLayout();
+        description.measure(0, 0);
+        int textHeight = (int) (description.getMeasuredHeight() / getResources().getDisplayMetrics().density + 0.5f);
+        int textWidth = (int) (description.getMeasuredWidth() / getResources().getDisplayMetrics().density + 0.5f);
+        int width = (int) (metrics.widthPixels / getResources().getDisplayMetrics().density + 0.5f) - 40;
+        int height = textHeight + textWidth / width * 18;
+        Log.d(TAG, String.format("textHeight: %d; textWidth: %d; width: %d; height: %d", textHeight, textWidth, width, height));
+
+        // 200dp - 2*16dp (padding) - 8dp (title margin) - 20sp (title text size) = 140dp
+        if (height > 140) {
+            descriptionLayout.getLayoutParams().height = height200;
+            descriptionGradient.setVisibility(View.VISIBLE);
+            descriptionLayout.setPadding(padding16, padding16, padding16, 0);
+            descriptionArrow.setImageResource(R.drawable.ic_expand_more);
+            descriptionArrow.setVisibility(View.VISIBLE);
+
+            descriptionCard.setClickable(true);
+            descriptionCard.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Log.d(TAG, "Description onclick");
+                    if (descriptionGradient.getVisibility() == View.VISIBLE) {      // Expand
+                        descriptionGradient.setVisibility(View.GONE);
+                        descriptionLayout.setPadding(padding16, padding16, padding16, padding16);
+                        descriptionLayout.getLayoutParams().height = RelativeLayout.LayoutParams.WRAP_CONTENT;
+                        descriptionArrow.setImageResource(R.drawable.ic_expand_less);
+                    } else {                                                        // Collapse
+                        descriptionLayout.getLayoutParams().height = height200;
+                        descriptionGradient.setVisibility(View.VISIBLE);
+                        descriptionLayout.setPadding(padding16, padding16, padding16, 0);
+                        descriptionArrow.setImageResource(R.drawable.ic_expand_more);
+                    }
+                }
+            });
+        } else {
+            descriptionGradient.setVisibility(View.GONE);
+            descriptionLayout.setPadding(padding16, padding16, padding16, padding16);
+            descriptionLayout.getLayoutParams().height = RelativeLayout.LayoutParams.WRAP_CONTENT;
+            descriptionArrow.setVisibility(View.GONE);
+            descriptionCard.setClickable(false);
+        }
     }
+
 
     private void populateFields() {
         if (owner != null) {
@@ -231,8 +271,58 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
             ((TextView) findViewById(R.id.event_details_id)).setText(String.valueOf(event.getEventId()));
             ((TextView) findViewById(R.id.event_details_tracked)).setText(event.isTracked() ? "Tracked" : "Not tracked");
             ((TextView) findViewById(R.id.event_details_description)).setText(event.getDescription());
+        }
 
+        if (pubs.size() > 0) {
+            pubAdapter.notifyDataSetChanged();
+            setListViewHeightBasedOnItems(pubListView);
+        }
 
+    }
+
+    private void setupPubsListView() {
+        pubAdapter = new PubAdapter(this, pubs);
+        pubListView = (ListView) findViewById(R.id.event_details_pubListView);
+        pubListView.setAdapter(pubAdapter);
+        pubListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Intent intent = new Intent(context, PubDetailsActivity.class);
+                intent.putExtra("name", pubs.get(i).name);
+                intent.putExtra("id", pubs.get(i).id);
+                startActivity(intent);
+            }
+        });
+    }
+
+    public static boolean setListViewHeightBasedOnItems(ListView listView) {
+        ListAdapter listAdapter = listView.getAdapter();
+
+        if (listAdapter != null) {
+
+            int numberOfItems = listAdapter.getCount();
+
+            // Get total height of all items.
+            int totalItemsHeight = 0;
+            for (int itemPos = 0; itemPos < numberOfItems; itemPos++) {
+                View item = listAdapter.getView(itemPos, null, listView);
+                item.measure(0, 0);
+                totalItemsHeight += item.getMeasuredHeight();
+            }
+
+            // Get total height of all item dividers.
+            int totalDividersHeight = listView.getDividerHeight() * (numberOfItems - 1);
+
+            // Set list height.
+            ViewGroup.LayoutParams params = listView.getLayoutParams();
+            params.height = totalItemsHeight + totalDividersHeight;
+            listView.setLayoutParams(params);
+            listView.requestLayout();
+
+            return true;
+
+        } else {
+            return false;
         }
 
     }
@@ -299,7 +389,7 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
                         .position(pub.latLng)
                         .draggable(false)
                         .title(pub.name)
-                        .icon(getCustomMarkerIcon(i))
+                        .icon(getCustomMarkerIcon(i+1))
                         .snippet(pub.getTimeSlotTimeString()));
                 latLngs.add(pub.latLng);
                 builder.include(pub.latLng);

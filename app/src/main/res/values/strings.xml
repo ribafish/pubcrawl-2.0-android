@@ -21,9 +21,9 @@
         Proin vitae consectetur nulla. Donec eu lacus vehicula, ultrices metus a, iaculis dui.
         Donec posuere tempus consectetur. Mauris sapien justo, vehicula et purus a, auctor
         pharetra nisi. Duis quam diam, sollicitudin convallis egestas vel, laoreet eget elit.
-        Sed dignissim laoreet risus quis ultrices. Ut non libero commodo mi tincidunt maximus.
+        Sed dignissim laoreet risus quis ultrices. Ut non libero commodo mi tincidunt maximus.\n\n
         Phasellus pharetra, purus ut aliquam sodales, enim ante ullamcorper mi, quis maximus
-        dui orci quis sem. Aenean sodales leo vitae urna lacinia, nec euismod diam viverra. Ut
+        dui orci quis sem. Aenean sodales leo vitae urna lacinia, nec euismod diam viverra. \nUt
         venenatis, purus ultricies hendrerit commodo, arcu lorem faucibus elit, eget vulputate
         mi erat non neque. Curabitur tincidunt dictum enim in pellentesque.</string>
 
@@ -120,4 +120,5 @@
 
     <string name="details">Details</string>
     <string name="route_map">ROUTE MAP</string>
+    <string name="no_description">No description</string>
 </resources>
