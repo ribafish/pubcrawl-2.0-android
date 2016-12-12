@@ -27,6 +27,7 @@ import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -241,27 +242,38 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
                 startActivity(intent);
             }
         });
-        findViewById(R.id.event_details_participants_show_all_btn).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.d(TAG, "expand participants onClick");
-                Bundle args = new Bundle();
-                args.putString("title", getString(R.string.participants));
-                FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-                PersonDialogFragment personDialogFragment = new PersonDialogFragment();
-                personDialogFragment.setParticipants(participants);
-                personDialogFragment.setArguments(args);
-                personDialogFragment.show(ft, "map_dialog_fragment");
-            }
-        });
-        // Disable scrolling
-        participantListView.setScrollContainer(false);
-        participantListView.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                return (motionEvent.getAction() == MotionEvent.ACTION_MOVE);
-            }
-        });
+        if (participants.size() < 4) {
+            ((Button)findViewById(R.id.event_details_participants_show_all_btn)).setVisibility(View.GONE);
+            ((ImageView)findViewById(R.id.event_details_participants_gradient)).setVisibility(View.GONE);
+            ((RelativeLayout) findViewById(R.id.event_details_participants_layout)).getLayoutParams().height = RelativeLayout.LayoutParams.WRAP_CONTENT;
+            setListViewHeightBasedOnItems(participantListView);
+        } else {
+            final int height280 = (int) (280 * getResources().getDisplayMetrics().density);
+            ((Button)findViewById(R.id.event_details_participants_show_all_btn)).setVisibility(View.VISIBLE);
+            ((ImageView)findViewById(R.id.event_details_participants_gradient)).setVisibility(View.VISIBLE);
+            ((RelativeLayout) findViewById(R.id.event_details_participants_layout)).getLayoutParams().height = height280;
+            findViewById(R.id.event_details_participants_show_all_btn).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Log.d(TAG, "expand participants onClick");
+                    Bundle args = new Bundle();
+                    args.putString("title", getString(R.string.participants));
+                    FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                    PersonDialogFragment personDialogFragment = new PersonDialogFragment();
+                    personDialogFragment.setParticipants(participants);
+                    personDialogFragment.setArguments(args);
+                    personDialogFragment.show(ft, "map_dialog_fragment");
+                }
+            });
+            // Disable scrolling
+            participantListView.setScrollContainer(false);
+            participantListView.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View view, MotionEvent motionEvent) {
+                    return (motionEvent.getAction() == MotionEvent.ACTION_MOVE);
+                }
+            });
+        }
     }
 
 
