@@ -25,7 +25,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
-import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.FrameLayout;
@@ -49,7 +48,6 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.ws1617.iosl.pubcrawl20.DataModels.Event;
-import com.ws1617.iosl.pubcrawl20.DataModels.Person;
 import com.ws1617.iosl.pubcrawl20.DataModels.TimeSlot;
 import com.ws1617.iosl.pubcrawl20.Details.MiniDataModels.PubMini;
 import com.ws1617.iosl.pubcrawl20.Details.MiniDataModels.PubMiniComparator;
@@ -101,7 +99,7 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
     private PubAdapter pubAdapter;
     private ListView pubListView;
 
-    private ParticipantAdapter participantAdapter;
+    private PersonAdapter personAdapter;
     private ListView participantListView;
 
 
@@ -226,13 +224,13 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
 
     private void setupParticipants() {
         if (this.participants.size() < 6) {
-            participantAdapter = new ParticipantAdapter(this, participants);
+            personAdapter = new PersonAdapter(this, participants);
         } else {
             ArrayList<PersonMini> p = new ArrayList<>(participants.subList(0, 6));
-            participantAdapter = new ParticipantAdapter(this, p);
+            personAdapter = new PersonAdapter(this, p);
         }
         participantListView = (ListView) findViewById(R.id.event_details_participants_listView);
-        participantListView.setAdapter(participantAdapter);
+        participantListView.setAdapter(personAdapter);
         participantListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {

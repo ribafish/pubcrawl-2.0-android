@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -13,9 +14,12 @@ import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
+import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
@@ -60,8 +64,14 @@ public class PubDetailsActivity extends AppCompatActivity implements AppBarLayou
     private ArrayList<EventMini> futureEventsList = new ArrayList<>();
     private ArrayList<EventMini> pastEventsList = new ArrayList<>();
 
-    private ParticipantAdapter topPersonsAdapter;
+    private PersonAdapter topPersonsAdapter;
     private ListView topPersonsListView;
+
+    private EventAdapter futureEventsAdapter;
+    private ListView futureEventsListView;
+
+    private EventAdapter pastEventsAdapter;
+    private ListView pastEventsListView;
 
 
     @Override
@@ -74,12 +84,16 @@ public class PubDetailsActivity extends AppCompatActivity implements AppBarLayou
         getPub(id);
         setupToolbar();
 
+        setupTopPersons();
+        setupFutureEvents();
+
         populateFields();
 
         initOpeningTimesExpanding();
     }
 
     private void populateFields() {
+        Log.d(TAG, "populateFields()");
         if (owner != null) {
             ((TextView) findViewById(R.id.pub_details_owner)).setText(owner.getName());
             findViewById(R.id.pub_details_owner).setOnClickListener(new View.OnClickListener() {
@@ -96,6 +110,7 @@ public class PubDetailsActivity extends AppCompatActivity implements AppBarLayou
         if (pub != null) {
             // Toolbar
             mTitle.setText(pub.getPubName());
+            mSubtitle.setText(address);
             mToolbar.setTitle(pub.getPubName());
 
             // Info card
@@ -114,16 +129,18 @@ public class PubDetailsActivity extends AppCompatActivity implements AppBarLayou
         }
 
         if (topPersonsList.size() > 0) {
-            // TODO
-        }
+            topPersonsAdapter.notifyDataSetChanged();
+            setListViewHeightBasedOnItems(topPersonsListView);
+        } else Log.e(TAG, "topPersonsList empty");
 
         if (futureEventsList.size() > 0) {
-            // TODO
-        }
+            futureEventsAdapter.notifyDataSetChanged();
+            setListViewHeightBasedOnItems(futureEventsListView);
+        } else Log.e(TAG, "futureEventsList empty");
 
         if (pastEventsList.size() > 0) {
             // TODO
-        }
+        } else Log.e(TAG, "pastEventsList empty");
     }
 
     /*
@@ -227,6 +244,110 @@ public class PubDetailsActivity extends AppCompatActivity implements AppBarLayou
         }
     }
 
+    private void setupTopPersons() {
+        if (this.topPersonsList.size() < 6) {
+            topPersonsAdapter = new PersonAdapter(this, topPersonsList);
+        } else {
+            ArrayList<PersonMini> p = new ArrayList<>(topPersonsList.subList(0, 6));
+            topPersonsAdapter = new PersonAdapter(this, p);
+        }
+        topPersonsListView = (ListView) findViewById(R.id.pub_details_top_participants_listView);
+        topPersonsListView.setAdapter(topPersonsAdapter);
+        topPersonsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Intent intent = new Intent(context, PersonDetailsActivity.class);
+                intent.putExtra("name", topPersonsList.get(i).getName());
+                intent.putExtra("id", topPersonsList.get(i).getId());
+                startActivity(intent);
+            }
+        });
+        if (topPersonsList.size() < 4) {
+            ((Button)findViewById(R.id.pub_details_top_participants_show_all_btn)).setVisibility(View.GONE);
+            ((ImageView)findViewById(R.id.pub_details_top_participants_gradient)).setVisibility(View.GONE);
+            ((RelativeLayout) findViewById(R.id.pub_details_top_participants_layout)).getLayoutParams().height = RelativeLayout.LayoutParams.WRAP_CONTENT;
+            setListViewHeightBasedOnItems(topPersonsListView);
+        } else {
+            final int height280 = (int) (280 * getResources().getDisplayMetrics().density);
+            ((Button)findViewById(R.id.pub_details_top_participants_show_all_btn)).setVisibility(View.VISIBLE);
+            ((ImageView)findViewById(R.id.pub_details_top_participants_gradient)).setVisibility(View.VISIBLE);
+            ((RelativeLayout) findViewById(R.id.pub_details_top_participants_layout)).getLayoutParams().height = height280;
+            findViewById(R.id.pub_details_top_participants_show_all_btn).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Log.d(TAG, "expand participants onClick");
+                    Bundle args = new Bundle();
+                    args.putString("title", getString(R.string.participants));
+                    FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                    PersonDialogFragment personDialogFragment = new PersonDialogFragment();
+                    personDialogFragment.setParticipants(topPersonsList);
+                    personDialogFragment.setArguments(args);
+                    personDialogFragment.show(ft, "map_dialog_fragment");
+                }
+            });
+            // Disable scrolling
+            topPersonsListView.setScrollContainer(false);
+            topPersonsListView.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View view, MotionEvent motionEvent) {
+                    return (motionEvent.getAction() == MotionEvent.ACTION_MOVE);
+                }
+            });
+        }
+    }
+
+    private void setupFutureEvents() {
+        if (this.futureEventsList.size() < 6) {
+            futureEventsAdapter = new EventAdapter(this, futureEventsList);
+        } else {
+            ArrayList<EventMini> p = new ArrayList<>(futureEventsList.subList(0, 6));
+            futureEventsAdapter = new EventAdapter(this, p);
+        }
+        futureEventsListView = (ListView) findViewById(R.id.pub_details_events_future_listView);
+        futureEventsListView.setAdapter(futureEventsAdapter);
+        futureEventsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Intent intent = new Intent(context, EventDetailsActivity.class);
+                intent.putExtra("name", futureEventsList.get(i).getName());
+                intent.putExtra("id", futureEventsList.get(i).getId());
+                startActivity(intent);
+            }
+        });
+        if (futureEventsList.size() < 4) {
+            ((Button)findViewById(R.id.pub_details_events_future_show_all_btn)).setVisibility(View.GONE);
+            ((ImageView)findViewById(R.id.pub_details_events_future_gradient)).setVisibility(View.GONE);
+            ((RelativeLayout) findViewById(R.id.pub_details_events_future_layout)).getLayoutParams().height = RelativeLayout.LayoutParams.WRAP_CONTENT;
+            setListViewHeightBasedOnItems(futureEventsListView);
+        } else {
+            final int height280 = (int) (280 * getResources().getDisplayMetrics().density);
+            ((Button)findViewById(R.id.pub_details_events_future_show_all_btn)).setVisibility(View.VISIBLE);
+            ((ImageView)findViewById(R.id.pub_details_events_future_gradient)).setVisibility(View.VISIBLE);
+            ((RelativeLayout) findViewById(R.id.pub_details_events_future_layout)).getLayoutParams().height = height280;
+            findViewById(R.id.pub_details_events_future_show_all_btn).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Log.d(TAG, "expand participants onClick");
+                    Bundle args = new Bundle();
+                    args.putString("title", getString(R.string.future_events));
+                    FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                    EventDialogFragment eventDialogFragment = new EventDialogFragment();
+                    eventDialogFragment.setEvents(futureEventsList);
+                    eventDialogFragment.setArguments(args);
+                    eventDialogFragment.show(ft, "map_dialog_fragment");
+                }
+            });
+            // Disable scrolling
+            futureEventsListView.setScrollContainer(false);
+            futureEventsListView.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View view, MotionEvent motionEvent) {
+                    return (motionEvent.getAction() == MotionEvent.ACTION_MOVE);
+                }
+            });
+        }
+    }
+
     /**
      * Sets ListView height to show all items
      * @param listView ListView to change height
@@ -318,10 +439,12 @@ public class PubDetailsActivity extends AppCompatActivity implements AppBarLayou
 
     private void getEvents(ArrayList<Long> ids) {
         Date rightNow = Calendar.getInstance().getTime();
+        Log.d(TAG, "rightnow: " + rightNow.toString());
 
         for (long id : ids) {
             EventMini e = getEventMini(id);
-            if (e.getDate().compareTo(rightNow) > 1) {
+            Log.d(TAG, "dummy eventMini date: " + e.getDate().toString());
+            if (e.getDate().compareTo(rightNow) >= 1) {
                 futureEventsList.add(e);
             } else {
                 pastEventsList.add(e);

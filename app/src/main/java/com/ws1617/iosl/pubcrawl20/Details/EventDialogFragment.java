@@ -20,27 +20,26 @@ import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-import com.ws1617.iosl.pubcrawl20.Details.MiniDataModels.PersonMini;
+import com.ws1617.iosl.pubcrawl20.Details.MiniDataModels.EventMini;
 import com.ws1617.iosl.pubcrawl20.R;
 
 import java.util.ArrayList;
-
 
 /**
  * Created by Gasper Kojek on 12. 12. 2016.
  * Github: https://github.com/ribafish/
  */
 
-public class PersonDialogFragment extends DialogFragment {
+public class EventDialogFragment extends DialogFragment {
     private static final String TAG = "PersonDialogFragment";
 
-    private PersonAdapter personAdapter;
-    private ArrayList<PersonMini> participants = new ArrayList<>();
-    private ArrayList<PersonMini> participantsDiplayed = new ArrayList<>();
+    private EventAdapter eventAdapter;
+    private ArrayList<EventMini> events = new ArrayList<>();
+    private ArrayList<EventMini> eventsDisplayed = new ArrayList<>();
     private Context context;
     private View view;
 
-    public PersonDialogFragment() {
+    public EventDialogFragment() {
     }
 
 
@@ -49,7 +48,7 @@ public class PersonDialogFragment extends DialogFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         Log.d(TAG, "onCreateView");
-        view = inflater.inflate(R.layout.popup_persons, container, false);
+        view = inflater.inflate(R.layout.popup_events, container, false);
 
         Bundle args = getArguments();
         String title = "";
@@ -60,23 +59,23 @@ public class PersonDialogFragment extends DialogFragment {
         }
 
 
-        ListView participantsListView = (ListView) view.findViewById(R.id.popup_person_listview);
+        ListView eventsListView = (ListView) view.findViewById(R.id.popup_events_listview);
 
         this.context = getContext();
 
-        this.personAdapter = new PersonAdapter(context, this.participantsDiplayed);
-        participantsListView.setAdapter(this.personAdapter);
-        participantsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        this.eventAdapter = new EventAdapter(context, this.eventsDisplayed);
+        eventsListView.setAdapter(this.eventAdapter);
+        eventsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Intent intent = new Intent(context, PersonDetailsActivity.class);
-                intent.putExtra("name", participantsDiplayed.get(i).getName());
-                intent.putExtra("id", participantsDiplayed.get(i).getId());
+                Intent intent = new Intent(context, EventDetailsActivity.class);
+                intent.putExtra("name", eventsDisplayed.get(i).getName());
+                intent.putExtra("id", eventsDisplayed.get(i).getId());
                 startActivity(intent);
             }
         });
 
-        Toolbar toolbar = (Toolbar) view.findViewById(R.id.popup_person_toolbar);
+        Toolbar toolbar = (Toolbar) view.findViewById(R.id.popup_events_toolbar);
         this.setHasOptionsMenu(true);
         toolbar.inflateMenu(R.menu.popup_listview_menu);
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
@@ -99,14 +98,16 @@ public class PersonDialogFragment extends DialogFragment {
                             public boolean onQueryTextChange(String newText) {
                                 Log.d(TAG, "search onQueryTextChange");
 
-                                participantsDiplayed.clear();
-                                for (PersonMini p : participants) {
-                                    if (p.getName().toLowerCase().contains(newText.toLowerCase()) || String.valueOf(p.getId()).contains(newText)) {
-                                        participantsDiplayed.add(p);
+                                eventsDisplayed.clear();
+                                for (EventMini e : events) {
+                                    if (e.getName().toLowerCase().contains(newText.toLowerCase())
+                                            || String.valueOf(e.getId()).contains(newText)
+                                            || e.getDate().toString().contains(newText)) {
+                                        eventsDisplayed.add(e);
                                     }
                                 }
 
-                                personAdapter.notifyDataSetChanged();
+                                eventAdapter.notifyDataSetChanged();
 
                                 return false;
                             }
@@ -121,21 +122,21 @@ public class PersonDialogFragment extends DialogFragment {
         return view;
     }
 
-    public PersonDialogFragment setParticipants(ArrayList<PersonMini> participants) {
+    public EventDialogFragment setEvents(ArrayList<EventMini> events) {
         Log.d(TAG, "setParticipants");
-        this.participants.clear();
-        this.participants.addAll(participants);
-        this.participantsDiplayed.clear();
-        this.participantsDiplayed.addAll(participants);
+        this.events.clear();
+        this.events.addAll(events);
+        this.eventsDisplayed.clear();
+        this.eventsDisplayed.addAll(events);
         return this;
     }
 
-    public PersonDialogFragment notifyDataSetChanged() {
+    public EventDialogFragment notifyDataSetChanged() {
         Log.d(TAG, "notifyDataSetChanged");
 
-        this.participantsDiplayed.clear();
-        this.participantsDiplayed.addAll(participants);
-        this.personAdapter.notifyDataSetChanged();
+        this.eventsDisplayed.clear();
+        this.eventsDisplayed.addAll(events);
+        this.eventAdapter.notifyDataSetChanged();
         return this;
     }
 
