@@ -8,6 +8,7 @@ import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import com.ws1617.iosl.pubcrawl20.Details.MiniDataModels.PubMini;
 import com.ws1617.iosl.pubcrawl20.R;
 
 import java.util.ArrayList;
@@ -19,10 +20,10 @@ import java.util.ArrayList;
  */
 
 public class PubAdapter extends BaseAdapter {
-    private ArrayList<EventDetailsActivity.PubMini> pubs;
+    private ArrayList<PubMini> pubs;
     private LayoutInflater inflater;
 
-    public PubAdapter(Context context, ArrayList<EventDetailsActivity.PubMini> pubs) {
+    public PubAdapter(Context context, ArrayList<PubMini> pubs) {
         this.pubs = pubs;
         this.inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
@@ -35,10 +36,10 @@ public class PubAdapter extends BaseAdapter {
         TextView name = (TextView) row.findViewById(R.id.pub_name);
         TextView time = (TextView) row.findViewById(R.id.pub_time);
 
-        EventDetailsActivity.PubMini pub = pubs.get(i);
+        PubMini pub = pubs.get(i);
 
         number.setText(String.valueOf(i+1) + ".");
-        name.setText(pub.name);
+        name.setText(pub.getName());
         time.setText(pub.getTimeSlotTimeString());
 
         return row;

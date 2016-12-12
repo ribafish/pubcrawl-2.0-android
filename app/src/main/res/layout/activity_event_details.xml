@@ -163,6 +163,7 @@
                         android:layout_marginBottom="6dp"
                         android:textSize="16sp"
                         />
+
                     <TextView
                         android:id="@+id/event_details.id"
                         android:layout_marginLeft="8dp"
@@ -176,10 +177,32 @@
                         />
 
                     <TextView
-                        android:id="@+id/event_details.owner.title"
+                        android:id="@+id/event_details.starts.title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/event_details.id.title"
+                        android:text="@string/starts"
+                        android:layout_marginBottom="6dp"
+                        android:textSize="16sp"
+                        />
+
+                    <TextView
+                        android:id="@+id/event_details.starts"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginRight="8dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignBottom="@+id/event_details.starts.title"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:text="@string/unknown"
+                        />
+
+                    <TextView
+                        android:id="@+id/event_details.owner.title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/event_details.starts.title"
                         android:layout_alignParentLeft="true"
                         android:layout_alignParentStart="true"
                         android:text="@string/owner"
@@ -362,8 +385,7 @@
                         android:id="@+id/event_details.participants.layout"
                         android:animateLayoutChanges="true"
                         android:layout_width="match_parent"
-                        android:layout_height="260dp"
-                        android:maxHeight="200dp"
+                        android:layout_height="280dp"
                         android:paddingTop="16dp"
                         android:paddingLeft="16dp"
                         android:paddingStart="16dp"
@@ -386,12 +408,10 @@
                         <ListView
                             android:id="@+id/event_details.participants.listView"
                             android:layout_width="wrap_content"
-                            android:layout_height="200dp"
+                            android:layout_height="300dp"
                             android:layout_below="@+id/event_details.participants.title"
                             android:layout_alignParentLeft="true"
                             android:layout_alignParentStart="true"
-                            android:text="@string/no_description"
-                            android:ellipsize="end"
                             android:layout_margin="4dp"
                             />
 
@@ -406,14 +426,21 @@
                         android:alpha="1"
                         android:src="@drawable/text_truncate_shadow"/>
 
-                    <ImageView
+                    <Button
                         android:visibility="visible"
-                        android:id="@+id/event_details.participants.arrow"
+                        android:id="@+id/event_details.participants.show_all_btn"
                         android:layout_width="match_parent"
-                        android:layout_height="22dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:textAlignment="center"
                         android:layout_alignParentBottom="true"
-                        android:alpha="1"
-                        android:src="@drawable/ic_expand_more"/>
+                        android:background="?android:attr/selectableItemBackground"
+                        android:textAllCaps="true"
+                        android:text="@string/show_all"
+                        android:textColor="#2196F3"
+                        android:layout_marginBottom="8dp"
+                        android:clickable="true"
+                        style="@style/Widget.AppCompat.Button.Borderless" />
 
                 </RelativeLayout>
 

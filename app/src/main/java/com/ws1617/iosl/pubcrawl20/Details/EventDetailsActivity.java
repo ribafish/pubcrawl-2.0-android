@@ -2,8 +2,6 @@ package com.ws1617.iosl.pubcrawl20.Details;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -12,54 +10,32 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
-import android.preference.Preference;
-import android.preference.PreferenceManager;
-import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
-import android.support.v4.widget.PopupWindowCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.util.TypedValue;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.view.animation.AlphaAnimation;
-import android.view.animation.Animation;
-import android.view.animation.Transformation;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMapOptions;
-import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptor;
@@ -68,29 +44,20 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
-import com.google.android.gms.vision.text.Text;
 import com.ws1617.iosl.pubcrawl20.DataModels.Event;
-import com.ws1617.iosl.pubcrawl20.DataModels.Person;
 import com.ws1617.iosl.pubcrawl20.DataModels.TimeSlot;
-import com.ws1617.iosl.pubcrawl20.DataModels.TimeSlotComparator;
+import com.ws1617.iosl.pubcrawl20.Details.MiniDataModels.PubMini;
+import com.ws1617.iosl.pubcrawl20.Details.MiniDataModels.PubMiniComparator;
 import com.ws1617.iosl.pubcrawl20.R;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
-import java.util.Locale;
+
+import com.ws1617.iosl.pubcrawl20.Details.MiniDataModels.PersonMini;
 
 import static android.graphics.Bitmap.Config.ARGB_8888;
 
@@ -263,18 +230,40 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
         }
         participantListView = (ListView) findViewById(R.id.event_details_participants_listView);
         participantListView.setAdapter(participantAdapter);
+        participantListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Intent intent = new Intent(context, PersonDetailsActivity.class);
+                intent.putExtra("name", participants.get(i).getName());
+                intent.putExtra("id", participants.get(i).getId());
+                startActivity(intent);
+            }
+        });
+        findViewById(R.id.event_details_participants_show_all_btn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d(TAG, "expand participants onClick");
+                Bundle args = new Bundle();
+                args.putString("title", getString(R.string.participants));
+                FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                PersonDialogFragment personDialogFragment = new PersonDialogFragment();
+                personDialogFragment.setParticipants(participants);
+                personDialogFragment.setArguments(args);
+                personDialogFragment.show(ft, "map_dialog_fragment");
+            }
+        });
     }
 
 
     private void populateFields() {
         if (owner != null) {
-            ((TextView) findViewById(R.id.event_details_owner)).setText(owner.name);
+            ((TextView) findViewById(R.id.event_details_owner)).setText(owner.getName());
             findViewById(R.id.event_details_owner).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     Intent intent = new Intent(context, PersonDetailsActivity.class);
-                    intent.putExtra("name", owner.name);
-                    intent.putExtra("id", owner.id);
+                    intent.putExtra("name", owner.getName());
+                    intent.putExtra("id", owner.getId());
                     startActivity(intent);
                 }
             });
@@ -282,8 +271,10 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
 
         if (event != null) {
             mTitle.setText(event.getEventName());
+            mToolbar.setTitle(event.getEventName());
             SimpleDateFormat localDateFormat = new SimpleDateFormat("E, MMM d, yyyy 'at' HH:mm");
             mSubtitle.setText(localDateFormat.format(event.getDate()));
+            ((TextView) findViewById(R.id.event_details_starts)).setText(localDateFormat.format(event.getDate()));
             ((TextView) findViewById(R.id.event_details_id)).setText(String.valueOf(event.getEventId()));
             ((TextView) findViewById(R.id.event_details_tracked)).setText(event.isTracked() ? "Tracked" : "Not tracked");
             ((TextView) findViewById(R.id.event_details_description)).setText(event.getDescription());
@@ -304,8 +295,8 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent intent = new Intent(context, PubDetailsActivity.class);
-                intent.putExtra("name", pubs.get(i).name);
-                intent.putExtra("id", pubs.get(i).id);
+                intent.putExtra("name", pubs.get(i).getName());
+                intent.putExtra("id", pubs.get(i).getId());
                 startActivity(intent);
             }
         });
@@ -414,16 +405,17 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
             for (int i = 0; i < pubs.size(); i++) {
                 PubMini pub = pubs.get(i);
 
-                Marker marker = pub.marker = map.addMarker(new MarkerOptions()
-                        .position(pub.latLng)
+                Marker marker = map.addMarker(new MarkerOptions()
+                        .position(pub.getLatLng())
                         .draggable(false)
-                        .title(pub.name)
+                        .title(pub.getName())
                         .icon(getCustomMarkerIcon(i+1))
                         .snippet(pub.getTimeSlotTimeString()));
-                latLngs.add(pub.latLng);
-                builder.include(pub.latLng);
+                pub.setMarker(marker);
+                latLngs.add(pub.getLatLng());
+                builder.include(pub.getLatLng());
 
-                markerLongHashMap.put(marker, pub.id);
+                markerLongHashMap.put(marker, pub.getId());
             }
             map.addPolyline(new PolylineOptions()
                     .addAll(latLngs)
@@ -441,7 +433,7 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
 
     public long getPubIdFromMarker(Marker marker) throws ArrayIndexOutOfBoundsException{
         for (PubMini pub : pubs) {
-            if(marker == pub.marker) return pub.id;
+            if(marker == pub.getMarker()) return pub.getId();
         }
         throw new ArrayIndexOutOfBoundsException("Can't find pub");
     }
@@ -621,6 +613,9 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
         for (long id : ids) {
             this.participants.add(new PersonMini("Person " + id, id));
         }
+        for (int i = ids.size(); i < 20; i++) {
+            this.participants.add(new PersonMini("Person " + i, i));
+        }
     }
 
     // TODO: when databse is ready change this to get it from database
@@ -628,59 +623,4 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
         owner = new PersonMini("Jack Black", id);
     }
 
-    class PubMini {
-        String name;
-        TimeSlot timeSlot;
-        long id;
-        LatLng latLng;
-        Marker marker;
-
-        public PubMini(String name, TimeSlot timeSlot, long id, LatLng latLng) {
-            this.name = name;
-            this.timeSlot = timeSlot;
-            this.id = id;
-            this.latLng = latLng;
-        }
-
-        public String getTimeSlotTimeString() {
-            if (timeSlot != null) {
-                SimpleDateFormat localDateFormat = new SimpleDateFormat("HH:mm");
-                String start = localDateFormat.format(timeSlot.getStartTime());
-                String end = localDateFormat.format(timeSlot.getEndTime());
-                return String.format("%s - %s", start, end);
-            } else {
-                return "Unknown time";
-            }
-        }
-
-        @Override
-        public boolean equals(Object obj) {
-            return this.id == ((PubMini)obj).id;
-        }
-    }
-
-    class PubMiniComparator implements Comparator<PubMini> {
-        @Override
-        public int compare(PubMini pubMini, PubMini t1) {
-            return new TimeSlotComparator(true, TimeSlotComparator.START)
-                    .compare(pubMini.timeSlot, t1.timeSlot);
-        }
-    }
-
-    class PersonMini {
-        String name;
-        long id;
-        Bitmap image;
-
-        public PersonMini(String name, long id) {
-            this.name = name;
-            this.id = id;
-        }
-    }
-
-    /*
-
-            MapDialogFragment class
-
-     */
 }

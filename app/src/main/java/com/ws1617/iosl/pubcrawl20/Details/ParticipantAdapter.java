@@ -9,6 +9,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.ws1617.iosl.pubcrawl20.Details.MiniDataModels.PersonMini;
 import com.ws1617.iosl.pubcrawl20.R;
 
 import java.util.ArrayList;
@@ -20,10 +21,10 @@ import java.util.ArrayList;
  */
 
 public class ParticipantAdapter extends BaseAdapter {
-    private ArrayList<EventDetailsActivity.PersonMini> participants;
+    private ArrayList<PersonMini> participants;
     private LayoutInflater inflater;
 
-    public ParticipantAdapter(Context context, ArrayList<EventDetailsActivity.PersonMini> participants) {
+    public ParticipantAdapter(Context context, ArrayList<PersonMini> participants) {
         this.participants = participants;
         this.inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
@@ -36,11 +37,11 @@ public class ParticipantAdapter extends BaseAdapter {
         TextView name = (TextView) row.findViewById(R.id.participant_name);
         ImageView img = (ImageView) row.findViewById(R.id.participant_img);
 
-        EventDetailsActivity.PersonMini p = participants.get(i);
+        PersonMini p = participants.get(i);
 
         number.setText(String.valueOf(i+1) + ".");
-        name.setText(p.name);
-        if (p.image != null) img.setImageBitmap(p.image);
+        name.setText(p.getName());
+        if (p.getImage() != null) img.setImageBitmap(p.getImage());
 
         return row;
     }

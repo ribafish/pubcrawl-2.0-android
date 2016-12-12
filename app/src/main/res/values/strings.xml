@@ -121,4 +121,6 @@
     <string name="details">Details</string>
     <string name="route_map">ROUTE MAP</string>
     <string name="no_description">No description</string>
+    <string name="starts">Starts</string>
+    <string name="show_all">Show all</string>
 </resources>
