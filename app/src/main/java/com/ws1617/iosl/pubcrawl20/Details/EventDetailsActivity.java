@@ -130,6 +130,9 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
     private PubAdapter pubAdapter;
     private ListView pubListView;
 
+    private ParticipantAdapter participantAdapter;
+    private ListView participantListView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -152,6 +155,7 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
         // TODO: change to the data load listener or smtn when database is ready
         populateFields();
         initDescriptionExpanding();
+        setupParticipants();
     }
 
     private void setupToolbar() {
@@ -249,6 +253,18 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
         }
     }
 
+    private void setupParticipants() {
+        if (this.participants.size() < 6) {
+            participantAdapter = new ParticipantAdapter(this, participants);
+        } else {
+            ArrayList<PersonMini> p = new ArrayList<>(participants);
+            p.subList(0, 6);
+            participantAdapter = new ParticipantAdapter(this, p);
+        }
+        participantListView = (ListView) findViewById(R.id.event_details_participants_listView);
+        participantListView.setAdapter(participantAdapter);
+    }
+
 
     private void populateFields() {
         if (owner != null) {
@@ -295,7 +311,12 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
         });
     }
 
-    public static boolean setListViewHeightBasedOnItems(ListView listView) {
+    /**
+     * Sets ListView height to show all items
+     * @param listView ListView to change height
+     * @return the raw height set to the listView
+     */
+    public static int setListViewHeightBasedOnItems(ListView listView) {
         ListAdapter listAdapter = listView.getAdapter();
 
         if (listAdapter != null) {
@@ -319,10 +340,10 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
             listView.setLayoutParams(params);
             listView.requestLayout();
 
-            return true;
+            return totalItemsHeight + totalDividersHeight;
 
         } else {
-            return false;
+            return 0;
         }
 
     }
@@ -362,7 +383,15 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
                         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
                         MapDialogFragment mapDialogFragment = new MapDialogFragment();
                         mapDialogFragment.show(ft, "map_dialog_fragment");
-
+                    }
+                });
+                map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+                    @Override
+                    public boolean onMarkerClick(Marker marker) {
+                        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                        MapDialogFragment mapDialogFragment = new MapDialogFragment();
+                        mapDialogFragment.show(ft, "map_dialog_fragment");
+                        return true;
                     }
                 });
             }
@@ -641,6 +670,7 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
     class PersonMini {
         String name;
         long id;
+        Bitmap image;
 
         public PersonMini(String name, long id) {
             this.name = name;

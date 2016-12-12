@@ -19,12 +19,10 @@ import java.util.ArrayList;
  */
 
 public class PubAdapter extends BaseAdapter {
-    private final Context context;
     private ArrayList<EventDetailsActivity.PubMini> pubs;
     private LayoutInflater inflater;
 
     public PubAdapter(Context context, ArrayList<EventDetailsActivity.PubMini> pubs) {
-        this.context = context;
         this.pubs = pubs;
         this.inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
