@@ -21,9 +21,11 @@ import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -46,6 +48,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.ws1617.iosl.pubcrawl20.DataModels.Event;
+import com.ws1617.iosl.pubcrawl20.DataModels.Person;
 import com.ws1617.iosl.pubcrawl20.DataModels.TimeSlot;
 import com.ws1617.iosl.pubcrawl20.Details.MiniDataModels.PubMini;
 import com.ws1617.iosl.pubcrawl20.Details.MiniDataModels.PubMiniComparator;
@@ -224,8 +227,7 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
         if (this.participants.size() < 6) {
             participantAdapter = new ParticipantAdapter(this, participants);
         } else {
-            ArrayList<PersonMini> p = new ArrayList<>(participants);
-            p.subList(0, 6);
+            ArrayList<PersonMini> p = new ArrayList<>(participants.subList(0, 6));
             participantAdapter = new ParticipantAdapter(this, p);
         }
         participantListView = (ListView) findViewById(R.id.event_details_participants_listView);
@@ -250,6 +252,14 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
                 personDialogFragment.setParticipants(participants);
                 personDialogFragment.setArguments(args);
                 personDialogFragment.show(ft, "map_dialog_fragment");
+            }
+        });
+        // Disable scrolling
+        participantListView.setScrollContainer(false);
+        participantListView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                return (motionEvent.getAction() == MotionEvent.ACTION_MOVE);
             }
         });
     }
@@ -365,26 +375,32 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
             public void onMapReady(GoogleMap googleMap) {
                 Log.d(TAG, "onMapReady()");
                 map = googleMap;
-                // googleMap.setPadding(left, top, right, bottom)
-                map.setPadding(20, 140, 20, 20);
-                drawOnMap(map, 0);
-                map.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+                map.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {    // Sometimes wouldn't load the map
                     @Override
-                    public void onMapClick(LatLng latLng) {
-                        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-                        MapDialogFragment mapDialogFragment = new MapDialogFragment();
-                        mapDialogFragment.show(ft, "map_dialog_fragment");
+                    public void onMapLoaded() {
+                        // googleMap.setPadding(left, top, right, bottom)
+                        map.setPadding(20, 140, 20, 20);
+                        drawOnMap(map, 0);
+                        map.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+                            @Override
+                            public void onMapClick(LatLng latLng) {
+                                FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                                MapDialogFragment mapDialogFragment = new MapDialogFragment();
+                                mapDialogFragment.show(ft, "map_dialog_fragment");
+                            }
+                        });
+                        map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+                            @Override
+                            public boolean onMarkerClick(Marker marker) {
+                                FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                                MapDialogFragment mapDialogFragment = new MapDialogFragment();
+                                mapDialogFragment.show(ft, "map_dialog_fragment");
+                                return true;
+                            }
+                        });
                     }
                 });
-                map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
-                    @Override
-                    public boolean onMarkerClick(Marker marker) {
-                        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-                        MapDialogFragment mapDialogFragment = new MapDialogFragment();
-                        mapDialogFragment.show(ft, "map_dialog_fragment");
-                        return true;
-                    }
-                });
+
             }
         });
 
@@ -424,8 +440,7 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
                     .clickable(false));
 
             map.moveCamera(CameraUpdateFactory.newLatLngBounds(builder.build(), 0));
-            if (unzoom != 0)
-                map.moveCamera(CameraUpdateFactory.newLatLngZoom(map.getCameraPosition().target, map.getCameraPosition().zoom-unzoom));
+            map.moveCamera(CameraUpdateFactory.newLatLngZoom(map.getCameraPosition().target, map.getCameraPosition().zoom-unzoom));
             return markerLongHashMap;
         }
         return null;
@@ -570,6 +585,8 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
                 12,
                 dummyIds
         );
+
+        this.event.setEventId(id);
 
         ArrayList<TimeSlot> timeSlots= new ArrayList<>();
         timeSlots.add(new TimeSlot(

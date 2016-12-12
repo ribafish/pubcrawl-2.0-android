@@ -408,11 +408,12 @@
                         <ListView
                             android:id="@+id/event_details.participants.listView"
                             android:layout_width="wrap_content"
-                            android:layout_height="300dp"
+                            android:layout_height="wrap_content"
                             android:layout_below="@+id/event_details.participants.title"
                             android:layout_alignParentLeft="true"
                             android:layout_alignParentStart="true"
                             android:layout_margin="4dp"
+                            android:scrollbars="none"
                             />
 
                     </RelativeLayout>
