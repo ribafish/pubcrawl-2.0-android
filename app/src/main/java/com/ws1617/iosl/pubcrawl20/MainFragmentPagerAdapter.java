@@ -11,12 +11,13 @@ import android.text.SpannableString;
 import android.text.style.ImageSpan;
 
 import com.ws1617.iosl.pubcrawl20.Chat.ChatFragment;
-import com.ws1617.iosl.pubcrawl20.CrawlSearch.CrawlSearchFragment;
+import com.ws1617.iosl.pubcrawl20.DisplayEvents.DisplayEventsFragment;
 import com.ws1617.iosl.pubcrawl20.Current.CurrentFragment;
 import com.ws1617.iosl.pubcrawl20.NotificationHistory.NotificationHistoryFragment;
 
 /**
- * Created by gaspe on 8. 11. 2016.
+ * Created by Gasper Kojek on 8. 11. 2016.
+ * Github: https://github.com/ribafish/
  */
 /**
  * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
@@ -41,7 +42,7 @@ public class MainFragmentPagerAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             case 0:
-                return new CrawlSearchFragment();
+                return new DisplayEventsFragment();
             case 1:
                 return new CurrentFragment();
             case 2:
@@ -49,7 +50,7 @@ public class MainFragmentPagerAdapter extends FragmentPagerAdapter {
             case 3:
                 return new NotificationHistoryFragment();
             default:
-                return new CrawlSearchFragment();
+                return new DisplayEventsFragment();
         }
     }
 

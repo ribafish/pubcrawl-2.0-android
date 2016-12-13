@@ -29,6 +29,11 @@ import android.view.ViewGroup;
 import java.util.List;
 
 /**
+ * Created by Gasper Kojek on 9. 11. 2016.
+ * Github: https://github.com/ribafish/
+ */
+
+/**
  * A {@link PreferenceActivity} that presents a set of application settings. On
  * handset devices, settings are presented as a single list. On tablets,
  * settings are split by category, with category headers shown to the left of

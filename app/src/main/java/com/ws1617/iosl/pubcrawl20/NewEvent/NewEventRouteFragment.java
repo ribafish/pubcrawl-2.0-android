@@ -10,8 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-import com.ws1617.iosl.pubcrawl20.Models.Event;
-import com.ws1617.iosl.pubcrawl20.Models.Pub;
 import com.ws1617.iosl.pubcrawl20.NewEvent.adapters.SelectedPupListAdapter;
 import com.ws1617.iosl.pubcrawl20.R;
 

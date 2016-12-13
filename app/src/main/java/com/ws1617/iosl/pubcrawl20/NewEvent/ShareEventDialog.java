@@ -33,9 +33,24 @@ public class ShareEventDialog extends DialogFragment {
 
 
     @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {€    void initDialogView(View rootView) {
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
 
-        mQrCodeImg = (ImageView) rootView.findViewById(R.id.invite_barcode);
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
+        rootView = LayoutInflater.from(getActivity()).inflate(R.layout.view_invite_dialog
+                , null);
+        alertDialog.setView(rootView);
+
+        return alertDialog.create();
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        initDialogView(rootView);
+    }
+
+    void initDialogView(View rootView) {
+     /*   mQrCodeImg = (ImageView) rootView.findViewById(R.id.invite_barcode);
         QRCodeWriter writer = new QRCodeWriter();
         String content = "test";
         // this is a small sample use of the QRCodeEncoder class from zxing
@@ -54,4 +69,7 @@ public class ShareEventDialog extends DialogFragment {
         mPubsListView = (Spinner) view.findViewById(R.id.pub_dialog_pubs_list);
         mPubsListView.setOnItemSelectedListener(pubListOnItemSelectedListener);
         //TODO should be fetched from the DB
+*/
+    }
 }
+

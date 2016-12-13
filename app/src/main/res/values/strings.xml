@@ -17,6 +17,28 @@
     <string name="new_event">New event</string>
     <string name="search">Search</string>
 
+    <string name="lorem">Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+        Proin vitae consectetur nulla. Donec eu lacus vehicula, ultrices metus a, iaculis dui.
+        Donec posuere tempus consectetur. Mauris sapien justo, vehicula et purus a, auctor
+        pharetra nisi. Duis quam diam, sollicitudin convallis egestas vel, laoreet eget elit.
+        Sed dignissim laoreet risus quis ultrices. Ut non libero commodo mi tincidunt maximus.\n\n
+        Phasellus pharetra, purus ut aliquam sodales, enim ante ullamcorper mi, quis maximus
+        dui orci quis sem. Aenean sodales leo vitae urna lacinia, nec euismod diam viverra. \nUt
+        venenatis, purus ultricies hendrerit commodo, arcu lorem faucibus elit, eget vulputate
+        mi erat non neque. Curabitur tincidunt dictum enim in pellentesque.</string>
+
+    <string name="description">Description</string>
+    <string name="info">Info</string>
+    <string name="route">Route</string>
+    <string name="participants">Participants</string>
+    <string name="owner">Owner</string>
+    <string name="tracked">Tracked</string>
+    <string name="unknown">Unknown</string>
+    <string name="id">Id</string>
+
+
+
+
 
     <!-- Preferences titles -->
     <string name="pref_profile_title">Profile</string>
@@ -95,4 +117,20 @@
     <string name="pref_ringtone_silent">Silent</string>
 
     <string name="pref_title_vibrate">Vibrate</string>
+
+    <string name="details">Details</string>
+    <string name="route_map">ROUTE MAP</string>
+    <string name="no_description">No description</string>
+    <string name="starts">Starts</string>
+    <string name="show_all">Show all</string>
+    <string name="address">Address</string>
+    <string name="coordinates">Coordinates</string>
+    <string name="size">Size</string>
+    <string name="prices">Prices</string>
+    <string name="rating">Rating</string>
+    <string name="opening_times">Opening times</string>
+    <string name="no_data">No data</string>
+    <string name="top_participants">Top participants</string>
+    <string name="past_events">Past events</string>
+    <string name="future_events">Future events</string>
 </resources>

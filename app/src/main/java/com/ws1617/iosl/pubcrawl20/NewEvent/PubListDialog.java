@@ -1,6 +1,5 @@
 package com.ws1617.iosl.pubcrawl20.NewEvent;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
@@ -10,7 +9,6 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -25,8 +23,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.ws1617.iosl.pubcrawl20.Models.Pub;
-import com.ws1617.iosl.pubcrawl20.NewEvent.adapters.PubsListAdapter;
+import com.ws1617.iosl.pubcrawl20.DataModels.Pub;
 import com.ws1617.iosl.pubcrawl20.R;
 
 import java.util.ArrayList;
@@ -125,7 +122,7 @@ public class PubListDialog extends DialogFragment {
         mDateFrom.setOnClickListener(mDoneBtnClickedListener);
 
         mDateTo = (Button) view.findViewById(R.id.pub_dialog_visit_to_date_picker);
-        mDateTo.setOnClickListener(mDoneBtnCli
+        mDateTo.setOnClickListener(mDoneBtnClickedListener);
         initPubList();
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, pubsListString);
         mPubsListView.setAdapter(adapter);
@@ -138,19 +135,19 @@ public class PubListDialog extends DialogFragment {
         pubsList = new ArrayList<>();
         pubsListString = new ArrayList<>();
 
-        Pub pub1 = new Pub("pub 1", new LatLng(1, 1), 10);
+        Pub pub1 = new Pub(1,"pub 1", new LatLng(1, 1), 10);
         pubsList.add(pub1);
         pubsListString.add(pub1.getPubName());
 
-        Pub pub2 = new Pub("pub 2", new LatLng(1, 1), 20);
+        Pub pub2 = new Pub(2,"pub 2", new LatLng(1, 1), 20);
         pubsList.add(pub2);
         pubsListString.add(pub2.getPubName());
 
-        Pub pub3 = new Pub("pub 3", new LatLng(1, 1), 30);
+        Pub pub3 = new Pub(3,"pub 3", new LatLng(1, 1), 30);
         pubsList.add(pub3);
         pubsListString.add(pub3.getPubName());
 
-        Pub pub4 = new Pub("pub 4", new LatLng(1, 1), 40);
+        Pub pub4 = new Pub(4,"pub 4", new LatLng(1, 1), 40);
         pubsList.add(pub4);
         pubsListString.add(pub4.getPubName());
 
