@@ -12,9 +12,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.ws1617.iosl.pubcrawl20.Details.EventDetailsActivity;
-import com.ws1617.iosl.pubcrawl20.DisplayEvents.Models.Event;
+import com.ws1617.iosl.pubcrawl20.DisplayEvents.MiniDataModels.EventMini;
 import com.ws1617.iosl.pubcrawl20.R;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 /**
@@ -22,11 +23,11 @@ import java.util.List;
  */
 
 public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHolder> {
-    private List<Event> eventList;
+    private List<EventMini> eventList;
     private final static String TAG = "EventAdapter";
 
     public class EventViewHolder extends RecyclerView.ViewHolder  {
-        public TextView name, description;
+        public TextView name, description, date;
         public RelativeLayout relativeLayout;
         public Button btn_details;
 
@@ -36,11 +37,12 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
             this.description = (TextView) itemView.findViewById(R.id.event_description);
             this.relativeLayout = (RelativeLayout) itemView.findViewById(R.id.event_layout);
             this.btn_details = (Button) itemView.findViewById(R.id.event_details_btn);
+            this.date = (TextView) itemView.findViewById(R.id.event_date);
         }
 
     }
 
-    public EventAdapter(List<Event> eventList) {
+    public EventAdapter(List<EventMini> eventList) {
         this.eventList = eventList;
     }
 
@@ -53,12 +55,12 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
         holder.btn_details.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Event event = eventList.get(holder.getAdapterPosition());
+                EventMini event = eventList.get(holder.getAdapterPosition());
 
                 Intent intent = new Intent(view.getContext(), EventDetailsActivity.class);
 
-                intent.putExtra("eventId", event.getEventId());
-                intent.putExtra("name", event.getEventName());
+                intent.putExtra("id", event.getEventId());
+                intent.putExtra("name", event.getName());
 
                 Log.d(TAG, "onClick event details: " + event);
 
@@ -69,9 +71,9 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
         holder.relativeLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Event event = eventList.get(holder.getAdapterPosition());
+                EventMini event = eventList.get(holder.getAdapterPosition());
 
-                for (Event e : eventList) {
+                for (EventMini e : eventList) {
                     if (e.getEventId() == event.getEventId()) {
                         e.setSelected(true);
 
@@ -88,15 +90,15 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
 
     @Override
     public void onBindViewHolder(final EventViewHolder holder, final int position) {
-        holder.name.setText(eventList.get(position).getEventName());
+        holder.name.setText(eventList.get(position).getName());
         holder.description.setText(eventList.get(position).getDescription());
         if (eventList.get(position).isSelected()) {
             holder.relativeLayout.setBackgroundColor(Color.LTGRAY);
         } else {
             holder.relativeLayout.setBackgroundColor(Color.WHITE);
         }
-
-
+        SimpleDateFormat localDateFormat = new SimpleDateFormat("E, MMM d, yyyy");
+        holder.date.setText(localDateFormat.format(eventList.get(position).getDate()));
     }
 
     @Override

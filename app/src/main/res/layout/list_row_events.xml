@@ -20,6 +20,8 @@
         android:id="@+id/event_name"
         android:layout_alignParentTop="true"
         android:textSize="30sp"
+        android:layout_toLeftOf="@+id/event_date"
+        android:text="Test Event"
         />
 
     <TextView
@@ -27,8 +29,25 @@
         android:layout_alignParentLeft="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_toLeftOf="@+id/event_details_btn"
         android:id="@+id/event_description"
+        android:maxLines="2"
+        android:ellipsize="end"
         android:layout_below="@+id/event_name"
+        android:text="@string/lorem"
+        />
+
+    <TextView
+        android:id="@+id/event_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/event_details_btn"
+        android:layout_alignLeft="@+id/event_details_btn"
+        android:layout_alignEnd="@+id/event_details_btn"
+        android:layout_alignRight="@+id/event_details_btn"
+        android:layout_alignBottom="@+id/event_name"
+        android:gravity="center"
+        android:text="Test date"
         />
 
     <Button

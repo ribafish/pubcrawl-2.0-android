@@ -1,12 +1,13 @@
-package com.ws1617.iosl.pubcrawl20.DisplayEvents.Models;
+package com.ws1617.iosl.pubcrawl20.DisplayEvents.MiniDataModels;
 
 import java.util.Comparator;
 
 /**
- * Created by gaspe on 2. 12. 2016.
+ * Created by Gasper Kojek on 13. 12. 2016.
+ * Github: https://github.com/ribafish/
  */
 
-public class EventComparator implements Comparator<Event> {
+public class EventMiniComparator implements Comparator<EventMini> {
     public static final int DATE = 1;
     public static final int ID = 2;
     public static final int NAME = 3;
@@ -14,7 +15,7 @@ public class EventComparator implements Comparator<Event> {
     private boolean ascending;
     private int type;
 
-    public EventComparator() {
+    public EventMiniComparator() {
         this.ascending = true;
         this.type = DATE;
     }
@@ -24,13 +25,13 @@ public class EventComparator implements Comparator<Event> {
      * @param ascending bool ascending, used for setting the direction of rder
      * @param type  int type, used for setting on what key the events are compared
      */
-    public EventComparator(boolean ascending, int type) {
+    public EventMiniComparator(boolean ascending, int type) {
         this.ascending = ascending;
         this.type = type;
     }
 
     @Override
-    public int compare(Event event, Event t1) {
+    public int compare(EventMini event, EventMini t1) {
         int result = 0;
 
         switch (type) {
@@ -44,7 +45,7 @@ public class EventComparator implements Comparator<Event> {
                 result = (int) l;
                 break;
             case NAME:
-                result = event.getEventName().compareTo(t1.getEventName());
+                result = event.getName().compareTo(t1.getName());
                 break;
             default:
                 result = event.getDate().compareTo(t1.getDate());
