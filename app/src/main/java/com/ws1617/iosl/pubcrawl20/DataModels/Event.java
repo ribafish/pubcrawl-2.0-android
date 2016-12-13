@@ -26,9 +26,11 @@ public class Event {
     private ArrayList<Long> pubIds = new ArrayList<>();
     private Polyline polyline;
 
-    public Event ()
-    {
+    public Event() {
+    }
 
+    public Event(long eventId) {
+        this.eventId = eventId;
     }
 
     public Event(String eventName, Date date, String description, boolean tracked) {

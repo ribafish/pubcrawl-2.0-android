@@ -10,6 +10,8 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
@@ -37,16 +39,18 @@ import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
-import com.ws1617.iosl.pubcrawl20.DataModels.Event;
-import com.ws1617.iosl.pubcrawl20.DataModels.EventComparator;
-import com.ws1617.iosl.pubcrawl20.DataModels.Person;
-import com.ws1617.iosl.pubcrawl20.DataModels.Pub;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.ws1617.iosl.pubcrawl20.DataModels.Event;
+import com.ws1617.iosl.pubcrawl20.DataModels.Person;
+import com.ws1617.iosl.pubcrawl20.DataModels.Pub;
 import com.ws1617.iosl.pubcrawl20.Details.EventDetailsActivity;
 import com.ws1617.iosl.pubcrawl20.Details.PersonDetailsActivity;
 import com.ws1617.iosl.pubcrawl20.Details.PubDetailsActivity;
+import com.ws1617.iosl.pubcrawl20.DisplayEvents.MiniDataModels.EventMini;
+import com.ws1617.iosl.pubcrawl20.DisplayEvents.MiniDataModels.EventMiniComparator;
+import com.ws1617.iosl.pubcrawl20.DisplayEvents.MiniDataModels.PubMini;
 import com.ws1617.iosl.pubcrawl20.R;
 
 import org.json.JSONArray;
@@ -71,15 +75,16 @@ public class DisplayEventsFragment extends Fragment implements OnMapReadyCallbac
     private GoogleMap map;
     private SharedPreferences prefs;
     private RequestQueue requestQueue;
-    private ArrayList<Event> eventList = new ArrayList<>();
+    private ArrayList<EventMini> eventList = new ArrayList<>();
     private EventAdapter eventAdapter;
 
     public DisplayEventsFragment() {}
 
 
 
+    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater,  ViewGroup container,  Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         SupportMapFragment mapFragment = new SupportMapFragment();
         FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
         fragmentTransaction.add(R.id.homeMapView, mapFragment).commit();
@@ -160,15 +165,15 @@ public class DisplayEventsFragment extends Fragment implements OnMapReadyCallbac
         map.setOnPolylineClickListener(this);
         map.setOnMarkerClickListener(this);
 
-        for (Event event : eventList) {
-            drawEventOnMap(event.getEventId(), event.getPubs());
+        for (EventMini e : eventList) {
+            drawEventOnMap(e.getEventId(), e.getPubs());
         }
     }
 
     @Override
     public void onPolylineClick(Polyline polyline) {
         Log.d(TAG, "onPolylineClick" + polyline);
-        for (Event event : eventList) {
+        for (EventMini event : eventList) {
             Polyline p = event.getPolyline();
             if (p==null) {
                 event.setSelected(false);
@@ -190,7 +195,7 @@ public class DisplayEventsFragment extends Fragment implements OnMapReadyCallbac
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         // Instantiate the RequestQueue.
@@ -247,10 +252,10 @@ public class DisplayEventsFragment extends Fragment implements OnMapReadyCallbac
      * @param eventId
      * @param pubs
      */
-    private void drawEventOnMap(final long eventId, ArrayList<Pub> pubs) {
+    private void drawEventOnMap(final long eventId, ArrayList<PubMini> pubs) {
         if (map != null && pubs != null) {
             ArrayList<LatLng> latLngs = new ArrayList<>();
-            for (Pub pub : pubs) {
+            for (PubMini pub : pubs) {
                 latLngs.add(pub.getLatLng());
             }
 
@@ -259,7 +264,7 @@ public class DisplayEventsFragment extends Fragment implements OnMapReadyCallbac
                     .width(10)
                     .clickable(true)
                     .color(Color.GRAY));
-            for (Event e : eventList) {
+            for (EventMini e : eventList) {
                 if (e.getEventId() == eventId) {
                     eventList.get(eventList.indexOf(e)).setPolyline(polyline);
                 }
@@ -275,6 +280,7 @@ public class DisplayEventsFragment extends Fragment implements OnMapReadyCallbac
      * @param size int size
      * @return BitmapDescriptor to be used for Marker.setIcon
      */
+    @NonNull
     private BitmapDescriptor getMarkerIconFromDrawable(int resId, int color, int size) {
         Drawable drawable = ContextCompat.getDrawable(getActivity(), resId);
         drawable.setColorFilter(color, PorterDuff.Mode.MULTIPLY);
@@ -291,11 +297,12 @@ public class DisplayEventsFragment extends Fragment implements OnMapReadyCallbac
         JSONArray jsonEvents = embedded.getJSONArray("events");
         for (int i=0; i < jsonEvents.length(); i++) {
             JSONObject jsonEvent = jsonEvents.getJSONObject(i);
-            Event event = parseJSONEvent(jsonEvent);
-            Log.d(TAG, "Parsed event [" + i + "]: " + event);
+            Event e = parseJSONEvent(jsonEvent);
+            Log.d(TAG, "Parsed event [" + i + "]: " + e);
+            EventMini event = new EventMini(e);
             eventList.add(event);
         }
-        Collections.sort(eventList, new EventComparator(true, EventComparator.NAME));
+        Collections.sort(eventList, new EventMiniComparator(true, EventMiniComparator.NAME));
         eventAdapter.notifyDataSetChanged();
     }
 
@@ -310,7 +317,6 @@ public class DisplayEventsFragment extends Fragment implements OnMapReadyCallbac
         JSONObject jsonLinks = jsonEvent.getJSONObject("_links");
         String participantsListURL = jsonLinks.getJSONObject("participantsList").getString("href");
         String pubsListURL = jsonLinks.getJSONObject("pubsList").getString("href");
-        String owenrURL = jsonLinks.getJSONObject("eventOwner").getString("href");
         final long eventId = parseIdFromHref(jsonLinks.getJSONObject("self").getString("href"));
         event.setEventId(eventId);
 
@@ -318,24 +324,24 @@ public class DisplayEventsFragment extends Fragment implements OnMapReadyCallbac
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        ArrayList<Person> participants = new ArrayList<>();
+                        ArrayList<Long> participantsIds = new ArrayList<>();
                         try {
                             JSONArray participantsJson = response.getJSONObject("_embedded").getJSONArray("crawlers");
                             for (int i=0; i < participantsJson.length(); i++) {
                                 JSONObject jsonParticipant = participantsJson.getJSONObject(i);
-                                participants.add(parsePersonJson(jsonParticipant));
+                                participantsIds.add(parsePersonJson(jsonParticipant).getId());
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
 
                         try {
-                            eventList.get(getEventListIndex(eventId)).setParticipants(participants);
+                            eventList.get(getEventListIndex(eventId)).setParticipantIds(participantsIds);
                             Log.d(TAG, "parsed participants, event id: " + eventId + "; Event: " + eventList.get(getEventListIndex(eventId)));
                         } catch (IndexOutOfBoundsException e) {
                             e.printStackTrace();
                         }
-                   }
+                    }
                 },
                 new Response.ErrorListener() {
                     @Override
@@ -348,12 +354,13 @@ public class DisplayEventsFragment extends Fragment implements OnMapReadyCallbac
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        ArrayList<Pub> pubs = new ArrayList<>();
+                        ArrayList<PubMini> pubs = new ArrayList<>();
                         try {
                             JSONArray pubsJson = response.getJSONObject("_embedded").getJSONArray("pubs");
                             for (int i=0; i < pubsJson.length(); i++) {
                                 JSONObject jsonPub = pubsJson.getJSONObject(i);
-                                Pub pub = parsePubJson(jsonPub);
+                                Pub p = parsePubJson(jsonPub);
+                                PubMini pub = new PubMini(p);
                                 pubs.add(pub);
                             }
                         } catch (Exception e) {
@@ -377,27 +384,8 @@ public class DisplayEventsFragment extends Fragment implements OnMapReadyCallbac
                     }
                 });
 
-        JsonObjectRequest ownerRequest = new JsonObjectRequest(Request.Method.GET, owenrURL, null,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        try {
-                            eventList.get(getEventListIndex(eventId)).setOwner(parsePersonJson(response));
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.e(TAG, "ownerRequest:" + error.getLocalizedMessage());
-                    }
-                });
-
         requestQueue.add(participantRequest);
         requestQueue.add(pubsRequest);
-        requestQueue.add(ownerRequest);
 
         return event;
     }
@@ -431,7 +419,7 @@ public class DisplayEventsFragment extends Fragment implements OnMapReadyCallbac
     }
 
     public int getEventListIndex (long eventId) throws IndexOutOfBoundsException {
-        for (Event e : eventList) {
+        for (EventMini e : eventList) {
             if (e.getEventId() == eventId) {
                 return eventList.indexOf(e);
             }
