@@ -18,7 +18,7 @@ public class Person {
     private ArrayList<Bitmap> images = new ArrayList<>();
     private ArrayList<Long> friendIds = new ArrayList<>();
     private ArrayList<Long> eventIds = new ArrayList<>();
-    private ArrayList<Long> favouriteIds = new ArrayList<>();
+    private ArrayList<Long> favouritePubIds = new ArrayList<>();
     private ArrayList<Long> ownedPubIds = new ArrayList<>();
     private ArrayList<Long> ownedEventIds = new ArrayList<>();
 
@@ -40,7 +40,7 @@ public class Person {
                   @NonNull ArrayList<Bitmap> images,
                   @NonNull ArrayList<Long> friendIds,
                   @NonNull ArrayList<Long> eventIds,
-                  @NonNull ArrayList<Long> favouriteIds,
+                  @NonNull ArrayList<Long> favouritePubIds,
                   @NonNull ArrayList<Long> ownedPubIds,
                   @NonNull ArrayList<Long> ownedEventIds) {
         this.id = id;
@@ -50,7 +50,7 @@ public class Person {
         this.images = images;
         this.friendIds = friendIds;
         this.eventIds = eventIds;
-        this.favouriteIds = favouriteIds;
+        this.favouritePubIds = favouritePubIds;
         this.ownedPubIds = ownedPubIds;
         this.ownedEventIds = ownedEventIds;
     }
@@ -132,12 +132,12 @@ public class Person {
         this.eventIds = eventIds;
     }
 
-    public ArrayList<Long> getFavouriteIds() {
-        return favouriteIds;
+    public ArrayList<Long> getFavouritePubIds() {
+        return favouritePubIds;
     }
 
-    public void setFavouriteIds(ArrayList<Long> favouriteIds) {
-        this.favouriteIds = favouriteIds;
+    public void setFavouritePubIds(ArrayList<Long> favouritePubIds) {
+        this.favouritePubIds = favouritePubIds;
     }
 
     public ArrayList<Long> getOwnedPubIds() {
