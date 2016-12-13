@@ -277,7 +277,27 @@ public class PersonDetailsActivity extends AppCompatActivity implements AppBarLa
      */
 
     private void getPerson(long id) {
-        // TODO
+        ArrayList<Long> dummy = new ArrayList<Long>();
+        for (Long i = 0l; i< 10; i++) {
+            dummy.add(i);
+        }
+
+        person = new Person(id,
+                "Person " + id,
+                "person"+id+"@noMail.no",
+                getResources().getString(R.string.lorem),
+                new ArrayList<Bitmap>(),
+                dummy,
+                dummy,
+                dummy,
+                dummy,
+                dummy);
+
+        getFriends();
+        getEvents();
+        getFavouritePubs();
+        getOwnedPubs();
+        getOwnedEvents();
     }
 
     private PersonMini getPersonMini(long id) {
@@ -291,6 +311,40 @@ public class PersonDetailsActivity extends AppCompatActivity implements AppBarLa
 
         return new EventMini("Dummy event " + id, id, date);
 
+    }
+
+    private PubMini getPubMini(long id) {
+        return new PubMini("Dummy pub "+id, null, id, null);
+    }
+
+    private void getFriends() {
+        for (Long i : person.getFriendIds()) {
+            friends.add(getPersonMini(i));
+        }
+    }
+
+    private void getEvents() {
+        for (long i : person.getEventIds()) {
+            events.add(getEventMini(i));
+        }
+    }
+
+    private void getFavouritePubs() {
+        for (long i : person.getFavouritePubIds()) {
+            favouritePubs.add(getPubMini(i));
+        }
+    }
+
+    private void getOwnedPubs() {
+        for (long i : person.getOwnedPubIds()) {
+            ownedPubs.add(getPubMini(i));
+        }
+    }
+
+    private void getOwnedEvents() {
+        for (long i : person.getOwnedEventIds()) {
+            ownedEvents.add(getEventMini(i));
+        }
     }
 
 
