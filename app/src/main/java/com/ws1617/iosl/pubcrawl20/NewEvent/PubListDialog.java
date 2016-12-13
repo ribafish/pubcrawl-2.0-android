@@ -43,6 +43,8 @@ public class PubListDialog extends DialogFragment {
     //Views
     Button mDateFrom, mDateTo, mDoneBtn;
     Spinner mPubsListView;
+
+
     TextView mPubName, mPubSize;
 
     SupportMapFragment mapFragment;
@@ -50,7 +52,7 @@ public class PubListDialog extends DialogFragment {
     Pub selectedPub;
     List<Pub> pubsList;
     List<String> pubsListString;
-    GoogleMap mGoogleMap;
+    //GoogleMap mGoogleMap;
 
 
     public PubListDialog() {
@@ -85,26 +87,26 @@ public class PubListDialog extends DialogFragment {
         //initMapView();
     }
 
-    @Override
+    /*@Override
     public void onDestroy() {
         super.onDestroy();
         if (null != getChildFragmentManager())
             getActivity().getSupportFragmentManager().beginTransaction()
                     .remove(mapFragment)
                     .commit();
-    }
-    private void initMapView()
-    {
+    }*/
+
+    private void initMapView() {
         mapFragment = new SupportMapFragment();
         FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
-        fragmentTransaction.add(R.id.pub_dialog_map,mapFragment,TAG).commit();
+        fragmentTransaction.add(R.id.pub_dialog_map, mapFragment, TAG).commit();
         mapFragment.getMapAsync(new OnMapReadyCallback() {
             @Override
             public void onMapReady(GoogleMap googleMap) {
-                mGoogleMap = googleMap;
+                /*mGoogleMap = googleMap;
                 LatLng sydney = new LatLng(-34, 151);
                 mGoogleMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-                mGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+                mGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));*/
             }
         });
     }
@@ -123,6 +125,10 @@ public class PubListDialog extends DialogFragment {
 
         mDateTo = (Button) view.findViewById(R.id.pub_dialog_visit_to_date_picker);
         mDateTo.setOnClickListener(mDoneBtnClickedListener);
+
+        mPubsListView = (Spinner) view.findViewById(R.id.pub_dialog_pubs_list);
+        mPubsListView.setOnItemSelectedListener(pubListOnItemSelectedListener);
+        //TODO should be fetched from the DB
         initPubList();
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, pubsListString);
         mPubsListView.setAdapter(adapter);
@@ -135,19 +141,19 @@ public class PubListDialog extends DialogFragment {
         pubsList = new ArrayList<>();
         pubsListString = new ArrayList<>();
 
-        Pub pub1 = new Pub(1,"pub 1", new LatLng(1, 1), 10);
+        Pub pub1 = new Pub(1, "pub 1", new LatLng(1, 1), 10);
         pubsList.add(pub1);
         pubsListString.add(pub1.getPubName());
 
-        Pub pub2 = new Pub(2,"pub 2", new LatLng(1, 1), 20);
+        Pub pub2 = new Pub(2, "pub 2", new LatLng(1, 1), 20);
         pubsList.add(pub2);
         pubsListString.add(pub2.getPubName());
 
-        Pub pub3 = new Pub(3,"pub 3", new LatLng(1, 1), 30);
+        Pub pub3 = new Pub(3, "pub 3", new LatLng(1, 1), 30);
         pubsList.add(pub3);
         pubsListString.add(pub3.getPubName());
 
-        Pub pub4 = new Pub(4,"pub 4", new LatLng(1, 1), 40);
+        Pub pub4 = new Pub(4, "pub 4", new LatLng(1, 1), 40);
         pubsList.add(pub4);
         pubsListString.add(pub4.getPubName());
 
@@ -166,13 +172,14 @@ public class PubListDialog extends DialogFragment {
 
             switch (view.getId()) {
                 case R.id.pub_dialog_pub_done: {
-                    if(selectedPub != null)
-                    onSelectPubDialogDismissed.addPubToList(selectedPub);
                     dismiss();
+                    if (selectedPub != null)
+                        onSelectPubDialogDismissed.addPubToList(selectedPub);
+
                     break;
                 }
                 case R.id.pub_dialog_visit_from_date_picker: {
-                     new DatePickerDialog(getContext(), onDateFromSetListener, year, month, day).show();
+                    new DatePickerDialog(getContext(), onDateFromSetListener, year, month, day).show();
                     break;
                 }
                 case R.id.pub_dialog_visit_to_date_picker: {

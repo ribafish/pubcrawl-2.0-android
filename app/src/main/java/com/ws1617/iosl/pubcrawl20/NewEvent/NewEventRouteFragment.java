@@ -2,7 +2,6 @@ package com.ws1617.iosl.pubcrawl20.NewEvent;
 
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -13,12 +12,10 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.ws1617.iosl.pubcrawl20.DataModels.Event;
 import com.ws1617.iosl.pubcrawl20.DataModels.Pub;
 import com.ws1617.iosl.pubcrawl20.NewEvent.adapters.SelectedPupListAdapter;
 import com.ws1617.iosl.pubcrawl20.R;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,19 +48,13 @@ public class NewEventRouteFragment extends Fragment {
         return rootView;
     }
 
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
-    }
-
 
     @Override
     public void setMenuVisibility(boolean menuVisible) {
         super.setMenuVisibility(menuVisible);
         if (menuVisible && mSelectedPupsList.size() == 0) {
-            Toast toast = Toast.makeText(getContext(),"Click on + to add Pubs",Toast.LENGTH_LONG);
-            toast.setGravity(Gravity.CENTER,0,0);
+            Toast toast = Toast.makeText(getContext(), "Click on + to add Pubs", Toast.LENGTH_LONG);
+            toast.setGravity(Gravity.CENTER, 0, 0);
             toast.show();
         }
     }
@@ -96,17 +87,13 @@ public class NewEventRouteFragment extends Fragment {
         }
     };
 
-  /*  public Event updatePubListInfo(Event event) {
-         event.addPubs(mSelectedPupsList);
-        return event;
-    }*/
 
     PubListDialog.OnSelectPubDialogDismissed onSelectPubDialogDismissed = new PubListDialog.OnSelectPubDialogDismissed() {
         @Override
         public void addPubToList(Pub newPub) {
             mSelectedPupsList.add(newPub);
-            adapter.notifyItemChanged(mSelectedPupsList.size());
-            //adapter.notifyDataSetChanged();
+            //adapter.notifyItemChanged(mSelectedPupsList.size());
+            adapter.notifyDataSetChanged();
         }
     };
 }
