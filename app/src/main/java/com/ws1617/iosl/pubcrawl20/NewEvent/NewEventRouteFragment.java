@@ -75,10 +75,10 @@ public class NewEventRouteFragment extends Fragment {
         }
     };
 
-    public Event updatePubListInfo(Event event) {
+  /*  public Event updatePubListInfo(Event event) {
          event.addPubs(mSelectedPupsList);
         return event;
-    }
+    }*/
 
     PubListDialog.OnSelectPubDialogDismissed onSelectPubDialogDismissed = new PubListDialog.OnSelectPubDialogDismissed() {
         @Override

@@ -69,14 +69,14 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
         holder.relativeLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Event event = eventList.get(holder.getAdapterPosition());
+               // Event event = eventList.get(holder.getAdapterPosition());
 
-                for (Event e : eventList) {
-                    if (e.getEventId() == event.getEventId()) {
-                        e.setSelected(true);
+                for (Event event : eventList) {
+                    if (event.getEventId() == event.getEventId()) {
+                        event.setSelected(true);
 
                     } else {
-                        e.setSelected(false);
+                        event.setSelected(false);
                     }
                 }
                 notifyDataSetChanged();

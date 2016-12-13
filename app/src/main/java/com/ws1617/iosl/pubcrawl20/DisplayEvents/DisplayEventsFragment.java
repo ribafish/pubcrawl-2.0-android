@@ -160,8 +160,8 @@ public class DisplayEventsFragment extends Fragment implements OnMapReadyCallbac
         map.setOnPolylineClickListener(this);
         map.setOnMarkerClickListener(this);
 
-        for (Event e : eventList) {
-            drawEventOnMap(e.getEventId(), e.getPubs());
+        for (Event event : eventList) {
+            drawEventOnMap(event.getEventId(), event.getPubs());
         }
     }
 
