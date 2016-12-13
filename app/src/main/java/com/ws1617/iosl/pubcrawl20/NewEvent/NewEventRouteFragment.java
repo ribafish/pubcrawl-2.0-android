@@ -2,19 +2,23 @@ package com.ws1617.iosl.pubcrawl20.NewEvent;
 
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.ws1617.iosl.pubcrawl20.DataModels.Event;
 import com.ws1617.iosl.pubcrawl20.DataModels.Pub;
 import com.ws1617.iosl.pubcrawl20.NewEvent.adapters.SelectedPupListAdapter;
 import com.ws1617.iosl.pubcrawl20.R;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,10 +51,27 @@ public class NewEventRouteFragment extends Fragment {
         return rootView;
     }
 
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+    }
+
+
+    @Override
+    public void setMenuVisibility(boolean menuVisible) {
+        super.setMenuVisibility(menuVisible);
+        if (menuVisible && mSelectedPupsList.size() == 0) {
+            Toast toast = Toast.makeText(getContext(),"Click on + to add Pubs",Toast.LENGTH_LONG);
+            toast.setGravity(Gravity.CENTER,0,0);
+            toast.show();
+        }
+    }
+
     private void initView() {
         // init pups list
         mSelectedPupsList = new ArrayList<>();
-       // mSelectedPupsList.add( new Pub(1,"Date",new LatLng(1,1),1));
+        // mSelectedPupsList.add( new Pub(1,"Date",new LatLng(1,1),1));
 
         mAddPubBtn = (Button) rootView.findViewById(R.id.event_new_add_pub);
         mAddPubBtn.setOnClickListener(addPubClickListener);
@@ -71,7 +92,7 @@ public class NewEventRouteFragment extends Fragment {
         public void onClick(View view) {
             PubListDialog dialog = new PubListDialog();
             dialog.setPubListListener(onSelectPubDialogDismissed);
-            dialog.show(getChildFragmentManager(), TAG+"pub");
+            dialog.show(getChildFragmentManager(), TAG + "pub");
         }
     };
 
@@ -85,7 +106,7 @@ public class NewEventRouteFragment extends Fragment {
         public void addPubToList(Pub newPub) {
             mSelectedPupsList.add(newPub);
             adapter.notifyItemChanged(mSelectedPupsList.size());
-           //adapter.notifyDataSetChanged();
+            //adapter.notifyDataSetChanged();
         }
     };
 }
