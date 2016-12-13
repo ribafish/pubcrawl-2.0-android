@@ -4,6 +4,7 @@ package com.ws1617.iosl.pubcrawl20.NewEvent.adapters;
         import android.widget.ArrayAdapter;
 
         import com.google.android.gms.maps.model.LatLng;
+        import com.ws1617.iosl.pubcrawl20.DataModels.Pub;
 
         import java.util.ArrayList;
         import java.util.List;
@@ -25,11 +26,11 @@ public class PubsListAdapter extends ArrayAdapter{
     void initPubList(){
         //TODO should be fetched from the local DB
         pubsList = new ArrayList<>();
-        pubsList.add(new Pub("pub 1",new LatLng(1,1),10));
-        pubsList.add(new Pub("pub 2",new LatLng(1,1),20));
-        pubsList.add(new Pub("pub 3",new LatLng(1,1),30));
-        pubsList.add(new Pub("pub 4",new LatLng(1,1),40));
-        pubsList.add(new Pub("pub 5",new LatLng(1,1),50));
-        pubsList.add(new Pub("pub 6",new LatLng(1,1),60));
+        pubsList.add(new Pub(1,"pub 1",new LatLng(1,1),10));
+        pubsList.add(new Pub(2,"pub 2",new LatLng(1,1),20));
+        pubsList.add(new Pub(3,"pub 3",new LatLng(1,1),30));
+        pubsList.add(new Pub(4,"pub 4",new LatLng(1,1),40));
+        pubsList.add(new Pub(5,"pub 5",new LatLng(1,1),50));
+        pubsList.add(new Pub(6,"pub 6",new LatLng(1,1),60));
     }
 }

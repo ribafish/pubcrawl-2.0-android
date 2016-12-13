@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
+import com.ws1617.iosl.pubcrawl20.DataModels.Event;
 import com.ws1617.iosl.pubcrawl20.NewEvent.adapters.NewEventPagerAdapter;
 import com.ws1617.iosl.pubcrawl20.R;
 
@@ -19,7 +20,7 @@ public class NewEventActivity extends AppCompatActivity  {
 
     FloatingActionButton mCreateEventBtn;
     NewEventPagerAdapter mFragmentPagerAdapter;
-    private  Event mEvent;
+    private Event mEvent;
     private List<Fragment> fragmentsList;
      final static String EVENT_TAG = "EVENT_TAG";
 
