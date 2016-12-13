@@ -22,7 +22,7 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class NewEventRouteFragment extends Fragment {
+public class NewEventRouteFragment extends Fragment implements SelectedPupListAdapter.OnPubItemClickListener {
 
     static final String TAG = "NewEventRouteFragment";
     //Views
@@ -30,6 +30,7 @@ public class NewEventRouteFragment extends Fragment {
     Button mAddPubBtn;
     RecyclerView mSelectedPupListView;
     SelectedPupListAdapter adapter;
+    PubListDialog mPubItemDialog;
 
     //Data
     List<Pub> mSelectedPupsList;
@@ -69,10 +70,11 @@ public class NewEventRouteFragment extends Fragment {
         //selected list
         mSelectedPupListView = (RecyclerView) rootView.findViewById(R.id.event_new_selected_pub_list);
 
+
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         mSelectedPupListView.setLayoutManager(linearLayoutManager);
 
-        adapter = new SelectedPupListAdapter(mSelectedPupsList);
+        adapter = new SelectedPupListAdapter(mSelectedPupsList, this);
         mSelectedPupListView.setAdapter(adapter);
 
     }
@@ -81,9 +83,9 @@ public class NewEventRouteFragment extends Fragment {
     View.OnClickListener addPubClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            PubListDialog dialog = new PubListDialog();
-            dialog.setPubListListener(onSelectPubDialogDismissed);
-            dialog.show(getChildFragmentManager(), TAG + "pub");
+            mPubItemDialog = new PubListDialog();
+            mPubItemDialog.setPubListListener(onSelectPubDialogDismissed);
+            mPubItemDialog.show(getChildFragmentManager(), TAG + "pub");
         }
     };
 
@@ -95,4 +97,13 @@ public class NewEventRouteFragment extends Fragment {
             adapter.notifyItemChanged(mSelectedPupsList.size());
         }
     };
+
+    @Override
+    public void onPubItemClicked(int itemPosition) {
+        if (mPubItemDialog != null) {
+            mPubItemDialog.setPubListListener(onSelectPubDialogDismissed);
+            mPubItemDialog.showSelectedPub(mSelectedPupsList.get(itemPosition));
+            mPubItemDialog.show(getChildFragmentManager(), TAG + "pub");
+        }
+    }
 }

@@ -17,10 +17,12 @@ import java.util.List;
 
 public class SelectedPupListAdapter extends RecyclerView.Adapter<SelectedPupListAdapter.pupViewHolder> {
     List<Pub> selectedPups;
+    OnPubItemClickListener mOnPubItemClickListener;
 
 
-    public SelectedPupListAdapter(List<Pub> selectedPups) {
+    public SelectedPupListAdapter(List<Pub> selectedPups, OnPubItemClickListener listener) {
         this.selectedPups = selectedPups;
+        mOnPubItemClickListener = listener;
     }
 
     @Override
@@ -43,13 +45,14 @@ public class SelectedPupListAdapter extends RecyclerView.Adapter<SelectedPupList
         return selectedPups.size();
     }
 
-    public class pupViewHolder extends RecyclerView.ViewHolder {
+    public class pupViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         TextView pubName;
         TextView pubTime;
 
         public pupViewHolder(View itemView) {
             super(itemView);
+            itemView.setOnClickListener(this);
             pubName = (TextView) itemView.findViewById(R.id.selected_pub_item_title);
             pubTime = (TextView) itemView.findViewById(R.id.selected_pub_item_time);
         }
@@ -58,5 +61,15 @@ public class SelectedPupListAdapter extends RecyclerView.Adapter<SelectedPupList
             pubName.setText(pub.getPubName());
             pubTime.setText(pub.getClosingTime());
         }
+
+        @Override
+        public void onClick(View view) {
+            mOnPubItemClickListener.onPubItemClicked(getAdapterPosition());
+        }
+    }
+
+
+    public interface OnPubItemClickListener {
+        void onPubItemClicked(int itemPosition);
     }
 }

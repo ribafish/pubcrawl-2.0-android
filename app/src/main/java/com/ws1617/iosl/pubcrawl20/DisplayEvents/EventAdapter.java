@@ -25,7 +25,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
     private List<Event> eventList;
     private final static String TAG = "EventAdapter";
 
-    public class EventViewHolder extends RecyclerView.ViewHolder  {
+    public class EventViewHolder extends RecyclerView.ViewHolder {
         public TextView name, description;
         public RelativeLayout relativeLayout;
         public Button btn_details;
@@ -60,7 +60,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
                 intent.putExtra("eventId", event.getEventId());
                 intent.putExtra("name", event.getEventName());
 
-                Log.d(TAG, "onClick event details: " + event);
+                Log.d(TAG, "onPubItemClicked event details: " + event);
 
                 view.getContext().startActivity(intent);
             }
@@ -69,16 +69,16 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
         holder.relativeLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-               // Event event = eventList.get(holder.getAdapterPosition());
+                // Event event = eventList.get(holder.getAdapterPosition());
 
-                for (Event event : eventList) {
+               /* for (Event event : eventList) {
                     if (event.getEventId() == event.getEventId()) {
                         event.setSelected(true);
 
                     } else {
                         event.setSelected(false);
                     }
-                }
+                }*/
                 notifyDataSetChanged();
             }
         });
@@ -90,11 +90,10 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
     public void onBindViewHolder(final EventViewHolder holder, final int position) {
         holder.name.setText(eventList.get(position).getEventName());
         holder.description.setText(eventList.get(position).getDescription());
-        if (eventList.get(position).isSelected()) {
+        /*if (eventList.get(position).isSelected()) {
             holder.relativeLayout.setBackgroundColor(Color.LTGRAY);
-        } else {
-            holder.relativeLayout.setBackgroundColor(Color.WHITE);
-        }
+        } else { }*/
+        holder.relativeLayout.setBackgroundColor(Color.WHITE);
 
 
     }

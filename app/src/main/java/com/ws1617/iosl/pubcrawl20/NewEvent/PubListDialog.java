@@ -38,16 +38,16 @@ public class PubListDialog extends DialogFragment {
 
     static final String TAG = "PubListDialog";
 
+    //Listeners
     OnSelectPubDialogDismissed onSelectPubDialogDismissed;
 
     //Views
     Button mDateFrom, mDateTo, mDoneBtn;
     Spinner mPubsListView;
-
-
     TextView mPubName, mPubSize;
-
     SupportMapFragment mapFragment;
+    View mRootView;
+
     //Data
     Pub selectedPub;
     List<Pub> pubsList;
@@ -56,7 +56,6 @@ public class PubListDialog extends DialogFragment {
 
 
     public PubListDialog() {
-
     }
 
     public void setPubListListener(OnSelectPubDialogDismissed onSelectPubDialogDismissed) {
@@ -68,12 +67,26 @@ public class PubListDialog extends DialogFragment {
         AlertDialog.Builder alertBuilder = new AlertDialog.Builder(getActivity());
 
         LayoutInflater inflater = getActivity().getLayoutInflater();
-        View view = inflater.inflate(R.layout.view_pup_list, null);
-        alertBuilder.setView(view);
-        initView(view);
+        mRootView = inflater.inflate(R.layout.view_pup_list, null);
+        alertBuilder.setView(mRootView);
+        initView();
 
         return alertBuilder.create();
     }
+
+    public void showSelectedPub(Pub pub) {
+
+        // there is two lists. one is the selected list and the other is the full list
+        // the itemPosition parameter that we get here is the position of the clicked item in the selected list
+        // but the position that we need to pass to the dialog is the position of this item in the full list
+        int position = pubsList.indexOf(pub);
+
+        if (position >= pubsList.size()) return;
+        mPubsListView.setSelection(position);
+        // selectedPub =pub;
+        //selectItem();
+    }
+
 
     @Override
     public void onAttach(Context context) {
@@ -81,11 +94,7 @@ public class PubListDialog extends DialogFragment {
         //initMapView();
     }
 
-    @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        //initMapView();
-    }
+
 //TODO check if this should be uncommented again
     /*@Override
     public void onDestroy() {
@@ -112,21 +121,21 @@ public class PubListDialog extends DialogFragment {
     }
 
 
-    private void initView(View view) {
+    private void initView() {
 
-        mPubName = (TextView) view.findViewById(R.id.pub_dialog_pub_name);
-        mPubSize = (TextView) view.findViewById(R.id.pub_dialog_pub_size);
+        mPubName = (TextView) mRootView.findViewById(R.id.pub_dialog_pub_name);
+        mPubSize = (TextView) mRootView.findViewById(R.id.pub_dialog_pub_size);
 
-        mDoneBtn = (Button) view.findViewById(R.id.pub_dialog_pub_done);
+        mDoneBtn = (Button) mRootView.findViewById(R.id.pub_dialog_pub_done);
         mDoneBtn.setOnClickListener(mDoneBtnClickedListener);
 
-        mDateFrom = (Button) view.findViewById(R.id.pub_dialog_visit_from_date_picker);
+        mDateFrom = (Button) mRootView.findViewById(R.id.pub_dialog_visit_from_date_picker);
         mDateFrom.setOnClickListener(mDoneBtnClickedListener);
 
-        mDateTo = (Button) view.findViewById(R.id.pub_dialog_visit_to_date_picker);
+        mDateTo = (Button) mRootView.findViewById(R.id.pub_dialog_visit_to_date_picker);
         mDateTo.setOnClickListener(mDoneBtnClickedListener);
 
-        mPubsListView = (Spinner) view.findViewById(R.id.pub_dialog_pubs_list);
+        mPubsListView = (Spinner) mRootView.findViewById(R.id.pub_dialog_pubs_list);
         mPubsListView.setOnItemSelectedListener(pubListOnItemSelectedListener);
         //TODO should be fetched from the DB
         initPubList();
@@ -212,8 +221,7 @@ public class PubListDialog extends DialogFragment {
         @Override
         public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long id) {
             selectedPub = pubsList.get(pos);
-            mPubName.setText(selectedPub.getPubName());
-            mPubSize.setText(String.valueOf(selectedPub.getSize()));
+            selectItem();
         }
 
         @Override
@@ -221,6 +229,11 @@ public class PubListDialog extends DialogFragment {
             Toast.makeText(getContext(), "no Pub selected ", Toast.LENGTH_LONG).show();
         }
     };
+
+    private void selectItem() {
+        mPubName.setText(this.selectedPub.getPubName());
+        mPubSize.setText(String.valueOf(this.selectedPub.getSize()));
+    }
 
     interface OnSelectPubDialogDismissed {
         void addPubToList(Pub newPub);

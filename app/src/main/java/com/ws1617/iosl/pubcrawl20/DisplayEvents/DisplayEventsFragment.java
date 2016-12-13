@@ -161,14 +161,14 @@ public class DisplayEventsFragment extends Fragment implements OnMapReadyCallbac
         map.setOnMarkerClickListener(this);
 
         for (Event event : eventList) {
-            drawEventOnMap(event.getEventId(), event.getPubs());
+           // drawEventOnMap(event.getEventId(), event.getPubs());
         }
     }
 
     @Override
     public void onPolylineClick(Polyline polyline) {
         Log.d(TAG, "onPolylineClick" + polyline);
-        for (Event event : eventList) {
+        /*for (Event event : eventList) {
             Polyline p = event.getPolyline();
             if (p==null) {
                 event.setSelected(false);
@@ -180,7 +180,7 @@ public class DisplayEventsFragment extends Fragment implements OnMapReadyCallbac
             } else {
                 event.setSelected(false);
             }
-        }
+        }*/
         eventAdapter.notifyDataSetChanged();
     }
 
@@ -330,7 +330,7 @@ public class DisplayEventsFragment extends Fragment implements OnMapReadyCallbac
                         }
 
                         try {
-                            eventList.get(getEventListIndex(eventId)).setParticipants(participants);
+                            //eventList.get(getEventListIndex(eventId)).setParticipants(participants);
                             Log.d(TAG, "parsed participants, event id: " + eventId + "; Event: " + eventList.get(getEventListIndex(eventId)));
                         } catch (IndexOutOfBoundsException e) {
                             e.printStackTrace();
@@ -361,7 +361,7 @@ public class DisplayEventsFragment extends Fragment implements OnMapReadyCallbac
                         }
 
                         try {
-                            eventList.get(getEventListIndex(eventId)).setPubs(pubs);
+                           // eventList.get(getEventListIndex(eventId)).setPubs(pubs);
 
                             drawEventOnMap(eventId, pubs);
                             Log.d(TAG, "parsed pubs, event id: " + eventId + "; Event: " + eventList.get(getEventListIndex(eventId)));
@@ -382,7 +382,7 @@ public class DisplayEventsFragment extends Fragment implements OnMapReadyCallbac
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
-                            eventList.get(getEventListIndex(eventId)).setOwner(parsePersonJson(response));
+                            //eventList.get(getEventListIndex(eventId)).setOwner(parsePersonJson(response));
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
