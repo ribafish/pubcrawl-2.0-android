@@ -25,7 +25,6 @@ public class SelectedPupListAdapter extends RecyclerView.Adapter<SelectedPupList
 
     @Override
     public pupViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-
         View rootView = LayoutInflater.from(parent.getContext()).
                 inflate(R.layout.view_selected_pup_item, parent, false);
         pupViewHolder pupViewHolder = new pupViewHolder(rootView);
@@ -35,8 +34,7 @@ public class SelectedPupListAdapter extends RecyclerView.Adapter<SelectedPupList
     @Override
     public void onBindViewHolder(pupViewHolder holder, int position) {
         Pub pub = selectedPups.get(position);
-        holder.pubName.setText(pub.getPubName());
-        holder.pubTime.setText("Date");
+        holder.setPubData(pub);
 
     }
 
@@ -54,6 +52,11 @@ public class SelectedPupListAdapter extends RecyclerView.Adapter<SelectedPupList
             super(itemView);
             pubName = (TextView) itemView.findViewById(R.id.selected_pub_item_title);
             pubTime = (TextView) itemView.findViewById(R.id.selected_pub_item_time);
+        }
+
+        public void setPubData(Pub pub) {
+            pubName.setText(pub.getPubName());
+            pubTime.setText(pub.getClosingTime());
         }
     }
 }

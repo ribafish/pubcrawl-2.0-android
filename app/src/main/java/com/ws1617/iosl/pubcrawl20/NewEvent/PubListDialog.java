@@ -86,7 +86,7 @@ public class PubListDialog extends DialogFragment {
         super.onViewCreated(view, savedInstanceState);
         //initMapView();
     }
-
+//TODO check if this should be uncommented again
     /*@Override
     public void onDestroy() {
         super.onDestroy();
@@ -97,18 +97,18 @@ public class PubListDialog extends DialogFragment {
     }*/
 
     private void initMapView() {
-        mapFragment = new SupportMapFragment();
+      /*   mapFragment = new SupportMapFragment();
         FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
         fragmentTransaction.add(R.id.pub_dialog_map, mapFragment, TAG).commit();
         mapFragment.getMapAsync(new OnMapReadyCallback() {
             @Override
             public void onMapReady(GoogleMap googleMap) {
-                /*mGoogleMap = googleMap;
+               mGoogleMap = googleMap;
                 LatLng sydney = new LatLng(-34, 151);
                 mGoogleMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-                mGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));*/
+                mGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
             }
-        });
+        });*/
     }
 
 
