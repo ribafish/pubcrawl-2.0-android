@@ -5,10 +5,12 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -52,7 +54,7 @@ public class PubListDialog extends DialogFragment {
     Pub selectedPub;
     List<Pub> pubsList;
     List<String> pubsListString;
-    //GoogleMap mGoogleMap;
+    GoogleMap mGoogleMap;
 
 
     public PubListDialog() {
@@ -62,16 +64,21 @@ public class PubListDialog extends DialogFragment {
         this.onSelectPubDialogDismissed = onSelectPubDialogDismissed;
     }
 
+    @Nullable
     @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
-        AlertDialog.Builder alertBuilder = new AlertDialog.Builder(getActivity());
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        LayoutInflater inflater = getActivity().getLayoutInflater();
         mRootView = inflater.inflate(R.layout.view_pup_list, null);
-        alertBuilder.setView(mRootView);
         initView();
+        initMapView();
+        return mRootView;
 
-        return alertBuilder.create();
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
     }
 
     public void showSelectedPub(Pub pub) {
@@ -91,24 +98,24 @@ public class PubListDialog extends DialogFragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        //initMapView();
+
     }
 
 
 //TODO check if this should be uncommented again
-    /*@Override
+    @Override
     public void onDestroy() {
         super.onDestroy();
-        if (null != getChildFragmentManager())
+       /* if (null != getChildFragmentManager() && mapFragment!= null)
             getActivity().getSupportFragmentManager().beginTransaction()
                     .remove(mapFragment)
-                    .commit();
-    }*/
+                    .commit();*/
+    }
 
     private void initMapView() {
-      /*   mapFragment = new SupportMapFragment();
+         mapFragment = new SupportMapFragment();
         FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
-        fragmentTransaction.add(R.id.pub_dialog_map, mapFragment, TAG).commit();
+        fragmentTransaction.replace(R.id.pub_dialog_map, mapFragment, TAG).commit();
         mapFragment.getMapAsync(new OnMapReadyCallback() {
             @Override
             public void onMapReady(GoogleMap googleMap) {
@@ -117,7 +124,7 @@ public class PubListDialog extends DialogFragment {
                 mGoogleMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
                 mGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
             }
-        });*/
+        });
     }
 
 
@@ -141,6 +148,9 @@ public class PubListDialog extends DialogFragment {
         initPubList();
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, pubsListString);
         mPubsListView.setAdapter(adapter);
+
+
+
 
     }
 
