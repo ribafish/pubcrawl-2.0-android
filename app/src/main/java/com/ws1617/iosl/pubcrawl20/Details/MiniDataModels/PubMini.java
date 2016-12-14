@@ -32,7 +32,7 @@ public class PubMini {
             String end = localDateFormat.format(timeSlot.getEndTime());
             return String.format("%s - %s", start, end);
         } else {
-            return "Unknown time";
+            return "";
         }
     }
 

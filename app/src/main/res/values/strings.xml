@@ -133,4 +133,9 @@
     <string name="top_participants">Top participants</string>
     <string name="past_events">Past events</string>
     <string name="future_events">Future events</string>
+    <string name="friends">Friends</string>
+    <string name="joined_events">Joined events</string>
+    <string name="favourite_pubs">Favourite pubs</string>
+    <string name="owned_pubs">Owned pubs</string>
+    <string name="events_created">Events created</string>
 </resources>

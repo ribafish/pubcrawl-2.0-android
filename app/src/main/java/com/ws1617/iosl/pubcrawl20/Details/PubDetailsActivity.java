@@ -224,57 +224,57 @@ public class PubDetailsActivity extends AppCompatActivity implements AppBarLayou
     }
 
     private void initOpeningTimesExpanding() {
-        final CardView descriptionCard = (CardView) findViewById(R.id.pub_details_times_card);
-        final RelativeLayout descriptionLayout = (RelativeLayout) findViewById(R.id.pub_details_times_layout);
-        final ImageView descriptionGradient = (ImageView) findViewById(R.id.pub_details_times_gradient);
-        final ImageView descriptionArrow = (ImageView) findViewById(R.id.pub_details_times_arrow);
+        final CardView openingTimesCard = (CardView) findViewById(R.id.pub_details_times_card);
+        final RelativeLayout openingTimesLayout = (RelativeLayout) findViewById(R.id.pub_details_times_layout);
+        final ImageView openingTimesGradient = (ImageView) findViewById(R.id.pub_details_times_gradient);
+        final ImageView openingTimesArrow = (ImageView) findViewById(R.id.pub_details_times_arrow);
         final int height200 = (int) (200 * getResources().getDisplayMetrics().density);
         final int padding16 = (int) (16 * getResources().getDisplayMetrics().density + 0.5f);
 
         DisplayMetrics metrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
 
-        TextView description = (TextView) findViewById(R.id.pub_details_times);
-        description.requestLayout();
-        description.measure(0, 0);
-        int textHeight = (int) (description.getMeasuredHeight() / getResources().getDisplayMetrics().density + 0.5f);
-        int textWidth = (int) (description.getMeasuredWidth() / getResources().getDisplayMetrics().density + 0.5f);
+        TextView openingTimes = (TextView) findViewById(R.id.pub_details_times);
+        openingTimes.requestLayout();
+        openingTimes.measure(0, 0);
+        int textHeight = (int) (openingTimes.getMeasuredHeight() / getResources().getDisplayMetrics().density + 0.5f);
+        int textWidth = (int) (openingTimes.getMeasuredWidth() / getResources().getDisplayMetrics().density + 0.5f);
         int width = (int) (metrics.widthPixels / getResources().getDisplayMetrics().density + 0.5f) - 40;
         int height = textHeight + textWidth / width * 18;
         Log.d(TAG, String.format("textHeight: %d; textWidth: %d; width: %d; height: %d", textHeight, textWidth, width, height));
 
         // 200dp - 2*16dp (padding) - 8dp (title margin) - 20sp (title text size) = 140dp
         if (height > 140) {
-            descriptionLayout.getLayoutParams().height = height200;
-            descriptionGradient.setVisibility(View.VISIBLE);
-            descriptionLayout.setPadding(padding16, padding16, padding16, 0);
-            descriptionArrow.setImageResource(R.drawable.ic_expand_more);
-            descriptionArrow.setVisibility(View.VISIBLE);
+            openingTimesLayout.getLayoutParams().height = height200;
+            openingTimesGradient.setVisibility(View.VISIBLE);
+            openingTimesLayout.setPadding(padding16, padding16, padding16, 0);
+            openingTimesArrow.setImageResource(R.drawable.ic_expand_more);
+            openingTimesArrow.setVisibility(View.VISIBLE);
 
-            descriptionCard.setClickable(true);
-            descriptionCard.setOnClickListener(new View.OnClickListener() {
+            openingTimesCard.setClickable(true);
+            openingTimesCard.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     Log.d(TAG, "Description onclick");
-                    if (descriptionGradient.getVisibility() == View.VISIBLE) {      // Expand
-                        descriptionGradient.setVisibility(View.GONE);
-                        descriptionLayout.setPadding(padding16, padding16, padding16, padding16);
-                        descriptionLayout.getLayoutParams().height = RelativeLayout.LayoutParams.WRAP_CONTENT;
-                        descriptionArrow.setImageResource(R.drawable.ic_expand_less);
+                    if (openingTimesGradient.getVisibility() == View.VISIBLE) {      // Expand
+                        openingTimesGradient.setVisibility(View.GONE);
+                        openingTimesLayout.setPadding(padding16, padding16, padding16, padding16);
+                        openingTimesLayout.getLayoutParams().height = RelativeLayout.LayoutParams.WRAP_CONTENT;
+                        openingTimesArrow.setImageResource(R.drawable.ic_expand_less);
                     } else {                                                        // Collapse
-                        descriptionLayout.getLayoutParams().height = height200;
-                        descriptionGradient.setVisibility(View.VISIBLE);
-                        descriptionLayout.setPadding(padding16, padding16, padding16, 0);
-                        descriptionArrow.setImageResource(R.drawable.ic_expand_more);
+                        openingTimesLayout.getLayoutParams().height = height200;
+                        openingTimesGradient.setVisibility(View.VISIBLE);
+                        openingTimesLayout.setPadding(padding16, padding16, padding16, 0);
+                        openingTimesArrow.setImageResource(R.drawable.ic_expand_more);
                     }
                 }
             });
         } else {
-            descriptionGradient.setVisibility(View.GONE);
-            descriptionLayout.setPadding(padding16, padding16, padding16, padding16);
-            descriptionLayout.getLayoutParams().height = RelativeLayout.LayoutParams.WRAP_CONTENT;
-            descriptionArrow.setVisibility(View.GONE);
-            descriptionCard.setClickable(false);
+            openingTimesGradient.setVisibility(View.GONE);
+            openingTimesLayout.setPadding(padding16, padding16, padding16, padding16);
+            openingTimesLayout.getLayoutParams().height = RelativeLayout.LayoutParams.WRAP_CONTENT;
+            openingTimesArrow.setVisibility(View.GONE);
+            openingTimesCard.setClickable(false);
         }
     }
 
