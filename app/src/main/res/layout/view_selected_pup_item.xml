@@ -93,7 +93,7 @@
             android:layout_width="match_parent"
             android:layout_gravity="bottom"
             android:layout_height="1dp"
-            android:background="@color/cast_libraries_material_featurehighlight_outer_highlight_default_color"></View>
+            android:background="@color/light_blue"></View>
 
     </LinearLayout>
 

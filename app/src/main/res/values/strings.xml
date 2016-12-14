@@ -17,7 +17,7 @@
     <string name="new_event">New event</string>
     <string name="search">Search</string>
     <string name="invite_dialog_title">Share this Event with your friends</string>
-
+    <string name="pubs_details_title"> Pub Details: </string>
 
     <!---->
     <string name="lorem">Lorem ipsum dolor sit amet, consectetur adipiscing elit.
@@ -38,11 +38,6 @@
     <string name="tracked">Tracked</string>
     <string name="unknown">Unknown</string>
     <string name="id">Id</string>
-
-
-
-
-
 
 
     <!-- Preferences titles -->
