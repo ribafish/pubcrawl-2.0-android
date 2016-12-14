@@ -1,10 +1,12 @@
 package com.ws1617.iosl.pubcrawl20.Details;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -12,9 +14,12 @@ import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
+import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
@@ -88,6 +93,12 @@ public class PersonDetailsActivity extends AppCompatActivity implements AppBarLa
 
         setupToolbar();
 
+        setupFriends();
+        setupEvents();
+        setupFavouritePubs();
+        setupOwnedEvents();
+        setupOwnedPubs();
+
         populateFields();
         initDescriptionExpanding();
     }
@@ -98,37 +109,317 @@ public class PersonDetailsActivity extends AppCompatActivity implements AppBarLa
         if (person != null) {
             // Toolbar
             mTitle.setText(person.getName());
-            mSubtitle.setText(String.valueOf(person.getId()));
+            mSubtitle.setText("Id: " + String.valueOf(person.getId()));
             mToolbar.setTitle(person.getName());
 
             // Description card
-            ((TextView) findViewById(R.id.pub_details_times)).setText(person.getDescription());
+            ((TextView) findViewById(R.id.person_details_description)).setText(person.getDescription());
         }
 
         if (friends.size() > 0) {
+            ((CardView) findViewById(R.id.person_details_friends_card)).setVisibility(View.VISIBLE);
             friendsAdapter.notifyDataSetChanged();
             setListViewHeightBasedOnItems(friendsListView);
-        } else Log.e(TAG, "friends empty");
+        } else {
+            Log.e(TAG, "friends empty");
+            ((CardView) findViewById(R.id.person_details_friends_card)).setVisibility(View.GONE);
+        }
 
         if (events.size() > 0) {
+            ((CardView) findViewById(R.id.person_details_events_card)).setVisibility(View.VISIBLE);
             eventAdapter.notifyDataSetChanged();
             setListViewHeightBasedOnItems(eventListView);
-        } else Log.e(TAG, "events empty");
+        } else {
+            Log.e(TAG, "events empty");
+            ((CardView) findViewById(R.id.person_details_events_card)).setVisibility(View.GONE);
+        }
 
         if (favouritePubs.size() > 0) {
+            ((CardView) findViewById(R.id.person_details_favourite_pubs_card)).setVisibility(View.VISIBLE);
             favouritePubsAdapter.notifyDataSetChanged();
             setListViewHeightBasedOnItems(favouritePubsListView);
-        } else Log.e(TAG, "favouritePubs empty");
+        } else {
+            Log.e(TAG, "favouritePubs empty");
+            ((CardView) findViewById(R.id.person_details_favourite_pubs_card)).setVisibility(View.GONE);
+        }
 
         if (ownedPubs.size() > 0) {
+            ((CardView) findViewById(R.id.person_details_owned_pubs_card)).setVisibility(View.VISIBLE);
             ownedPubsAdapter.notifyDataSetChanged();
             setListViewHeightBasedOnItems(ownedPubsListView);
-        } else Log.e(TAG, "ownedPubs empty");
+        } else {
+            Log.e(TAG, "ownedPubs empty");
+            ((CardView) findViewById(R.id.person_details_owned_pubs_card)).setVisibility(View.GONE);
+        }
 
         if (ownedEvents.size() > 0) {
+            ((CardView) findViewById(R.id.person_details_owned_events_card)).setVisibility(View.VISIBLE);
             ownedEventsAdapter.notifyDataSetChanged();
             setListViewHeightBasedOnItems(ownedEventsListView);
-        } else Log.e(TAG, "ownedEvents empty");
+        } else {
+            Log.e(TAG, "ownedEvents empty");
+            ((CardView) findViewById(R.id.person_details_owned_events_card)).setVisibility(View.GONE);
+        }
+    }
+
+    private void setupFriends() {
+        if (this.friends.size() < 6) {
+            friendsAdapter = new PersonAdapter(this, friends);
+        } else {
+            ArrayList<PersonMini> p = new ArrayList<>(friends.subList(0, 6));
+            friendsAdapter = new PersonAdapter(this, p);
+        }
+        friendsListView = (ListView) findViewById(R.id.person_details_friends_listView);
+        friendsListView.setAdapter(friendsAdapter);
+        friendsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Intent intent = new Intent(context, PersonDetailsActivity.class);
+                intent.putExtra("name", friends.get(i).getName());
+                intent.putExtra("id", friends.get(i).getId());
+                startActivity(intent);
+            }
+        });
+        if (friends.size() < 4) {
+            ((Button)findViewById(R.id.person_details_friends_show_all_btn)).setVisibility(View.GONE);
+            ((ImageView)findViewById(R.id.person_details_friends_gradient)).setVisibility(View.GONE);
+            ((RelativeLayout) findViewById(R.id.person_details_friends_layout)).getLayoutParams().height = RelativeLayout.LayoutParams.WRAP_CONTENT;
+            setListViewHeightBasedOnItems(friendsListView);
+        } else {
+            final int height280 = (int) (280 * getResources().getDisplayMetrics().density);
+            ((Button)findViewById(R.id.person_details_friends_show_all_btn)).setVisibility(View.VISIBLE);
+            ((ImageView)findViewById(R.id.person_details_friends_gradient)).setVisibility(View.VISIBLE);
+            ((RelativeLayout) findViewById(R.id.person_details_friends_layout)).getLayoutParams().height = height280;
+            findViewById(R.id.person_details_friends_show_all_btn).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Log.d(TAG, "expand friends onClick");
+                    Bundle args = new Bundle();
+                    args.putString("title", getString(R.string.friends));
+                    FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                    PersonDialogFragment personDialogFragment = new PersonDialogFragment();
+                    personDialogFragment.setParticipants(friends);
+                    personDialogFragment.setArguments(args);
+                    personDialogFragment.show(ft, "person_details_friends_fragment");
+                }
+            });
+            // Disable scrolling
+            friendsListView.setScrollContainer(false);
+            friendsListView.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View view, MotionEvent motionEvent) {
+                    return (motionEvent.getAction() == MotionEvent.ACTION_MOVE);
+                }
+            });
+        }
+    }
+
+    private void setupEvents() {
+        if (this.events.size() < 6) {
+            eventAdapter = new EventAdapter(this, events);
+        } else {
+            ArrayList<EventMini> p = new ArrayList<>(events.subList(0, 6));
+            eventAdapter = new EventAdapter(this, p);
+        }
+        eventListView = (ListView) findViewById(R.id.person_details_events_listView);
+        eventListView.setAdapter(eventAdapter);
+        eventListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Intent intent = new Intent(context, EventDetailsActivity.class);
+                intent.putExtra("name", events.get(i).getName());
+                intent.putExtra("id", events.get(i).getId());
+                startActivity(intent);
+            }
+        });
+        if (events.size() < 4) {
+            ((Button)findViewById(R.id.person_details_events_show_all_btn)).setVisibility(View.GONE);
+            ((ImageView)findViewById(R.id.person_details_events_gradient)).setVisibility(View.GONE);
+            ((RelativeLayout) findViewById(R.id.person_details_events_layout)).getLayoutParams().height = RelativeLayout.LayoutParams.WRAP_CONTENT;
+            setListViewHeightBasedOnItems(eventListView);
+        } else {
+            final int height280 = (int) (280 * getResources().getDisplayMetrics().density);
+            ((Button)findViewById(R.id.person_details_events_show_all_btn)).setVisibility(View.VISIBLE);
+            ((ImageView)findViewById(R.id.person_details_events_gradient)).setVisibility(View.VISIBLE);
+            ((RelativeLayout) findViewById(R.id.person_details_events_layout)).getLayoutParams().height = height280;
+            findViewById(R.id.person_details_events_show_all_btn).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Log.d(TAG, "expand events onClick");
+                    Bundle args = new Bundle();
+                    args.putString("title", getString(R.string.joined_events));
+                    FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                    EventDialogFragment eventDialogFragment = new EventDialogFragment();
+                    eventDialogFragment.setEvents(events);
+                    eventDialogFragment.setArguments(args);
+                    eventDialogFragment.show(ft, "person_details_events_fragment");
+                }
+            });
+            // Disable scrolling
+            eventListView.setScrollContainer(false);
+            eventListView.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View view, MotionEvent motionEvent) {
+                    return (motionEvent.getAction() == MotionEvent.ACTION_MOVE);
+                }
+            });
+        }
+    }
+
+    private void setupFavouritePubs() {
+        if (this.favouritePubs.size() < 6) {
+            favouritePubsAdapter = new PubAdapter(this, favouritePubs);
+        } else {
+            ArrayList<PubMini> p = new ArrayList<>(favouritePubs.subList(0, 6));
+            favouritePubsAdapter = new PubAdapter(this, p);
+        }
+        favouritePubsListView = (ListView) findViewById(R.id.person_details_favourite_pubs_listView);
+        favouritePubsListView.setAdapter(favouritePubsAdapter);
+        favouritePubsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Intent intent = new Intent(context, PubDetailsActivity.class);
+                intent.putExtra("name", favouritePubs.get(i).getName());
+                intent.putExtra("id", favouritePubs.get(i).getId());
+                startActivity(intent);
+            }
+        });
+        if (favouritePubs.size() < 4) {
+            ((Button)findViewById(R.id.person_details_favourite_pubs_show_all_btn)).setVisibility(View.GONE);
+            ((ImageView)findViewById(R.id.person_details_favourite_pubs_gradient)).setVisibility(View.GONE);
+            ((RelativeLayout) findViewById(R.id.person_details_favourite_pubs_layout)).getLayoutParams().height = RelativeLayout.LayoutParams.WRAP_CONTENT;
+            setListViewHeightBasedOnItems(favouritePubsListView);
+        } else {
+            final int height280 = (int) (280 * getResources().getDisplayMetrics().density);
+            ((Button)findViewById(R.id.person_details_favourite_pubs_show_all_btn)).setVisibility(View.VISIBLE);
+            ((ImageView)findViewById(R.id.person_details_favourite_pubs_gradient)).setVisibility(View.VISIBLE);
+            ((RelativeLayout) findViewById(R.id.person_details_favourite_pubs_layout)).getLayoutParams().height = height280;
+            findViewById(R.id.person_details_favourite_pubs_show_all_btn).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Log.d(TAG, "expand favourite pubs onClick");
+                    Bundle args = new Bundle();
+                    args.putString("title", getString(R.string.favourite_pubs));
+                    FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                    PubDialogFragment pubDialogFragment = new PubDialogFragment();
+                    pubDialogFragment.setPubs(favouritePubs);
+                    pubDialogFragment.setArguments(args);
+                    pubDialogFragment.show(ft, "person_details_favourite_pubs_fragment");
+                }
+            });
+            // Disable scrolling
+            favouritePubsListView.setScrollContainer(false);
+            favouritePubsListView.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View view, MotionEvent motionEvent) {
+                    return (motionEvent.getAction() == MotionEvent.ACTION_MOVE);
+                }
+            });
+        }
+    }
+
+    private void setupOwnedPubs() {
+        if (this.ownedPubs.size() < 6) {
+            ownedPubsAdapter = new PubAdapter(this, ownedPubs);
+        } else {
+            ArrayList<PubMini> p = new ArrayList<>(ownedPubs.subList(0, 6));
+            ownedPubsAdapter = new PubAdapter(this, p);
+        }
+        ownedPubsListView = (ListView) findViewById(R.id.person_details_owned_pubs_listView);
+        ownedPubsListView.setAdapter(ownedPubsAdapter);
+        ownedPubsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Intent intent = new Intent(context, PubDetailsActivity.class);
+                intent.putExtra("name", ownedPubs.get(i).getName());
+                intent.putExtra("id", ownedPubs.get(i).getId());
+                startActivity(intent);
+            }
+        });
+        if (ownedPubs.size() < 4) {
+            ((Button)findViewById(R.id.person_details_owned_pubs_show_all_btn)).setVisibility(View.GONE);
+            ((ImageView)findViewById(R.id.person_details_owned_pubs_gradient)).setVisibility(View.GONE);
+            ((RelativeLayout) findViewById(R.id.person_details_owned_pubs_layout)).getLayoutParams().height = RelativeLayout.LayoutParams.WRAP_CONTENT;
+            setListViewHeightBasedOnItems(ownedPubsListView);
+        } else {
+            final int height280 = (int) (280 * getResources().getDisplayMetrics().density);
+            ((Button)findViewById(R.id.person_details_owned_pubs_show_all_btn)).setVisibility(View.VISIBLE);
+            ((ImageView)findViewById(R.id.person_details_owned_pubs_gradient)).setVisibility(View.VISIBLE);
+            ((RelativeLayout) findViewById(R.id.person_details_owned_pubs_layout)).getLayoutParams().height = height280;
+            findViewById(R.id.person_details_owned_pubs_show_all_btn).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Log.d(TAG, "expand owned pubs onClick");
+                    Bundle args = new Bundle();
+                    args.putString("title", getString(R.string.owned_pubs));
+                    FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                    PubDialogFragment pubDialogFragment = new PubDialogFragment();
+                    pubDialogFragment.setPubs(ownedPubs);
+                    pubDialogFragment.setArguments(args);
+                    pubDialogFragment.show(ft, "person_details_owned_pubs_fragment");
+                }
+            });
+            // Disable scrolling
+            ownedPubsListView.setScrollContainer(false);
+            ownedPubsListView.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View view, MotionEvent motionEvent) {
+                    return (motionEvent.getAction() == MotionEvent.ACTION_MOVE);
+                }
+            });
+        }
+    }
+
+    private void setupOwnedEvents() {
+        if (this.ownedEvents.size() < 6) {
+            ownedEventsAdapter = new EventAdapter(this, ownedEvents);
+        } else {
+            ArrayList<EventMini> p = new ArrayList<>(ownedEvents.subList(0, 6));
+            ownedEventsAdapter = new EventAdapter(this, p);
+        }
+        ownedEventsListView = (ListView) findViewById(R.id.person_details_owned_events_listView);
+        ownedEventsListView.setAdapter(ownedEventsAdapter);
+        ownedEventsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Intent intent = new Intent(context, EventDetailsActivity.class);
+                intent.putExtra("name", ownedEvents.get(i).getName());
+                intent.putExtra("id", ownedEvents.get(i).getId());
+                startActivity(intent);
+            }
+        });
+        if (ownedEvents.size() < 4) {
+            ((Button)findViewById(R.id.person_details_owned_events_show_all_btn)).setVisibility(View.GONE);
+            ((ImageView)findViewById(R.id.person_details_owned_events_gradient)).setVisibility(View.GONE);
+            ((RelativeLayout) findViewById(R.id.person_details_owned_events_layout)).getLayoutParams().height = RelativeLayout.LayoutParams.WRAP_CONTENT;
+            setListViewHeightBasedOnItems(ownedEventsListView);
+        } else {
+            final int height280 = (int) (280 * getResources().getDisplayMetrics().density);
+            ((Button)findViewById(R.id.person_details_owned_events_show_all_btn)).setVisibility(View.VISIBLE);
+            ((ImageView)findViewById(R.id.person_details_owned_events_gradient)).setVisibility(View.VISIBLE);
+            ((RelativeLayout) findViewById(R.id.person_details_owned_events_layout)).getLayoutParams().height = height280;
+            findViewById(R.id.person_details_owned_events_show_all_btn).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Log.d(TAG, "expand participants onClick");
+                    Bundle args = new Bundle();
+                    args.putString("title", getString(R.string.participants));
+                    FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                    EventDialogFragment eventDialogFragment = new EventDialogFragment();
+                    eventDialogFragment.setEvents(ownedEvents);
+                    eventDialogFragment.setArguments(args);
+                    eventDialogFragment.show(ft, "map_dialog_fragment");
+                }
+            });
+            // Disable scrolling
+            ownedEventsListView.setScrollContainer(false);
+            ownedEventsListView.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View view, MotionEvent motionEvent) {
+                    return (motionEvent.getAction() == MotionEvent.ACTION_MOVE);
+                }
+            });
+        }
     }
 
     /*
@@ -272,7 +563,6 @@ public class PersonDetailsActivity extends AppCompatActivity implements AppBarLa
     /*
 
         Data load functions
-        TODO: add them all
 
      */
 
