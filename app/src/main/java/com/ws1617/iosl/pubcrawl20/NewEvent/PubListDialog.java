@@ -1,8 +1,6 @@
 package com.ws1617.iosl.pubcrawl20.NewEvent;
 
-import android.app.AlertDialog;
-import android.app.DatePickerDialog;
-import android.app.Dialog;
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -14,9 +12,9 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -44,7 +42,7 @@ public class PubListDialog extends DialogFragment {
     OnSelectPubDialogDismissed onSelectPubDialogDismissed;
 
     //Views
-    Button mDateFrom, mDateTo, mDoneBtn;
+    Button mTimeFrom, mTimeTo, mDoneBtn;
     Spinner mPubsListView;
     TextView mPubName, mPubSize;
     SupportMapFragment mapFragment;
@@ -136,11 +134,11 @@ public class PubListDialog extends DialogFragment {
         mDoneBtn = (Button) mRootView.findViewById(R.id.pub_dialog_pub_done);
         mDoneBtn.setOnClickListener(mDoneBtnClickedListener);
 
-        mDateFrom = (Button) mRootView.findViewById(R.id.pub_dialog_visit_from_date_picker);
-        mDateFrom.setOnClickListener(mDoneBtnClickedListener);
+        mTimeFrom = (Button) mRootView.findViewById(R.id.pub_dialog_visit_from_date_picker);
+        mTimeFrom.setOnClickListener(mDoneBtnClickedListener);
 
-        mDateTo = (Button) mRootView.findViewById(R.id.pub_dialog_visit_to_date_picker);
-        mDateTo.setOnClickListener(mDoneBtnClickedListener);
+        mTimeTo = (Button) mRootView.findViewById(R.id.pub_dialog_visit_to_date_picker);
+        mTimeTo.setOnClickListener(mDoneBtnClickedListener);
 
         mPubsListView = (Spinner) mRootView.findViewById(R.id.pub_dialog_pubs_list);
         mPubsListView.setOnItemSelectedListener(pubListOnItemSelectedListener);
@@ -182,13 +180,6 @@ public class PubListDialog extends DialogFragment {
     View.OnClickListener mDoneBtnClickedListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-
-            Calendar calendar = Calendar.getInstance();
-            int year = calendar.get(Calendar.YEAR);
-            int month = calendar.get(Calendar.MONTH);
-            int day = calendar.get(Calendar.DAY_OF_MONTH);
-
-
             switch (view.getId()) {
                 case R.id.pub_dialog_pub_done: {
                     dismiss();
@@ -198,11 +189,11 @@ public class PubListDialog extends DialogFragment {
                     break;
                 }
                 case R.id.pub_dialog_visit_from_date_picker: {
-                    new DatePickerDialog(getContext(), onDateFromSetListener, year, month, day).show();
+                    new TimePickerDialog(getContext(), onTimeFromSetListener, 12, 00, true).show();
                     break;
                 }
                 case R.id.pub_dialog_visit_to_date_picker: {
-                    new DatePickerDialog(getContext(), onDatToSetListener, year, month, day).show();
+                    new TimePickerDialog(getContext(), onTimeToSetListener, 12, 00, true).show();
                     break;
                 }
             }
@@ -210,19 +201,17 @@ public class PubListDialog extends DialogFragment {
         }
     };
 
-    DatePickerDialog.OnDateSetListener onDateFromSetListener = new DatePickerDialog.OnDateSetListener() {
+
+    TimePickerDialog.OnTimeSetListener onTimeFromSetListener = new TimePickerDialog.OnTimeSetListener() {
         @Override
-        public void onDateSet(DatePicker view, int year, int monthOfYear,
-                              int dayOfMonth) {
-            mDateFrom.setText(dayOfMonth + "." + monthOfYear + "." + year);
+        public void onTimeSet(TimePicker timePicker, int hours, int minutes) {
+            mTimeFrom.setText(hours + ":" + minutes );
         }
     };
-
-    DatePickerDialog.OnDateSetListener onDatToSetListener = new DatePickerDialog.OnDateSetListener() {
+    TimePickerDialog.OnTimeSetListener onTimeToSetListener = new TimePickerDialog.OnTimeSetListener() {
         @Override
-        public void onDateSet(DatePicker view, int year, int monthOfYear,
-                              int dayOfMonth) {
-            mDateTo.setText(dayOfMonth + "." + monthOfYear + "." + year);
+        public void onTimeSet(TimePicker timePicker, int hours, int minutes) {
+            mTimeTo.setText(hours + ":" + minutes );
         }
     };
 

@@ -18,10 +18,10 @@
             card_view:cardBackgroundColor="@color/colorPrimary">
 
             <TextView
-                android:layout_margin="10dp"
-                android:layout_gravity="center_vertical"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:layout_margin="10dp"
                 android:text="@string/pubs_details_title"
                 android:textColor="@color/titleTextColor"
                 android:textSize="20dp" />
@@ -57,7 +57,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
-                android:text="Pup name:" />
+                android:text="Pup name:"
+                android:textColor="@color/colorPrimary"
+                android:textSize="25dp" />
 
             <TextView
                 android:id="@+id/pub_dialog_pub_name"
@@ -66,14 +68,18 @@
                 android:layout_marginBottom="10dp"
                 android:layout_marginLeft="10dp"
                 android:layout_toRightOf="@id/view_pup_name"
-                android:text="Pup name:" />
+                android:gravity="center_vertical"
+                android:text="Pup name:"
+                android:textSize="20dp" />
 
             <TextView
                 android:id="@+id/view_pup_size"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/view_pup_name"
-                android:text="Pup Size:" />
+                android:text="Pup Size:"
+                android:textColor="@color/colorPrimary"
+                android:textSize="25dp" />
 
             <TextView
                 android:id="@+id/pub_dialog_pub_size"
@@ -82,7 +88,9 @@
                 android:layout_below="@id/pub_dialog_pub_name"
                 android:layout_marginLeft="10dp"
                 android:layout_toRightOf="@id/view_pup_size"
-                android:text="Pup size:" />
+                android:gravity="center_vertical"
+                android:text="Pup size:"
+                android:textSize="20dp" />
 
             <LinearLayout
                 android:id="@+id/date_from_placeholder"
@@ -101,9 +109,10 @@
 
                 <Button
                     android:id="@+id/pub_dialog_visit_from_date_picker"
+                    style="@style/Widget.AppCompat.Button.Borderless.Colored"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="02.01.1990" />
+                    android:text="11:00" />
             </LinearLayout>
 
             <LinearLayout
@@ -123,9 +132,10 @@
 
                 <Button
                     android:id="@+id/pub_dialog_visit_to_date_picker"
+                    style="@style/Widget.AppCompat.Button.Borderless.Colored"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="02.01.1990" />
+                    android:text="12:00" />
             </LinearLayout>
 
             <Button
