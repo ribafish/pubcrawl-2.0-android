@@ -3,6 +3,7 @@ package com.ws1617.iosl.pubcrawl20.DataModels;
 import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
 
+import com.google.android.gms.maps.StreetViewPanoramaFragment;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
@@ -19,11 +20,15 @@ public class Pub {
     private int size;
     private int prices;
     private double rating;
+    private String description;
     private String openingTimes;
     private ArrayList<Long> topsListIds = new ArrayList<>();
     private ArrayList<Long> eventsListIds = new ArrayList<>();
     private ArrayList<Bitmap> images = new ArrayList<>();
     private Long ownerId;
+
+    public Pub() {
+    }
 
     public Pub(long id) {
         this.id = id;
@@ -162,5 +167,13 @@ public class Pub {
 
     public void removeImage(int imageId) {
         images.remove(imageId);
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

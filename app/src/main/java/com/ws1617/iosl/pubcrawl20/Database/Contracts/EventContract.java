@@ -23,6 +23,10 @@ public class EventContract {
     public static final String TRACKED = "tracked";
     public static final String OWNER = "owner";
     public static final String IMAGE = "image";
+    public static final String LAT_MIN = "lat_min";
+    public static final String LAT_MAX = "lat_max";
+    public static final String LONG_MIN = "long_min";
+    public static final String LONG_MAX = "long_max";
 
     public static final String PUB_ID = "pub_id";
     public static final String PARTICIPANT_ID = "participant_id";
@@ -39,7 +43,11 @@ public class EventContract {
             DESCRIPTION + " TEXT," +
             TRACKED + " INTEGER," +
             OWNER + " INTEGER," +
-            IMAGE + " BLOB" +
+            IMAGE + " BLOB," +
+            LAT_MIN + " REAL," +
+            LAT_MAX + " REAL," +
+            LONG_MIN + " REAL," +
+            LONG_MAX + " REAL" +
             ")";
 
     public static final String CREATE_TIMESLOTS_TABLE = "CREATE TABLE " +

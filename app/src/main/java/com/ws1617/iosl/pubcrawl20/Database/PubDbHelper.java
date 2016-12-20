@@ -213,7 +213,8 @@ public class PubDbHelper extends SQLiteOpenHelper {
 
         String query = "SELECT * FROM " +
                 TABLE_TOP_PERSONS +  " WHERE " +
-                PUB_ID + " =? " + pub_id;
+                PUB_ID + " =? " + pub_id +
+                "ORDER BY " + ITERATOR + " ASC";
 
         Cursor c = db.rawQuery(query, null);
         if (c != null) {

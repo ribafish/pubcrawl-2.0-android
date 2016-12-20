@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.graphics.Bitmap;
 import android.util.Log;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.ws1617.iosl.pubcrawl20.DataModels.Event;
 import com.ws1617.iosl.pubcrawl20.DataModels.TimeSlot;
 
@@ -65,6 +66,10 @@ public class EventDbHelper extends SQLiteOpenHelper {
         values.put(TRACKED, event.isTracked() ? 1 : 0);
         values.put(OWNER, event.getOwnerId());
         values.put(IMAGE, bitmapToBytes(event.getImage()));
+        values.put(LAT_MIN, event.getMinLatLng().latitude);
+        values.put(LONG_MIN, event.getMinLatLng().longitude);
+        values.put(LAT_MAX, event.getMaxLatLng().latitude);
+        values.put(LONG_MAX, event.getMaxLatLng().longitude);
 
         long row_id = db.insert(TABLE_EVENTS, null, values);
         if (row_id == -1) {
@@ -125,6 +130,10 @@ public class EventDbHelper extends SQLiteOpenHelper {
         values.put(TRACKED, event.isTracked() ? 1 : 0);
         values.put(OWNER, event.getOwnerId());
         values.put(IMAGE, bitmapToBytes(event.getImage()));
+        values.put(LAT_MIN, event.getMinLatLng().latitude);
+        values.put(LONG_MIN, event.getMinLatLng().longitude);
+        values.put(LAT_MAX, event.getMaxLatLng().latitude);
+        values.put(LONG_MAX, event.getMaxLatLng().longitude);
 
         String selection = EVENT_ID + " =?";
         String[] selectionArgs = {String.valueOf(event.getEventId())};
@@ -185,6 +194,10 @@ public class EventDbHelper extends SQLiteOpenHelper {
             event.setOwnerId(c.getLong(c.getColumnIndex(OWNER)));
             Bitmap image = bytesToBitmap(c.getBlob(c.getColumnIndex(IMAGE)));
             event.setImage(image);
+            event.setMinLatLng(new LatLng(c.getDouble(c.getColumnIndex(LAT_MIN)),
+                    c.getDouble(c.getColumnIndex(LONG_MIN))));
+            event.setMaxLatLng(new LatLng(c.getDouble(c.getColumnIndex(LAT_MAX)),
+                    c.getDouble(c.getColumnIndex(LONG_MAX))));
 
             c.close();
         } else {
@@ -268,5 +281,21 @@ public class EventDbHelper extends SQLiteOpenHelper {
         }
 
         return list;
+    }
+
+    public ArrayList<Event> getEventsBoundryBox(long event_id, LatLng minLatLng, LatLng maxLatLng) {
+        ArrayList<Event> events = new ArrayList<>();
+
+        //TODO
+
+        return events;
+    }
+
+    public ArrayList<Event> getEventsBoundryBoxTimeFrame(long event_id, LatLng minLatLng, LatLng maxLatLng, Date min, Date max) {
+        ArrayList<Event> events = new ArrayList<>();
+
+        //TODO
+
+        return events;
     }
 }

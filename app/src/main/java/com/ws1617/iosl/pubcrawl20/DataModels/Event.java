@@ -3,6 +3,7 @@ package com.ws1617.iosl.pubcrawl20.DataModels;
 import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Polyline;
 
 import java.util.ArrayList;
@@ -22,6 +23,7 @@ public class Event {
     private boolean tracked;
     private long ownerId;
     private Bitmap image;
+    private LatLng minLatLng, maxLatLng;
 
     private ArrayList<TimeSlot> timeSlotList = new ArrayList<>();
     private ArrayList<Long> participantIds = new ArrayList<>();
@@ -198,5 +200,21 @@ public class Event {
 
     public void setImage(Bitmap image) {
         this.image = image;
+    }
+
+    public LatLng getMinLatLng() {
+        return minLatLng;
+    }
+
+    public void setMinLatLng(LatLng minLatLng) {
+        this.minLatLng = minLatLng;
+    }
+
+    public LatLng getMaxLatLng() {
+        return maxLatLng;
+    }
+
+    public void setMaxLatLng(LatLng maxLatLng) {
+        this.maxLatLng = maxLatLng;
     }
 }
