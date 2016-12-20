@@ -183,7 +183,7 @@ public class EventDbHelper extends SQLiteOpenHelper {
             event.setDescription(c.getString(c.getColumnIndex(DESCRIPTION)));
             event.setTracked(1 == c.getInt(c.getColumnIndex(TRACKED)));
             event.setOwnerId(c.getLong(c.getColumnIndex(OWNER)));
-            Bitmap image = bytesToBitmap(c.getBlob(6));
+            Bitmap image = bytesToBitmap(c.getBlob(c.getColumnIndex(IMAGE)));
             event.setImage(image);
 
             c.close();

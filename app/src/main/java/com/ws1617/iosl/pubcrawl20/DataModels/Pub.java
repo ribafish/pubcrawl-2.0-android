@@ -25,6 +25,10 @@ public class Pub {
     private ArrayList<Bitmap> images = new ArrayList<>();
     private Long ownerId;
 
+    public Pub(long id) {
+        this.id = id;
+    }
+
     public Pub(long id, String pubName, LatLng latLng, int size) {
         this.id = id;
         this.pubName = pubName;

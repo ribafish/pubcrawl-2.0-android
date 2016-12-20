@@ -216,7 +216,7 @@ public class PersonDbHelper extends SQLiteOpenHelper {
 
             person.setDescription(c.getString(c.getColumnIndex(DESCRIPTION)));
             person.setEmail(c.getString(c.getColumnIndex(EMAIL)));
-            Bitmap image = bytesToBitmap(c.getBlob(3));
+            Bitmap image = bytesToBitmap(c.getBlob(c.getColumnIndex(IMAGE)));
             if (image != null) person.setImage(image);
             person.setName(c.getString(c.getColumnIndex(USERNAME)));
 
