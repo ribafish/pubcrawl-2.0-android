@@ -34,7 +34,7 @@ public class PersonContract {
                     PERSON_ID + " INTEGER PRIMARY KEY," +
                     DESCRIPTION + " TEXT," +
                     EMAIL + " TEXT," +
-                    IMAGE + " TEXT," +
+                    IMAGE + " BLOB," +
                     USERNAME + " TEXT" +
             ")";
 

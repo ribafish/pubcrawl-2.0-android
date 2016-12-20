@@ -1,5 +1,6 @@
 package com.ws1617.iosl.pubcrawl20.DataModels;
 
+import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
 
 import com.google.android.gms.maps.model.Polyline;
@@ -20,6 +21,7 @@ public class Event {
     private String description;
     private boolean tracked;
     private long ownerId;
+    private Bitmap image;
 
     private ArrayList<TimeSlot> timeSlotList = new ArrayList<>();
     private ArrayList<Long> participantIds = new ArrayList<>();
@@ -190,4 +192,11 @@ public class Event {
         this.polyline = polyline;
     }
 
+    public Bitmap getImage() {
+        return image;
+    }
+
+    public void setImage(Bitmap image) {
+        this.image = image;
+    }
 }

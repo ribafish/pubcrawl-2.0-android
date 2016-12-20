@@ -1,5 +1,6 @@
 package com.ws1617.iosl.pubcrawl20.DataModels;
 
+import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
 
 import com.google.android.gms.maps.model.LatLng;
@@ -18,9 +19,10 @@ public class Pub {
     private int size;
     private int prices;
     private double rating;
-    private String closingTime;
+    private String openingTimes;
     private ArrayList<Long> topsListIds = new ArrayList<>();
     private ArrayList<Long> eventsListIds = new ArrayList<>();
+    private ArrayList<Bitmap> images = new ArrayList<>();
     private Long ownerId;
 
     public Pub(long id, String pubName, LatLng latLng, int size) {
@@ -31,7 +33,7 @@ public class Pub {
     }
 
     public Pub(long id, String pubName, LatLng latLng, int size, int prices, double rating,
-               String closingTime,
+               String openingTimes,
                @NonNull ArrayList<Long> topsListIds,
                @NonNull ArrayList<Long> eventsListIds,
                Long ownerId) {
@@ -41,7 +43,7 @@ public class Pub {
         this.size = size;
         this.prices = prices;
         this.rating = rating;
-        this.closingTime = closingTime;
+        this.openingTimes = openingTimes;
         this.topsListIds = topsListIds;
         this.eventsListIds = eventsListIds;
         this.ownerId = ownerId;
@@ -96,12 +98,12 @@ public class Pub {
         this.rating = rating;
     }
 
-    public String getClosingTime() {
-        return closingTime;
+    public String getOpeningTimes() {
+        return openingTimes;
     }
 
-    public void setClosingTime(String closingTime) {
-        this.closingTime = closingTime;
+    public void setOpeningTimes(String openingTimes) {
+        this.openingTimes = openingTimes;
     }
 
     public ArrayList<Long> getTopsListIds() {
@@ -136,5 +138,25 @@ public class Pub {
                 ", latLng=" + latLng +
                 ", size=" + size +
                 '}';
+    }
+
+    public ArrayList<Bitmap> getImages() {
+        return images;
+    }
+
+    public void setImages(ArrayList<Bitmap> images) {
+        this.images = images;
+    }
+
+    public void addImage(Bitmap image) {
+        images.add(image);
+    }
+
+    public void removeImage(Bitmap image) {
+        images.remove(image);
+    }
+
+    public void removeImage(int imageId) {
+        images.remove(imageId);
     }
 }
