@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.graphics.Bitmap;
+import android.util.Log;
 
 import com.ws1617.iosl.pubcrawl20.DataModels.Person;
 
@@ -71,16 +72,16 @@ public class PersonDbHelper extends SQLiteOpenHelper {
         row_id = db.insert(TABLE_PERSONS, null, values);
         if (row_id == -1) { // Error - already exists -> update the person
             updatePerson(person);
+        } else {
+            addEventIds(person);
+            addFriendIds(person);
+            addFavouritePubIds(person);
+            addOwnedEventIds(person);
+            addOwnedPubIds(person);
         }
-
-        addEvents(person);
-        addFriends(person);
-        addFavouritePubs(person);
-        addOwnedEvents(person);
-        addOwnedPubs(person);
     }
 
-    public void addEvents(Person person) {
+    public void addEventIds(Person person) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values;
         for (long event_id : person.getEventIds()) {
@@ -91,7 +92,7 @@ public class PersonDbHelper extends SQLiteOpenHelper {
         }
     }
 
-    public void addFriends(Person person) {
+    public void addFriendIds(Person person) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values;
         for (long event_id : person.getFriendIds()) {
@@ -102,7 +103,7 @@ public class PersonDbHelper extends SQLiteOpenHelper {
         }
     }
 
-    public void addFavouritePubs(Person person) {
+    public void addFavouritePubIds(Person person) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values;
         for (long event_id : person.getFavouritePubIds()) {
@@ -113,7 +114,7 @@ public class PersonDbHelper extends SQLiteOpenHelper {
         }
     }
 
-    public void addOwnedEvents(Person person) {
+    public void addOwnedEventIds(Person person) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values;
         for (long event_id : person.getOwnedEventIds()) {
@@ -125,7 +126,7 @@ public class PersonDbHelper extends SQLiteOpenHelper {
 
     }
 
-    public void addOwnedPubs(Person person) {
+    public void addOwnedPubIds(Person person) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values;
         for (long event_id : person.getOwnedEventIds()) {
@@ -155,15 +156,13 @@ public class PersonDbHelper extends SQLiteOpenHelper {
     }
 
     public void updateLists(Person person) {
-        SQLiteDatabase db = this.getWritableDatabase();
-
         deleteLists(person);
 
-        addEvents(person);
-        addFriends(person);
-        addFavouritePubs(person);
-        addOwnedEvents(person);
-        addOwnedPubs(person);
+        addEventIds(person);
+        addFriendIds(person);
+        addFavouritePubIds(person);
+        addOwnedEventIds(person);
+        addOwnedPubIds(person);
     }
 
     public void deleteLists(Person person) {
@@ -222,6 +221,9 @@ public class PersonDbHelper extends SQLiteOpenHelper {
             person.setName(c.getString(c.getColumnIndex(USERNAME)));
 
             c.close();
+        } else {
+            Log.e(TAG, "Can't find person with id " + person_id);
+            return null;
         }
         return person;
     }
@@ -240,6 +242,7 @@ public class PersonDbHelper extends SQLiteOpenHelper {
             do {
                 list.add(c.getLong(c.getColumnIndex(EVENT_ID)));
             } while (c.moveToNext());
+            c.close();
         }
 
         return list;
@@ -259,6 +262,7 @@ public class PersonDbHelper extends SQLiteOpenHelper {
             do {
                 list.add(c.getLong(c.getColumnIndex(FRIEND_ID)));
             } while (c.moveToNext());
+            c.close();
         }
 
         return list;
@@ -278,6 +282,7 @@ public class PersonDbHelper extends SQLiteOpenHelper {
             do {
                 list.add(c.getLong(c.getColumnIndex(PUB_ID)));
             } while (c.moveToNext());
+            c.close();
         }
 
         return list;
@@ -297,6 +302,7 @@ public class PersonDbHelper extends SQLiteOpenHelper {
             do {
                 list.add(c.getLong(c.getColumnIndex(EVENT_ID)));
             } while (c.moveToNext());
+            c.close();
         }
 
         return list;
@@ -316,6 +322,7 @@ public class PersonDbHelper extends SQLiteOpenHelper {
             do {
                 list.add(c.getLong(c.getColumnIndex(PUB_ID)));
             } while (c.moveToNext());
+            c.close();
         }
 
         return list;

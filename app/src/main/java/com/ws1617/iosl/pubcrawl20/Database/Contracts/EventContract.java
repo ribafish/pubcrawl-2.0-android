@@ -35,7 +35,7 @@ public class EventContract {
             TABLE_EVENTS + "(" +
             EVENT_ID + " INTEGER PRIMARY KEY," +
             EVENT_NAME + " TEXT," +
-            DATE + " INTEGER," +
+            DATE + " INTEGER," +            // epoch time in ms
             DESCRIPTION + " TEXT," +
             TRACKED + " INTEGER," +
             OWNER + " INTEGER," +
@@ -47,8 +47,8 @@ public class EventContract {
             ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + 
             EVENT_ID + " INTEGER," +
             PUB_ID + " INTEGER," + 
-            START_TIME + " INTEGER," +
-            END_TIME + " INTEGER" + 
+            START_TIME + " INTEGER," +      // epoch time in ms
+            END_TIME + " INTEGER" +         // epoch time in ms
             ")";
 
     public static final String CREATE_PARTICIPANTS_TABLE = "CREATE TABLE " +
