@@ -26,6 +26,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
     private List<EventMini> eventList;
     private final static String TAG = "EventAdapter";
 
+
     public class EventViewHolder extends RecyclerView.ViewHolder  {
         public TextView name, description, date;
         public RelativeLayout relativeLayout;
@@ -62,7 +63,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
                 intent.putExtra("id", event.getEventId());
                 intent.putExtra("name", event.getName());
 
-                Log.d(TAG, "onClick event details: " + event);
+                Log.d(TAG, "onPubItemClicked event details: " + event);
 
                 view.getContext().startActivity(intent);
             }
@@ -71,12 +72,12 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
         holder.relativeLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 EventMini event = eventList.get(holder.getAdapterPosition());
 
                 for (EventMini e : eventList) {
                     if (e.getEventId() == event.getEventId()) {
                         e.setSelected(true);
-
                     } else {
                         e.setSelected(false);
                     }

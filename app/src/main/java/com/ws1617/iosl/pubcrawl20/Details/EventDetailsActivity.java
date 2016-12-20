@@ -253,7 +253,7 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
             findViewById(R.id.event_details_participants_show_all_btn).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Log.d(TAG, "expand participants onClick");
+                    Log.d(TAG, "expand participants onPubItemClicked");
                     Bundle args = new Bundle();
                     args.putString("title", getString(R.string.participants));
                     FragmentTransaction ft = getSupportFragmentManager().beginTransaction();

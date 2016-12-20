@@ -1,84 +1,155 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
-    <!-- <FrameLayout
-        android:id="@+id/pub_map_placeholder"
-        android:layout_weight="1"
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"/>-->
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-    <com.google.android.gms.maps.MapView xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/map"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1" />
-
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:padding="20dp">
-
-        <TextView
-            android:id="@+id/view_pup_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Pup name:" />
-
-        <TextView
-            android:id="@+id/pub_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toLeftOf="@id/view_pup_name"
-            android:text="Pup name:" />
-
-        <TextView
-            android:id="@+id/view_pup_size"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/view_pup_name"
-            android:text="Pup Size:" />
-
-        <TextView
-            android:id="@+id/pub_size"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toLeftOf="@id/view_pup_size"
-            android:text="Pup size:" />
-
-        <LinearLayout
-            android:id="@+id/date_placeholder"
+        <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/view_pup_size"
-            android:gravity="left"
-            android:orientation="horizontal"
-            android:padding="5dp">
+            android:layout_height="50dp"
+            android:elevation="2dp"
+            android:gravity="center_vertical"
+            android:padding="5dp"
+            card_view:cardBackgroundColor="@color/colorPrimary">
 
             <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:layout_margin="10dp"
+                android:text="@string/pubs_details_title"
+                android:textColor="@color/titleTextColor"
+                android:textSize="20dp" />
+        </android.support.v7.widget.CardView>
+
+        <Spinner
+            android:id="@+id/pub_dialog_pubs_list"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:layout_marginTop="10dp"
+            android:layout_weight="0.5" />
+
+        <FrameLayout
+            android:id="@+id/pub_dialog_map"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:layout_margin="10dp"
+            android:layout_weight="2" />
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:padding="20dp">
+
+            <TextView
+                android:id="@+id/view_pup_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="10dp"
-                android:text="Event date: " />
+                android:layout_marginBottom="10dp"
+                android:text="Pup name:"
+                android:textColor="@color/colorPrimary"
+                android:textSize="25dp" />
+
+            <TextView
+                android:id="@+id/pub_dialog_pub_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_toRightOf="@id/view_pup_name"
+                android:gravity="center_vertical"
+                android:text="Pup name:"
+                android:textSize="20dp" />
+
+            <TextView
+                android:id="@+id/view_pup_size"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/view_pup_name"
+                android:text="Pup Size:"
+                android:textColor="@color/colorPrimary"
+                android:textSize="25dp" />
+
+            <TextView
+                android:id="@+id/pub_dialog_pub_size"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/pub_dialog_pub_name"
+                android:layout_marginLeft="10dp"
+                android:layout_toRightOf="@id/view_pup_size"
+                android:gravity="center_vertical"
+                android:text="Pup size:"
+                android:textSize="20dp" />
+
+            <LinearLayout
+                android:id="@+id/date_from_placeholder"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/view_pup_size"
+                android:gravity="left"
+                android:orientation="horizontal"
+                android:padding="5dp">
+
+                <TextView
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:text="Visit From date : " />
+
+                <Button
+                    android:id="@+id/pub_dialog_visit_from_date_picker"
+                    style="@style/Widget.AppCompat.Button.Borderless.Colored"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="11:00" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/date_to_placeholder"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/date_from_placeholder"
+                android:gravity="left"
+                android:orientation="horizontal"
+                android:padding="5dp">
+
+                <TextView
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:text="Visit To date : " />
+
+                <Button
+                    android:id="@+id/pub_dialog_visit_to_date_picker"
+                    style="@style/Widget.AppCompat.Button.Borderless.Colored"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="12:00" />
+            </LinearLayout>
 
             <Button
-                android:id="@+id/event_new_date_picker"
+                android:id="@+id/pub_dialog_pub_done"
+                style="@style/Widget.AppCompat.Button.Borderless.Colored"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="02.01.1990" />
-        </LinearLayout>
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:layout_below="@id/date_to_placeholder"
+                android:layout_marginTop="40dp"
+                android:text="Done"
+                android:textColor="@color/colorPrimary" />
+        </RelativeLayout>
 
-        <Button
-            android:layout_below="@id/date_placeholder"
-            android:id="@+id/pub_done"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:text="Done" />
-    </RelativeLayout>
-
-</LinearLayout>
+    </LinearLayout>
+</ScrollView>

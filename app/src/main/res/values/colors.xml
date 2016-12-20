@@ -7,4 +7,5 @@
     <color name="background_grey_50">#fffafafa</color>
     <color name="dark_gray">#ff404040</color>
     <color name="popup_background">#ab2fc4</color>
+    <color name="light_blue">#a2c3f9</color>
 </resources>

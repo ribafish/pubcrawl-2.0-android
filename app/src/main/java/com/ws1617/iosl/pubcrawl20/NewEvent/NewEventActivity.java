@@ -9,7 +9,8 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
-import com.ws1617.iosl.pubcrawl20.Models.Event;
+import com.ws1617.iosl.pubcrawl20.DataModels.Event;
+import com.ws1617.iosl.pubcrawl20.NewEvent.adapters.NewEventPagerAdapter;
 import com.ws1617.iosl.pubcrawl20.R;
 
 import java.util.ArrayList;
@@ -19,7 +20,7 @@ public class NewEventActivity extends AppCompatActivity  {
 
     FloatingActionButton mCreateEventBtn;
     NewEventPagerAdapter mFragmentPagerAdapter;
-    private  Event mEvent;
+    private Event mEvent;
     private List<Fragment> fragmentsList;
      final static String EVENT_TAG = "EVENT_TAG";
 
@@ -32,6 +33,7 @@ public class NewEventActivity extends AppCompatActivity  {
         fragmentsList.add(new NewEventShareFragment());
 
     }
+
 
 
     @Override
@@ -80,11 +82,28 @@ public class NewEventActivity extends AppCompatActivity  {
         }
     };
 
+    InsertNewEventListener insertNewEventListener;
 
     public void onCollectDataClicked() {
         Event mEvent = new Event();
         mEvent = ((NewEventGeneralFragment) fragmentsList.get(0)).updateGeneralInfo(mEvent);
-        mEvent = ((NewEventRouteFragment) fragmentsList.get(1)).updatePubListInfo(mEvent);
+        //mEvent = ((NewEventRouteFragment) fragmentsList.get(1)).updatePubListInfo(mEvent);
 
+        /*DB.insertNewEvent(new InsertNewEventListener insertNewEventListener
+        {
+            void onSuccsess(){}
+            void onFaild(){}
+        }
+         );*/
+
+        //onSuccess
+        ShareEventDialog shareEventDialog = new ShareEventDialog();
+        shareEventDialog.show(getFragmentManager(),"shareEventDialog");
+    }
+
+
+    interface InsertNewEventListener{
+        void onSuccessfulInsert();
+        void onFaildInsert();
     }
 }

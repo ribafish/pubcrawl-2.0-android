@@ -165,6 +165,7 @@ public class DisplayEventsFragment extends Fragment implements OnMapReadyCallbac
         map.setOnPolylineClickListener(this);
         map.setOnMarkerClickListener(this);
 
+
         for (EventMini e : eventList) {
             drawEventOnMap(e.getEventId(), e.getPubs());
         }
@@ -173,9 +174,11 @@ public class DisplayEventsFragment extends Fragment implements OnMapReadyCallbac
     @Override
     public void onPolylineClick(Polyline polyline) {
         Log.d(TAG, "onPolylineClick" + polyline);
+
         for (EventMini event : eventList) {
+
             Polyline p = event.getPolyline();
-            if (p==null) {
+            if (p == null) {
                 event.setSelected(false);
                 continue;
             }
@@ -336,6 +339,7 @@ public class DisplayEventsFragment extends Fragment implements OnMapReadyCallbac
                         }
 
                         try {
+
                             eventList.get(getEventListIndex(eventId)).setParticipantIds(participantsIds);
                             Log.d(TAG, "parsed participants, event id: " + eventId + "; Event: " + eventList.get(getEventListIndex(eventId)));
                         } catch (IndexOutOfBoundsException e) {
@@ -368,7 +372,7 @@ public class DisplayEventsFragment extends Fragment implements OnMapReadyCallbac
                         }
 
                         try {
-                            eventList.get(getEventListIndex(eventId)).setPubs(pubs);
+                           // eventList.get(getEventListIndex(eventId)).setPubs(pubs);
 
                             drawEventOnMap(eventId, pubs);
                             Log.d(TAG, "parsed pubs, event id: " + eventId + "; Event: " + eventList.get(getEventListIndex(eventId)));
@@ -383,6 +387,7 @@ public class DisplayEventsFragment extends Fragment implements OnMapReadyCallbac
                         Log.e(TAG, "pubsRequest: " + error.getLocalizedMessage());
                     }
                 });
+
 
         requestQueue.add(participantRequest);
         requestQueue.add(pubsRequest);

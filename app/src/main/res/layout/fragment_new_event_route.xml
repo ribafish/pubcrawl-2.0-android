@@ -2,6 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/background_grey_50"
     android:padding="10dp"
     tools:context="com.ws1617.iosl.pubcrawl20.NewEvent.NewEventRouteFragment">
 
@@ -10,42 +11,21 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:text="selected pubs list:"
         android:layout_marginBottom="20dp"
-        />
+        android:text="selected pubs list:"
+        android:textSize="20dp" />
 
-    <LinearLayout
-        android:id="@+id/view_list_header"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/view_pub_txt"
-        android:background="@android:color/holo_blue_bright"
-        android:orientation="horizontal"
-        android:layout_marginBottom="10dp"
-        >
-
-        <TextView
-            android:id="@+id/pub_item_title"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Date:" />
-
-        <TextView
-            android:id="@+id/pub_item_time"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="PubName:" />
-
-
-    </LinearLayout>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/event_new_selected_pub_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/view_list_header" />
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@id/view_pub_txt"
+        android:layout_marginLeft="11dp"
+        android:layout_marginStart="11dp"
+        android:layout_marginTop="25dp" />
 
     <Button
         android:id="@+id/event_new_add_pub"
@@ -55,4 +35,5 @@
         android:layout_below="@id/event_new_selected_pub_list"
         android:layout_marginTop="10dp"
         android:background="@android:drawable/ic_input_add" />
+
 </RelativeLayout>

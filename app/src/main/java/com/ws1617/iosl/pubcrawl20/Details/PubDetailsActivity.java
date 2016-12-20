@@ -309,7 +309,7 @@ public class PubDetailsActivity extends AppCompatActivity implements AppBarLayou
             findViewById(R.id.pub_details_top_participants_show_all_btn).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Log.d(TAG, "expand participants onClick");
+                    Log.d(TAG, "expand participants onPubItemClicked");
                     Bundle args = new Bundle();
                     args.putString("title", getString(R.string.participants));
                     FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
@@ -361,7 +361,7 @@ public class PubDetailsActivity extends AppCompatActivity implements AppBarLayou
             findViewById(R.id.pub_details_events_future_show_all_btn).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Log.d(TAG, "expand participants onClick");
+                    Log.d(TAG, "expand participants onPubItemClicked");
                     Bundle args = new Bundle();
                     args.putString("title", getString(R.string.future_events));
                     FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
@@ -413,7 +413,7 @@ public class PubDetailsActivity extends AppCompatActivity implements AppBarLayou
             findViewById(R.id.pub_details_events_past_show_all_btn).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Log.d(TAG, "expand participants onClick");
+                    Log.d(TAG, "expand participants onPubItemClicked");
                     Bundle args = new Bundle();
                     args.putString("title", getString(R.string.past_events));
                     FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
