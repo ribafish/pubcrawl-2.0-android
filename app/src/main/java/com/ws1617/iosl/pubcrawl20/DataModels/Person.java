@@ -23,6 +23,10 @@ public class Person {
     private ArrayList<Long> ownedEventIds = new ArrayList<>();
 
 
+    public Person(long id) {
+        this.id = id;
+    }
+
     public Person(long id, String name) {
         this.id = id;
         this.name = name;
@@ -154,5 +158,16 @@ public class Person {
 
     public void setOwnedEventIds(ArrayList<Long> ownedEventIds) {
         this.ownedEventIds = ownedEventIds;
+    }
+
+    public Bitmap getImage() {
+        if (images == null) return null;
+        else if (images.size() == 0) return null;
+        else return images.get(0);
+    }
+
+    public void setImage(Bitmap image) {
+        if (images == null) images = new ArrayList<>();
+        this.images.add(image);
     }
 }
