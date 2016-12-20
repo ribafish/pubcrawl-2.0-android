@@ -59,7 +59,7 @@ public class SelectedPupListAdapter extends RecyclerView.Adapter<SelectedPupList
 
         public void setPubData(Pub pub) {
             pubName.setText(pub.getPubName());
-            pubTime.setText(pub.getClosingTime());
+            pubTime.setText(pub.getOpeningTimes());
         }
 
         @Override

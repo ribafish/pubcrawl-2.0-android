@@ -40,7 +40,7 @@ public class JsonParser {
 
 
     // Event
-    private static final String EVENTS = "events";
+    public static final String EVENTS = "events";
     private static final String EVENT_NAME = "eventName";
     private static final String EVENT_DATE = "date";
     private static final String EVENT_DATE_FORMAT = "dd.MM.yyyy";
@@ -65,7 +65,7 @@ public class JsonParser {
 
 
     // Pub
-    private static final String PUBS = "pubs";
+    public static final String PUBS = "pubs";
     private static final String PUB_NAME = "pubName";
     private static final String PUB_PRICES = "prices";
     private static final String PUB_RATING = "rating";
@@ -83,7 +83,7 @@ public class JsonParser {
 
 
     // Person
-    private static final String PERSONS = "crawlers";
+    public static final String PERSONS = "crawlers";
     private static final String PERSON_NAME = "userName";
     private static final String PERSON_EMAIL = "email";
     private static final String PERSON_DESCRIPTION = "description";

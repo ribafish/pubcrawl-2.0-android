@@ -158,7 +158,7 @@ public class PubDetailsActivity extends AppCompatActivity implements AppBarLayou
 
 
             // Opening times card
-            ((TextView) findViewById(R.id.pub_details_times)).setText(pub.getClosingTime());
+            ((TextView) findViewById(R.id.pub_details_times)).setText(pub.getOpeningTimes());
         }
 
         if (topPersonsList.size() > 0) {

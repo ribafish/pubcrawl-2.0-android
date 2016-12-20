@@ -143,6 +143,17 @@ public class EventDbHelper extends SQLiteOpenHelper {
         updateLists(event);
     }
 
+    public void updateEventOwner(long event_id, long owner_id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(OWNER, owner_id);
+
+        String selection = EVENT_ID + " =?";
+        String[] selectionArgs = {String.valueOf(event_id)};
+
+        db.update(TABLE_EVENTS, values, selection, selectionArgs);
+    }
+
     public void updateLists(Event event) {
         deleteLists(event.getEventId());
 
@@ -173,6 +184,25 @@ public class EventDbHelper extends SQLiteOpenHelper {
         deleteLists(event_id);
     }
 
+    private Event getListlessEventFromCursor(Cursor c) {
+        Event event = new Event();
+
+        event.setEventId(c.getLong(c.getColumnIndex(EVENT_ID)));
+        event.setEventName(c.getString(c.getColumnIndex(EVENT_NAME)));
+        event.setDate(new Date(c.getLong(c.getColumnIndex(DATE))));
+        event.setDescription(c.getString(c.getColumnIndex(DESCRIPTION)));
+        event.setTracked(1 == c.getInt(c.getColumnIndex(TRACKED)));
+        event.setOwnerId(c.getLong(c.getColumnIndex(OWNER)));
+        Bitmap image = bytesToBitmap(c.getBlob(c.getColumnIndex(IMAGE)));
+        event.setImage(image);
+        event.setMinLatLng(new LatLng(c.getDouble(c.getColumnIndex(LAT_MIN)),
+                c.getDouble(c.getColumnIndex(LONG_MIN))));
+        event.setMaxLatLng(new LatLng(c.getDouble(c.getColumnIndex(LAT_MAX)),
+                c.getDouble(c.getColumnIndex(LONG_MAX))));
+
+        return event;
+    }
+
     public Event getListlessEvent(long event_id) {
         SQLiteDatabase db = this.getReadableDatabase();
         Event event = new Event();
@@ -186,18 +216,7 @@ public class EventDbHelper extends SQLiteOpenHelper {
         if (c != null) {
             c.moveToFirst();
 
-            event.setEventId(event_id);
-            event.setEventName(c.getString(c.getColumnIndex(EVENT_NAME)));
-            event.setDate(new Date(c.getLong(c.getColumnIndex(DATE))));
-            event.setDescription(c.getString(c.getColumnIndex(DESCRIPTION)));
-            event.setTracked(1 == c.getInt(c.getColumnIndex(TRACKED)));
-            event.setOwnerId(c.getLong(c.getColumnIndex(OWNER)));
-            Bitmap image = bytesToBitmap(c.getBlob(c.getColumnIndex(IMAGE)));
-            event.setImage(image);
-            event.setMinLatLng(new LatLng(c.getDouble(c.getColumnIndex(LAT_MIN)),
-                    c.getDouble(c.getColumnIndex(LONG_MIN))));
-            event.setMaxLatLng(new LatLng(c.getDouble(c.getColumnIndex(LAT_MAX)),
-                    c.getDouble(c.getColumnIndex(LONG_MAX))));
+            event = getListlessEventFromCursor(c);
 
             c.close();
         } else {
@@ -283,6 +302,24 @@ public class EventDbHelper extends SQLiteOpenHelper {
         return list;
     }
 
+    public ArrayList<Event> getAllEvents() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        ArrayList<Event> events = new ArrayList<>();
+
+        String query = "SELECT * FROM " + TABLE_EVENT_PUBS;
+
+        Cursor c = db.rawQuery(query, null);
+        if (c != null) {
+            c.moveToFirst();
+            do {
+                events.add(getListlessEventFromCursor(c));
+            } while (c.moveToNext());
+            c.close();
+        }
+
+        return events;
+    }
+
     public ArrayList<Event> getEventsBoundryBox(long event_id, LatLng minLatLng, LatLng maxLatLng) {
         ArrayList<Event> events = new ArrayList<>();
 
@@ -298,4 +335,5 @@ public class EventDbHelper extends SQLiteOpenHelper {
 
         return events;
     }
+
 }

@@ -64,6 +64,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Locale;
 
+import static com.ws1617.iosl.pubcrawl20.Database.DatabaseHelper.resetEventsDatabase;
+
 /**
  * Created by gaspe on 8. 11. 2016.
  */
@@ -98,6 +100,7 @@ public class DisplayEventsFragment extends Fragment implements OnMapReadyCallbac
         refresh.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                resetEventsDatabase(getContext());
                 getEvents();
             }
         });
