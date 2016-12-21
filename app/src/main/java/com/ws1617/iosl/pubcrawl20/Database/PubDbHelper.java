@@ -39,10 +39,10 @@ public class PubDbHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int i, int i1) {
-        db.execSQL("DROP IF TABLE EXISTS " + TABLE_PUBS);
-        db.execSQL("DROP IF TABLE EXISTS " + TABLE_TOP_PERSONS);
-        db.execSQL("DROP IF TABLE EXISTS " + TABLE_PUB_EVENTS);
-        db.execSQL("DROP IF TABLE EXISTS " + TABLE_PUB_IMAGES);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_PUBS);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_TOP_PERSONS);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_PUB_EVENTS);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_PUB_IMAGES);
 
         onCreate(db);
     }

@@ -42,12 +42,12 @@ public class PersonDbHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int i, int i1) {
         // drop older person tables
-        db.execSQL("DROP IF TABLE EXISTS " + TABLE_PERSONS);
-        db.execSQL("DROP IF TABLE EXISTS " + TABLE_PERSON_EVENTS);
-        db.execSQL("DROP IF TABLE EXISTS " + TABLE_PERSON_FRIENDS);
-        db.execSQL("DROP IF TABLE EXISTS " + TABLE_PERSON_FAVOURITE_PUBS);
-        db.execSQL("DROP IF TABLE EXISTS " + CREATE_PERSON_OWNED_EVENTS_TABLE);
-        db.execSQL("DROP IF TABLE EXISTS " + CREATE_PERSON_OWNED_PUBS_TABLE);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_PERSONS);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_PERSON_EVENTS);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_PERSON_FRIENDS);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_PERSON_FAVOURITE_PUBS);
+        db.execSQL("DROP TABLE IF EXISTS " + CREATE_PERSON_OWNED_EVENTS_TABLE);
+        db.execSQL("DROP TABLE IF EXISTS " + CREATE_PERSON_OWNED_PUBS_TABLE);
 
         onCreate(db);
     }

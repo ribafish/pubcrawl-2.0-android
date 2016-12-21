@@ -41,10 +41,10 @@ public class EventDbHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int i, int i1) {
-        db.execSQL("DROP IF TABLE EXISTS " + TABLE_EVENTS);
-        db.execSQL("DROP IF TABLE EXISTS " + TABLE_EVENT_TIMESLOTS);
-        db.execSQL("DROP IF TABLE EXISTS " + TABLE_EVENT_PARTICIPANTS);
-        db.execSQL("DROP IF TABLE EXISTS " + TABLE_EVENT_PUBS);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_EVENTS);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_EVENT_TIMESLOTS);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_EVENT_PARTICIPANTS);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_EVENT_PUBS);
 
         onCreate(db);
     }
@@ -66,10 +66,12 @@ public class EventDbHelper extends SQLiteOpenHelper {
         values.put(TRACKED, event.isTracked() ? 1 : 0);
         values.put(OWNER, event.getOwnerId());
         values.put(IMAGE, bitmapToBytes(event.getImage()));
-        values.put(LAT_MIN, event.getMinLatLng().latitude);
-        values.put(LONG_MIN, event.getMinLatLng().longitude);
-        values.put(LAT_MAX, event.getMaxLatLng().latitude);
-        values.put(LONG_MAX, event.getMaxLatLng().longitude);
+        try {
+            values.put(LAT_MIN, event.getMinLatLng().latitude);
+            values.put(LONG_MIN, event.getMinLatLng().longitude);
+            values.put(LAT_MAX, event.getMaxLatLng().latitude);
+            values.put(LONG_MAX, event.getMaxLatLng().longitude);
+        } catch (Exception e) { e.printStackTrace(); }
 
         long row_id = db.insert(TABLE_EVENTS, null, values);
         if (row_id == -1) {

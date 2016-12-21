@@ -46,11 +46,11 @@ public class JsonParser {
     private static final String EVENT_DATE_FORMAT = "dd.MM.yyyy";
     private static final String EVENT_DESCRIPTION = "description";
     private static final String EVENT_TRACKED = "tracked";
-    private static final String EVENT_IMAGE = "image";
-    private static final String EVENT_LAT_MIN = "lat_min";
-    private static final String EVENT_LAT_MAX = "lat_max";
-    private static final String EVENT_LONG_MIN = "long_min";
-    private static final String EVENT_LONG_MAX = "long_max";
+    private static final String EVENT_IMAGE = "eventImage";
+    private static final String EVENT_LAT_MIN = "latmin";
+    private static final String EVENT_LAT_MAX = "latmax";
+    private static final String EVENT_LONG_MIN = "lngmin";
+    private static final String EVENT_LONG_MAX = "lngmax";
 
     private static final String EVENT_TIMESLOTS = "timeslotList";
     private static final String EVENT_TIMESLOT_TIME_FORMAT = "HH:mm:ss";
@@ -120,26 +120,35 @@ public class JsonParser {
         event.setDescription(jsonEvent.getString(EVENT_DESCRIPTION));
         event.setTracked(jsonEvent.getBoolean(EVENT_TRACKED));
         event.setImage(decodeBitmapBase64(jsonEvent.getString(EVENT_IMAGE)));
-        event.setMinLatLng(new LatLng(
-                jsonEvent.getDouble(EVENT_LAT_MIN),
-                jsonEvent.getDouble(EVENT_LONG_MIN)));
-        event.setMaxLatLng(new LatLng(
-                jsonEvent.getDouble(EVENT_LAT_MAX),
-                jsonEvent.getDouble(EVENT_LONG_MAX)));
-
-        ArrayList<TimeSlot> timeSlots = new ArrayList<>();
-        DateFormat timeSlotFormat = new SimpleDateFormat(EVENT_TIMESLOT_TIME_FORMAT, Locale.ENGLISH);
-        JSONArray jsonTimeSlots = jsonEvent.getJSONArray(EVENT_TIMESLOTS);
-        for (int i=0; i < jsonTimeSlots.length(); i++) {
-            JSONObject slot = jsonTimeSlots.getJSONObject(i);
-            TimeSlot ts = new TimeSlot(
-                    slot.getLong(EVENT_TIMESLOT_PUB_ID),
-                    timeSlotFormat.parse(slot.getString(EVENT_TIMESLOT_START)),
-                    timeSlotFormat.parse(slot.getString(EVENT_TIMESLOT_END))
-            );
-            timeSlots.add(ts);
+        try {
+            event.setMinLatLng(new LatLng(
+                    jsonEvent.getDouble(EVENT_LAT_MIN),
+                    jsonEvent.getDouble(EVENT_LONG_MIN)));
+            event.setMaxLatLng(new LatLng(
+                    jsonEvent.getDouble(EVENT_LAT_MAX),
+                    jsonEvent.getDouble(EVENT_LONG_MAX)));
+        } catch (Exception e) {
+            Log.e(TAG, "Can't parse event boundary box");
+            e.printStackTrace();
         }
-        event.setTimeSlotList(timeSlots);
+
+        try {
+            ArrayList<TimeSlot> timeSlots = new ArrayList<>();
+            DateFormat timeSlotFormat = new SimpleDateFormat(EVENT_TIMESLOT_TIME_FORMAT, Locale.ENGLISH);
+            JSONArray jsonTimeSlots = jsonEvent.getJSONArray(EVENT_TIMESLOTS);
+            for (int i = 0; i < jsonTimeSlots.length(); i++) {
+                JSONObject slot = jsonTimeSlots.getJSONObject(i);
+                TimeSlot ts = new TimeSlot(
+                        slot.getLong(EVENT_TIMESLOT_PUB_ID),
+                        timeSlotFormat.parse(slot.getString(EVENT_TIMESLOT_START)),
+                        timeSlotFormat.parse(slot.getString(EVENT_TIMESLOT_END))
+                );
+                timeSlots.add(ts);
+            }
+            event.setTimeSlotList(timeSlots);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         JSONObject jsonLinks = jsonEvent.getJSONObject(LINKS);
         long eventId = parseIdFromHref(jsonLinks.getJSONObject(SELF).getString(HREF));
