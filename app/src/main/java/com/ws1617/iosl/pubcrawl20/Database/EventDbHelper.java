@@ -59,7 +59,7 @@ public class EventDbHelper extends SQLiteOpenHelper {
 
         // Add to event table
         ContentValues values = new ContentValues();
-        values.put(EVENT_ID, event.getEventId());
+        values.put(EVENT_ID, event.getId());
         values.put(EVENT_NAME, event.getEventName());
         values.put(DATE, event.getDate().getTime());    // epoch time in ms
         values.put(DESCRIPTION, event.getDescription());
@@ -89,7 +89,7 @@ public class EventDbHelper extends SQLiteOpenHelper {
 
         for (TimeSlot ts : event.getTimeSlotList()) {
             values = new ContentValues();
-            values.put(EVENT_ID, event.getEventId());
+            values.put(EVENT_ID, event.getId());
             values.put(PUB_ID, ts.getPubId());
             values.put(START_TIME, ts.getStartTime().getTime());
             values.put(END_TIME, ts.getEndTime().getTime());
@@ -103,7 +103,7 @@ public class EventDbHelper extends SQLiteOpenHelper {
 
         for (long id : event.getParticipantIds()) {
             values = new ContentValues();
-            values.put(EVENT_ID, event.getEventId());
+            values.put(EVENT_ID, event.getId());
             values.put(PARTICIPANT_ID, id);
             db.insert(TABLE_EVENT_PARTICIPANTS, null, values);
         }
@@ -115,7 +115,7 @@ public class EventDbHelper extends SQLiteOpenHelper {
 
         for (long id : event.getPubIds()) {
             values = new ContentValues();
-            values.put(EVENT_ID, event.getEventId());
+            values.put(EVENT_ID, event.getId());
             values.put(PUB_ID, id);
             db.insert(TABLE_EVENT_PUBS, null, values);
         }
@@ -125,7 +125,7 @@ public class EventDbHelper extends SQLiteOpenHelper {
     public void updateEvent(Event event) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put(EVENT_ID, event.getEventId());
+        values.put(EVENT_ID, event.getId());
         values.put(EVENT_NAME, event.getEventName());
         values.put(DATE, event.getDate().getTime());    // epoch time in ms
         values.put(DESCRIPTION, event.getDescription());
@@ -138,7 +138,7 @@ public class EventDbHelper extends SQLiteOpenHelper {
         values.put(LONG_MAX, event.getMaxLatLng().longitude);
 
         String selection = EVENT_ID + " =?";
-        String[] selectionArgs = {String.valueOf(event.getEventId())};
+        String[] selectionArgs = {String.valueOf(event.getId())};
 
         db.update(TABLE_EVENTS, values, selection, selectionArgs);
 
@@ -157,7 +157,7 @@ public class EventDbHelper extends SQLiteOpenHelper {
     }
 
     public void updateLists(Event event) {
-        deleteLists(event.getEventId());
+        deleteLists(event.getId());
 
         addTimeslots(event);
         addParticipants(event);
@@ -189,7 +189,7 @@ public class EventDbHelper extends SQLiteOpenHelper {
     private Event getListlessEventFromCursor(Cursor c) {
         Event event = new Event();
 
-        event.setEventId(c.getLong(c.getColumnIndex(EVENT_ID)));
+        event.setId(c.getLong(c.getColumnIndex(EVENT_ID)));
         event.setEventName(c.getString(c.getColumnIndex(EVENT_NAME)));
         event.setDate(new Date(c.getLong(c.getColumnIndex(DATE))));
         event.setDescription(c.getString(c.getColumnIndex(DESCRIPTION)));
@@ -215,14 +215,14 @@ public class EventDbHelper extends SQLiteOpenHelper {
 
         Cursor c = db.rawQuery(query, null);
 
-        if (c != null) {
-            c.moveToFirst();
+        if (c != null && c.moveToFirst()) {
 
             event = getListlessEventFromCursor(c);
 
             c.close();
         } else {
             Log.e(TAG, "Can't find event with id " + event_id);
+            Log.e(TAG, "Cursor is null or database empty");
             return null;
         }
 
@@ -248,8 +248,7 @@ public class EventDbHelper extends SQLiteOpenHelper {
                 EVENT_ID + " =? " + event_id;
 
         Cursor c = db.rawQuery(query, null);
-        if (c != null) {
-            c.moveToFirst();
+        if (c != null && c.moveToFirst()) {
             do {
                 TimeSlot slot = new TimeSlot(
                         c.getLong(c.getColumnIndex(PUB_ID)),
@@ -259,6 +258,8 @@ public class EventDbHelper extends SQLiteOpenHelper {
                 timeSlots.add(slot);
             } while (c.moveToNext());
             c.close();
+        } else {
+            Log.e(TAG, "Cursor is null or database empty");
         }
 
         return timeSlots;
@@ -273,12 +274,13 @@ public class EventDbHelper extends SQLiteOpenHelper {
                 EVENT_ID + " =? " + event_id;
 
         Cursor c = db.rawQuery(query, null);
-        if (c != null) {
-            c.moveToFirst();
+        if (c != null && c.moveToFirst()) {
             do {
                 list.add(c.getLong(c.getColumnIndex(PARTICIPANT_ID)));
             } while (c.moveToNext());
             c.close();
+        } else {
+            Log.e(TAG, "Cursor is null or database empty");
         }
 
         return list;
@@ -293,12 +295,13 @@ public class EventDbHelper extends SQLiteOpenHelper {
                 EVENT_ID + " =? " + event_id;
 
         Cursor c = db.rawQuery(query, null);
-        if (c != null) {
-            c.moveToFirst();
+        if (c != null && c.moveToFirst()) {
             do {
                 list.add(c.getLong(c.getColumnIndex(PUB_ID)));
             } while (c.moveToNext());
             c.close();
+        } else {
+            Log.e(TAG, "Cursor is null or database empty");
         }
 
         return list;
@@ -311,10 +314,13 @@ public class EventDbHelper extends SQLiteOpenHelper {
         String query = "SELECT * FROM " + TABLE_EVENT_PUBS;
 
         Cursor c = db.rawQuery(query, null);
-        if (c != null) {
-            c.moveToFirst();
+        if (c != null && c.moveToFirst()) {
             do {
-                events.add(getListlessEventFromCursor(c));
+                Event event = getListlessEventFromCursor(c);
+                event.setPubIds(getPubIds(event.getId()));
+                event.setParticipantIds(getParticipantIds(event.getId()));
+                event.setTimeSlotList(getTimeSlots(event.getId()));
+                events.add(event);
             } while (c.moveToNext());
             c.close();
         }
@@ -327,7 +333,7 @@ public class EventDbHelper extends SQLiteOpenHelper {
 
         //TODO
 
-        return events;
+        return null;
     }
 
     public ArrayList<Event> getEventsBoundryBoxTimeFrame(long event_id, LatLng minLatLng, LatLng maxLatLng, Date min, Date max) {
@@ -335,7 +341,7 @@ public class EventDbHelper extends SQLiteOpenHelper {
 
         //TODO
 
-        return events;
+        return null;
     }
 
 }

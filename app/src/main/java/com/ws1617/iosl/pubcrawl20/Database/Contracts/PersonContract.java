@@ -56,7 +56,7 @@ public class PersonContract {
             TABLE_PERSON_FAVOURITE_PUBS + "(" +
             ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
             PERSON_ID + " INTEGER," +
-            PUB_ID + " INTEGER," +
+            PUB_ID + " INTEGER" +
             ")";
 
     public static final String CREATE_PERSON_OWNED_EVENTS_TABLE = "CREATE TABLE " +
@@ -70,6 +70,6 @@ public class PersonContract {
             TABLE_PERSON_OWNED_PUBS + "(" +
             ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
             PERSON_ID + " INTEGER," +
-            PUB_ID + " INTEGER," +
+            PUB_ID + " INTEGER" +
             ")";
 }

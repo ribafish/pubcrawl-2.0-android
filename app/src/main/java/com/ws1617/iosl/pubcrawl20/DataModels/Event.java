@@ -16,7 +16,7 @@ import java.util.List;
  */
 
 public class Event {
-    private long eventId;
+    private long Id;
     private String eventName;
     private Date date;
     private String description;
@@ -33,8 +33,8 @@ public class Event {
     public Event() {
     }
 
-    public Event(long eventId) {
-        this.eventId = eventId;
+    public Event(long Id) {
+        this.Id = Id;
     }
 
     public Event(String eventName, Date date, String description, boolean tracked) {
@@ -141,18 +141,18 @@ public class Event {
 
     }
 
-    public long getEventId() {
-        return eventId;
+    public long getId() {
+        return Id;
     }
 
-    public void setEventId(long eventId) {
-        this.eventId = eventId;
+    public void setId(long id) {
+        this.Id = id;
     }
 
     @Override
     public String toString() {
         return "Event{" +
-                "eventId=" + eventId +
+                "Id=" + Id +
                 ", eventName='" + eventName + '\'' +
                 ", date=" + date +
                 ", description='" + description + '\'' +
@@ -170,7 +170,7 @@ public class Event {
 
         Event event = (Event) o;
 
-        return eventId == event.eventId;
+        return Id == event.Id;
 
     }
 

@@ -295,7 +295,7 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
             SimpleDateFormat localDateFormat = new SimpleDateFormat("E, MMM d, yyyy 'at' HH:mm");
             mSubtitle.setText(localDateFormat.format(event.getDate()));
             ((TextView) findViewById(R.id.event_details_starts)).setText(localDateFormat.format(event.getDate()));
-            ((TextView) findViewById(R.id.event_details_id)).setText(String.valueOf(event.getEventId()));
+            ((TextView) findViewById(R.id.event_details_id)).setText(String.valueOf(event.getId()));
             ((TextView) findViewById(R.id.event_details_tracked)).setText(event.isTracked() ? "Tracked" : "Not tracked");
             ((TextView) findViewById(R.id.event_details_description)).setText(event.getDescription());
         }
@@ -596,7 +596,7 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
                 dummyIds
         );
 
-        this.event.setEventId(id);
+        this.event.setId(id);
 
         ArrayList<TimeSlot> timeSlots= new ArrayList<>();
         timeSlots.add(new TimeSlot(

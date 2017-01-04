@@ -67,7 +67,7 @@ public class JsonParser {
     // Pub
     public static final String PUBS = "pubs";
     private static final String PUB_NAME = "pubName";
-    private static final String PUB_PRICES = "prices";
+    private static final String PUB_PRICES = "price";
     private static final String PUB_RATING = "rating";
     private static final String PUB_LAT = "lat";
     private static final String PUB_LONG = "lng";
@@ -98,17 +98,22 @@ public class JsonParser {
 
 
 
-    public static ArrayList<Event> parseJSONResponseEvents (JSONObject response) throws JSONException, ParseException  {
+    public static ArrayList<Event> parseJSONResponseEvents (JSONObject response) throws JSONException  {
         ArrayList<Event> events = new ArrayList<>();
         JSONObject embedded = response.getJSONObject(EMBEDDED);
         JSONArray jsonEvents = embedded.getJSONArray(EVENTS);
         for (int i=0; i < jsonEvents.length(); i++) {
             JSONObject jsonEvent = jsonEvents.getJSONObject(i);
-            Event e = parseJSONEvent(jsonEvent);
-            Log.d(TAG, "Parsed event [" + i + "]: " + e);
-            events.add(e);
+            try {
+                Event e = parseJSONEvent(jsonEvent);
+                events.add(e);
+            } catch (Exception e) {
+                Log.e(TAG, "Error for parsing event json " + jsonEvent);
+                Log.e(TAG, "Error message: " + e.getLocalizedMessage());
+            }
         }
         Collections.sort(events, new EventComparator(true, EventComparator.NAME));
+        Log.d(TAG, "Parsed all events");
         return events;
     }
 
@@ -129,7 +134,7 @@ public class JsonParser {
                     jsonEvent.getDouble(EVENT_LONG_MAX)));
         } catch (Exception e) {
             Log.e(TAG, "Can't parse event boundary box");
-            e.printStackTrace();
+            Log.e(TAG, "Error message: " + e.getLocalizedMessage());
         }
 
         try {
@@ -147,26 +152,36 @@ public class JsonParser {
             }
             event.setTimeSlotList(timeSlots);
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e(TAG, "Can't parse event timeslot list");
+            Log.e(TAG, "Error message: " + e.getLocalizedMessage());
         }
 
         JSONObject jsonLinks = jsonEvent.getJSONObject(LINKS);
         long eventId = parseIdFromHref(jsonLinks.getJSONObject(SELF).getString(HREF));
-        event.setEventId(eventId);
+        event.setId(eventId);
+
+        Log.d(TAG, "Parsed event: " + event);
 
         return event;
     }
 
     public static ArrayList<Pub> parseJsonResponsePubs (JSONObject response) throws JSONException {
         ArrayList<Pub> pubs = new ArrayList<>();
+        Log.v(TAG, "Got Pubs JSON response: " + response);
         JSONObject embedded = response.getJSONObject(EMBEDDED);
         JSONArray jsonPubs = embedded.getJSONArray(PUBS);
         for (int i=0; i < jsonPubs.length(); i++) {
             JSONObject jsonPub = jsonPubs.getJSONObject(i);
-            Pub p = parsePubJson(jsonPub);
-            Log.d(TAG, "Parsed pub [" + i + "]: " + p);
-            pubs.add(p);
+            try {
+                Pub p = parsePubJson(jsonPub);
+                pubs.add(p);
+            } catch (Exception e) {
+                Log.e(TAG, "Error for parsing pub json " + jsonPub);
+                Log.e(TAG, "Error message: " + e.getLocalizedMessage());
+            }
         }
+
+        Log.d(TAG, "Parsed all pubs");
 
         return pubs;
     }
@@ -185,6 +200,8 @@ public class JsonParser {
         pub.setSize(jsonPub.getInt(PUB_SIZE));
         pub.setOpeningTimes(jsonPub.getString(PUB_OPENING_TIME));
 
+        Log.d(TAG, "Parsed Pub: " + pub);
+
         return pub;
     }
 
@@ -195,10 +212,16 @@ public class JsonParser {
         JSONArray json = embedded.getJSONArray(PERSONS);
         for (int i=0; i < json.length(); i++) {
             JSONObject jsonPerson = json.getJSONObject(i);
-            Person person = parsePersonJson(jsonPerson);
-            Log.d(TAG, "Parsed event [" + i + "]: " + person);
-            persons.add(person);
+            try {
+                Person person = parsePersonJson(jsonPerson);
+                persons.add(person);
+            } catch (Exception e) {
+                Log.e(TAG, "Error for parsing person json " + jsonPerson);
+                Log.e(TAG, "Error message: " + e.getLocalizedMessage());
+            }
         }
+
+        Log.d(TAG, "Parsed all persons");
 
         return persons;
     }
@@ -215,6 +238,8 @@ public class JsonParser {
         person.setEmail(jsonPerson.getString(PERSON_EMAIL));
         person.setDescription(jsonPerson.getString(PERSON_DESCRIPTION));
         person.setImage(decodeBitmapBase64(jsonPerson.getString(PERSON_IMAGE)));
+
+        Log.d(TAG, "Parsed person: " + person);
 
         return person;
     }

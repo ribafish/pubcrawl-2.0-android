@@ -28,7 +28,7 @@ public class EventMini {
     }
 
     public EventMini(Event event) {
-        this.eventId = event.getEventId();
+        this.eventId = event.getId();
         this.name = event.getEventName();
         this.date = event.getDate();
         this.description = event.getDescription();

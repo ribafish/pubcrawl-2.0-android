@@ -136,6 +136,17 @@ public class PubDbHelper extends SQLiteOpenHelper {
         updateLists(pub);
     }
 
+    public void updatePubOwner(long event_id, long owner_id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(OWNER, owner_id);
+
+        String selection = PUB_ID + " =?";
+        String[] selectionArgs = {String.valueOf(event_id)};
+
+        db.update(TABLE_PUBS, values, selection, selectionArgs);
+    }
+
     public void updateLists(Pub pub) {
         deleteLists(pub.getId());
 
@@ -176,8 +187,7 @@ public class PubDbHelper extends SQLiteOpenHelper {
 
         Cursor c = db.rawQuery(query, null);
 
-        if (c != null) {
-            c.moveToFirst();
+        if (c != null && c.moveToFirst()) {
 
             pub.setPubName(c.getString(c.getColumnIndex(PUB_NAME)));
             pub.setLatLng(new LatLng(c.getDouble(c.getColumnIndex(LATITUDE)),
@@ -191,6 +201,7 @@ public class PubDbHelper extends SQLiteOpenHelper {
             c.close();
         } else {
             Log.e(TAG, "Can't find pub with id " + pub_id);
+            Log.e(TAG, "Cursor is null or database empty");
             return null;
         }
 
@@ -217,12 +228,13 @@ public class PubDbHelper extends SQLiteOpenHelper {
                 "ORDER BY " + ITERATOR + " ASC";
 
         Cursor c = db.rawQuery(query, null);
-        if (c != null) {
-            c.moveToFirst();
+        if (c != null && c.moveToFirst()) {
             do {
                 list.add(c.getLong(c.getColumnIndex(PERSON_ID)));
             } while (c.moveToNext());
             c.close();
+        } else {
+            Log.e(TAG, "Cursor is null or database empty");
         }
 
         return list;
@@ -237,12 +249,13 @@ public class PubDbHelper extends SQLiteOpenHelper {
                 PUB_ID + " =? " + pub_id;
 
         Cursor c = db.rawQuery(query, null);
-        if (c != null) {
-            c.moveToFirst();
+        if (c != null && c.moveToFirst()) {
             do {
                 list.add(c.getLong(c.getColumnIndex(EVENT_ID)));
             } while (c.moveToNext());
             c.close();
+        } else {
+            Log.e(TAG, "Cursor is null or database empty");
         }
 
         return list;
@@ -257,12 +270,13 @@ public class PubDbHelper extends SQLiteOpenHelper {
                 PUB_ID + " =? " + pub_id;
 
         Cursor c = db.rawQuery(query, null);
-        if (c != null) {
-            c.moveToFirst();
+        if (c != null && c.moveToFirst()) {
             do {
                 list.add(bytesToBitmap(c.getBlob(c.getColumnIndex(IMAGE))));
             } while (c.moveToNext());
             c.close();
+        } else {
+            Log.e(TAG, "Cursor is null or database empty");
         }
 
         return list;

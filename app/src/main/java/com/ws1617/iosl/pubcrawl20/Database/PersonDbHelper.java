@@ -46,8 +46,8 @@ public class PersonDbHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_PERSON_EVENTS);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_PERSON_FRIENDS);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_PERSON_FAVOURITE_PUBS);
-        db.execSQL("DROP TABLE IF EXISTS " + CREATE_PERSON_OWNED_EVENTS_TABLE);
-        db.execSQL("DROP TABLE IF EXISTS " + CREATE_PERSON_OWNED_PUBS_TABLE);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_PERSON_OWNED_EVENTS);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_PERSON_OWNED_PUBS);
 
         onCreate(db);
     }
@@ -211,8 +211,7 @@ public class PersonDbHelper extends SQLiteOpenHelper {
 
         Cursor c = db.rawQuery(query, null);
 
-        if (c != null) {
-            c.moveToFirst();
+        if (c != null && c.moveToFirst()) {
 
             person.setDescription(c.getString(c.getColumnIndex(DESCRIPTION)));
             person.setEmail(c.getString(c.getColumnIndex(EMAIL)));
@@ -223,6 +222,7 @@ public class PersonDbHelper extends SQLiteOpenHelper {
             c.close();
         } else {
             Log.e(TAG, "Can't find person with id " + person_id);
+            Log.e(TAG, "Cursor is null or database empty");
             return null;
         }
         return person;
@@ -237,12 +237,13 @@ public class PersonDbHelper extends SQLiteOpenHelper {
                 PERSON_ID + " =? " + person_id;
 
         Cursor c = db.rawQuery(query, null);
-        if (c != null) {
-            c.moveToFirst();
+        if (c != null && c.moveToFirst()) {
             do {
                 list.add(c.getLong(c.getColumnIndex(EVENT_ID)));
             } while (c.moveToNext());
             c.close();
+        } else {
+            Log.e(TAG, "Cursor is null or database empty");
         }
 
         return list;
@@ -257,12 +258,13 @@ public class PersonDbHelper extends SQLiteOpenHelper {
                 PERSON_ID + " =? " + person_id;
 
         Cursor c = db.rawQuery(query, null);
-        if (c != null) {
-            c.moveToFirst();
+        if (c != null && c.moveToFirst()) {
             do {
                 list.add(c.getLong(c.getColumnIndex(FRIEND_ID)));
             } while (c.moveToNext());
             c.close();
+        } else {
+            Log.e(TAG, "Cursor is null or database empty");
         }
 
         return list;
@@ -277,12 +279,13 @@ public class PersonDbHelper extends SQLiteOpenHelper {
                 PERSON_ID + " =? " + person_id;
 
         Cursor c = db.rawQuery(query, null);
-        if (c != null) {
-            c.moveToFirst();
+        if (c != null && c.moveToFirst()) {
             do {
                 list.add(c.getLong(c.getColumnIndex(PUB_ID)));
             } while (c.moveToNext());
             c.close();
+        } else {
+            Log.e(TAG, "Cursor is null or database empty");
         }
 
         return list;
@@ -297,12 +300,13 @@ public class PersonDbHelper extends SQLiteOpenHelper {
                 PERSON_ID + " =? " + person_id;
 
         Cursor c = db.rawQuery(query, null);
-        if (c != null) {
-            c.moveToFirst();
+        if (c != null && c.moveToFirst()) {
             do {
                 list.add(c.getLong(c.getColumnIndex(EVENT_ID)));
             } while (c.moveToNext());
             c.close();
+        } else {
+            Log.e(TAG, "Cursor is null or database empty");
         }
 
         return list;
@@ -317,12 +321,13 @@ public class PersonDbHelper extends SQLiteOpenHelper {
                 PERSON_ID + " =? " + person_id;
 
         Cursor c = db.rawQuery(query, null);
-        if (c != null) {
-            c.moveToFirst();
+        if (c != null && c.moveToFirst()) {
             do {
                 list.add(c.getLong(c.getColumnIndex(PUB_ID)));
             } while (c.moveToNext());
             c.close();
+        } else {
+            Log.e(TAG, "Cursor is null or database empty");
         }
 
         return list;
