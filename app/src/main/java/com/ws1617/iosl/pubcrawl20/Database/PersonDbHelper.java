@@ -207,7 +207,7 @@ public class PersonDbHelper extends SQLiteOpenHelper {
 
         String query = "SELECT * FROM " +
                 TABLE_PERSONS +  " WHERE " +
-                PERSON_ID + " =? " + person_id;
+                PERSON_ID + " = " + person_id;
 
         Cursor c = db.rawQuery(query, null);
 
@@ -234,7 +234,7 @@ public class PersonDbHelper extends SQLiteOpenHelper {
 
         String query = "SELECT * FROM " +
                 TABLE_PERSON_EVENTS +  " WHERE " +
-                PERSON_ID + " =? " + person_id;
+                PERSON_ID + " = " + person_id;
 
         Cursor c = db.rawQuery(query, null);
         if (c != null && c.moveToFirst()) {
@@ -255,7 +255,7 @@ public class PersonDbHelper extends SQLiteOpenHelper {
 
         String query = "SELECT * FROM " +
                 TABLE_PERSON_FRIENDS +  " WHERE " +
-                PERSON_ID + " =? " + person_id;
+                PERSON_ID + " = " + person_id;
 
         Cursor c = db.rawQuery(query, null);
         if (c != null && c.moveToFirst()) {
@@ -276,7 +276,7 @@ public class PersonDbHelper extends SQLiteOpenHelper {
 
         String query = "SELECT * FROM " +
                 TABLE_PERSON_FAVOURITE_PUBS +  " WHERE " +
-                PERSON_ID + " =? " + person_id;
+                PERSON_ID + " = " + person_id;
 
         Cursor c = db.rawQuery(query, null);
         if (c != null && c.moveToFirst()) {
@@ -297,7 +297,7 @@ public class PersonDbHelper extends SQLiteOpenHelper {
 
         String query = "SELECT * FROM " +
                 TABLE_PERSON_OWNED_EVENTS +  " WHERE " +
-                PERSON_ID + " =? " + person_id;
+                PERSON_ID + " = " + person_id;
 
         Cursor c = db.rawQuery(query, null);
         if (c != null && c.moveToFirst()) {
@@ -318,7 +318,7 @@ public class PersonDbHelper extends SQLiteOpenHelper {
 
         String query = "SELECT * FROM " +
                 TABLE_PERSON_OWNED_PUBS +  " WHERE " +
-                PERSON_ID + " =? " + person_id;
+                PERSON_ID + " = " + person_id;
 
         Cursor c = db.rawQuery(query, null);
         if (c != null && c.moveToFirst()) {

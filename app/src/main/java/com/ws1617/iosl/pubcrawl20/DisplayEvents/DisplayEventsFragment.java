@@ -26,11 +26,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -43,7 +38,6 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.ws1617.iosl.pubcrawl20.DataModels.Event;
-import com.ws1617.iosl.pubcrawl20.DataModels.Person;
 import com.ws1617.iosl.pubcrawl20.DataModels.Pub;
 import com.ws1617.iosl.pubcrawl20.Database.EventDbHelper;
 import com.ws1617.iosl.pubcrawl20.Database.PubDbHelper;
@@ -56,19 +50,9 @@ import com.ws1617.iosl.pubcrawl20.DisplayEvents.MiniDataModels.EventMiniComparat
 import com.ws1617.iosl.pubcrawl20.DisplayEvents.MiniDataModels.PubMini;
 import com.ws1617.iosl.pubcrawl20.R;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Locale;
 
-import static com.ws1617.iosl.pubcrawl20.Database.DatabaseHelper.resetEventsDatabase;
-import static com.ws1617.iosl.pubcrawl20.Database.DatabaseHelper.resetPubsDatabase;
 import static com.ws1617.iosl.pubcrawl20.Database.DatabaseHelper.resetWholeDatabase;
 
 /**
@@ -81,7 +65,6 @@ public class DisplayEventsFragment extends Fragment implements OnMapReadyCallbac
     private View rootView;
     private GoogleMap map;
     private SharedPreferences prefs;
-    private RequestQueue requestQueue;
     private ArrayList<EventMini> eventList = new ArrayList<>();
     private EventAdapter eventAdapter;
     private BroadcastReceiver receiver;
@@ -232,10 +215,7 @@ public class DisplayEventsFragment extends Fragment implements OnMapReadyCallbac
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // Instantiate the RequestQueue.
-//        requestQueue = Volley.newRequestQueue(getActivity());
         prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-
 
         getEvents();
         resetWholeDatabase(getContext());
@@ -263,8 +243,17 @@ public class DisplayEventsFragment extends Fragment implements OnMapReadyCallbac
             }
             eventList.add(eventMini);
         }
-        if (eventAdapter != null)
+        if (eventAdapter != null) {
+            Log.d(TAG, "eventAdapter.notifyDataSetChanged()");
+            Collections.sort(eventList, new EventMiniComparator(true, EventMiniComparator.NAME));
             eventAdapter.notifyDataSetChanged();
+        }
+        if (map != null) {
+            Log.d(TAG, "drawing events on map...");
+            for (EventMini e : eventList) {
+                drawEventOnMap(e.getEventId(), e.getPubs());
+            }
+        }
 
     }
 

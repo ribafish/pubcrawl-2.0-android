@@ -211,7 +211,7 @@ public class EventDbHelper extends SQLiteOpenHelper {
 
         String query = "SELECT * FROM " +
                 TABLE_EVENTS +  " WHERE " +
-                EVENT_ID + " =? " + event_id;
+                EVENT_ID + " = " + event_id;
 
         Cursor c = db.rawQuery(query, null);
 
@@ -245,7 +245,7 @@ public class EventDbHelper extends SQLiteOpenHelper {
 
         String query = "SELECT * FROM " +
                 TABLE_EVENT_TIMESLOTS +  " WHERE " +
-                EVENT_ID + " =? " + event_id;
+                EVENT_ID + " = " + event_id;
 
         Cursor c = db.rawQuery(query, null);
         if (c != null && c.moveToFirst()) {
@@ -271,7 +271,7 @@ public class EventDbHelper extends SQLiteOpenHelper {
 
         String query = "SELECT * FROM " +
                 TABLE_EVENT_PARTICIPANTS +  " WHERE " +
-                EVENT_ID + " =? " + event_id;
+                EVENT_ID + " = " + event_id;
 
         Cursor c = db.rawQuery(query, null);
         if (c != null && c.moveToFirst()) {
@@ -292,7 +292,7 @@ public class EventDbHelper extends SQLiteOpenHelper {
 
         String query = "SELECT * FROM " +
                 TABLE_EVENT_PUBS +  " WHERE " +
-                EVENT_ID + " =? " + event_id;
+                EVENT_ID + " = " + event_id;
 
         Cursor c = db.rawQuery(query, null);
         if (c != null && c.moveToFirst()) {
@@ -311,7 +311,7 @@ public class EventDbHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         ArrayList<Event> events = new ArrayList<>();
 
-        String query = "SELECT * FROM " + TABLE_EVENT_PUBS;
+        String query = "SELECT * FROM " + TABLE_EVENTS;
 
         Cursor c = db.rawQuery(query, null);
         if (c != null && c.moveToFirst()) {
@@ -324,6 +324,8 @@ public class EventDbHelper extends SQLiteOpenHelper {
             } while (c.moveToNext());
             c.close();
         }
+
+        Log.d(TAG, "getAllEvents: Found " + events.size() + " events");
 
         return events;
     }
