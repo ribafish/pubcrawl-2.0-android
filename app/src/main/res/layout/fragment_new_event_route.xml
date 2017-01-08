@@ -6,6 +6,14 @@
     android:padding="10dp"
     tools:context="com.ws1617.iosl.pubcrawl20.NewEvent.NewEventRouteFragment">
 
+    <FrameLayout
+        android:id="@+id/test_place_holder"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="8dp"></FrameLayout>
+
+    <!--
+
     <TextView
         android:id="@+id/view_pub_txt"
         android:layout_width="wrap_content"
@@ -35,5 +43,5 @@
         android:layout_below="@id/event_new_selected_pub_list"
         android:layout_marginTop="10dp"
         android:background="@android:drawable/ic_input_add" />
-
+-->
 </RelativeLayout>
