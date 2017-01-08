@@ -143,7 +143,7 @@ public class RouteFragment extends DialogFragment {
     private void setupMap() {
         if (mRootView == null) return;
         Log.d(TAG, "setupMap");
-        FrameLayout mapContainer = (FrameLayout) mRootView.findViewById(R.id.event_details_map_map);
+       // FrameLayout mapContainer = (FrameLayout) mRootView.findViewById(R.id.event_details_map_map);
 //        mapContainer.getLayoutParams().height = mapContainer.getLayoutParams().width;
 
         GoogleMapOptions options = new GoogleMapOptions();

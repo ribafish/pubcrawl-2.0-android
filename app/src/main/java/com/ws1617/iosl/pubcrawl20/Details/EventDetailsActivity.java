@@ -13,6 +13,7 @@ import android.graphics.drawable.Drawable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -111,13 +112,14 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
         setContentView(R.layout.activity_event_details);
         rootView = (CoordinatorLayout) findViewById(R.id.event_details_root);
 
-        long id = getIntent().getLongExtra("id", -1);
-        getEvent(id);
+
+        initRouteFragment();
+
         initDescriptionExpanding();
 
         setupToolbar();
-        setupMap();
-        setupPubsListView();
+      //  setupMap();
+        //setupPubsListView();
 
 
 
@@ -125,6 +127,30 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
         populateFields();
         initDescriptionExpanding();
         setupParticipants();
+    }
+
+
+    void initRouteFragment() {
+        // this list should come from the DB and from outside the fragment
+        // the fragment it self get the data from outsource
+
+        //View mode
+        initVewMode();
+        //Edit mode
+        //TODO
+
+        RouteFragment routeFragment = RouteFragment.newInstance();
+        routeFragment.setListOfPubs(pubs);
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction().add(R.id.test_place_holder,routeFragment,"Route").commit();
+
+    }
+
+    void initVewMode(){
+        long id = getIntent().getLongExtra("id", -1);
+
+        getEvent(id);
     }
 
     private void setupToolbar() {
@@ -301,13 +327,13 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
         }
 
         if (pubs.size() > 0) {
-            pubAdapter.notifyDataSetChanged();
-            setListViewHeightBasedOnItems(pubListView);
+            //pubAdapter.notifyDataSetChanged();
+            //setListViewHeightBasedOnItems(pubListView);
         }
 
     }
 
-    private void setupPubsListView() {
+ /*   private void setupPubsListView() {
         pubAdapter = new PubAdapter(this, pubs);
         pubListView = (ListView) findViewById(R.id.event_details_pubListView);
         pubListView.setAdapter(pubAdapter);
@@ -320,7 +346,7 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
                 startActivity(intent);
             }
         });
-    }
+    }*/
 
     /**
      * Sets ListView height to show all items
@@ -365,7 +391,7 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
 
      */
 
-    private void setupMap() {
+  /*  private void setupMap() {
         Log.d(TAG, "setupMap");
         FrameLayout mapContainer = (FrameLayout) findViewById(R.id.event_details_map_map);
 //        mapContainer.getLayoutParams().height = mapContainer.getLayoutParams().width;
@@ -414,7 +440,7 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
             }
         });
 
-    }
+    }*/
 
     /**
      *  Draws the event on the supplied map
