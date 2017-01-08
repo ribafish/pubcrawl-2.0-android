@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.ws1617.iosl.pubcrawl20.DataModels.Pub;
+import com.ws1617.iosl.pubcrawl20.Details.MiniDataModels.PubMini;
 import com.ws1617.iosl.pubcrawl20.NewEvent.adapters.SelectedPupListAdapter;
 import com.ws1617.iosl.pubcrawl20.R;
 
@@ -33,7 +34,7 @@ public class NewEventRouteFragment extends Fragment implements SelectedPupListAd
     PubListDialog mPubItemDialog;
 
     //Data
-    List<Pub> mSelectedPupsList;
+    List<PubMini> mSelectedPupsList;
 
     public NewEventRouteFragment() {
         // Required empty public constructor
@@ -92,7 +93,7 @@ public class NewEventRouteFragment extends Fragment implements SelectedPupListAd
 
     PubListDialog.OnSelectPubDialogDismissed onSelectPubDialogDismissed = new PubListDialog.OnSelectPubDialogDismissed() {
         @Override
-        public void addPubToList(Pub newPub) {
+        public void addPubToList(PubMini newPub) {
             mSelectedPupsList.add(newPub);
             adapter.notifyItemChanged(mSelectedPupsList.size());
         }

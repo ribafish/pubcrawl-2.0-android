@@ -24,6 +24,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.ws1617.iosl.pubcrawl20.DataModels.Pub;
+import com.ws1617.iosl.pubcrawl20.Details.MiniDataModels.PubMini;
 import com.ws1617.iosl.pubcrawl20.R;
 
 import java.util.ArrayList;
@@ -49,8 +50,8 @@ public class PubListDialog extends DialogFragment {
     View mRootView;
 
     //Data
-    Pub selectedPub;
-    List<Pub> pubsList;
+    PubMini selectedPub;
+    List<PubMini> pubsList;
     List<String> pubsListString;
     GoogleMap mGoogleMap;
 
@@ -79,7 +80,7 @@ public class PubListDialog extends DialogFragment {
 
     }
 
-    public void showSelectedPub(Pub pub) {
+    public void showSelectedPub(PubMini pub) {
 
         // there is two lists. one is the selected list and the other is the full list
         // the itemPosition parameter that we get here is the position of the clicked item in the selected list
@@ -158,7 +159,7 @@ public class PubListDialog extends DialogFragment {
         pubsList = new ArrayList<>();
         pubsListString = new ArrayList<>();
 
-        Pub pub1 = new Pub(1, "pub 1", new LatLng(1, 1), 10);
+       /*Pub pub1 = new Pub(1, "pub 1", new LatLng(1, 1), 10);
         pubsList.add(pub1);
         pubsListString.add(pub1.getPubName());
 
@@ -173,7 +174,7 @@ public class PubListDialog extends DialogFragment {
         Pub pub4 = new Pub(4, "pub 4", new LatLng(1, 1), 40);
         pubsList.add(pub4);
         pubsListString.add(pub4.getPubName());
-
+        */
 
     }
 
@@ -230,11 +231,11 @@ public class PubListDialog extends DialogFragment {
     };
 
     private void selectItem() {
-        mPubName.setText(this.selectedPub.getPubName());
-        mPubSize.setText(String.valueOf(this.selectedPub.getSize()));
+        mPubName.setText(this.selectedPub.getName());
+        mPubSize.setText(String.valueOf(this.selectedPub.getTimeSlot()));
     }
 
     interface OnSelectPubDialogDismissed {
-        void addPubToList(Pub newPub);
+        void addPubToList(PubMini newPub);
     }
 }
