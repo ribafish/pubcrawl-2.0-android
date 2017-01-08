@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.ws1617.iosl.pubcrawl20.ScanQR;
+package com.ws1617.iosl.pubcrawl20.scanQR;
 
 import com.google.android.gms.vision.Detector;
 import com.google.android.gms.vision.Tracker;

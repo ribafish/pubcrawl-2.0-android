@@ -1,4 +1,4 @@
-package com.ws1617.iosl.pubcrawl20.Current;
+package com.ws1617.iosl.pubcrawl20.current;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;

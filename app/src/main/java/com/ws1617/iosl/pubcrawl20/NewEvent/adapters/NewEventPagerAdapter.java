@@ -1,4 +1,4 @@
-package com.ws1617.iosl.pubcrawl20.NewEvent.adapters;
+package com.ws1617.iosl.pubcrawl20.newEvent.adapters;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;

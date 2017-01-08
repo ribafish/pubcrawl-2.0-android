@@ -1,4 +1,4 @@
-package com.ws1617.iosl.pubcrawl20.Database;
+package com.ws1617.iosl.pubcrawl20.database;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -8,12 +8,12 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.graphics.Bitmap;
 import android.util.Log;
 
-import com.ws1617.iosl.pubcrawl20.DataModels.Person;
+import com.ws1617.iosl.pubcrawl20.dataModels.Person;
 
 import java.util.ArrayList;
 
-import static com.ws1617.iosl.pubcrawl20.Database.Contracts.PersonContract.*;
-import static com.ws1617.iosl.pubcrawl20.Database.DatabaseHelper.*;
+import static com.ws1617.iosl.pubcrawl20.database.Contracts.PersonContract.*;
+import static com.ws1617.iosl.pubcrawl20.database.DatabaseHelper.*;
 
 /**
  * Created by Gasper Kojek on 20. 12. 2016.

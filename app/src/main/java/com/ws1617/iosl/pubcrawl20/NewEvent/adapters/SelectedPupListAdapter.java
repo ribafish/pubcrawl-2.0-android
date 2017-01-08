@@ -1,4 +1,4 @@
-package com.ws1617.iosl.pubcrawl20.NewEvent.adapters;
+package com.ws1617.iosl.pubcrawl20.newEvent.adapters;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -6,7 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.ws1617.iosl.pubcrawl20.DataModels.Pub;
+import com.ws1617.iosl.pubcrawl20.dataModels.Pub;
 import com.ws1617.iosl.pubcrawl20.R;
 
 import java.util.List;

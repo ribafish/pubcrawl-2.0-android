@@ -1,4 +1,4 @@
-package com.ws1617.iosl.pubcrawl20.ScanQR;
+package com.ws1617.iosl.pubcrawl20.scanQR;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;

@@ -1,4 +1,4 @@
-package com.ws1617.iosl.pubcrawl20.Database;
+package com.ws1617.iosl.pubcrawl20.database;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -9,14 +9,14 @@ import android.graphics.Bitmap;
 import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
-import com.ws1617.iosl.pubcrawl20.DataModels.Event;
-import com.ws1617.iosl.pubcrawl20.DataModels.TimeSlot;
+import com.ws1617.iosl.pubcrawl20.dataModels.Event;
+import com.ws1617.iosl.pubcrawl20.dataModels.TimeSlot;
 
 import java.util.ArrayList;
 import java.util.Date;
 
-import static com.ws1617.iosl.pubcrawl20.Database.Contracts.EventContract.*;
-import static com.ws1617.iosl.pubcrawl20.Database.DatabaseHelper.*;
+import static com.ws1617.iosl.pubcrawl20.database.Contracts.EventContract.*;
+import static com.ws1617.iosl.pubcrawl20.database.DatabaseHelper.*;
 
 /**
  * Created by Gasper Kojek on 20. 12. 2016.

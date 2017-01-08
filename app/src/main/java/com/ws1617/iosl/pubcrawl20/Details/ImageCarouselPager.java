@@ -1,4 +1,4 @@
-package com.ws1617.iosl.pubcrawl20.Details;
+package com.ws1617.iosl.pubcrawl20.details;
 
 import android.content.Context;
 import android.graphics.Bitmap;

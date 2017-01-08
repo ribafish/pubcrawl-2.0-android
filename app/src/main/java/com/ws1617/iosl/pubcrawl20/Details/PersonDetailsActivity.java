@@ -1,4 +1,4 @@
-package com.ws1617.iosl.pubcrawl20.Details;
+package com.ws1617.iosl.pubcrawl20.details;
 
 import android.content.Context;
 import android.content.Intent;
@@ -27,10 +27,10 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.ws1617.iosl.pubcrawl20.DataModels.Person;
-import com.ws1617.iosl.pubcrawl20.Details.MiniDataModels.EventMini;
-import com.ws1617.iosl.pubcrawl20.Details.MiniDataModels.PersonMini;
-import com.ws1617.iosl.pubcrawl20.Details.MiniDataModels.PubMini;
+import com.ws1617.iosl.pubcrawl20.dataModels.Person;
+import com.ws1617.iosl.pubcrawl20.details.MiniDataModels.EventMini;
+import com.ws1617.iosl.pubcrawl20.details.MiniDataModels.PersonMini;
+import com.ws1617.iosl.pubcrawl20.details.MiniDataModels.PubMini;
 import com.ws1617.iosl.pubcrawl20.R;
 
 import java.util.ArrayList;

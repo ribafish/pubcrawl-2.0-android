@@ -1,4 +1,4 @@
-package com.ws1617.iosl.pubcrawl20.DisplayEvents.MiniDataModels;
+package com.ws1617.iosl.pubcrawl20.displayEvents.MiniDataModels;
 
 import java.util.Comparator;
 

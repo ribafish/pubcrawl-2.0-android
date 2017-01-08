@@ -1,4 +1,4 @@
-package com.ws1617.iosl.pubcrawl20.Details;
+package com.ws1617.iosl.pubcrawl20.details;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import com.ws1617.iosl.pubcrawl20.Details.MiniDataModels.EventMini;
+import com.ws1617.iosl.pubcrawl20.details.MiniDataModels.EventMini;
 import com.ws1617.iosl.pubcrawl20.R;
 
 import java.text.SimpleDateFormat;

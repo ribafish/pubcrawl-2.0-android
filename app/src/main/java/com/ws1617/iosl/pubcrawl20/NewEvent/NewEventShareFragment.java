@@ -1,4 +1,4 @@
-package com.ws1617.iosl.pubcrawl20.NewEvent;
+package com.ws1617.iosl.pubcrawl20.newEvent;
 
 
 import android.os.Bundle;
@@ -8,7 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.ws1617.iosl.pubcrawl20.NewEvent.adapters.ShareEventAdapter;
+import com.ws1617.iosl.pubcrawl20.newEvent.adapters.ShareEventAdapter;
 import com.ws1617.iosl.pubcrawl20.R;
 
 /**

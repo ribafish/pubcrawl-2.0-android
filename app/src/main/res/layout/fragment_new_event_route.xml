@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:background="@color/background_grey_50"
     android:padding="10dp"
-    tools:context="com.ws1617.iosl.pubcrawl20.NewEvent.NewEventRouteFragment">
+    tools:context="com.ws1617.iosl.pubcrawl20.newEvent.NewEventRouteFragment">
 
     <TextView
         android:id="@+id/view_pub_txt"

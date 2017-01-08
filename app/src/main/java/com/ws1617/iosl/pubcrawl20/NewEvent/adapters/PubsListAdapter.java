@@ -1,10 +1,10 @@
-package com.ws1617.iosl.pubcrawl20.NewEvent.adapters;
+package com.ws1617.iosl.pubcrawl20.newEvent.adapters;
 
         import android.content.Context;
         import android.widget.ArrayAdapter;
 
         import com.google.android.gms.maps.model.LatLng;
-        import com.ws1617.iosl.pubcrawl20.DataModels.Pub;
+        import com.ws1617.iosl.pubcrawl20.dataModels.Pub;
 
         import java.util.ArrayList;
         import java.util.List;

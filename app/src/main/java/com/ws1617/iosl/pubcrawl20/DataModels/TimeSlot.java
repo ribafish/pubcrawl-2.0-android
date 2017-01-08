@@ -1,4 +1,4 @@
-package com.ws1617.iosl.pubcrawl20.DataModels;
+package com.ws1617.iosl.pubcrawl20.dataModels;
 
 import java.util.Date;
 

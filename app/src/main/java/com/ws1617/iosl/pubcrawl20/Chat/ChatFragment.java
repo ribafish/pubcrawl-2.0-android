@@ -1,10 +1,8 @@
-package com.ws1617.iosl.pubcrawl20.Chat;
+package com.ws1617.iosl.pubcrawl20.chat;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;

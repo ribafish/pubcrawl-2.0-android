@@ -1,9 +1,9 @@
-package com.ws1617.iosl.pubcrawl20.DisplayEvents.MiniDataModels;
+package com.ws1617.iosl.pubcrawl20.displayEvents.MiniDataModels;
 
 import android.graphics.Color;
 
 import com.google.android.gms.maps.model.Polyline;
-import com.ws1617.iosl.pubcrawl20.DataModels.Event;
+import com.ws1617.iosl.pubcrawl20.dataModels.Event;
 
 import java.util.ArrayList;
 import java.util.Date;

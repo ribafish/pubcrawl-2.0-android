@@ -1,4 +1,4 @@
-package com.ws1617.iosl.pubcrawl20.Database;
+package com.ws1617.iosl.pubcrawl20.database;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -6,11 +6,11 @@ import android.util.Base64;
 import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
-import com.ws1617.iosl.pubcrawl20.DataModels.Event;
-import com.ws1617.iosl.pubcrawl20.DataModels.EventComparator;
-import com.ws1617.iosl.pubcrawl20.DataModels.Person;
-import com.ws1617.iosl.pubcrawl20.DataModels.Pub;
-import com.ws1617.iosl.pubcrawl20.DataModels.TimeSlot;
+import com.ws1617.iosl.pubcrawl20.dataModels.Event;
+import com.ws1617.iosl.pubcrawl20.dataModels.EventComparator;
+import com.ws1617.iosl.pubcrawl20.dataModels.Person;
+import com.ws1617.iosl.pubcrawl20.dataModels.Pub;
+import com.ws1617.iosl.pubcrawl20.dataModels.TimeSlot;
 
 import org.json.JSONArray;
 import org.json.JSONException;

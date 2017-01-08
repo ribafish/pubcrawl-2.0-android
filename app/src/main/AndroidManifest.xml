@@ -37,7 +37,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".NewEvent.NewEventActivity"
+            android:name=".newEvent.NewEventActivity"
             android:parentActivityName=".MainActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait">
@@ -53,15 +53,20 @@
             android:screenOrientation="portrait">
         </activity>
         <activity
-            android:name=".ScanQR.BarcodeCaptureActivity"
+            android:name=".chat.CordovaChat"
+            android:theme="@style/AppTheme"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".scanQR.BarcodeCaptureActivity"
             android:theme="@style/AppTheme"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
             android:label="Read Barcode"/>
 
-        <activity android:name=".Details.EventDetailsActivity" />
-        <activity android:name=".Details.PubDetailsActivity" />
-        <activity android:name=".Details.PersonDetailsActivity" />
+        <activity android:name=".details.EventDetailsActivity" />
+        <activity android:name=".details.PubDetailsActivity" />
+        <activity android:name=".details.PersonDetailsActivity" />
     </application>
 
 </manifest>

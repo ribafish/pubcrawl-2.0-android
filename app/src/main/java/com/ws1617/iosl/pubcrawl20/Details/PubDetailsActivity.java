@@ -1,4 +1,4 @@
-package com.ws1617.iosl.pubcrawl20.Details;
+package com.ws1617.iosl.pubcrawl20.details;
 
 import android.content.Context;
 import android.content.Intent;
@@ -29,9 +29,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.model.LatLng;
-import com.ws1617.iosl.pubcrawl20.DataModels.Pub;
-import com.ws1617.iosl.pubcrawl20.Details.MiniDataModels.EventMini;
-import com.ws1617.iosl.pubcrawl20.Details.MiniDataModels.PersonMini;
+import com.ws1617.iosl.pubcrawl20.dataModels.Pub;
+import com.ws1617.iosl.pubcrawl20.details.MiniDataModels.EventMini;
+import com.ws1617.iosl.pubcrawl20.details.MiniDataModels.PersonMini;
 import com.ws1617.iosl.pubcrawl20.R;
 
 import java.util.ArrayList;

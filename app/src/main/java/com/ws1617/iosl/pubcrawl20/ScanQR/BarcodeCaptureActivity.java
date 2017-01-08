@@ -1,4 +1,4 @@
-package com.ws1617.iosl.pubcrawl20.ScanQR;
+package com.ws1617.iosl.pubcrawl20.scanQR;
 
 /*
  * Copyright (C) The Android Open Source Project
