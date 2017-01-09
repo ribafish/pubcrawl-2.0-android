@@ -2,22 +2,19 @@ package com.ws1617.iosl.pubcrawl20;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.design.widget.TabLayout;
-import android.support.v7.app.AppCompatActivity;
-
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Toast;
-
 
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.vision.barcode.Barcode;
-import com.ws1617.iosl.pubcrawl20.chat.CordovaChat;
 import com.ws1617.iosl.pubcrawl20.newEvent.NewEventActivity;
 import com.ws1617.iosl.pubcrawl20.scanQR.BarcodeCaptureActivity;
 
@@ -104,12 +101,12 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        fabSearch.setOnClickListener(new View.OnClickListener() {
+        fabScanQR.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(context, CordovaChat.class);
+                Intent intent = new Intent(context, BarcodeCaptureActivity.class);
                 context.startActivity(intent);
-                fabMenu.close(false);
+                fabMenu.close(true);
             }
         });
 

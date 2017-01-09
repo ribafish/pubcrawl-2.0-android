@@ -53,11 +53,6 @@
             android:screenOrientation="portrait">
         </activity>
         <activity
-            android:name=".chat.CordovaChat"
-            android:theme="@style/AppTheme"
-            android:configChanges="orientation"
-            android:screenOrientation="portrait"/>
-        <activity
             android:name=".scanQR.BarcodeCaptureActivity"
             android:theme="@style/AppTheme"
             android:configChanges="orientation"
