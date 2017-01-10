@@ -103,6 +103,7 @@ public class RouteFragment extends DialogFragment implements NewEventRouteFragme
     private void addPub(PubMini pub) {
         this.pubs.add(pub);
         adapter.notifyItemChanged(pubs.size());
+        refreshMap();
     }
 
     @Override
@@ -151,6 +152,11 @@ public class RouteFragment extends DialogFragment implements NewEventRouteFragme
         mapFragment = SupportMapFragment.newInstance(options);
         FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
         fragmentTransaction.add(R.id.route_fragment_map, mapFragment).commit();
+        refreshMap();
+
+    }
+
+    private void refreshMap() {
         mapFragment.getMapAsync(new OnMapReadyCallback() {
             @Override
             public void onMapReady(GoogleMap googleMap) {
@@ -185,7 +191,6 @@ public class RouteFragment extends DialogFragment implements NewEventRouteFragme
 
             }
         });
-
     }
 
     /**
