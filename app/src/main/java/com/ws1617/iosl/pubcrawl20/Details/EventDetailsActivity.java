@@ -73,11 +73,11 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
 
     private static final String TAG = "EventDetailsActivity";
 
-    private static final float PERCENTAGE_TO_SHOW_TITLE_AT_TOOLBAR  = 0.75f;
-    private static final float PERCENTAGE_TO_HIDE_TITLE_DETAILS     = 0.3f;
-    private static final int ALPHA_ANIMATIONS_DURATION              = 200;
+    private static final float PERCENTAGE_TO_SHOW_TITLE_AT_TOOLBAR = 0.75f;
+    private static final float PERCENTAGE_TO_HIDE_TITLE_DETAILS = 0.3f;
+    private static final int ALPHA_ANIMATIONS_DURATION = 200;
 
-    private boolean mIsTheTitleVisible          = false;
+    private boolean mIsTheTitleVisible = false;
     private boolean mIsTheTitleContainerVisible = true;
 
     private LinearLayout mCollapsableTitleContainer;
@@ -118,9 +118,8 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
         initDescriptionExpanding();
 
         setupToolbar();
-      //  setupMap();
+        //  setupMap();
         //setupPubsListView();
-
 
 
         // TODO: change to the data load listener or smtn when database is ready
@@ -141,12 +140,12 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
 
         RouteFragment routeFragment = RouteFragment.newInstance();
         FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction().add(R.id.test_place_holder,routeFragment,"Route").commit();
+        fragmentManager.beginTransaction().add(R.id.test_place_holder, routeFragment, "Route").commit();
         routeFragment.setListOfPubs(pubs);
 
     }
 
-    void initVewMode(){
+    void initVewMode() {
         long id = getIntent().getLongExtra("id", -1);
 
         getEvent(id);
@@ -161,14 +160,16 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
         ViewPager viewPager = (ViewPager) findViewById(R.id.event_details_pager);
         TabLayout tabLayout = (TabLayout) findViewById(R.id.event_details_tabDots);
 
-        try{
+        try {
             String eventName = getIntent().getStringExtra("name");
 
             mToolbar.setTitle(eventName);
             mTitle.setText(eventName);
             mSubtitle.setText("Loading...");  //TODO
 
-        } catch (Exception e) { e.printStackTrace(); }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
 
         mAppBarLayout.addOnOffsetChangedListener(this);
@@ -266,14 +267,14 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
             }
         });
         if (participants.size() < 4) {
-            ((Button)findViewById(R.id.event_details_participants_show_all_btn)).setVisibility(View.GONE);
-            ((ImageView)findViewById(R.id.event_details_participants_gradient)).setVisibility(View.GONE);
+            ((Button) findViewById(R.id.event_details_participants_show_all_btn)).setVisibility(View.GONE);
+            ((ImageView) findViewById(R.id.event_details_participants_gradient)).setVisibility(View.GONE);
             ((RelativeLayout) findViewById(R.id.event_details_participants_layout)).getLayoutParams().height = RelativeLayout.LayoutParams.WRAP_CONTENT;
             setListViewHeightBasedOnItems(participantListView);
         } else {
             final int height280 = (int) (280 * getResources().getDisplayMetrics().density);
-            ((Button)findViewById(R.id.event_details_participants_show_all_btn)).setVisibility(View.VISIBLE);
-            ((ImageView)findViewById(R.id.event_details_participants_gradient)).setVisibility(View.VISIBLE);
+            ((Button) findViewById(R.id.event_details_participants_show_all_btn)).setVisibility(View.VISIBLE);
+            ((ImageView) findViewById(R.id.event_details_participants_gradient)).setVisibility(View.VISIBLE);
             ((RelativeLayout) findViewById(R.id.event_details_participants_layout)).getLayoutParams().height = height280;
             findViewById(R.id.event_details_participants_show_all_btn).setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -349,6 +350,7 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
 
     /**
      * Sets ListView height to show all items
+     *
      * @param listView ListView to change height
      * @return the raw height set to the listView
      */
@@ -441,12 +443,8 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
 
     }*/
 
-    /**
-     *  Draws the event on the supplied map
-      * @param map map to draw the event on
-     *  @param unzoom float amount to un-zoom the map
-     */
-    public HashMap<Marker, Long> drawOnMap(GoogleMap map, float unzoom) {
+   
+   /* public HashMap<Marker, Long> drawOnMap(GoogleMap map, float unzoom) {
         Log.d(TAG, "drawOnMap()");
         if (pubs.size() > 0 && map != null) {
             map.clear();
@@ -533,7 +531,7 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
 
         return bitmap;
     }
-
+*/
     /*
 
         Expandable / Collapsable toolbar animation functions
@@ -552,7 +550,7 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
     private void handleToolbarTitleVisibility(float percentage) {
         if (percentage >= PERCENTAGE_TO_SHOW_TITLE_AT_TOOLBAR) {
 
-            if(!mIsTheTitleVisible) {
+            if (!mIsTheTitleVisible) {
                 startAlphaAnimation(mToolbar, ALPHA_ANIMATIONS_DURATION, View.VISIBLE);
                 mIsTheTitleVisible = true;
             }
@@ -568,7 +566,7 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
 
     private void handleAlphaOnTitle(float percentage) {
         if (percentage >= PERCENTAGE_TO_HIDE_TITLE_DETAILS) {
-            if(mIsTheTitleContainerVisible) {
+            if (mIsTheTitleContainerVisible) {
                 startAlphaAnimation(mCollapsableTitleContainer, ALPHA_ANIMATIONS_DURATION, View.INVISIBLE);
                 mIsTheTitleContainerVisible = false;
             }
@@ -582,7 +580,7 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
         }
     }
 
-    public static void startAlphaAnimation (View v, long duration, int visibility) {
+    public static void startAlphaAnimation(View v, long duration, int visibility) {
         AlphaAnimation alphaAnimation = (visibility == View.VISIBLE)
                 ? new AlphaAnimation(0f, 1f)
                 : new AlphaAnimation(1f, 0f);
@@ -602,13 +600,13 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
     // TODO: Change to get it from database when it will be ready
     private void getEvent(long id) {
         ArrayList<Long> dummyIds = new ArrayList<>();
-        dummyIds.add((long)0);
-        dummyIds.add((long)1);
-        dummyIds.add((long)2);
-        dummyIds.add((long)3);
-        dummyIds.add((long)4);
-        dummyIds.add((long)5);
-        dummyIds.add((long)6);
+        dummyIds.add((long) 0);
+        dummyIds.add((long) 1);
+        dummyIds.add((long) 2);
+        dummyIds.add((long) 3);
+        dummyIds.add((long) 4);
+        dummyIds.add((long) 5);
+        dummyIds.add((long) 6);
 
 
         this.event = new Event(
@@ -623,7 +621,7 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
 
         this.event.setEventId(id);
 
-        ArrayList<TimeSlot> timeSlots= new ArrayList<>();
+        ArrayList<TimeSlot> timeSlots = new ArrayList<>();
         timeSlots.add(new TimeSlot(
                 1,
                 new Date(116, 11, 31, 21, 0, 0),
@@ -646,22 +644,22 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
     }
 
     // TODO: Change to get it from database when it will be ready
-    private void getPubMinis (ArrayList<Long> ids, ArrayList<TimeSlot> slots) {
+    private void getPubMinis(ArrayList<Long> ids, ArrayList<TimeSlot> slots) {
         ArrayList<Long> mIds = new ArrayList<>(ids);
         for (TimeSlot t : slots) {
             long id = t.getPubId();
-            this.pubs.add(new PubMini("Dummy Pub " + id, t, id, new LatLng(52.5 + Math.random()*0.1, 13.35 + Math.random()*0.1)));
+            this.pubs.add(new PubMini("Dummy Pub " + id, t, id, new LatLng(52.5 + Math.random() * 0.1, 13.35 + Math.random() * 0.1)));
             mIds.remove(id);
         }
 
         Collections.sort(this.pubs, new PubMiniComparator());
 
         for (Long id : mIds) {
-            this.pubs.add(new PubMini("Dummy Pub " + id, null, id, new LatLng(52.5 + Math.random()*0.1, 13.35 + Math.random()*0.1)));
+            this.pubs.add(new PubMini("Dummy Pub " + id, null, id, new LatLng(52.5 + Math.random() * 0.1, 13.35 + Math.random() * 0.1)));
         }
     }
 
-    private void getParticipants (ArrayList<Long> ids) {
+    private void getParticipants(ArrayList<Long> ids) {
         for (long id : ids) {
             this.participants.add(new PersonMini("Person " + id, id));
         }
@@ -671,7 +669,7 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
     }
 
     // TODO: when databse is ready change this to get it from database
-    private void getOwner (long id) {
+    private void getOwner(long id) {
         owner = new PersonMini("Jack Black", id);
     }
 
