@@ -37,6 +37,7 @@ import com.ws1617.iosl.pubcrawl20.DataModels.Pub;
 import com.ws1617.iosl.pubcrawl20.DataModels.TimeSlot;
 import com.ws1617.iosl.pubcrawl20.Details.MiniDataModels.PubMini;
 import com.ws1617.iosl.pubcrawl20.Details.MiniDataModels.PubMiniComparator;
+import com.ws1617.iosl.pubcrawl20.NewEvent.NewEventRouteFragment;
 import com.ws1617.iosl.pubcrawl20.NewEvent.adapters.SelectedPupListAdapter;
 import com.ws1617.iosl.pubcrawl20.R;
 
@@ -54,11 +55,11 @@ import static android.graphics.Bitmap.Config.ARGB_8888;
  * <p>
  * <p>
  * ??
- * The fragment has two modes: View mode : used to display an already selected list of pubs
- * edit mode : used in event creation, user can select pubs
+ * The fragment has two modes: View mode : used to display an already selected list of pubs. the list items don't response to any click event
+ * edit mode : used in event creation, user can click on list item to edit
  */
 
-public class RouteFragment extends DialogFragment {
+public class RouteFragment extends DialogFragment implements NewEventRouteFragment.IUpdatePubList {
     String TAG = "RouteFragment";
     //View
     View mRootView;
@@ -89,19 +90,28 @@ public class RouteFragment extends DialogFragment {
         initMapView();
         initPubsListView();
         return mRootView;
-
-
     }
 
-
+    /*
+        This function is used to set the list of pubs that should be displayed on the map and on the list ..
+     */
     public void setListOfPubs(List<PubMini> pubs) {
         this.pubs = pubs;
     }
 
 
+    private void addPub(PubMini pub) {
+        this.pubs.add(pub);
+        adapter.notifyItemChanged(pubs.size());
+    }
+
+    @Override
+    public void onNewPub(PubMini pub) {
+        addPub(pub);
+    }
+
     // initViews
     private void initMapView() {
-
         setupMap();
     }
 
@@ -113,39 +123,24 @@ public class RouteFragment extends DialogFragment {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         mPubsListView.setLayoutManager(linearLayoutManager);
 
+        //TODO  OnPubItemClickListener listener should be deleted or not null
         adapter = new SelectedPupListAdapter(pubs, null);
         mPubsListView.setAdapter(adapter);
 
     }
 
-    // TODO: Change to get it from database when it will be ready
-    private void getPubMinis(ArrayList<Long> ids, ArrayList<TimeSlot> slots) {
-        ArrayList<Long> mIds = new ArrayList<>(ids);
-        for (TimeSlot t : slots) {
-            long id = t.getPubId();
-            this.pubs.add(new PubMini("Dummy Pub " + id, t, id, new LatLng(52.5 + Math.random() * 0.1, 13.35 + Math.random() * 0.1)));
-            mIds.remove(id);
-        }
 
-        Collections.sort(this.pubs, new PubMiniComparator());
 
-        for (Long id : mIds) {
-            this.pubs.add(new PubMini("Dummy Pub " + id, null, id, new LatLng(52.5 + Math.random() * 0.1, 13.35 + Math.random() * 0.1)));
-        }
-    }
+
+
 
     /*
-
-        Map functions
-
+     * Map functions
      */
 
     private void setupMap() {
         if (mRootView == null) return;
         Log.d(TAG, "setupMap");
-       // FrameLayout mapContainer = (FrameLayout) mRootView.findViewById(R.id.event_details_map_map);
-//        mapContainer.getLayoutParams().height = mapContainer.getLayoutParams().width;
-
         GoogleMapOptions options = new GoogleMapOptions();
         options.mapType(GoogleMap.MAP_TYPE_NORMAL)
                 .compassEnabled(false)
@@ -160,6 +155,7 @@ public class RouteFragment extends DialogFragment {
             @Override
             public void onMapReady(GoogleMap googleMap) {
                 Log.d(TAG, "onMapReady()");
+                if (pubs == null) return;
                 map = googleMap;
                 map.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {    // Sometimes wouldn't load the map
                     @Override
@@ -191,7 +187,6 @@ public class RouteFragment extends DialogFragment {
         });
 
     }
-
 
     /**
      * Draws the event on the supplied map
@@ -280,5 +275,6 @@ public class RouteFragment extends DialogFragment {
 
         return bitmap;
     }
+
 
 }

@@ -140,10 +140,9 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
         //TODO
 
         RouteFragment routeFragment = RouteFragment.newInstance();
-        routeFragment.setListOfPubs(pubs);
-
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().add(R.id.test_place_holder,routeFragment,"Route").commit();
+        routeFragment.setListOfPubs(pubs);
 
     }
 

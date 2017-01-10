@@ -2,9 +2,11 @@ package com.ws1617.iosl.pubcrawl20.Details.MiniDataModels;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
+import com.ws1617.iosl.pubcrawl20.DataModels.Pub;
 import com.ws1617.iosl.pubcrawl20.DataModels.TimeSlot;
 
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * Created by Gasper Kojek on 12. 12. 2016.
@@ -25,6 +27,13 @@ public class PubMini {
         this.latLng = latLng;
     }
 
+    public PubMini(Pub pub) {
+        this.name = pub.getPubName();//TODO
+        this.timeSlot = null;
+        this.id = pub.getId();
+        this.latLng = pub.getLatLng();
+    }
+
     public String getTimeSlotTimeString() {
         if (timeSlot != null) {
             SimpleDateFormat localDateFormat = new SimpleDateFormat("HH:mm");
@@ -38,7 +47,7 @@ public class PubMini {
 
     @Override
     public boolean equals(Object obj) {
-        return this.id == ((PubMini)obj).id;
+        return this.id == ((PubMini) obj).id;
     }
 
     public String getName() {

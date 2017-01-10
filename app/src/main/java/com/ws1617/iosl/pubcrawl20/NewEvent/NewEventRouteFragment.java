@@ -2,10 +2,9 @@ package com.ws1617.iosl.pubcrawl20.NewEvent;
 
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,20 +12,12 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.google.android.gms.maps.model.LatLng;
-import com.ws1617.iosl.pubcrawl20.DataModels.Event;
-import com.ws1617.iosl.pubcrawl20.DataModels.Pub;
-import com.ws1617.iosl.pubcrawl20.DataModels.TimeSlot;
-import com.ws1617.iosl.pubcrawl20.Details.MiniDataModels.PersonMini;
 import com.ws1617.iosl.pubcrawl20.Details.MiniDataModels.PubMini;
-import com.ws1617.iosl.pubcrawl20.Details.MiniDataModels.PubMiniComparator;
 import com.ws1617.iosl.pubcrawl20.Details.RouteFragment;
 import com.ws1617.iosl.pubcrawl20.NewEvent.adapters.SelectedPupListAdapter;
 import com.ws1617.iosl.pubcrawl20.R;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -38,12 +29,13 @@ public class NewEventRouteFragment extends Fragment implements SelectedPupListAd
     //Views
     View rootView;
     Button mAddPubBtn;
-    RecyclerView mSelectedPupListView;
-    SelectedPupListAdapter adapter;
     PubListDialog mPubItemDialog;
 
     //Data
-    List<PubMini> mSelectedPupsList;
+    List<PubMini> mSelectedPupsList = new ArrayList<>();
+    private ArrayList<PubMini> pubs;
+
+    IUpdatePubList iUpdatePubListInterface;
 
     public NewEventRouteFragment() {
         // Required empty public constructor
@@ -58,43 +50,76 @@ public class NewEventRouteFragment extends Fragment implements SelectedPupListAd
 
         initRouteFragment();
 
+        mAddPubBtn = (Button) rootView.findViewById(R.id.event_new_add_pub);
+        mAddPubBtn.setOnClickListener(addPubClickListener);
+
+
         //initView();
         return rootView;
     }
 
+    //@Override
+   /* public void onAttachFragment(Fragment childFragment) {
+        //super.onAttachFragment(childFragment);
 
-    private Event event;
-    private ArrayList<PubMini> pubs = new ArrayList<>();
-    private ArrayList<PersonMini> participants = new ArrayList<>();
-    private PersonMini owner;
+        try {
+            iUpdatePubListInterface = (IUpdatePubList) childFragment;
+        } catch (ClassCastException ex) {
+            throw new ClassCastException(
+                    childFragment.toString() + " must implement IUpdatePubList");
+        }
+
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        this.onAttachFragment(getParentFragment());
+    }*/
 
     void initRouteFragment() {
-        // this list should come from the DB and from outside the fragment
         // the fragment it self get the data from outsource
 
         //View mode
-        initVewMode();
+        //initVewMode();
         //Edit mode
         //TODO
 
         RouteFragment routeFragment = RouteFragment.newInstance();
+        try {
+            iUpdatePubListInterface = (IUpdatePubList) routeFragment;
+        } catch (ClassCastException ex) {
+
+            throw new ClassCastException(
+                    routeFragment.toString() + " must implement OnPlayerSelectionSetListener");
+        }
+
+        pubs = new ArrayList<>();
         routeFragment.setListOfPubs(pubs);
 
         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-        fragmentManager.beginTransaction().add(R.id.test_place_holder, routeFragment, "Route").commit();
+        fragmentManager.beginTransaction().add(R.id.event_new_selected_pub_list, routeFragment, "Route").commit();
 
     }
 
 
-    void initVewMode() {
+    /*   private Event event;
+
+      private ArrayList<PersonMini> participants = new ArrayList<>();
+    private PersonMini owner;
+
+ //RecyclerView mSelectedPupListView;
+    //SelectedPupListAdapter adapter;
+
+   void initVewMode() {
         long id = getActivity().getIntent().getLongExtra("id", -1);
 
-        getEvent(id);
+       //getEvent(id);
     }
 
 
     // TODO: Change to get it from database when it will be ready
-    private void getEvent(long id) {
+   private void getEvent(long id) {
         ArrayList<Long> dummyIds = new ArrayList<>();
         dummyIds.add((long) 0);
         dummyIds.add((long) 1);
@@ -168,7 +193,7 @@ public class NewEventRouteFragment extends Fragment implements SelectedPupListAd
     private void getOwner(long id) {
         owner = new PersonMini("Jack Black", id);
     }
-
+*/
 
     @Override
     public void setMenuVisibility(boolean menuVisible) {
@@ -214,9 +239,15 @@ public class NewEventRouteFragment extends Fragment implements SelectedPupListAd
         @Override
         public void addPubToList(PubMini newPub) {
             mSelectedPupsList.add(newPub);
-            adapter.notifyItemChanged(mSelectedPupsList.size());
+            // adapter.notifyItemChanged(mSelectedPupsList.size());
+            iUpdatePubListInterface.onNewPub(newPub);
         }
     };
+
+
+    public interface IUpdatePubList {
+        void onNewPub(PubMini pub);
+    }
 
     @Override
     public void onPubItemClicked(int itemPosition) {

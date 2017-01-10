@@ -51,7 +51,7 @@ public class PubListDialog extends DialogFragment {
 
     //Data
     PubMini selectedPub;
-    List<PubMini> pubsList;
+    List<Pub> pubsList;
     List<String> pubsListString;
     GoogleMap mGoogleMap;
 
@@ -143,6 +143,7 @@ public class PubListDialog extends DialogFragment {
 
         mPubsListView = (Spinner) mRootView.findViewById(R.id.pub_dialog_pubs_list);
         mPubsListView.setOnItemSelectedListener(pubListOnItemSelectedListener);
+
         //TODO should be fetched from the DB
         initPubList();
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, pubsListString);
@@ -159,7 +160,7 @@ public class PubListDialog extends DialogFragment {
         pubsList = new ArrayList<>();
         pubsListString = new ArrayList<>();
 
-       /*Pub pub1 = new Pub(1, "pub 1", new LatLng(1, 1), 10);
+       Pub pub1 = new Pub(1, "pub 1", new LatLng(1, 1), 10);
         pubsList.add(pub1);
         pubsListString.add(pub1.getPubName());
 
@@ -174,7 +175,7 @@ public class PubListDialog extends DialogFragment {
         Pub pub4 = new Pub(4, "pub 4", new LatLng(1, 1), 40);
         pubsList.add(pub4);
         pubsListString.add(pub4.getPubName());
-        */
+
 
     }
 
@@ -220,7 +221,7 @@ public class PubListDialog extends DialogFragment {
     AdapterView.OnItemSelectedListener pubListOnItemSelectedListener = new AdapterView.OnItemSelectedListener() {
         @Override
         public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long id) {
-            selectedPub = pubsList.get(pos);
+            selectedPub = new PubMini(pubsList.get(pos));
             selectItem();
         }
 
