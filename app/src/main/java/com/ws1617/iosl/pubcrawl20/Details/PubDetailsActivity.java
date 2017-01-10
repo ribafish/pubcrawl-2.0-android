@@ -27,9 +27,14 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.google.firebase.database.DatabaseException;
 import com.ws1617.iosl.pubcrawl20.DataModels.Pub;
+import com.ws1617.iosl.pubcrawl20.Database.EventDbHelper;
+import com.ws1617.iosl.pubcrawl20.Database.PersonDbHelper;
+import com.ws1617.iosl.pubcrawl20.Database.PubDbHelper;
 import com.ws1617.iosl.pubcrawl20.Details.MiniDataModels.EventMini;
 import com.ws1617.iosl.pubcrawl20.Details.MiniDataModels.PersonMini;
 import com.ws1617.iosl.pubcrawl20.R;
@@ -478,48 +483,42 @@ public class PubDetailsActivity extends AppCompatActivity implements AppBarLayou
      */
 
     private void getPub(long id) {
-        ArrayList<Long> p = new ArrayList<Long>();
-        ArrayList<Long> e = new ArrayList<Long>();
-        for (Long i = 0l; i< 20; i++) {
-            p.add(i);
-            e.add(i);
+        try {
+            pub = new PubDbHelper(this).getPub(id);
+
+            getTopPeople(pub.getTopsListIds());
+            getEvents(pub.getEventsListIds());
+            owner = getPersonMini(pub.getOwnerId());
+        } catch (DatabaseException e) {
+            e.printStackTrace();
+            Toast.makeText(getApplicationContext(),
+                    "Can't find data for Pub with ID " + id, Toast.LENGTH_LONG)
+                    .show();
+            Log.e(TAG, "getPub: id " + id + ", pub == null");
+            return;
         }
 
-        pub = new Pub(id,
-                "Dummy pub "+id,
-                new LatLng(52.5 + Math.random()*0.1, 13.35 + Math.random()*0.1),
-                50,
-                5,
-                4.5,
-                "Mo - Fri: 16.00 - 01.00\nSat: 16.00 - 03.00",
-//                getResources().getString(R.string.lorem),
-                p,
-                e,
-                17l);
+        address = "TODO: get address from LatLng"; // TODO: get address
 
-        address = "Nonexistant street -1";
 
-        getTopPeople(pub.getTopsListIds());
-        getEvents(pub.getEventsListIds());
-        owner = getPersonMini(pub.getOwnerId());
     }
 
-    private PersonMini getPersonMini(long id) {
-        return new PersonMini("Person " + id, id);
+    private PersonMini getPersonMini(long id) throws DatabaseException {
+        return new PersonMini(new PersonDbHelper(this).getPerson(id));
     }
 
-    private EventMini getEventMini(long id) {
-        Date date = Calendar.getInstance().getTime();
-        int newdate = (int) (Math.random() * 30);
-        date.setDate(newdate);
 
-        return new EventMini("Dummy event " + id, id, date);
-
+    private EventMini getEventMini(long id) throws DatabaseException{
+        return new EventMini(new EventDbHelper(this).getEvent(id));
     }
 
     private void getTopPeople(ArrayList<Long> ids) {
         for (long id : ids) {
-            topPersonsList.add(getPersonMini(id));
+            try {
+                topPersonsList.add(getPersonMini(id));
+            } catch (DatabaseException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -528,12 +527,16 @@ public class PubDetailsActivity extends AppCompatActivity implements AppBarLayou
         Log.d(TAG, "rightnow: " + rightNow.toString());
 
         for (long id : ids) {
-            EventMini e = getEventMini(id);
-            Log.d(TAG, "dummy eventMini date: " + e.getDate().toString());
-            if (e.getDate().compareTo(rightNow) >= 1) {
-                futureEventsList.add(e);
-            } else {
-                pastEventsList.add(e);
+            try {
+                EventMini e = getEventMini(id);
+                Log.d(TAG, "eventMini date: " + e.getDate().toString());
+                if (e.getDate().compareTo(rightNow) >= 1) {
+                    futureEventsList.add(e);
+                } else {
+                    pastEventsList.add(e);
+                }
+            } catch (DatabaseException e1) {
+                e1.printStackTrace();
             }
         }
     }

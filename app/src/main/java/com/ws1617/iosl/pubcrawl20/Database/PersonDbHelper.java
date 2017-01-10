@@ -6,8 +6,10 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.graphics.Bitmap;
+import android.provider.ContactsContract;
 import android.util.Log;
 
+import com.google.firebase.database.DatabaseException;
 import com.ws1617.iosl.pubcrawl20.DataModels.Person;
 
 import java.util.ArrayList;
@@ -189,7 +191,7 @@ public class PersonDbHelper extends SQLiteOpenHelper {
         deleteLists(person);
     }
 
-    public Person getPerson(long person_id) {
+    public Person getPerson(long person_id) throws DatabaseException {
         Person person = getListlessPerson(person_id);
 
         person.setEventIds(getEventIds(person_id));
@@ -201,7 +203,7 @@ public class PersonDbHelper extends SQLiteOpenHelper {
         return person;
     }
 
-    public Person getListlessPerson(long person_id) {
+    public Person getListlessPerson(long person_id) throws DatabaseException {
         SQLiteDatabase db = this.getReadableDatabase();
         Person person = new Person(person_id);
 
@@ -221,14 +223,13 @@ public class PersonDbHelper extends SQLiteOpenHelper {
 
             c.close();
         } else {
-            Log.e(TAG, "Can't find person with id " + person_id);
-            Log.e(TAG, "Cursor is null or database empty");
-            return null;
+            Log.e(TAG, "Can't find person with id " + person_id );
+            throw new DatabaseException("Can't find person with id " + person_id + ". Cursor is null or database empty");
         }
         return person;
     }
 
-    public ArrayList<Long> getEventIds(long person_id) {
+    public ArrayList<Long> getEventIds(long person_id) throws DatabaseException{
         SQLiteDatabase db = this.getReadableDatabase();
         ArrayList<Long> list = new ArrayList<>();
 
@@ -243,7 +244,7 @@ public class PersonDbHelper extends SQLiteOpenHelper {
             } while (c.moveToNext());
             c.close();
         } else {
-            Log.e(TAG, "Cursor is null or database empty");
+            Log.w(TAG, "getEventIds: Cursor is null or database empty");
         }
 
         return list;
@@ -264,7 +265,7 @@ public class PersonDbHelper extends SQLiteOpenHelper {
             } while (c.moveToNext());
             c.close();
         } else {
-            Log.e(TAG, "Cursor is null or database empty");
+            Log.w(TAG, "getFriendIds: Cursor is null or database empty");
         }
 
         return list;
@@ -285,7 +286,7 @@ public class PersonDbHelper extends SQLiteOpenHelper {
             } while (c.moveToNext());
             c.close();
         } else {
-            Log.e(TAG, "Cursor is null or database empty");
+            Log.w(TAG, "getFavouritePubIds: Cursor is null or database empty");
         }
 
         return list;
@@ -306,7 +307,7 @@ public class PersonDbHelper extends SQLiteOpenHelper {
             } while (c.moveToNext());
             c.close();
         } else {
-            Log.e(TAG, "Cursor is null or database empty");
+            Log.w(TAG, "getFavouritePubIds: Cursor is null or database empty");
         }
 
         return list;
@@ -327,7 +328,7 @@ public class PersonDbHelper extends SQLiteOpenHelper {
             } while (c.moveToNext());
             c.close();
         } else {
-            Log.e(TAG, "Cursor is null or database empty");
+            Log.w(TAG, "getFavouritePubIds: Cursor is null or database empty");
         }
 
         return list;

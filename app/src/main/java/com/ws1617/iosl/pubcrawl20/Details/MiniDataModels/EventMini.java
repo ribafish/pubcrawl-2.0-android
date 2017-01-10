@@ -1,5 +1,7 @@
 package com.ws1617.iosl.pubcrawl20.Details.MiniDataModels;
 
+import com.ws1617.iosl.pubcrawl20.DataModels.Event;
+
 import java.util.Date;
 
 /**
@@ -16,6 +18,12 @@ public class EventMini {
         this.name = name;
         this.id = id;
         this.date = date;
+    }
+
+    public EventMini(Event event) {
+        this.name = event.getEventName();
+        this.id = event.getId();
+        this.date = event.getDate();
     }
 
     public String getName() {

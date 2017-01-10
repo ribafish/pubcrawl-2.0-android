@@ -9,6 +9,7 @@ import android.graphics.Bitmap;
 import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.google.firebase.database.DatabaseException;
 import com.ws1617.iosl.pubcrawl20.DataModels.Event;
 import com.ws1617.iosl.pubcrawl20.DataModels.TimeSlot;
 
@@ -205,9 +206,9 @@ public class EventDbHelper extends SQLiteOpenHelper {
         return event;
     }
 
-    public Event getListlessEvent(long event_id) {
+    public Event getListlessEvent(long event_id) throws DatabaseException {
         SQLiteDatabase db = this.getReadableDatabase();
-        Event event = new Event();
+        Event event;
 
         String query = "SELECT * FROM " +
                 TABLE_EVENTS +  " WHERE " +
@@ -221,15 +222,14 @@ public class EventDbHelper extends SQLiteOpenHelper {
 
             c.close();
         } else {
-            Log.e(TAG, "Can't find event with id " + event_id);
-            Log.e(TAG, "Cursor is null or database empty");
-            return null;
+            Log.e(TAG, "Can't find event with id " + event_id );
+            throw new DatabaseException("Can't find event with id " + event_id + ". Cursor is null or database empty");
         }
 
         return event;
     }
 
-    public Event getEvent (long event_id) {
+    public Event getEvent (long event_id) throws DatabaseException {
         Event event = getListlessEvent(event_id);
 
         event.setTimeSlotList(getTimeSlots(event_id));
@@ -259,7 +259,7 @@ public class EventDbHelper extends SQLiteOpenHelper {
             } while (c.moveToNext());
             c.close();
         } else {
-            Log.e(TAG, "Cursor is null or database empty");
+            Log.w(TAG, "getTimeSlots: Cursor is null or database empty");
         }
 
         return timeSlots;
@@ -280,7 +280,7 @@ public class EventDbHelper extends SQLiteOpenHelper {
             } while (c.moveToNext());
             c.close();
         } else {
-            Log.e(TAG, "Cursor is null or database empty");
+            Log.w(TAG, "getParticipantIds: Cursor is null or database empty");
         }
 
         return list;
@@ -301,13 +301,13 @@ public class EventDbHelper extends SQLiteOpenHelper {
             } while (c.moveToNext());
             c.close();
         } else {
-            Log.e(TAG, "Cursor is null or database empty");
+            Log.w(TAG, "getPubIds: Cursor is null or database empty");
         }
 
         return list;
     }
 
-    public ArrayList<Event> getAllEvents() {
+    public ArrayList<Event> getAllEvents() throws DatabaseException {
         SQLiteDatabase db = this.getReadableDatabase();
         ArrayList<Event> events = new ArrayList<>();
 
@@ -323,6 +323,8 @@ public class EventDbHelper extends SQLiteOpenHelper {
                 events.add(event);
             } while (c.moveToNext());
             c.close();
+        } else {
+            throw new DatabaseException("Database not initialized, cursor is null");
         }
 
         Log.d(TAG, "getAllEvents: Found " + events.size() + " events");
