@@ -1,4 +1,4 @@
-package com.ws1617.iosl.pubcrawl20.Details.MiniDataModels;
+package com.ws1617.iosl.pubcrawl20.Details;
 
 import android.graphics.Bitmap;
 
@@ -10,7 +10,7 @@ import com.ws1617.iosl.pubcrawl20.DataModels.Person;
  */
 
 
-public class PersonMini {
+class PersonMini {
     String name;
     long id;
     Bitmap image;

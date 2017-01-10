@@ -10,14 +10,13 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.provider.ContactsContract;
+import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
@@ -55,17 +54,12 @@ import com.ws1617.iosl.pubcrawl20.DataModels.TimeSlot;
 import com.ws1617.iosl.pubcrawl20.Database.EventDbHelper;
 import com.ws1617.iosl.pubcrawl20.Database.PersonDbHelper;
 import com.ws1617.iosl.pubcrawl20.Database.PubDbHelper;
-import com.ws1617.iosl.pubcrawl20.Details.MiniDataModels.PubMini;
-import com.ws1617.iosl.pubcrawl20.Details.MiniDataModels.PubMiniComparator;
 import com.ws1617.iosl.pubcrawl20.R;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.HashMap;
-
-import com.ws1617.iosl.pubcrawl20.Details.MiniDataModels.PersonMini;
 
 import static android.graphics.Bitmap.Config.ARGB_8888;
 

@@ -1,4 +1,4 @@
-package com.ws1617.iosl.pubcrawl20.DisplayEvents.MiniDataModels;
+package com.ws1617.iosl.pubcrawl20.DisplayEvents;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -9,7 +9,7 @@ import com.ws1617.iosl.pubcrawl20.DataModels.Pub;
  * Github: https://github.com/ribafish/
  */
 
-public class PubMini {
+class PubMini {
     private long id;
     private String name;
     private LatLng latLng;

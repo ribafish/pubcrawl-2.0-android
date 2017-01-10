@@ -5,12 +5,12 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
@@ -29,14 +29,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.database.DatabaseException;
 import com.ws1617.iosl.pubcrawl20.DataModels.Pub;
 import com.ws1617.iosl.pubcrawl20.Database.EventDbHelper;
 import com.ws1617.iosl.pubcrawl20.Database.PersonDbHelper;
 import com.ws1617.iosl.pubcrawl20.Database.PubDbHelper;
-import com.ws1617.iosl.pubcrawl20.Details.MiniDataModels.EventMini;
-import com.ws1617.iosl.pubcrawl20.Details.MiniDataModels.PersonMini;
 import com.ws1617.iosl.pubcrawl20.R;
 
 import java.util.ArrayList;

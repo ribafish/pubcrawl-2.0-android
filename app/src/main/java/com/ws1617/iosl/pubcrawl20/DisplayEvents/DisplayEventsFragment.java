@@ -46,9 +46,6 @@ import com.ws1617.iosl.pubcrawl20.Database.RequestQueueHelper;
 import com.ws1617.iosl.pubcrawl20.Details.EventDetailsActivity;
 import com.ws1617.iosl.pubcrawl20.Details.PersonDetailsActivity;
 import com.ws1617.iosl.pubcrawl20.Details.PubDetailsActivity;
-import com.ws1617.iosl.pubcrawl20.DisplayEvents.MiniDataModels.EventMini;
-import com.ws1617.iosl.pubcrawl20.DisplayEvents.MiniDataModels.EventMiniComparator;
-import com.ws1617.iosl.pubcrawl20.DisplayEvents.MiniDataModels.PubMini;
 import com.ws1617.iosl.pubcrawl20.R;
 
 import java.util.ArrayList;

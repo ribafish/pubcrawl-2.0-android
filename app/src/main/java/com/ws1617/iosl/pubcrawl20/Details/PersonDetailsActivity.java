@@ -4,12 +4,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
@@ -33,14 +33,9 @@ import com.ws1617.iosl.pubcrawl20.DataModels.Person;
 import com.ws1617.iosl.pubcrawl20.Database.EventDbHelper;
 import com.ws1617.iosl.pubcrawl20.Database.PersonDbHelper;
 import com.ws1617.iosl.pubcrawl20.Database.PubDbHelper;
-import com.ws1617.iosl.pubcrawl20.Details.MiniDataModels.EventMini;
-import com.ws1617.iosl.pubcrawl20.Details.MiniDataModels.PersonMini;
-import com.ws1617.iosl.pubcrawl20.Details.MiniDataModels.PubMini;
 import com.ws1617.iosl.pubcrawl20.R;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 
 public class PersonDetailsActivity extends AppCompatActivity implements AppBarLayout.OnOffsetChangedListener {
 

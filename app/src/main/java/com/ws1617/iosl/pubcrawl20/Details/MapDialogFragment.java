@@ -1,6 +1,5 @@
 package com.ws1617.iosl.pubcrawl20.Details;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;

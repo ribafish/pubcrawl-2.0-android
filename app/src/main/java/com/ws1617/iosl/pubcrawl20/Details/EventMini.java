@@ -1,4 +1,4 @@
-package com.ws1617.iosl.pubcrawl20.Details.MiniDataModels;
+package com.ws1617.iosl.pubcrawl20.Details;
 
 import com.ws1617.iosl.pubcrawl20.DataModels.Event;
 
@@ -9,7 +9,7 @@ import java.util.Date;
  * Github: https://github.com/ribafish/
  */
 
-public class EventMini {
+class EventMini {
     private String name;
     private long id;
     private Date date;
