@@ -2,7 +2,9 @@ package com.ws1617.iosl.pubcrawl20;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -88,24 +90,15 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        final SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
         fabScanQR.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(context, BarcodeCaptureActivity.class);
                 //TODO Add preferences for camera ui
-                //SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
-                intent.putExtra(BarcodeCaptureActivity.AutoFocus, true);
-                intent.putExtra(BarcodeCaptureActivity.UseFlash, true);
+                intent.putExtra(BarcodeCaptureActivity.AutoFocus, sharedPrefs.getBoolean("barcode_focus", false));
+                intent.putExtra(BarcodeCaptureActivity.UseFlash, sharedPrefs.getBoolean("barcode_flash", false));
                 startActivityForResult(intent, RC_BARCODE_CAPTURE);
-                fabMenu.close(true);
-            }
-        });
-
-        fabScanQR.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(context, BarcodeCaptureActivity.class);
-                context.startActivity(intent);
                 fabMenu.close(true);
             }
         });
