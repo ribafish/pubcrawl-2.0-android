@@ -56,9 +56,6 @@ public class PubListDialog extends DialogFragment {
     GoogleMap mGoogleMap;
 
 
-    public PubListDialog() {
-    }
-
     public void setPubListListener(OnSelectPubDialogDismissed onSelectPubDialogDismissed) {
         this.onSelectPubDialogDismissed = onSelectPubDialogDismissed;
     }

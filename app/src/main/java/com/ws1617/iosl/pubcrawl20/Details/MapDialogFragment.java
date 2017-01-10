@@ -6,6 +6,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -29,19 +30,20 @@ import java.util.HashMap;
  * Github: https://github.com/ribafish/
  */
 
-public class MapDialogFragment extends DialogFragment implements OnMapReadyCallback{
+public class MapDialogFragment extends DialogFragment implements OnMapReadyCallback {
     private static final String TAG = "MapDialogFragment";
     private HashMap<Marker, Long> markerIds;
+    OnMapLoader onMapLoaderInterface;
 
-
-    public MapDialogFragment() {
-
-    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setStyle(DialogFragment.STYLE_NO_FRAME, getTheme());
+    }
+
+    public void setOnMapLoaderListener( OnMapLoader onMapLoaderInterface){
+        this.onMapLoaderInterface = onMapLoaderInterface;
     }
 
     @Nullable
@@ -65,6 +67,7 @@ public class MapDialogFragment extends DialogFragment implements OnMapReadyCallb
         return v;
     }
 
+
     @Override
     public void onMapReady(final GoogleMap googleMap) {
         Log.d(TAG, "onMapReady");
@@ -74,7 +77,7 @@ public class MapDialogFragment extends DialogFragment implements OnMapReadyCallb
         googleMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
             @Override
             public void onMapLoaded() {
-                markerIds = ((EventDetailsActivity) getActivity()).drawOnMap(googleMap, 0.5f);
+                markerIds = onMapLoaderInterface.drawOnDialogMap(googleMap);//()).drawOnMap(googleMap, 0.5f);
             }
         });
 
@@ -97,8 +100,7 @@ public class MapDialogFragment extends DialogFragment implements OnMapReadyCallb
     }
 
     @Override
-    public void onResume()
-    {
+    public void onResume() {
         super.onResume();
 
         DisplayMetrics displayMetrics = new DisplayMetrics();
@@ -106,11 +108,16 @@ public class MapDialogFragment extends DialogFragment implements OnMapReadyCallb
         final int padding = (int) (2 * 26 * getResources().getDisplayMetrics().density + 0.5f);
 
         Window window = getDialog().getWindow();
-        window.setLayout(displayMetrics.widthPixels - padding/2, displayMetrics.heightPixels - padding);
+        window.setLayout(displayMetrics.widthPixels - padding / 2, displayMetrics.heightPixels - padding);
         window.setGravity(Gravity.CENTER);
-        if(Build.VERSION.SDK_INT >= 22){
+        if (Build.VERSION.SDK_INT >= 22) {
             window.setElevation(10.0f);
         }
+    }
+
+
+    public interface OnMapLoader {
+        HashMap<Marker, Long> drawOnDialogMap(GoogleMap googleMap);
     }
 }
 

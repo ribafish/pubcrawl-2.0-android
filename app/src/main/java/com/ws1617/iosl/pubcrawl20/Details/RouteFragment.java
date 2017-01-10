@@ -156,6 +156,7 @@ public class RouteFragment extends DialogFragment implements NewEventRouteFragme
 
     }
 
+
     private void refreshMap() {
         mapFragment.getMapAsync(new OnMapReadyCallback() {
             @Override
@@ -174,6 +175,12 @@ public class RouteFragment extends DialogFragment implements NewEventRouteFragme
                             public void onMapClick(LatLng latLng) {
                                 FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
                                 MapDialogFragment mapDialogFragment = new MapDialogFragment();
+                                mapDialogFragment.setOnMapLoaderListener(new MapDialogFragment.OnMapLoader() {
+                                    @Override
+                                    public HashMap<Marker, Long> drawOnDialogMap(GoogleMap googleMap) {
+                                        return drawOnMap(googleMap, 0.5f);
+                                    }
+                                });
                                 mapDialogFragment.show(ft, "map_dialog_fragment");
                             }
                         });
@@ -182,6 +189,12 @@ public class RouteFragment extends DialogFragment implements NewEventRouteFragme
                             public boolean onMarkerClick(Marker marker) {
                                 FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
                                 MapDialogFragment mapDialogFragment = new MapDialogFragment();
+                                mapDialogFragment.setOnMapLoaderListener(new MapDialogFragment.OnMapLoader() {
+                                    @Override
+                                    public HashMap<Marker, Long> drawOnDialogMap(GoogleMap googleMap) {
+                                        return drawOnMap(googleMap, 0.5f);
+                                    }
+                                });
                                 mapDialogFragment.show(ft, "map_dialog_fragment");
                                 return true;
                             }

@@ -443,7 +443,7 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
 
     }*/
 
-   
+
    /* public HashMap<Marker, Long> drawOnMap(GoogleMap map, float unzoom) {
         Log.d(TAG, "drawOnMap()");
         if (pubs.size() > 0 && map != null) {
