@@ -41,7 +41,7 @@ public class TestActivity extends FragmentActivity  {
         //Edit mode
         //TODO
 
-        RouteFragment routeFragment = RouteFragment.newInstance();
+        RouteFragment routeFragment = RouteFragment.newInstance(RouteFragment.DIALOG_STATUS.VIEW_MODE);
         routeFragment.setListOfPubs(pubs);
 
         FragmentManager fragmentManager = getSupportFragmentManager();

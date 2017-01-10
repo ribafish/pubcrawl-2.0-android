@@ -8,10 +8,8 @@ import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.provider.CalendarContract;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -19,7 +17,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
+import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -33,16 +31,13 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
-import com.ws1617.iosl.pubcrawl20.DataModels.Pub;
-import com.ws1617.iosl.pubcrawl20.DataModels.TimeSlot;
 import com.ws1617.iosl.pubcrawl20.Details.MiniDataModels.PubMini;
-import com.ws1617.iosl.pubcrawl20.Details.MiniDataModels.PubMiniComparator;
 import com.ws1617.iosl.pubcrawl20.NewEvent.NewEventRouteFragment;
+import com.ws1617.iosl.pubcrawl20.NewEvent.PubListDialog;
 import com.ws1617.iosl.pubcrawl20.NewEvent.adapters.SelectedPupListAdapter;
 import com.ws1617.iosl.pubcrawl20.R;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -50,16 +45,16 @@ import static android.graphics.Bitmap.Config.ARGB_8888;
 
 /**
  * Created by Haneen on 15/12/2016.
- * This fragment has two parts,  a list of Pubs and the map that shows these pubs
+ * This fragment has two parts,  a list of Pubs and the map that shows these mSelectedPupsList
  * inputs : pubList
  * <p>
  * <p>
  * ??
- * The fragment has two modes: View mode : used to display an already selected list of pubs. the list items don't response to any click event
+ * The fragment has two modes: View mode : used to display an already selected list of mSelectedPupsList. the list items don't response to any click event
  * edit mode : used in event creation, user can click on list item to edit
  */
 
-public class RouteFragment extends DialogFragment implements NewEventRouteFragment.IUpdatePubList {
+public class RouteFragment extends DialogFragment implements NewEventRouteFragment.IUpdatePubList, SelectedPupListAdapter.OnPubItemClickListener {
     String TAG = "RouteFragment";
     //View
     View mRootView;
@@ -71,12 +66,28 @@ public class RouteFragment extends DialogFragment implements NewEventRouteFragme
     //PubsListView
     RecyclerView mPubsListView;
     SelectedPupListAdapter adapter;
+    TextView title;
     //Data
-    List<PubMini> pubs;
+    List<PubMini> mSelectedPupsList;
 
-    public static RouteFragment newInstance() {
+    //display options
+    DIALOG_STATUS currentDialogStatus = DIALOG_STATUS.VIEW_MODE;
+
+    //static
+    public enum DIALOG_STATUS {
+        VIEW_MODE, EDIT_MODE
+    }
+
+    static String STATUS = "status";
+
+    //Dialog
+    PubListDialog mPubItemDialog;
+
+
+    public static RouteFragment newInstance(DIALOG_STATUS dialogStatus) {
         RouteFragment routeFragment = new RouteFragment();
         Bundle bundle = new Bundle();
+        bundle.putSerializable(STATUS, dialogStatus);
         routeFragment.setArguments(bundle);
         return routeFragment;
     }
@@ -87,22 +98,25 @@ public class RouteFragment extends DialogFragment implements NewEventRouteFragme
 
         mRootView = inflater.inflate(R.layout.fragment_route, container, false);
 
+        if (getArguments() != null)
+            currentDialogStatus = (DIALOG_STATUS) getArguments().getSerializable(STATUS);
+
         initMapView();
         initPubsListView();
         return mRootView;
     }
 
     /*
-        This function is used to set the list of pubs that should be displayed on the map and on the list ..
+        This function is used to set the list of mSelectedPupsList that should be displayed on the map and on the list ..
      */
     public void setListOfPubs(List<PubMini> pubs) {
-        this.pubs = pubs;
+        this.mSelectedPupsList = pubs;
     }
 
 
     private void addPub(PubMini pub) {
-        this.pubs.add(pub);
-        adapter.notifyItemChanged(pubs.size());
+        this.mSelectedPupsList.add(pub);
+        adapter.notifyItemChanged(mSelectedPupsList.size());
         refreshMap();
     }
 
@@ -117,22 +131,34 @@ public class RouteFragment extends DialogFragment implements NewEventRouteFragme
     }
 
     private void initPubsListView() {
-        if (pubs == null) return;
-        mPubsListView = (RecyclerView) mRootView.findViewById(R.id.route_fragment_pubListView);
+        if (mSelectedPupsList == null) return;
 
+        title = (TextView) mRootView.findViewById(R.id.route_fragment_map_title);
+        mPubsListView = (RecyclerView) mRootView.findViewById(R.id.route_fragment_pubListView);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         mPubsListView.setLayoutManager(linearLayoutManager);
 
         //TODO  OnPubItemClickListener listener should be deleted or not null
-        adapter = new SelectedPupListAdapter(pubs, null);
+        adapter = new SelectedPupListAdapter(mSelectedPupsList, this);
         mPubsListView.setAdapter(adapter);
 
+        if (currentDialogStatus.equals(DIALOG_STATUS.EDIT_MODE)) {
+            title.setVisibility(View.GONE);
+        } else {
+            title.setVisibility(View.VISIBLE);
+        }
     }
 
 
+    @Override
+    public void onPubItemClicked(int itemPosition) {
+        mPubItemDialog = new PubListDialog();
+        //mPubItemDialog.setPubListListener(onSelectPubDialogDismissed);
+        mPubItemDialog.showSelectedPub(mSelectedPupsList.get(itemPosition));
+        mPubItemDialog.show(getChildFragmentManager(), TAG + "pub");
 
-
+    }
 
 
     /*
@@ -162,7 +188,7 @@ public class RouteFragment extends DialogFragment implements NewEventRouteFragme
             @Override
             public void onMapReady(GoogleMap googleMap) {
                 Log.d(TAG, "onMapReady()");
-                if (pubs == null) return;
+                if (mSelectedPupsList == null) return;
                 map = googleMap;
                 map.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {    // Sometimes wouldn't load the map
                     @Override
@@ -214,13 +240,13 @@ public class RouteFragment extends DialogFragment implements NewEventRouteFragme
      */
     public HashMap<Marker, Long> drawOnMap(GoogleMap map, float unzoom) {
         Log.d(TAG, "drawOnMap()");
-        if (pubs.size() > 0 && map != null) {
+        if (mSelectedPupsList.size() > 0 && map != null) {
             map.clear();
             HashMap<Marker, Long> markerLongHashMap = new HashMap<>();
             ArrayList<LatLng> latLngs = new ArrayList<>();
             LatLngBounds.Builder builder = new LatLngBounds.Builder();
-            for (int i = 0; i < pubs.size(); i++) {
-                PubMini pub = pubs.get(i);
+            for (int i = 0; i < mSelectedPupsList.size(); i++) {
+                PubMini pub = mSelectedPupsList.get(i);
 
                 Marker marker = map.addMarker(new MarkerOptions()
                         .position(pub.getLatLng())

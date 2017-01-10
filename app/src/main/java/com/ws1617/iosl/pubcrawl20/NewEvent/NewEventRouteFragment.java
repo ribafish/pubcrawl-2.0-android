@@ -23,7 +23,7 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class NewEventRouteFragment extends Fragment implements SelectedPupListAdapter.OnPubItemClickListener {
+public class NewEventRouteFragment extends Fragment  {
 
     static final String TAG = "NewEventRouteFragment";
     //Views
@@ -56,7 +56,7 @@ public class NewEventRouteFragment extends Fragment implements SelectedPupListAd
 
     void initRouteFragment() {
 
-        RouteFragment routeFragment = RouteFragment.newInstance();
+        RouteFragment routeFragment = RouteFragment.newInstance(RouteFragment.DIALOG_STATUS.EDIT_MODE);
         try {
             iUpdatePubListInterface = routeFragment;
         } catch (ClassCastException ex) {
@@ -83,14 +83,6 @@ public class NewEventRouteFragment extends Fragment implements SelectedPupListAd
         }
     }
 
-    @Override
-    public void onPubItemClicked(int itemPosition) {
-        if (mPubItemDialog != null) {
-            mPubItemDialog.setPubListListener(onSelectPubDialogDismissed);
-            mPubItemDialog.showSelectedPub(mSelectedPupsList.get(itemPosition));
-            mPubItemDialog.show(getChildFragmentManager(), TAG + "pub");
-        }
-    }
 
     View.OnClickListener addPubClickListener = new View.OnClickListener() {
         @Override

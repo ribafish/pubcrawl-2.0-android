@@ -138,7 +138,7 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
         //Edit mode
         //TODO
 
-        RouteFragment routeFragment = RouteFragment.newInstance();
+        RouteFragment routeFragment = RouteFragment.newInstance(RouteFragment.DIALOG_STATUS.VIEW_MODE);
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().add(R.id.test_place_holder, routeFragment, "Route").commit();
         routeFragment.setListOfPubs(pubs);
@@ -334,15 +334,15 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
     }
 
  /*   private void setupPubsListView() {
-        pubAdapter = new PubAdapter(this, pubs);
+        pubAdapter = new PubAdapter(this, mSelectedPupsList);
         pubListView = (ListView) findViewById(R.id.event_details_pubListView);
         pubListView.setAdapter(pubAdapter);
         pubListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent intent = new Intent(context, PubDetailsActivity.class);
-                intent.putExtra("name", pubs.get(i).getName());
-                intent.putExtra("id", pubs.get(i).getId());
+                intent.putExtra("name", mSelectedPupsList.get(i).getName());
+                intent.putExtra("id", mSelectedPupsList.get(i).getId());
                 startActivity(intent);
             }
         });
@@ -446,13 +446,13 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
 
    /* public HashMap<Marker, Long> drawOnMap(GoogleMap map, float unzoom) {
         Log.d(TAG, "drawOnMap()");
-        if (pubs.size() > 0 && map != null) {
+        if (mSelectedPupsList.size() > 0 && map != null) {
             map.clear();
             HashMap<Marker, Long> markerLongHashMap = new HashMap<>();
             ArrayList<LatLng> latLngs = new ArrayList<>();
             LatLngBounds.Builder builder = new LatLngBounds.Builder();
-            for (int i = 0; i < pubs.size(); i++) {
-                PubMini pub = pubs.get(i);
+            for (int i = 0; i < mSelectedPupsList.size(); i++) {
+                PubMini pub = mSelectedPupsList.get(i);
 
                 Marker marker = map.addMarker(new MarkerOptions()
                         .position(pub.getLatLng())
@@ -480,7 +480,7 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
     }
 
     public long getPubIdFromMarker(Marker marker) throws ArrayIndexOutOfBoundsException{
-        for (PubMini pub : pubs) {
+        for (PubMini pub : mSelectedPupsList) {
             if(marker == pub.getMarker()) return pub.getId();
         }
         throw new ArrayIndexOutOfBoundsException("Can't find pub");
