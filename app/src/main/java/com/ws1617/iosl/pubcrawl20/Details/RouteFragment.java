@@ -153,6 +153,7 @@ public class RouteFragment extends DialogFragment implements NewEventRouteFragme
 
     @Override
     public void onPubItemClicked(int itemPosition) {
+        if (currentDialogStatus == DIALOG_STATUS.VIEW_MODE) return;
         mPubItemDialog = new PubListDialog();
         //mPubItemDialog.setPubListListener(onSelectPubDialogDismissed);
         mPubItemDialog.showSelectedPub(mSelectedPupsList.get(itemPosition));
