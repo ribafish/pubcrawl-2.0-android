@@ -17,6 +17,8 @@ import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.vision.barcode.Barcode;
+import com.ws1617.iosl.pubcrawl20.details.EventDetailsActivity;
+import com.ws1617.iosl.pubcrawl20.details.PubDetailsActivity;
 import com.ws1617.iosl.pubcrawl20.newEvent.NewEventActivity;
 import com.ws1617.iosl.pubcrawl20.scanQR.BarcodeCaptureActivity;
 
@@ -111,7 +113,22 @@ public class MainActivity extends AppCompatActivity {
             if (resultCode == CommonStatusCodes.SUCCESS) {
                 if (data != null) {
                     Barcode barcode = data.getParcelableExtra(BarcodeCaptureActivity.BarcodeObject);
-                    Toast.makeText(this, barcode.displayValue, Toast.LENGTH_LONG).show();
+                    if(barcode.displayValue.isEmpty())
+                        Toast.makeText(this, "failed", Toast.LENGTH_LONG).show();
+                    else {
+                        if(barcode.displayValue.contains("/event/")) {
+                            Intent intent = new Intent(context, EventDetailsActivity.class);
+                            intent.putExtra("name", "Test Event");
+                            intent.putExtra("id", (long) 14);
+                            startActivity(intent);
+                        }
+                        if(barcode.displayValue.contains("/pub/")) {
+                            Intent intent = new Intent(context, PubDetailsActivity.class);
+                            intent.putExtra("name", "Test Pub");
+                            intent.putExtra("id", (long) 9);
+                            startActivity(intent);
+                        }
+                    }
                 } else {
                     Toast.makeText(this, "failed", Toast.LENGTH_LONG).show();
                 }

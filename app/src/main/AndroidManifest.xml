@@ -35,14 +35,7 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-                <data
-                    android:scheme="http"
-                    android:host="pubcrawl.de"/>
-            </intent-filter>
+
         </activity>
         <activity
             android:name=".newEvent.NewEventActivity"
@@ -66,8 +59,28 @@
             android:theme="@style/AppTheme"
             android:screenOrientation="portrait"
             android:label="Read Barcode"/>
-        <activity android:name=".details.EventDetailsActivity" />
-        <activity android:name=".details.PubDetailsActivity" />
+        <activity android:name=".details.EventDetailsActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data
+                    android:scheme="http"
+                    android:host="pubcrawl.de"
+                    android:pathPrefix="/event"/>
+            </intent-filter>
+        </activity>
+        <activity android:name=".details.PubDetailsActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data
+                    android:scheme="http"
+                    android:host="pubcrawl.de"
+                    android:pathPrefix="/pub"/>
+            </intent-filter>
+        </activity>
         <activity android:name=".details.PersonDetailsActivity" />
     </application>
 
