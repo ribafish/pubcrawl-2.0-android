@@ -1,12 +1,10 @@
 package com.ws1617.iosl.pubcrawl20.NewEvent;
 
 import android.app.TimePickerDialog;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentTransaction;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,7 +22,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.ws1617.iosl.pubcrawl20.Details.MiniDataModels.PubMini;
+import com.ws1617.iosl.pubcrawl20.DataModels.Pub;
 import com.ws1617.iosl.pubcrawl20.R;
 
 import java.util.ArrayList;
@@ -34,9 +32,9 @@ import java.util.List;
  * Created by Haneen on 11/29/2016.
  */
 
-public class PubListDialog extends DialogFragment {
+public class SelectPubDialog extends DialogFragment {
 
-    static final String TAG = "PubListDialog";
+    static final String TAG = "SelectPubDialog";
 
     //Listeners
     OnSelectPubDialogDismissed onSelectPubDialogDismissed;
@@ -49,8 +47,8 @@ public class PubListDialog extends DialogFragment {
     View mRootView;
 
     //Data
-    PubMini selectedPub;
-    List<PubMini> pubsList;
+    Pub selectedPub;
+    List<Pub> pubsList;
     List<String> pubsListString;
     GoogleMap mGoogleMap;
     Integer pubPosition;
@@ -80,7 +78,7 @@ public class PubListDialog extends DialogFragment {
 
     }
 
-    public void showSelectedPub(PubMini pub) {
+    public void showSelectedPub(Pub pub) {
 
         // there is two lists. one is the selected list and the other is the full list
         // the itemPosition parameter that we get here is the position of the clicked item in the selected list
@@ -153,20 +151,20 @@ public class PubListDialog extends DialogFragment {
         pubsList = new ArrayList<>();
         pubsListString = new ArrayList<>();
 
-        PubMini pub1 = new PubMini("Dummy Pub " + 1, null, 1, new LatLng(52.5 + Math.random() * 0.1, 13.35 + Math.random() * 0.1));
+        Pub pub1 = new Pub("Dummy Pub " + 1, null, 1, new LatLng(52.5 + Math.random() * 0.1, 13.35 + Math.random() * 0.1));
         pubsList.add(pub1);
         pubsListString.add(pub1.getName());
 
-        PubMini pub2 = new PubMini("Dummy Pub " + 2, null, 1, new LatLng(52.5 + Math.random() * 0.1, 13.35 + Math.random() * 0.1));
+        Pub pub2 = new Pub("Dummy Pub " + 2, null, 1, new LatLng(52.5 + Math.random() * 0.1, 13.35 + Math.random() * 0.1));
         // new Pub(2, "pub 2", new LatLng(1, 1), 20);
         pubsList.add(pub2);
         pubsListString.add(pub2.getName());
 
-        PubMini pub3 = new PubMini("Dummy Pub " + 3, null, 1, new LatLng(52.5 + Math.random() * 0.1, 13.35 + Math.random() * 0.1));
+        Pub pub3 = new Pub("Dummy Pub " + 3, null, 1, new LatLng(52.5 + Math.random() * 0.1, 13.35 + Math.random() * 0.1));
         pubsList.add(pub3);
         pubsListString.add(pub3.getName());
 
-        PubMini pub4 = new PubMini("Dummy Pub " + 4, null, 1, new LatLng(52.5 + Math.random() * 0.1, 13.35 + Math.random() * 0.1));
+        Pub pub4 = new Pub("Dummy Pub " + 4, null, 1, new LatLng(52.5 + Math.random() * 0.1, 13.35 + Math.random() * 0.1));
         pubsList.add(pub4);
         pubsListString.add(pub4.getName());
 
@@ -230,6 +228,6 @@ public class PubListDialog extends DialogFragment {
     }
 
     interface OnSelectPubDialogDismissed {
-        void addPubToList(PubMini newPub);
+        void addPubToList(Pub newPub);
     }
 }

@@ -10,6 +10,7 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.TabLayout;
@@ -17,7 +18,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
@@ -35,6 +35,7 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -48,19 +49,18 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.firebase.database.DatabaseException;
 import com.ws1617.iosl.pubcrawl20.DataModels.Event;
 import com.ws1617.iosl.pubcrawl20.DataModels.TimeSlot;
-import com.ws1617.iosl.pubcrawl20.Details.MiniDataModels.PubMini;
-import com.ws1617.iosl.pubcrawl20.Details.MiniDataModels.PubMiniComparator;
+import com.ws1617.iosl.pubcrawl20.Database.EventDbHelper;
+import com.ws1617.iosl.pubcrawl20.Database.PersonDbHelper;
+import com.ws1617.iosl.pubcrawl20.Database.PubDbHelper;
 import com.ws1617.iosl.pubcrawl20.R;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.HashMap;
-
-import com.ws1617.iosl.pubcrawl20.Details.MiniDataModels.PersonMini;
 
 import static android.graphics.Bitmap.Config.ARGB_8888;
 
@@ -321,7 +321,7 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
             SimpleDateFormat localDateFormat = new SimpleDateFormat("E, MMM d, yyyy 'at' HH:mm");
             mSubtitle.setText(localDateFormat.format(event.getDate()));
             ((TextView) findViewById(R.id.event_details_starts)).setText(localDateFormat.format(event.getDate()));
-            ((TextView) findViewById(R.id.event_details_id)).setText(String.valueOf(event.getEventId()));
+            ((TextView) findViewById(R.id.event_details_id)).setText(String.valueOf(event.getId()));
             ((TextView) findViewById(R.id.event_details_tracked)).setText(event.isTracked() ? "Tracked" : "Not tracked");
             ((TextView) findViewById(R.id.event_details_description)).setText(event.getDescription());
         }
@@ -446,7 +446,15 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
 
    /* public HashMap<Marker, Long> drawOnMap(GoogleMap map, float unzoom) {
         Log.d(TAG, "drawOnMap()");
+<<<<<<< HEAD
         if (mSelectedPupsList.size() > 0 && map != null) {
+=======
+        if (this.event == null) {
+            Log.e(TAG, "drawOnMap: event == null");
+            return null;
+        }
+        if (pubs.size() > 0 && map != null) {
+>>>>>>> master
             map.clear();
             HashMap<Marker, Long> markerLongHashMap = new HashMap<>();
             ArrayList<LatLng> latLngs = new ArrayList<>();
@@ -597,80 +605,64 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
 
      */
 
-    // TODO: Change to get it from database when it will be ready
     private void getEvent(long id) {
-        ArrayList<Long> dummyIds = new ArrayList<>();
-        dummyIds.add((long) 0);
-        dummyIds.add((long) 1);
-        dummyIds.add((long) 2);
-        dummyIds.add((long) 3);
-        dummyIds.add((long) 4);
-        dummyIds.add((long) 5);
-        dummyIds.add((long) 6);
 
+        try {
+            this.event = new EventDbHelper(this).getEvent(id);
 
-        this.event = new Event(
-                "Dummy event " + id,
-                new Date(116, 11, 31, 20, 0, 0),
-                getResources().getString(R.string.lorem),
-                true,
-                dummyIds,
-                12,
-                dummyIds
-        );
-
-        this.event.setEventId(id);
-
-        ArrayList<TimeSlot> timeSlots = new ArrayList<>();
-        timeSlots.add(new TimeSlot(
-                1,
-                new Date(116, 11, 31, 21, 0, 0),
-                new Date(116, 11, 31, 22, 0, 0)
-        ));
-        timeSlots.add(new TimeSlot(
-                0,
-                new Date(116, 11, 31, 22, 0, 0),
-                new Date(116, 11, 31, 23, 0, 0)
-        ));
-        timeSlots.add(new TimeSlot(
-                2,
-                new Date(116, 11, 31, 20, 0, 0),
-                new Date(116, 11, 31, 21, 0, 0)
-        ));
-        this.event.setTimeSlotList(timeSlots);
-        getPubMinis(this.event.getPubIds(), this.event.getTimeSlotList());
-        getParticipants(this.event.getParticipantIds());
-        getOwner(this.event.getOwnerId());
+            getPubMinis(this.event.getPubIds(), this.event.getTimeSlotList());
+            getParticipants(this.event.getParticipantIds());
+            getOwner(this.event.getOwnerId());
+        } catch (DatabaseException e) {
+            e.printStackTrace();
+            Toast.makeText(getApplicationContext(),
+                    "Can't find data for Event with ID " + id, Toast.LENGTH_LONG)
+                    .show();
+            Log.e(TAG, "getEvent: id " + id + ", event == null");
+        }
     }
 
-    // TODO: Change to get it from database when it will be ready
-    private void getPubMinis(ArrayList<Long> ids, ArrayList<TimeSlot> slots) {
+    private void getPubMinis (ArrayList<Long> ids, ArrayList<TimeSlot> slots) {
         ArrayList<Long> mIds = new ArrayList<>(ids);
         for (TimeSlot t : slots) {
-            long id = t.getPubId();
-            this.pubs.add(new PubMini("Dummy Pub " + id, t, id, new LatLng(52.5 + Math.random() * 0.1, 13.35 + Math.random() * 0.1)));
-            mIds.remove(id);
+            try {
+                long id = t.getPubId();
+                this.pubs.add(new PubMini(new PubDbHelper(this).getPub(id), t));
+                mIds.remove(id);
+            } catch (DatabaseException de) {
+                de.printStackTrace();
+            }
         }
 
         Collections.sort(this.pubs, new PubMiniComparator());
 
         for (Long id : mIds) {
-            this.pubs.add(new PubMini("Dummy Pub " + id, null, id, new LatLng(52.5 + Math.random() * 0.1, 13.35 + Math.random() * 0.1)));
+
+            try {
+                this.pubs.add(new PubMini(new PubDbHelper(this).getPub(id), null));
+            } catch (DatabaseException de) {
+                de.printStackTrace();
+            }
         }
     }
 
     private void getParticipants(ArrayList<Long> ids) {
         for (long id : ids) {
-            this.participants.add(new PersonMini("Person " + id, id));
-        }
-        for (int i = ids.size(); i < 20; i++) {
-            this.participants.add(new PersonMini("Person " + i, i));
+            try {
+                this.participants.add(new PersonMini(new PersonDbHelper(this).getPerson(id)));
+            } catch (DatabaseException e) {
+                e.printStackTrace();
+            }
         }
     }
 
-    // TODO: when databse is ready change this to get it from database
-    private void getOwner(long id) {
-        owner = new PersonMini("Jack Black", id);
+
+    private void getOwner (long id) {
+        try {
+            owner = new PersonMini(new PersonDbHelper(this).getPerson(id));
+        } catch (DatabaseException e) {
+            e.printStackTrace();
+        }
     }
 
 }

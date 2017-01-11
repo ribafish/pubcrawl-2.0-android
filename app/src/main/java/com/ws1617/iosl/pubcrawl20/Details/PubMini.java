@@ -1,4 +1,4 @@
-package com.ws1617.iosl.pubcrawl20.Details.MiniDataModels;
+package com.ws1617.iosl.pubcrawl20.Details;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -13,7 +13,7 @@ import java.util.Date;
  * Github: https://github.com/ribafish/
  */
 
-public class PubMini {
+class PubMini {
     String name;
     TimeSlot timeSlot;
     long id;
@@ -27,9 +27,10 @@ public class PubMini {
         this.latLng = latLng;
     }
 
-    public PubMini(Pub pub) {
-        this.name = pub.getPubName();//TODO
-        this.timeSlot = null;
+
+    public PubMini(Pub pub, TimeSlot timeSlot) {
+        this.name = pub.getPubName();
+        this.timeSlot = timeSlot;
         this.id = pub.getId();
         this.latLng = pub.getLatLng();
     }

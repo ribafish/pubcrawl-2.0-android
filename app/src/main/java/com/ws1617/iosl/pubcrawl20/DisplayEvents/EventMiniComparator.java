@@ -1,4 +1,4 @@
-package com.ws1617.iosl.pubcrawl20.DisplayEvents.MiniDataModels;
+package com.ws1617.iosl.pubcrawl20.DisplayEvents;
 
 import java.util.Comparator;
 
@@ -7,7 +7,7 @@ import java.util.Comparator;
  * Github: https://github.com/ribafish/
  */
 
-public class EventMiniComparator implements Comparator<EventMini> {
+class EventMiniComparator implements Comparator<EventMini> {
     public static final int DATE = 1;
     public static final int ID = 2;
     public static final int NAME = 3;

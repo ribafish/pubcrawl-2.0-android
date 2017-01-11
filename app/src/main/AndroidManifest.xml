@@ -37,13 +37,6 @@
             </intent-filter>
         </activity>
 
-        <activity
-            android:name=".Details.TestActivity"
-            android:configChanges="orientation"
-            android:screenOrientation="portrait">
-
-        </activity>
-
 
         <activity
             android:name=".NewEvent.NewEventActivity"

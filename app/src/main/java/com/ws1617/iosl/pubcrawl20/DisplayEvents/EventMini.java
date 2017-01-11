@@ -1,4 +1,4 @@
-package com.ws1617.iosl.pubcrawl20.DisplayEvents.MiniDataModels;
+package com.ws1617.iosl.pubcrawl20.DisplayEvents;
 
 import android.graphics.Color;
 
@@ -14,7 +14,7 @@ import java.util.List;
  * Github: https://github.com/ribafish/
  */
 
-public class EventMini {
+class EventMini {
     private long eventId;
     private String name;
     private Date date;
@@ -28,7 +28,7 @@ public class EventMini {
     }
 
     public EventMini(Event event) {
-        this.eventId = event.getEventId();
+        this.eventId = event.getId();
         this.name = event.getEventName();
         this.date = event.getDate();
         this.description = event.getDescription();

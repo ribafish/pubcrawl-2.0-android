@@ -2,7 +2,6 @@ package com.ws1617.iosl.pubcrawl20.NewEvent;
 
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.view.Gravity;
@@ -12,9 +11,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.ws1617.iosl.pubcrawl20.Details.MiniDataModels.PubMini;
+import com.ws1617.iosl.pubcrawl20.DataModels.Pub;
 import com.ws1617.iosl.pubcrawl20.Details.RouteFragment;
-import com.ws1617.iosl.pubcrawl20.NewEvent.adapters.SelectedPupListAdapter;
 import com.ws1617.iosl.pubcrawl20.R;
 
 import java.util.ArrayList;
@@ -29,11 +27,11 @@ public class NewEventRouteFragment extends Fragment  {
     //Views
     View rootView;
     Button mAddPubBtn;
-    PubListDialog mPubItemDialog;
+    SelectPubDialog mPubItemDialog;
 
     //Data
-    List<PubMini> mSelectedPupsList = new ArrayList<>();
-    private ArrayList<PubMini> pubs;
+    List<Pub> mSelectedPupsList = new ArrayList<>();
+    private ArrayList<Pub> pubs;
 
     IUpdatePubList iUpdatePubListInterface;
 
@@ -87,15 +85,15 @@ public class NewEventRouteFragment extends Fragment  {
     View.OnClickListener addPubClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            mPubItemDialog = new PubListDialog();
+            mPubItemDialog = new SelectPubDialog();
             mPubItemDialog.setPubListListener(onSelectPubDialogDismissed);
             mPubItemDialog.show(getChildFragmentManager(), TAG + "pub");
         }
     };
 
-    PubListDialog.OnSelectPubDialogDismissed onSelectPubDialogDismissed = new PubListDialog.OnSelectPubDialogDismissed() {
+    SelectPubDialog.OnSelectPubDialogDismissed onSelectPubDialogDismissed = new SelectPubDialog.OnSelectPubDialogDismissed() {
         @Override
-        public void addPubToList(PubMini newPub) {
+        public void addPubToList(Pub newPub) {
             mSelectedPupsList.add(newPub);
             iUpdatePubListInterface.onNewPub(newPub);
             //TODO init the map as well
@@ -105,6 +103,6 @@ public class NewEventRouteFragment extends Fragment  {
 
 
     public interface IUpdatePubList {
-        void onNewPub(PubMini pub);
+        void onNewPub(Pub pub);
     }
 }

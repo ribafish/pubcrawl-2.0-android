@@ -31,9 +31,8 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
-import com.ws1617.iosl.pubcrawl20.Details.MiniDataModels.PubMini;
 import com.ws1617.iosl.pubcrawl20.NewEvent.NewEventRouteFragment;
-import com.ws1617.iosl.pubcrawl20.NewEvent.PubListDialog;
+import com.ws1617.iosl.pubcrawl20.NewEvent.SelectPubDialog;
 import com.ws1617.iosl.pubcrawl20.NewEvent.adapters.SelectedPupListAdapter;
 import com.ws1617.iosl.pubcrawl20.R;
 
@@ -81,7 +80,7 @@ public class RouteFragment extends DialogFragment implements NewEventRouteFragme
     static String STATUS = "status";
 
     //Dialog
-    PubListDialog mPubItemDialog;
+    SelectPubDialog mPubItemDialog;
 
 
     public static RouteFragment newInstance(DIALOG_STATUS dialogStatus) {
@@ -154,7 +153,7 @@ public class RouteFragment extends DialogFragment implements NewEventRouteFragme
     @Override
     public void onPubItemClicked(int itemPosition) {
         if (currentDialogStatus == DIALOG_STATUS.VIEW_MODE) return;
-        mPubItemDialog = new PubListDialog();
+        mPubItemDialog = new SelectPubDialog();
         //mPubItemDialog.setPubListListener(onSelectPubDialogDismissed);
         mPubItemDialog.showSelectedPub(mSelectedPupsList.get(itemPosition));
         mPubItemDialog.show(getChildFragmentManager(), TAG + "pub");

@@ -39,7 +39,7 @@ public class EventComparator implements Comparator<Event> {
                 result = event.getDate().compareTo(t1.getDate());
                 break;
             case ID:
-                long l = event.getEventId() - t1.getEventId();
+                long l = event.getId() - t1.getId();
                 if (l > Integer.MAX_VALUE) l = Integer.MAX_VALUE;
                 else if (l < Integer.MIN_VALUE) l = Integer.MIN_VALUE;
                 result = (int) l;

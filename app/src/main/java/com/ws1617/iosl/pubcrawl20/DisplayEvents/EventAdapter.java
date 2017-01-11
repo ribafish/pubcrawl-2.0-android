@@ -12,7 +12,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.ws1617.iosl.pubcrawl20.Details.EventDetailsActivity;
-import com.ws1617.iosl.pubcrawl20.DisplayEvents.MiniDataModels.EventMini;
 import com.ws1617.iosl.pubcrawl20.R;
 
 import java.text.SimpleDateFormat;

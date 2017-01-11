@@ -1,7 +1,9 @@
 package com.ws1617.iosl.pubcrawl20.DataModels;
 
+import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Polyline;
 
 import java.util.ArrayList;
@@ -14,12 +16,14 @@ import java.util.List;
  */
 
 public class Event {
-    private long eventId;
+    private long Id;
     private String eventName;
     private Date date;
     private String description;
     private boolean tracked;
     private long ownerId;
+    private Bitmap image;
+    private LatLng minLatLng, maxLatLng;
 
     private ArrayList<TimeSlot> timeSlotList = new ArrayList<>();
     private ArrayList<Long> participantIds = new ArrayList<>();
@@ -29,8 +33,8 @@ public class Event {
     public Event() {
     }
 
-    public Event(long eventId) {
-        this.eventId = eventId;
+    public Event(long Id) {
+        this.Id = Id;
     }
 
     public Event(String eventName, Date date, String description, boolean tracked) {
@@ -137,18 +141,18 @@ public class Event {
 
     }
 
-    public long getEventId() {
-        return eventId;
+    public long getId() {
+        return Id;
     }
 
-    public void setEventId(long eventId) {
-        this.eventId = eventId;
+    public void setId(long id) {
+        this.Id = id;
     }
 
     @Override
     public String toString() {
         return "Event{" +
-                "eventId=" + eventId +
+                "Id=" + Id +
                 ", eventName='" + eventName + '\'' +
                 ", date=" + date +
                 ", description='" + description + '\'' +
@@ -166,7 +170,7 @@ public class Event {
 
         Event event = (Event) o;
 
-        return eventId == event.eventId;
+        return Id == event.Id;
 
     }
 
@@ -190,4 +194,27 @@ public class Event {
         this.polyline = polyline;
     }
 
+    public Bitmap getImage() {
+        return image;
+    }
+
+    public void setImage(Bitmap image) {
+        this.image = image;
+    }
+
+    public LatLng getMinLatLng() {
+        return minLatLng;
+    }
+
+    public void setMinLatLng(LatLng minLatLng) {
+        this.minLatLng = minLatLng;
+    }
+
+    public LatLng getMaxLatLng() {
+        return maxLatLng;
+    }
+
+    public void setMaxLatLng(LatLng maxLatLng) {
+        this.maxLatLng = maxLatLng;
+    }
 }
