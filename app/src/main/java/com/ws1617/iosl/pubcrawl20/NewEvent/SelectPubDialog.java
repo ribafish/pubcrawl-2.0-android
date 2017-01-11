@@ -23,6 +23,8 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.ws1617.iosl.pubcrawl20.DataModels.Pub;
+import com.ws1617.iosl.pubcrawl20.DataModels.SelectedPub;
+import com.ws1617.iosl.pubcrawl20.DataModels.TimeSlot;
 import com.ws1617.iosl.pubcrawl20.R;
 
 import java.util.ArrayList;
@@ -151,22 +153,25 @@ public class SelectPubDialog extends DialogFragment {
         pubsList = new ArrayList<>();
         pubsListString = new ArrayList<>();
 
-        Pub pub1 = new Pub("Dummy Pub " + 1, null, 1, new LatLng(52.5 + Math.random() * 0.1, 13.35 + Math.random() * 0.1));
+        Pub pub1 = new Pub(1, "pub 1", new LatLng(1, 1), 20);//new Pub("Dummy Pub " + 1, null, 1, new LatLng(52.5 + Math.random() * 0.1, 13.35 + Math.random() * 0.1));
         pubsList.add(pub1);
-        pubsListString.add(pub1.getName());
+        pubsListString.add(pub1.getPubName());
 
-        Pub pub2 = new Pub("Dummy Pub " + 2, null, 1, new LatLng(52.5 + Math.random() * 0.1, 13.35 + Math.random() * 0.1));
-        // new Pub(2, "pub 2", new LatLng(1, 1), 20);
+        Pub pub2 = //new Pub("Dummy Pub " + 2, null, 1, new LatLng(52.5 + Math.random() * 0.1, 13.35 + Math.random() * 0.1));
+        new Pub(2, "pub 2", new LatLng(1, 1), 20);
         pubsList.add(pub2);
-        pubsListString.add(pub2.getName());
+        pubsListString.add(pub2.getPubName());
 
-        Pub pub3 = new Pub("Dummy Pub " + 3, null, 1, new LatLng(52.5 + Math.random() * 0.1, 13.35 + Math.random() * 0.1));
+        Pub pub3 =
+                new Pub(3, "pub 3", new LatLng(1, 1), 20);
+        // new Pub("Dummy Pub " + 3, null, 1, new LatLng(52.5 + Math.random() * 0.1, 13.35 + Math.random() * 0.1));
         pubsList.add(pub3);
-        pubsListString.add(pub3.getName());
+        pubsListString.add(pub3.getPubName());
 
-        Pub pub4 = new Pub("Dummy Pub " + 4, null, 1, new LatLng(52.5 + Math.random() * 0.1, 13.35 + Math.random() * 0.1));
+        Pub pub4 =  new Pub(4, "pub 4", new LatLng(1, 1), 20);
+                // new Pub("Dummy Pub " + 4, null, 1, new LatLng(52.5 + Math.random() * 0.1, 13.35 + Math.random() * 0.1));
         pubsList.add(pub4);
-        pubsListString.add(pub4.getName());
+        pubsListString.add(pub4.getPubName());
 
     }
 
@@ -176,10 +181,13 @@ public class SelectPubDialog extends DialogFragment {
             switch (view.getId()) {
                 case R.id.pub_dialog_pub_done: {
                     dismiss();
-                    if (selectedPub != null)
-                        onSelectPubDialogDismissed.addPubToList(selectedPub);
+                    if (selectedPub != null){
+                        SelectedPub sb = new SelectedPub(selectedPub,
+                                new TimeSlot(selectedPub.getId(),null,null));
+                        onSelectPubDialogDismissed.addPubToList(sb);
 
                     break;
+                    }
                 }
                 case R.id.pub_dialog_visit_from_date_picker: {
                     new TimePickerDialog(getContext(), onTimeFromSetListener, 12, 00, true).show();
@@ -223,11 +231,11 @@ public class SelectPubDialog extends DialogFragment {
     };
 
     private void selectItem() {
-        mPubName.setText(this.selectedPub.getName());
-        mPubSize.setText(String.valueOf(this.selectedPub.getTimeSlot()));
+        mPubName.setText(this.selectedPub.getPubName());
+        mPubSize.setText(String.valueOf(this.selectedPub.getSize()));
     }
 
     interface OnSelectPubDialogDismissed {
-        void addPubToList(Pub newPub);
+        void addPubToList(SelectedPub newPub);
     }
 }

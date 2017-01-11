@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.ws1617.iosl.pubcrawl20.DataModels.Pub;
+import com.ws1617.iosl.pubcrawl20.DataModels.SelectedPub;
 import com.ws1617.iosl.pubcrawl20.Details.RouteFragment;
 import com.ws1617.iosl.pubcrawl20.R;
 
@@ -30,10 +31,9 @@ public class NewEventRouteFragment extends Fragment  {
     SelectPubDialog mPubItemDialog;
 
     //Data
-    List<Pub> mSelectedPupsList = new ArrayList<>();
-    private ArrayList<Pub> pubs;
+    List<SelectedPub> mSelectedPupsList = new ArrayList<>();
 
-    IUpdatePubList iUpdatePubListInterface;
+    UpdatePubList updatePubListInterface;
 
 
     @Override
@@ -56,15 +56,14 @@ public class NewEventRouteFragment extends Fragment  {
 
         RouteFragment routeFragment = RouteFragment.newInstance(RouteFragment.DIALOG_STATUS.EDIT_MODE);
         try {
-            iUpdatePubListInterface = routeFragment;
+            updatePubListInterface = routeFragment;
         } catch (ClassCastException ex) {
 
             throw new ClassCastException(
                     routeFragment.toString() + " must implement OnPlayerSelectionSetListener");
         }
 
-        pubs = new ArrayList<>();
-        routeFragment.setListOfPubs(pubs);
+        routeFragment.setListOfPubs(mSelectedPupsList);
 
         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
         fragmentManager.beginTransaction().add(R.id.event_new_selected_pub_list, routeFragment, "Route").commit();
@@ -74,7 +73,7 @@ public class NewEventRouteFragment extends Fragment  {
     @Override
     public void setMenuVisibility(boolean menuVisible) {
         super.setMenuVisibility(menuVisible);
-        if (menuVisible && pubs.size() == 0) {
+        if (menuVisible && mSelectedPupsList.size() == 0) {
             Toast toast = Toast.makeText(getContext(), "Click on + to add Pubs", Toast.LENGTH_LONG);
             toast.setGravity(Gravity.CENTER, 0, 0);
             toast.show();
@@ -93,16 +92,16 @@ public class NewEventRouteFragment extends Fragment  {
 
     SelectPubDialog.OnSelectPubDialogDismissed onSelectPubDialogDismissed = new SelectPubDialog.OnSelectPubDialogDismissed() {
         @Override
-        public void addPubToList(Pub newPub) {
+        public void addPubToList(SelectedPub newPub) {
             mSelectedPupsList.add(newPub);
-            iUpdatePubListInterface.onNewPub(newPub);
+            updatePubListInterface.onNewPub(newPub);
             //TODO init the map as well
         }
     };
 
 
 
-    public interface IUpdatePubList {
-        void onNewPub(Pub pub);
+    public interface UpdatePubList {
+        void onNewPub(SelectedPub pub);
     }
 }
