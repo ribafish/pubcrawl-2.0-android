@@ -6,19 +6,30 @@ import com.google.android.gms.maps.model.Marker;
 import java.text.SimpleDateFormat;
 
 /**
- * Created by Haneen on 11/01/2017.
+ * Created by Haneen on 12/01/2017.
  */
 
-public class SelectedPub {
+public class PubMiniModel {
 
-    Pub pub;
+    String name;
     TimeSlot timeSlot;
+    long id;
+    LatLng latLng;
     Marker marker;
 
-
-    public SelectedPub(Pub pub, TimeSlot timeSlot) {
-        this.pub = pub;
+    public PubMiniModel(String name, TimeSlot timeSlot, long id, LatLng latLng) {
+        this.name = name;
         this.timeSlot = timeSlot;
+        this.id = id;
+        this.latLng = latLng;
+    }
+
+
+    public PubMiniModel(Pub pub, TimeSlot timeSlot) {
+        this.name = pub.getPubName();
+        this.timeSlot = timeSlot;
+        this.id = pub.getId();
+        this.latLng = pub.getLatLng();
     }
 
     public String getTimeSlotTimeString() {
@@ -32,16 +43,17 @@ public class SelectedPub {
         }
     }
 
-    public Pub getPub(){
-        return pub;
+    @Override
+    public boolean equals(Object obj) {
+        return this.id == ((PubMiniModel) obj).id;
     }
 
     public String getName() {
-        return pub.getPubName();
+        return name;
     }
 
     public void setName(String name) {
-        pub.setPubName(name);
+        this.name = name;
     }
 
     public TimeSlot getTimeSlot() {
@@ -53,19 +65,19 @@ public class SelectedPub {
     }
 
     public long getId() {
-        return pub.getId();
+        return id;
     }
 
     public void setId(long id) {
-        pub.setId(id);
+        this.id = id;
     }
 
     public LatLng getLatLng() {
-        return pub.getLatLng();
+        return latLng;
     }
 
     public void setLatLng(LatLng latLng) {
-        pub.setLatLng(latLng);
+        this.latLng = latLng;
     }
 
     public Marker getMarker() {

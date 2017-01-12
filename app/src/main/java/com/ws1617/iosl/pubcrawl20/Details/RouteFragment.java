@@ -31,7 +31,7 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
-import com.ws1617.iosl.pubcrawl20.DataModels.SelectedPub;
+import com.ws1617.iosl.pubcrawl20.DataModels.PubMiniModel;
 import com.ws1617.iosl.pubcrawl20.NewEvent.NewEventRouteFragment;
 import com.ws1617.iosl.pubcrawl20.NewEvent.SelectPubDialog;
 import com.ws1617.iosl.pubcrawl20.NewEvent.adapters.SelectedPupListAdapter;
@@ -68,7 +68,7 @@ public class RouteFragment extends DialogFragment implements NewEventRouteFragme
     SelectedPupListAdapter adapter;
     TextView title;
     //Data
-    List<SelectedPub> mSelectedPupsList;
+    List<PubMiniModel> mSelectedPupsList;
 
     //display options
     DIALOG_STATUS currentDialogStatus = DIALOG_STATUS.VIEW_MODE;
@@ -109,19 +109,19 @@ public class RouteFragment extends DialogFragment implements NewEventRouteFragme
     /*
         This function is used to set the list of mSelectedPupsList that should be displayed on the map and on the list ..
      */
-    public void setListOfPubs(List<SelectedPub> pubs) {
+    public void setListOfPubs(List<PubMiniModel> pubs) {
         this.mSelectedPupsList = pubs;
     }
 
 
-    private void addPub(SelectedPub pub) {
+    private void addPub(PubMiniModel pub) {
         this.mSelectedPupsList.add(pub);
         adapter.notifyItemChanged(mSelectedPupsList.size());
         refreshMap();
     }
 
     @Override
-    public void onNewPub(SelectedPub pub) {
+    public void onNewPub(PubMiniModel pub) {
         addPub(pub);
     }
 
@@ -156,11 +156,11 @@ public class RouteFragment extends DialogFragment implements NewEventRouteFragme
         if (currentDialogStatus == DIALOG_STATUS.VIEW_MODE) return;
         mPubItemDialog = new SelectPubDialog();
         //mPubItemDialog.setPubListListener(onSelectPubDialogDismissed);
-        mPubItemDialog.showSelectedPub(mSelectedPupsList.get(itemPosition).getPub());
+        //TODO get pub by pubID
+       // mPubItemDialog.showSelectedPub(mSelectedPupsList.get(itemPosition).getPub());
         mPubItemDialog.show(getChildFragmentManager(), TAG + "pub");
 
     }
-
 
     /*
      * Map functions
@@ -247,7 +247,7 @@ public class RouteFragment extends DialogFragment implements NewEventRouteFragme
             ArrayList<LatLng> latLngs = new ArrayList<>();
             LatLngBounds.Builder builder = new LatLngBounds.Builder();
             for (int i = 0; i < mSelectedPupsList.size(); i++) {
-                SelectedPub pub = mSelectedPupsList.get(i);
+                PubMiniModel pub = mSelectedPupsList.get(i);
 
                 Marker marker = map.addMarker(new MarkerOptions()
                         .position(pub.getLatLng())

@@ -6,8 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.ws1617.iosl.pubcrawl20.DataModels.Pub;
-import com.ws1617.iosl.pubcrawl20.DataModels.SelectedPub;
+import com.ws1617.iosl.pubcrawl20.DataModels.PubMiniModel;
 import com.ws1617.iosl.pubcrawl20.R;
 
 import java.util.List;
@@ -17,11 +16,11 @@ import java.util.List;
  */
 
 public class SelectedPupListAdapter extends RecyclerView.Adapter<SelectedPupListAdapter.pupViewHolder> {
-    List<SelectedPub> selectedPups;
+    List<PubMiniModel> selectedPups;
     OnPubItemClickListener mOnPubItemClickListener;
 
 
-    public SelectedPupListAdapter(List<SelectedPub> selectedPups, OnPubItemClickListener listener) {
+    public SelectedPupListAdapter(List<PubMiniModel> selectedPups, OnPubItemClickListener listener) {
         this.selectedPups = selectedPups;
         mOnPubItemClickListener = listener;
     }
@@ -36,7 +35,7 @@ public class SelectedPupListAdapter extends RecyclerView.Adapter<SelectedPupList
 
     @Override
     public void onBindViewHolder(pupViewHolder holder, int position) {
-        SelectedPub pub = selectedPups.get(position);
+        PubMiniModel pub = selectedPups.get(position);
         holder.setPubData(pub);
 
     }
@@ -58,7 +57,7 @@ public class SelectedPupListAdapter extends RecyclerView.Adapter<SelectedPupList
             pubTime = (TextView) itemView.findViewById(R.id.selected_pub_item_time);
         }
 
-        public void setPubData(SelectedPub pub) {
+        public void setPubData(PubMiniModel pub) {
             pubName.setText(pub.getName());
             pubTime.setText(pub.getTimeSlotTimeString());
         }

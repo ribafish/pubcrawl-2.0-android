@@ -23,7 +23,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.ws1617.iosl.pubcrawl20.DataModels.Pub;
-import com.ws1617.iosl.pubcrawl20.DataModels.SelectedPub;
+import com.ws1617.iosl.pubcrawl20.DataModels.PubMiniModel;
 import com.ws1617.iosl.pubcrawl20.DataModels.TimeSlot;
 import com.ws1617.iosl.pubcrawl20.R;
 
@@ -182,7 +182,7 @@ public class SelectPubDialog extends DialogFragment {
                 case R.id.pub_dialog_pub_done: {
                     dismiss();
                     if (selectedPub != null){
-                        SelectedPub sb = new SelectedPub(selectedPub,
+                        PubMiniModel sb = new PubMiniModel(selectedPub,
                                 new TimeSlot(selectedPub.getId(),null,null));
                         onSelectPubDialogDismissed.addPubToList(sb);
 
@@ -236,6 +236,6 @@ public class SelectPubDialog extends DialogFragment {
     }
 
     interface OnSelectPubDialogDismissed {
-        void addPubToList(SelectedPub newPub);
+        void addPubToList(PubMiniModel newPub);
     }
 }

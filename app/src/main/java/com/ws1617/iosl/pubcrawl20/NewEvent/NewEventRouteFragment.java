@@ -11,8 +11,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.ws1617.iosl.pubcrawl20.DataModels.Pub;
-import com.ws1617.iosl.pubcrawl20.DataModels.SelectedPub;
+import com.ws1617.iosl.pubcrawl20.DataModels.PubMiniModel;
 import com.ws1617.iosl.pubcrawl20.Details.RouteFragment;
 import com.ws1617.iosl.pubcrawl20.R;
 
@@ -31,7 +30,7 @@ public class NewEventRouteFragment extends Fragment  {
     SelectPubDialog mPubItemDialog;
 
     //Data
-    List<SelectedPub> mSelectedPupsList = new ArrayList<>();
+    List<PubMiniModel> mSelectedPupsList = new ArrayList<>();
 
     UpdatePubList updatePubListInterface;
 
@@ -92,7 +91,7 @@ public class NewEventRouteFragment extends Fragment  {
 
     SelectPubDialog.OnSelectPubDialogDismissed onSelectPubDialogDismissed = new SelectPubDialog.OnSelectPubDialogDismissed() {
         @Override
-        public void addPubToList(SelectedPub newPub) {
+        public void addPubToList(PubMiniModel newPub) {
             mSelectedPupsList.add(newPub);
             updatePubListInterface.onNewPub(newPub);
             //TODO init the map as well
@@ -102,6 +101,6 @@ public class NewEventRouteFragment extends Fragment  {
 
 
     public interface UpdatePubList {
-        void onNewPub(SelectedPub pub);
+        void onNewPub(PubMiniModel pub);
     }
 }
