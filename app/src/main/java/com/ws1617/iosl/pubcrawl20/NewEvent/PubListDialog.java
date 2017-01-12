@@ -27,7 +27,6 @@ import com.ws1617.iosl.pubcrawl20.DataModels.Pub;
 import com.ws1617.iosl.pubcrawl20.R;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 /**

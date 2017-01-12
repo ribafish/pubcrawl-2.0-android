@@ -2,25 +2,25 @@ package com.ws1617.iosl.pubcrawl20;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.design.widget.Snackbar;
+import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.TabLayout;
-import android.support.v7.app.AppCompatActivity;
-
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Toast;
-
 
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.vision.barcode.Barcode;
+import com.ws1617.iosl.pubcrawl20.Details.EventDetailsActivity;
+import com.ws1617.iosl.pubcrawl20.Details.PubDetailsActivity;
 import com.ws1617.iosl.pubcrawl20.NewEvent.NewEventActivity;
 import com.ws1617.iosl.pubcrawl20.ScanQR.BarcodeCaptureActivity;
-import com.ws1617.iosl.pubcrawl20.ScanQR.ScanQrActivity;
 
 /**
  * Created by Gasper Kojek on 9. 11. 2016.
@@ -92,23 +92,15 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        final SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
         fabScanQR.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(context, BarcodeCaptureActivity.class);
                 //TODO Add preferences for camera ui
-                //SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
-                //intent.putExtra(BarcodeCaptureActivity.AutoFocus, sharedPrefs.getBoolean("barcode_focus", false));
-                //intent.putExtra(BarcodeCaptureActivity.UseFlash, sharedPrefs.getBoolean("barcode_flash", false));
+                intent.putExtra(BarcodeCaptureActivity.AutoFocus, sharedPrefs.getBoolean("barcode_focus", false));
+                intent.putExtra(BarcodeCaptureActivity.UseFlash, sharedPrefs.getBoolean("barcode_flash", false));
                 startActivityForResult(intent, RC_BARCODE_CAPTURE);
-                fabMenu.close(true);
-            }
-        });
-
-        fabSearch.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "TODO", Snackbar.LENGTH_SHORT).show();
                 fabMenu.close(true);
             }
         });
@@ -121,7 +113,22 @@ public class MainActivity extends AppCompatActivity {
             if (resultCode == CommonStatusCodes.SUCCESS) {
                 if (data != null) {
                     Barcode barcode = data.getParcelableExtra(BarcodeCaptureActivity.BarcodeObject);
-                    Toast.makeText(this, barcode.displayValue, Toast.LENGTH_LONG).show();
+                    if(barcode.displayValue.isEmpty())
+                        Toast.makeText(this, "failed", Toast.LENGTH_LONG).show();
+                    else {
+                        if(barcode.displayValue.contains("/event/")) {
+                            Intent intent = new Intent(context, EventDetailsActivity.class);
+                            intent.putExtra("name", "Test Event");
+                            intent.putExtra("id", (long) 14);
+                            startActivity(intent);
+                        }
+                        if(barcode.displayValue.contains("/pub/")) {
+                            Intent intent = new Intent(context, PubDetailsActivity.class);
+                            intent.putExtra("name", "Test Pub");
+                            intent.putExtra("id", (long) 9);
+                            startActivity(intent);
+                        }
+                    }
                 } else {
                     Toast.makeText(this, "failed", Toast.LENGTH_LONG).show();
                 }

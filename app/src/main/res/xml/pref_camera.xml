@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <SwitchPreference
+        android:defaultValue="true"
+        android:key="barcode_focus"
+        android:title="@string/pref_title_auto_focus" />
+    <SwitchPreference
+        android:defaultValue="true"
+        android:key="barcode_flash"
+        android:title="@string/pref_title_flash" />
+</PreferenceScreen>

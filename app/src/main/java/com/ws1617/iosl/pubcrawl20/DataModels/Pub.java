@@ -3,7 +3,6 @@ package com.ws1617.iosl.pubcrawl20.DataModels;
 import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
 
-import com.google.android.gms.maps.StreetViewPanoramaFragment;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
