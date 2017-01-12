@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.ws1617.iosl.pubcrawl20.scanQR;
+package com.ws1617.iosl.pubcrawl20.ScanQR;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -46,9 +46,9 @@ import com.google.android.gms.vision.MultiProcessor;
 import com.google.android.gms.vision.barcode.Barcode;
 import com.google.android.gms.vision.barcode.BarcodeDetector;
 import com.ws1617.iosl.pubcrawl20.R;
-import com.ws1617.iosl.pubcrawl20.scanQR.ui.CameraSource;
-import com.ws1617.iosl.pubcrawl20.scanQR.ui.CameraSourcePreview;
-import com.ws1617.iosl.pubcrawl20.scanQR.ui.GraphicOverlay;
+import com.ws1617.iosl.pubcrawl20.ScanQR.ui.CameraSource;
+import com.ws1617.iosl.pubcrawl20.ScanQR.ui.CameraSourcePreview;
+import com.ws1617.iosl.pubcrawl20.ScanQR.ui.GraphicOverlay;
 
 import java.io.IOException;
 

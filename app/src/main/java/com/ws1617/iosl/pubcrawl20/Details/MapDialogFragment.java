@@ -1,4 +1,4 @@
-package com.ws1617.iosl.pubcrawl20.details;
+package com.ws1617.iosl.pubcrawl20.Details;
 
 import android.content.Intent;
 import android.os.Build;

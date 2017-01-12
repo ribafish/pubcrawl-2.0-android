@@ -1,4 +1,4 @@
-package com.ws1617.iosl.pubcrawl20.database;
+package com.ws1617.iosl.pubcrawl20.Database;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -12,9 +12,9 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.ws1617.iosl.pubcrawl20.dataModels.Event;
-import com.ws1617.iosl.pubcrawl20.dataModels.Person;
-import com.ws1617.iosl.pubcrawl20.dataModels.Pub;
+import com.ws1617.iosl.pubcrawl20.DataModels.Event;
+import com.ws1617.iosl.pubcrawl20.DataModels.Person;
+import com.ws1617.iosl.pubcrawl20.DataModels.Pub;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -22,7 +22,7 @@ import org.json.JSONObject;
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 
-import static com.ws1617.iosl.pubcrawl20.database.JsonParser.*;
+import static com.ws1617.iosl.pubcrawl20.Database.JsonParser.*;
 
 
 /**

@@ -1,4 +1,4 @@
-package com.ws1617.iosl.pubcrawl20.newEvent;
+package com.ws1617.iosl.pubcrawl20.NewEvent;
 
 import android.app.AlertDialog;
 import android.app.Dialog;

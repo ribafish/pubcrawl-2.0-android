@@ -13,12 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.ws1617.iosl.pubcrawl20.scanQR;
+package com.ws1617.iosl.pubcrawl20.ScanQR;
 
 import com.google.android.gms.vision.Detector;
 import com.google.android.gms.vision.Tracker;
 import com.google.android.gms.vision.barcode.Barcode;
-import com.ws1617.iosl.pubcrawl20.scanQR.ui.GraphicOverlay;
+import com.ws1617.iosl.pubcrawl20.ScanQR.ui.GraphicOverlay;
 
 /**
  * Generic tracker which is used for tracking or reading a barcode (and can really be used for

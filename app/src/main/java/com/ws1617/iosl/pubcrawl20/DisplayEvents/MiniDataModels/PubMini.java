@@ -1,8 +1,8 @@
-package com.ws1617.iosl.pubcrawl20.displayEvents.MiniDataModels;
+package com.ws1617.iosl.pubcrawl20.DisplayEvents.MiniDataModels;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
-import com.ws1617.iosl.pubcrawl20.dataModels.Pub;
+import com.ws1617.iosl.pubcrawl20.DataModels.Pub;
 
 /**
  * Created by Gasper Kojek on 13. 12. 2016.

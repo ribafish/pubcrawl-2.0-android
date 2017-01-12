@@ -1,4 +1,4 @@
-package com.ws1617.iosl.pubcrawl20.newEvent;
+package com.ws1617.iosl.pubcrawl20.NewEvent;
 
 
 import android.os.Bundle;
@@ -12,8 +12,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.ws1617.iosl.pubcrawl20.dataModels.Pub;
-import com.ws1617.iosl.pubcrawl20.newEvent.adapters.SelectedPupListAdapter;
+import com.ws1617.iosl.pubcrawl20.DataModels.Pub;
+import com.ws1617.iosl.pubcrawl20.NewEvent.adapters.SelectedPupListAdapter;
 import com.ws1617.iosl.pubcrawl20.R;
 
 import java.util.ArrayList;

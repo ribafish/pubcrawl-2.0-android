@@ -1,4 +1,4 @@
-package com.ws1617.iosl.pubcrawl20.newEvent;
+package com.ws1617.iosl.pubcrawl20.NewEvent;
 
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
@@ -9,8 +9,8 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
-import com.ws1617.iosl.pubcrawl20.dataModels.Event;
-import com.ws1617.iosl.pubcrawl20.newEvent.adapters.NewEventPagerAdapter;
+import com.ws1617.iosl.pubcrawl20.DataModels.Event;
+import com.ws1617.iosl.pubcrawl20.NewEvent.adapters.NewEventPagerAdapter;
 import com.ws1617.iosl.pubcrawl20.R;
 
 import java.util.ArrayList;

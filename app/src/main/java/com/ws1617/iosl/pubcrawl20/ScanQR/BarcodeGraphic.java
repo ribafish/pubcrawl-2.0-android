@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.ws1617.iosl.pubcrawl20.scanQR;
+package com.ws1617.iosl.pubcrawl20.ScanQR;
 
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -21,7 +21,7 @@ import android.graphics.Paint;
 import android.graphics.RectF;
 
 import com.google.android.gms.vision.barcode.Barcode;
-import com.ws1617.iosl.pubcrawl20.scanQR.ui.GraphicOverlay;
+import com.ws1617.iosl.pubcrawl20.ScanQR.ui.GraphicOverlay;
 
 /**
  * Graphic instance for rendering barcode position, size, and ID within an associated graphic

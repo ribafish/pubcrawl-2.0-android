@@ -1,4 +1,4 @@
-package com.ws1617.iosl.pubcrawl20.database;
+package com.ws1617.iosl.pubcrawl20.Database;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -9,12 +9,12 @@ import android.graphics.Bitmap;
 import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
-import com.ws1617.iosl.pubcrawl20.dataModels.Pub;
+import com.ws1617.iosl.pubcrawl20.DataModels.Pub;
 
 import java.util.ArrayList;
 
-import static com.ws1617.iosl.pubcrawl20.database.Contracts.PubContract.*;
-import static com.ws1617.iosl.pubcrawl20.database.DatabaseHelper.*;
+import static com.ws1617.iosl.pubcrawl20.Database.Contracts.PubContract.*;
+import static com.ws1617.iosl.pubcrawl20.Database.DatabaseHelper.*;
 
 /**
  * Created by Gasper Kojek on 20. 12. 2016.

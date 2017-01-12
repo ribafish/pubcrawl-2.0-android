@@ -1,4 +1,4 @@
-package com.ws1617.iosl.pubcrawl20.displayEvents;
+package com.ws1617.iosl.pubcrawl20.DisplayEvents;
 
 import android.view.View;
 

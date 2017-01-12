@@ -7,16 +7,16 @@
     android:layout_height="match_parent"
     android:keepScreenOn="true">
 
-    <com.ws1617.iosl.pubcrawl20.scanQR.ui.CameraSourcePreview
+    <com.ws1617.iosl.pubcrawl20.ScanQR.ui.CameraSourcePreview
         android:id="@+id/preview"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <com.ws1617.iosl.pubcrawl20.scanQR.ui.GraphicOverlay
+        <com.ws1617.iosl.pubcrawl20.ScanQR.ui.GraphicOverlay
             android:id="@+id/graphicOverlay"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
-    </com.ws1617.iosl.pubcrawl20.scanQR.ui.CameraSourcePreview>
+    </com.ws1617.iosl.pubcrawl20.ScanQR.ui.CameraSourcePreview>
 
 </LinearLayout>

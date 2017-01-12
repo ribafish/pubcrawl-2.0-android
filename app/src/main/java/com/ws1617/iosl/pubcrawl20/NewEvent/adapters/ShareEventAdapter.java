@@ -1,4 +1,4 @@
-package com.ws1617.iosl.pubcrawl20.newEvent.adapters;
+package com.ws1617.iosl.pubcrawl20.NewEvent.adapters;
 
 /**
  * Created by Haneen on 11/19/2016.

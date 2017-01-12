@@ -1,4 +1,4 @@
-package com.ws1617.iosl.pubcrawl20.database;
+package com.ws1617.iosl.pubcrawl20.Database;
 
 import android.content.Context;
 import android.content.Intent;

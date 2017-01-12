@@ -17,10 +17,10 @@ import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.vision.barcode.Barcode;
-import com.ws1617.iosl.pubcrawl20.details.EventDetailsActivity;
-import com.ws1617.iosl.pubcrawl20.details.PubDetailsActivity;
-import com.ws1617.iosl.pubcrawl20.newEvent.NewEventActivity;
-import com.ws1617.iosl.pubcrawl20.scanQR.BarcodeCaptureActivity;
+import com.ws1617.iosl.pubcrawl20.Details.EventDetailsActivity;
+import com.ws1617.iosl.pubcrawl20.Details.PubDetailsActivity;
+import com.ws1617.iosl.pubcrawl20.NewEvent.NewEventActivity;
+import com.ws1617.iosl.pubcrawl20.ScanQR.BarcodeCaptureActivity;
 
 /**
  * Created by Gasper Kojek on 9. 11. 2016.

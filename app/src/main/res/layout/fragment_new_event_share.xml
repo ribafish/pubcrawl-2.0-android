@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.ws1617.iosl.pubcrawl20.newEvent.NewEventShareFragment">
+    tools:context="com.ws1617.iosl.pubcrawl20.NewEvent.NewEventShareFragment">
 
     <!-- TODO: Update blank fragment layout -->
     <TextView

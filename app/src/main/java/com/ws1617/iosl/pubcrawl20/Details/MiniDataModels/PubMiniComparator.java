@@ -1,6 +1,6 @@
-package com.ws1617.iosl.pubcrawl20.details.MiniDataModels;
+package com.ws1617.iosl.pubcrawl20.Details.MiniDataModels;
 
-import com.ws1617.iosl.pubcrawl20.dataModels.TimeSlotComparator;
+import com.ws1617.iosl.pubcrawl20.DataModels.TimeSlotComparator;
 
 import java.util.Comparator;
 

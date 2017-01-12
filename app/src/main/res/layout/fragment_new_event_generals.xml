@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="20dp"
-    tools:context="com.ws1617.iosl.pubcrawl20.newEvent.NewEventGeneralFragment">
+    tools:context="com.ws1617.iosl.pubcrawl20.NewEvent.NewEventGeneralFragment">
 
 
     <android.support.v7.widget.SwitchCompat

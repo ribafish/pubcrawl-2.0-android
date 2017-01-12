@@ -1,4 +1,4 @@
-package com.ws1617.iosl.pubcrawl20.chat;
+package com.ws1617.iosl.pubcrawl20.Chat;
 
 import android.view.View;
 

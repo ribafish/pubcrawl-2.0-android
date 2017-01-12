@@ -1,4 +1,4 @@
-package com.ws1617.iosl.pubcrawl20.profile;
+package com.ws1617.iosl.pubcrawl20.Profile;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;

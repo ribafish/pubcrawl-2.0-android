@@ -1,4 +1,4 @@
-package com.ws1617.iosl.pubcrawl20.displayEvents;
+package com.ws1617.iosl.pubcrawl20.DisplayEvents;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -11,8 +11,8 @@ import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.ws1617.iosl.pubcrawl20.details.EventDetailsActivity;
-import com.ws1617.iosl.pubcrawl20.displayEvents.MiniDataModels.EventMini;
+import com.ws1617.iosl.pubcrawl20.Details.EventDetailsActivity;
+import com.ws1617.iosl.pubcrawl20.DisplayEvents.MiniDataModels.EventMini;
 import com.ws1617.iosl.pubcrawl20.R;
 
 import java.text.SimpleDateFormat;

@@ -1,4 +1,4 @@
-package com.ws1617.iosl.pubcrawl20.displayEvents;
+package com.ws1617.iosl.pubcrawl20.DisplayEvents;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -37,23 +37,23 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
-import com.ws1617.iosl.pubcrawl20.dataModels.Event;
-import com.ws1617.iosl.pubcrawl20.dataModels.Pub;
-import com.ws1617.iosl.pubcrawl20.database.EventDbHelper;
-import com.ws1617.iosl.pubcrawl20.database.PubDbHelper;
-import com.ws1617.iosl.pubcrawl20.database.RequestQueueHelper;
-import com.ws1617.iosl.pubcrawl20.details.EventDetailsActivity;
-import com.ws1617.iosl.pubcrawl20.details.PersonDetailsActivity;
-import com.ws1617.iosl.pubcrawl20.details.PubDetailsActivity;
-import com.ws1617.iosl.pubcrawl20.displayEvents.MiniDataModels.EventMini;
-import com.ws1617.iosl.pubcrawl20.displayEvents.MiniDataModels.EventMiniComparator;
-import com.ws1617.iosl.pubcrawl20.displayEvents.MiniDataModels.PubMini;
+import com.ws1617.iosl.pubcrawl20.DataModels.Event;
+import com.ws1617.iosl.pubcrawl20.DataModels.Pub;
+import com.ws1617.iosl.pubcrawl20.Database.EventDbHelper;
+import com.ws1617.iosl.pubcrawl20.Database.PubDbHelper;
+import com.ws1617.iosl.pubcrawl20.Database.RequestQueueHelper;
+import com.ws1617.iosl.pubcrawl20.Details.EventDetailsActivity;
+import com.ws1617.iosl.pubcrawl20.Details.PersonDetailsActivity;
+import com.ws1617.iosl.pubcrawl20.Details.PubDetailsActivity;
+import com.ws1617.iosl.pubcrawl20.DisplayEvents.MiniDataModels.EventMini;
+import com.ws1617.iosl.pubcrawl20.DisplayEvents.MiniDataModels.EventMiniComparator;
+import com.ws1617.iosl.pubcrawl20.DisplayEvents.MiniDataModels.PubMini;
 import com.ws1617.iosl.pubcrawl20.R;
 
 import java.util.ArrayList;
 import java.util.Collections;
 
-import static com.ws1617.iosl.pubcrawl20.database.DatabaseHelper.resetWholeDatabase;
+import static com.ws1617.iosl.pubcrawl20.Database.DatabaseHelper.resetWholeDatabase;
 
 /**
  * Created by gaspe on 8. 11. 2016.

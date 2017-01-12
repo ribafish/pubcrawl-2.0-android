@@ -10,10 +10,10 @@ import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ImageSpan;
 
-import com.ws1617.iosl.pubcrawl20.chat.ChatFragment;
-import com.ws1617.iosl.pubcrawl20.displayEvents.DisplayEventsFragment;
-import com.ws1617.iosl.pubcrawl20.current.CurrentFragment;
-import com.ws1617.iosl.pubcrawl20.notificationHistory.NotificationHistoryFragment;
+import com.ws1617.iosl.pubcrawl20.Chat.ChatFragment;
+import com.ws1617.iosl.pubcrawl20.DisplayEvents.DisplayEventsFragment;
+import com.ws1617.iosl.pubcrawl20.Current.CurrentFragment;
+import com.ws1617.iosl.pubcrawl20.NotificationHistory.NotificationHistoryFragment;
 
 /**
  * Created by Gasper Kojek on 8. 11. 2016.

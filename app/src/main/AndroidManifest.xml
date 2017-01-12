@@ -38,7 +38,7 @@
 
         </activity>
         <activity
-            android:name=".newEvent.NewEventActivity"
+            android:name=".NewEvent.NewEventActivity"
             android:parentActivityName=".MainActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait">
@@ -54,12 +54,12 @@
             android:screenOrientation="portrait">
         </activity>
         <activity
-            android:name=".scanQR.BarcodeCaptureActivity"
+            android:name=".ScanQR.BarcodeCaptureActivity"
             android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme"
             android:screenOrientation="portrait"
             android:label="Read Barcode"/>
-        <activity android:name=".details.EventDetailsActivity">
+        <activity android:name=".Details.EventDetailsActivity">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -70,7 +70,7 @@
                     android:pathPrefix="/event"/>
             </intent-filter>
         </activity>
-        <activity android:name=".details.PubDetailsActivity">
+        <activity android:name=".Details.PubDetailsActivity">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -81,7 +81,7 @@
                     android:pathPrefix="/pub"/>
             </intent-filter>
         </activity>
-        <activity android:name=".details.PersonDetailsActivity" />
+        <activity android:name=".Details.PersonDetailsActivity" />
     </application>
 
 </manifest>

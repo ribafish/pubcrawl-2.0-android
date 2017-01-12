@@ -1,4 +1,4 @@
-package com.ws1617.iosl.pubcrawl20.details;
+package com.ws1617.iosl.pubcrawl20.Details;
 
 import android.content.Context;
 import android.content.Intent;
@@ -47,10 +47,10 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
-import com.ws1617.iosl.pubcrawl20.dataModels.Event;
-import com.ws1617.iosl.pubcrawl20.dataModels.TimeSlot;
-import com.ws1617.iosl.pubcrawl20.details.MiniDataModels.PubMini;
-import com.ws1617.iosl.pubcrawl20.details.MiniDataModels.PubMiniComparator;
+import com.ws1617.iosl.pubcrawl20.DataModels.Event;
+import com.ws1617.iosl.pubcrawl20.DataModels.TimeSlot;
+import com.ws1617.iosl.pubcrawl20.Details.MiniDataModels.PubMini;
+import com.ws1617.iosl.pubcrawl20.Details.MiniDataModels.PubMiniComparator;
 import com.ws1617.iosl.pubcrawl20.R;
 
 import java.text.SimpleDateFormat;
@@ -59,7 +59,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 
-import com.ws1617.iosl.pubcrawl20.details.MiniDataModels.PersonMini;
+import com.ws1617.iosl.pubcrawl20.Details.MiniDataModels.PersonMini;
 
 import static android.graphics.Bitmap.Config.ARGB_8888;
 

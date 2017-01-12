@@ -1,4 +1,4 @@
-package com.ws1617.iosl.pubcrawl20.notificationHistory;
+package com.ws1617.iosl.pubcrawl20.NotificationHistory;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;

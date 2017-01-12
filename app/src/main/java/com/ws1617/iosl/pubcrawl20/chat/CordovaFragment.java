@@ -1,4 +1,4 @@
-package com.ws1617.iosl.pubcrawl20.chat;/*
+package com.ws1617.iosl.pubcrawl20.Chat;/*
        Licensed to the Apache Software Foundation (ASF) under one
        or more contributor license agreements.  See the NOTICE file
        distributed with this work for additional information

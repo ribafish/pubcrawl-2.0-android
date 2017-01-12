@@ -1,4 +1,4 @@
-package com.ws1617.iosl.pubcrawl20.database.Contracts;
+package com.ws1617.iosl.pubcrawl20.Database.Contracts;
 
 /**
  * Created by Gasper Kojek on 20. 12. 2016.

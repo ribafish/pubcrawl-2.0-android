@@ -13,12 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.ws1617.iosl.pubcrawl20.scanQR;
+package com.ws1617.iosl.pubcrawl20.ScanQR;
 
 import com.google.android.gms.vision.MultiProcessor;
 import com.google.android.gms.vision.Tracker;
 import com.google.android.gms.vision.barcode.Barcode;
-import com.ws1617.iosl.pubcrawl20.scanQR.ui.GraphicOverlay;
+import com.ws1617.iosl.pubcrawl20.ScanQR.ui.GraphicOverlay;
 
 /**
  * Factory for creating a tracker and associated graphic to be associated with a new barcode.  The

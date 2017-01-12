@@ -1,8 +1,8 @@
-package com.ws1617.iosl.pubcrawl20.details.MiniDataModels;
+package com.ws1617.iosl.pubcrawl20.Details.MiniDataModels;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
-import com.ws1617.iosl.pubcrawl20.dataModels.TimeSlot;
+import com.ws1617.iosl.pubcrawl20.DataModels.TimeSlot;
 
 import java.text.SimpleDateFormat;
 

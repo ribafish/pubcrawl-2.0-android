@@ -1,4 +1,4 @@
-package com.ws1617.iosl.pubcrawl20.dataModels;
+package com.ws1617.iosl.pubcrawl20.DataModels;
 
 import java.util.Comparator;
 

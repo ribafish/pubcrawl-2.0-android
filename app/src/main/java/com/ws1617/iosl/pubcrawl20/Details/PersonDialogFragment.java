@@ -1,4 +1,4 @@
-package com.ws1617.iosl.pubcrawl20.details;
+package com.ws1617.iosl.pubcrawl20.Details;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -20,7 +20,7 @@ import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-import com.ws1617.iosl.pubcrawl20.details.MiniDataModels.PersonMini;
+import com.ws1617.iosl.pubcrawl20.Details.MiniDataModels.PersonMini;
 import com.ws1617.iosl.pubcrawl20.R;
 
 import java.util.ArrayList;
