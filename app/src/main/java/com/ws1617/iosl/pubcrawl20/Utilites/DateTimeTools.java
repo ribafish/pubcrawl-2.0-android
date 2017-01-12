@@ -12,7 +12,7 @@ public class DateTimeTools {
         Calendar calendar = Calendar.getInstance();
 
         int year = calendar.get(Calendar.YEAR);
-        int month = calendar.get(Calendar.MONTH);
+        int month = calendar.get(Calendar.MONTH)+1;
         int day = calendar.get(Calendar.DAY_OF_MONTH);
 
         return day + "." + month + "." +year;

@@ -64,7 +64,8 @@ public class NewEventGeneralFragment extends Fragment {
         @Override
         public void onDateSet(DatePicker view, int year, int monthOfYear,
                               int dayOfMonth) {
-            datePickerButton.setText(dayOfMonth + "." + monthOfYear + "." + year);
+            int month= monthOfYear +1;
+            datePickerButton.setText(dayOfMonth + "." +  month + "." + year);
         }
     };
 
