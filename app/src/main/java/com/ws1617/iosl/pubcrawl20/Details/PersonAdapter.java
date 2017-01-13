@@ -8,7 +8,6 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.ws1617.iosl.pubcrawl20.Details.MiniDataModels.PersonMini;
 import com.ws1617.iosl.pubcrawl20.R;
 
 import java.util.ArrayList;

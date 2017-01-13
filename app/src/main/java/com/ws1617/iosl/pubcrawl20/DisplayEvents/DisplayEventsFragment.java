@@ -37,6 +37,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.firebase.database.DatabaseException;
 import com.ws1617.iosl.pubcrawl20.DataModels.Event;
 import com.ws1617.iosl.pubcrawl20.DataModels.Pub;
 import com.ws1617.iosl.pubcrawl20.Database.EventDbHelper;
@@ -45,9 +46,6 @@ import com.ws1617.iosl.pubcrawl20.Database.RequestQueueHelper;
 import com.ws1617.iosl.pubcrawl20.Details.EventDetailsActivity;
 import com.ws1617.iosl.pubcrawl20.Details.PersonDetailsActivity;
 import com.ws1617.iosl.pubcrawl20.Details.PubDetailsActivity;
-import com.ws1617.iosl.pubcrawl20.DisplayEvents.MiniDataModels.EventMini;
-import com.ws1617.iosl.pubcrawl20.DisplayEvents.MiniDataModels.EventMiniComparator;
-import com.ws1617.iosl.pubcrawl20.DisplayEvents.MiniDataModels.PubMini;
 import com.ws1617.iosl.pubcrawl20.R;
 
 import java.util.ArrayList;
@@ -230,18 +228,22 @@ public class DisplayEventsFragment extends Fragment implements OnMapReadyCallbac
         final Context context = getActivity();
         EventDbHelper eventDbHelper = new EventDbHelper(context);
         PubDbHelper pubDbHelper = new PubDbHelper(context);
-        ArrayList<Event> el = eventDbHelper.getAllEvents();
-        for (Event e : el) {
-            EventMini eventMini = new EventMini(e);
-            for (long pubId : e.getPubIds()) {
-                try {
-                    Pub p = pubDbHelper.getPub(pubId);
-                    eventMini.addPub(new PubMini(p));
-                } catch (Exception ee) {
-                    ee.printStackTrace();
+        try {
+            ArrayList<Event> el = eventDbHelper.getAllEvents();
+            for (Event e : el) {
+                EventMini eventMini = new EventMini(e);
+                for (long pubId : e.getPubIds()) {
+                    try {
+                        Pub p = pubDbHelper.getPub(pubId);
+                        eventMini.addPub(new PubMini(p));
+                    } catch (Exception exx) {
+                        exx.printStackTrace();
+                    }
                 }
+                eventList.add(eventMini);
             }
-            eventList.add(eventMini);
+        } catch (DatabaseException ex) {
+            ex.printStackTrace();
         }
         if (eventAdapter != null) {
             Log.d(TAG, "eventAdapter.notifyDataSetChanged()");

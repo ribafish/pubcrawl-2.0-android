@@ -4,12 +4,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
@@ -26,16 +26,16 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.firebase.database.DatabaseException;
 import com.ws1617.iosl.pubcrawl20.DataModels.Person;
-import com.ws1617.iosl.pubcrawl20.Details.MiniDataModels.EventMini;
-import com.ws1617.iosl.pubcrawl20.Details.MiniDataModels.PersonMini;
-import com.ws1617.iosl.pubcrawl20.Details.MiniDataModels.PubMini;
+import com.ws1617.iosl.pubcrawl20.Database.EventDbHelper;
+import com.ws1617.iosl.pubcrawl20.Database.PersonDbHelper;
+import com.ws1617.iosl.pubcrawl20.Database.PubDbHelper;
 import com.ws1617.iosl.pubcrawl20.R;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 
 public class PersonDetailsActivity extends AppCompatActivity implements AppBarLayout.OnOffsetChangedListener {
 
@@ -567,21 +567,16 @@ public class PersonDetailsActivity extends AppCompatActivity implements AppBarLa
      */
 
     private void getPerson(long id) {
-        ArrayList<Long> dummy = new ArrayList<Long>();
-        for (Long i = 0l; i< 10; i++) {
-            dummy.add(i);
+        try {
+            person = new PersonDbHelper(this).getPerson(id);
+        } catch (DatabaseException e) {
+            e.printStackTrace();
+            Toast.makeText(getApplicationContext(),
+                    "Can't find data for Person with ID " + id, Toast.LENGTH_LONG)
+                    .show();
+            Log.e(TAG, "getPerson: id " + id + ", person == null");
+            return;
         }
-
-        person = new Person(id,
-                "Person " + id,
-                "person"+id+"@noMail.no",
-                getResources().getString(R.string.lorem),
-                new ArrayList<Bitmap>(),
-                dummy,
-                dummy,
-                dummy,
-                dummy,
-                dummy);
 
         getFriends();
         getEvents();
@@ -590,50 +585,66 @@ public class PersonDetailsActivity extends AppCompatActivity implements AppBarLa
         getOwnedEvents();
     }
 
-    private PersonMini getPersonMini(long id) {
-        return new PersonMini("Person " + id, id);
+    private PersonMini getPersonMini(long id) throws DatabaseException {
+        return new PersonMini(new PersonDbHelper(this).getPerson(id));
     }
 
-    private EventMini getEventMini(long id) {
-        Date date = Calendar.getInstance().getTime();
-        int newdate = (int) (Math.random() * 30);
-        date.setDate(newdate);
 
-        return new EventMini("Dummy event " + id, id, date);
-
+    private EventMini getEventMini(long id) throws DatabaseException {
+        return new EventMini(new EventDbHelper(this).getEvent(id));
     }
 
-    private PubMini getPubMini(long id) {
-        return new PubMini("Dummy pub "+id, null, id, null);
+    private PubMini getPubMini(long id) throws DatabaseException {
+        return new PubMini(new PubDbHelper(this).getPub(id), null);
     }
 
     private void getFriends() {
         for (Long i : person.getFriendIds()) {
-            friends.add(getPersonMini(i));
+            try {
+                friends.add(getPersonMini(i));
+            } catch (DatabaseException de) {
+                de.printStackTrace();
+            }
         }
     }
 
     private void getEvents() {
         for (long i : person.getEventIds()) {
-            events.add(getEventMini(i));
+            try {
+                events.add(getEventMini(i));
+            } catch (DatabaseException de) {
+                de.printStackTrace();
+            }
         }
     }
 
     private void getFavouritePubs() {
         for (long i : person.getFavouritePubIds()) {
-            favouritePubs.add(getPubMini(i));
+            try {
+                favouritePubs.add(getPubMini(i));
+            } catch (DatabaseException de) {
+                de.printStackTrace();
+            }
         }
     }
 
     private void getOwnedPubs() {
         for (long i : person.getOwnedPubIds()) {
-            ownedPubs.add(getPubMini(i));
+            try {
+                ownedPubs.add(getPubMini(i));
+            } catch (DatabaseException de) {
+                de.printStackTrace();
+            }
         }
     }
 
     private void getOwnedEvents() {
         for (long i : person.getOwnedEventIds()) {
-            ownedEvents.add(getEventMini(i));
+            try {
+                ownedEvents.add(getEventMini(i));
+            } catch (DatabaseException de) {
+                de.printStackTrace();
+            }
         }
     }
 

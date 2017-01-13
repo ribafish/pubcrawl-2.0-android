@@ -1,6 +1,8 @@
-package com.ws1617.iosl.pubcrawl20.Details.MiniDataModels;
+package com.ws1617.iosl.pubcrawl20.Details;
 
 import android.graphics.Bitmap;
+
+import com.ws1617.iosl.pubcrawl20.DataModels.Person;
 
 /**
  * Created by Gasper Kojek on 12. 12. 2016.
@@ -8,7 +10,7 @@ import android.graphics.Bitmap;
  */
 
 
-public class PersonMini {
+class PersonMini {
     String name;
     long id;
     Bitmap image;
@@ -16,6 +18,12 @@ public class PersonMini {
     public PersonMini(String name, long id) {
         this.name = name;
         this.id = id;
+    }
+
+    public PersonMini(Person person) {
+        this.name = person.getName();
+        this.id = person.getId();
+        this.image = person.getImage();
     }
 
     public String getName() {

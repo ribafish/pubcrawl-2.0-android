@@ -9,6 +9,7 @@ import android.graphics.Bitmap;
 import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.google.firebase.database.DatabaseException;
 import com.ws1617.iosl.pubcrawl20.DataModels.Pub;
 
 import java.util.ArrayList;
@@ -177,7 +178,7 @@ public class PubDbHelper extends SQLiteOpenHelper {
         deleteLists(pub_id);
     }
 
-    public Pub getListlessPub (long pub_id) {
+    public Pub getListlessPub (long pub_id) throws DatabaseException {
         SQLiteDatabase db = this.getReadableDatabase();
         Pub pub = new Pub(pub_id);
 
@@ -200,15 +201,14 @@ public class PubDbHelper extends SQLiteOpenHelper {
 
             c.close();
         } else {
-            Log.e(TAG, "Can't find pub with id " + pub_id);
-            Log.e(TAG, "Cursor is null or database empty");
-            return null;
+            Log.e(TAG, "Can't find pub with id " + pub_id );
+            throw new DatabaseException("Can't find pub with id " + pub_id + ". Cursor is null or database empty");
         }
 
         return pub;
     }
 
-    public Pub getPub (long pub_id) {
+    public Pub getPub (long pub_id) throws DatabaseException {
         Pub pub = getListlessPub(pub_id);
 
         pub.setTopsListIds(getTopPersonIds(pub_id));
@@ -225,7 +225,7 @@ public class PubDbHelper extends SQLiteOpenHelper {
         String query = "SELECT * FROM " +
                 TABLE_TOP_PERSONS +  " WHERE " +
                 PUB_ID + " = " + pub_id +
-                "ORDER BY " + ITERATOR + " ASC";
+                " ORDER BY " + ITERATOR + " ASC";
 
         Cursor c = db.rawQuery(query, null);
         if (c != null && c.moveToFirst()) {
@@ -234,7 +234,7 @@ public class PubDbHelper extends SQLiteOpenHelper {
             } while (c.moveToNext());
             c.close();
         } else {
-            Log.e(TAG, "Cursor is null or database empty");
+            Log.w(TAG, "getTopPersonIds: Cursor is null or database empty");
         }
 
         return list;
@@ -255,7 +255,7 @@ public class PubDbHelper extends SQLiteOpenHelper {
             } while (c.moveToNext());
             c.close();
         } else {
-            Log.e(TAG, "Cursor is null or database empty");
+            Log.w(TAG, "getPubEventIds: Cursor is null or database empty");
         }
 
         return list;
@@ -276,7 +276,7 @@ public class PubDbHelper extends SQLiteOpenHelper {
             } while (c.moveToNext());
             c.close();
         } else {
-            Log.e(TAG, "Cursor is null or database empty");
+            Log.w(TAG, "getPubImages: Cursor is null or database empty");
         }
 
         return list;

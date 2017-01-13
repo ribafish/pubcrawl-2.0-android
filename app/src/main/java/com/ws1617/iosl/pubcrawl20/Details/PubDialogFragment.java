@@ -20,7 +20,6 @@ import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-import com.ws1617.iosl.pubcrawl20.Details.MiniDataModels.PubMini;
 import com.ws1617.iosl.pubcrawl20.R;
 
 import java.util.ArrayList;
