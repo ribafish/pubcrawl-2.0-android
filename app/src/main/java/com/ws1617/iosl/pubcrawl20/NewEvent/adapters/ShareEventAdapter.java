@@ -1,12 +1,5 @@
 package com.ws1617.iosl.pubcrawl20.NewEvent.adapters;
 
-import android.content.Intent;
-import android.support.v7.widget.RecyclerView;
-import android.view.ViewGroup;
-
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * Created by Haneen on 11/19/2016.
  */

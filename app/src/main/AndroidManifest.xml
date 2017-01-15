@@ -35,6 +35,7 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
 
 
@@ -56,13 +57,37 @@
             android:theme="@style/AppTheme"></activity>
         <activity
             android:name=".ScanQR.BarcodeCaptureActivity"
-            android:configChanges="orientation"
             android:label="Read Barcode"
+            android:parentActivityName=".MainActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
+        <activity android:name=".Details.EventDetailsActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
 
-        <activity android:name=".Details.EventDetailsActivity" />
-        <activity android:name=".Details.PubDetailsActivity" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="pubcrawl.de"
+                    android:pathPrefix="/event"
+                    android:scheme="http" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".Details.PubDetailsActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="pubcrawl.de"
+                    android:pathPrefix="/pub"
+                    android:scheme="http" />
+            </intent-filter>
+        </activity>
+        >>>>>>> master
         <activity android:name=".Details.PersonDetailsActivity" />
     </application>
 
