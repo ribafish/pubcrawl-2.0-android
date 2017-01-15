@@ -13,6 +13,7 @@ import com.google.firebase.database.DatabaseException;
 import com.ws1617.iosl.pubcrawl20.DataModels.Pub;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static com.ws1617.iosl.pubcrawl20.Database.Contracts.PubContract.*;
 import static com.ws1617.iosl.pubcrawl20.Database.DatabaseHelper.*;
@@ -81,7 +82,7 @@ public class PubDbHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values;
 
-        for (int i = 0; i<pub.getTopsListIds().size(); i++) {
+        for (int i = 0; i < pub.getTopsListIds().size(); i++) {
             values = new ContentValues();
             values.put(PUB_ID, pub.getId());
             values.put(PERSON_ID, pub.getTopsListIds().get(i));
@@ -106,7 +107,7 @@ public class PubDbHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values;
 
-        for (int i = 0; i<pub.getTopsListIds().size(); i++) {
+        for (int i = 0; i < pub.getTopsListIds().size(); i++) {
             values = new ContentValues();
             values.put(PUB_ID, pub.getId());
             values.put(ITERATOR, i);
@@ -178,12 +179,12 @@ public class PubDbHelper extends SQLiteOpenHelper {
         deleteLists(pub_id);
     }
 
-    public Pub getListlessPub (long pub_id) throws DatabaseException {
+    public Pub getListlessPub(long pub_id) throws DatabaseException {
         SQLiteDatabase db = this.getReadableDatabase();
         Pub pub = new Pub(pub_id);
 
         String query = "SELECT * FROM " +
-                TABLE_PUBS +  " WHERE " +
+                TABLE_PUBS + " WHERE " +
                 PUB_ID + " = " + pub_id;
 
         Cursor c = db.rawQuery(query, null);
@@ -201,14 +202,14 @@ public class PubDbHelper extends SQLiteOpenHelper {
 
             c.close();
         } else {
-            Log.e(TAG, "Can't find pub with id " + pub_id );
+            Log.e(TAG, "Can't find pub with id " + pub_id);
             throw new DatabaseException("Can't find pub with id " + pub_id + ". Cursor is null or database empty");
         }
 
         return pub;
     }
 
-    public Pub getPub (long pub_id) throws DatabaseException {
+    public Pub getPub(long pub_id) throws DatabaseException {
         Pub pub = getListlessPub(pub_id);
 
         pub.setTopsListIds(getTopPersonIds(pub_id));
@@ -218,12 +219,36 @@ public class PubDbHelper extends SQLiteOpenHelper {
         return pub;
     }
 
+    public List<Pub> getAllPubs() {
+        List<Pub> pubsList = new ArrayList<>();
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String query = "SELECT " + PUB_ID + " FROM " +
+                TABLE_PUBS;
+
+        Cursor c = db.rawQuery(query, null);
+
+        if (c != null && c.moveToFirst()) {
+            int pub_id = c.getInt(c.getColumnIndex(PUB_NAME));
+            Pub pub = getListlessPub(pub_id);
+            pubsList.add(pub);
+            c.close();
+        } else {
+            Log.e(TAG, "Can't find Pubs");
+            String msg = c != null ? "Can't find pubs. cursor size is " + c.getCount() : "\"Can't find pubs . Cursor is null or database empty\"";
+            throw new DatabaseException(msg);
+        }
+        return pubsList;
+
+    }
+
     public ArrayList<Long> getTopPersonIds(long pub_id) {
         SQLiteDatabase db = this.getReadableDatabase();
         ArrayList<Long> list = new ArrayList<>();
 
         String query = "SELECT * FROM " +
-                TABLE_TOP_PERSONS +  " WHERE " +
+                TABLE_TOP_PERSONS + " WHERE " +
                 PUB_ID + " = " + pub_id +
                 " ORDER BY " + ITERATOR + " ASC";
 
@@ -240,12 +265,12 @@ public class PubDbHelper extends SQLiteOpenHelper {
         return list;
     }
 
-    public ArrayList<Long> getPubEventIds (long pub_id) {
+    public ArrayList<Long> getPubEventIds(long pub_id) {
         SQLiteDatabase db = this.getReadableDatabase();
         ArrayList<Long> list = new ArrayList<>();
 
         String query = "SELECT * FROM " +
-                TABLE_PUB_EVENTS +  " WHERE " +
+                TABLE_PUB_EVENTS + " WHERE " +
                 PUB_ID + " = " + pub_id;
 
         Cursor c = db.rawQuery(query, null);
@@ -261,12 +286,12 @@ public class PubDbHelper extends SQLiteOpenHelper {
         return list;
     }
 
-    public ArrayList<Bitmap> getPubImages (long pub_id) {
+    public ArrayList<Bitmap> getPubImages(long pub_id) {
         SQLiteDatabase db = this.getReadableDatabase();
         ArrayList<Bitmap> list = new ArrayList<>();
 
         String query = "SELECT * FROM " +
-                TABLE_PUB_IMAGES +  " WHERE " +
+                TABLE_PUB_IMAGES + " WHERE " +
                 PUB_ID + " = " + pub_id;
 
         Cursor c = db.rawQuery(query, null);

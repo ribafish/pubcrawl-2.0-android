@@ -25,6 +25,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.ws1617.iosl.pubcrawl20.DataModels.Pub;
 import com.ws1617.iosl.pubcrawl20.DataModels.PubMiniModel;
 import com.ws1617.iosl.pubcrawl20.DataModels.TimeSlot;
+import com.ws1617.iosl.pubcrawl20.Database.PubDbHelper;
 import com.ws1617.iosl.pubcrawl20.R;
 
 import java.util.ArrayList;
@@ -68,7 +69,7 @@ public class SelectPubDialog extends DialogFragment {
         initView();
         initMapView();
 
-        if (pubPosition != null)  mPubsListSpinner.setSelection(pubPosition);
+        if (pubPosition != null) mPubsListSpinner.setSelection(pubPosition);
 
         return mRootView;
 
@@ -150,8 +151,10 @@ public class SelectPubDialog extends DialogFragment {
     //TODO should be fetched from the local DB
     void initPubList() {
 
-        pubsList = new ArrayList<>();
-        pubsListString = new ArrayList<>();
+        PubDbHelper pubDbHelper = new PubDbHelper(getContext());
+        pubsList = pubDbHelper.getAllPubs();
+       pubsList = new ArrayList<>();
+         /*pubsListString = new ArrayList<>();
 
         Pub pub1 = new Pub(1, "pub 1", new LatLng(1, 1), 20);//new Pub("Dummy Pub " + 1, null, 1, new LatLng(52.5 + Math.random() * 0.1, 13.35 + Math.random() * 0.1));
         pubsList.add(pub1);
@@ -172,7 +175,7 @@ public class SelectPubDialog extends DialogFragment {
                 // new Pub("Dummy Pub " + 4, null, 1, new LatLng(52.5 + Math.random() * 0.1, 13.35 + Math.random() * 0.1));
         pubsList.add(pub4);
         pubsListString.add(pub4.getPubName());
-
+*/
     }
 
     View.OnClickListener mDoneBtnClickedListener = new View.OnClickListener() {
@@ -181,12 +184,12 @@ public class SelectPubDialog extends DialogFragment {
             switch (view.getId()) {
                 case R.id.pub_dialog_pub_done: {
                     dismiss();
-                    if (selectedPub != null){
+                    if (selectedPub != null) {
                         PubMiniModel sb = new PubMiniModel(selectedPub,
-                                new TimeSlot(selectedPub.getId(),null,null));
+                                new TimeSlot(selectedPub.getId(), null, null));
                         onSelectPubDialogDismissed.addPubToList(sb);
 
-                    break;
+                        break;
                     }
                 }
                 case R.id.pub_dialog_visit_from_date_picker: {
