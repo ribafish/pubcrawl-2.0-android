@@ -48,18 +48,20 @@ public class SelectedPupListAdapter extends RecyclerView.Adapter<SelectedPupList
     public class pupViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         TextView pubName;
-        TextView pubTime;
+        TextView startTime,endTime;
 
         public pupViewHolder(View itemView) {
             super(itemView);
             itemView.setOnClickListener(this);
             pubName = (TextView) itemView.findViewById(R.id.selected_pub_item_title);
-            pubTime = (TextView) itemView.findViewById(R.id.selected_pub_item_time);
+            startTime = (TextView) itemView.findViewById(R.id.txt_time_from);
+            endTime = (TextView) itemView.findViewById(R.id.txt_time_to);
         }
 
         public void setPubData(PubMiniModel pub) {
             pubName.setText(pub.getName());
-            pubTime.setText(pub.getTimeSlotTimeString());
+            startTime.setText(pub.getTimeSlot().getStartTimeAsString());
+            endTime.setText(pub.getTimeSlot().getEndTimeAsString());
         }
 
         @Override

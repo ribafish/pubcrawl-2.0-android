@@ -99,6 +99,7 @@ public class NewEventRouteFragment extends Fragment {
             mSelectedPupsList.add(newPub);
             updatePubListInterface.onNewPub(newPub);
             //TODO init the map as well
+
         }
     };
 

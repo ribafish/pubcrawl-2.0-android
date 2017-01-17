@@ -1,5 +1,6 @@
 package com.ws1617.iosl.pubcrawl20.DataModels;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -30,6 +31,15 @@ public class TimeSlot {
         return startTime;
     }
 
+    SimpleDateFormat localDateFormat = new SimpleDateFormat("HH:mm");
+
+    public String getStartTimeAsString(){
+       return localDateFormat.format(startTime);
+    }
+
+    public String getEndTimeAsString(){
+        return localDateFormat.format(endTime);
+    }
     public void setStartTime(Date startTime) {
         this.startTime = startTime;
     }

@@ -17,6 +17,8 @@ public class PubMiniModel {
     LatLng latLng;
     Marker marker;
 
+    SimpleDateFormat localDateFormat = new SimpleDateFormat("HH:mm");
+
     public PubMiniModel(String name, TimeSlot timeSlot, long id, LatLng latLng) {
         this.name = name;
         this.timeSlot = timeSlot;
@@ -34,8 +36,7 @@ public class PubMiniModel {
 
     public String getTimeSlotTimeString() {
         if (timeSlot != null) {
-            SimpleDateFormat localDateFormat = new SimpleDateFormat("HH:mm");
-            String start = localDateFormat.format(timeSlot.getStartTime());
+           String start = localDateFormat.format(timeSlot.getStartTime());
             String end = localDateFormat.format(timeSlot.getEndTime());
             return String.format("%s - %s", start, end);
         } else {
