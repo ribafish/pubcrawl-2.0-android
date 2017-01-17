@@ -178,7 +178,6 @@ public class SelectPubDialog extends DialogFragment {
                                 selectedPub,
                                 new TimeSlot(selectedPub.getId(), mStartDate, mEndDate));
                         onSelectPubDialogDismissed.addPubToList(miniPubModel);
-
                         break;
                     }
                 }

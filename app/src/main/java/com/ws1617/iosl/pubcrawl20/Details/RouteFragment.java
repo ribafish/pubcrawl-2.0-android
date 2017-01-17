@@ -115,7 +115,6 @@ public class RouteFragment extends DialogFragment implements NewEventRouteFragme
 
 
     private void addPub(PubMiniModel pub) {
-        this.mSelectedPupsList.add(pub);
         adapter.notifyItemChanged(mSelectedPupsList.size());
         refreshMap();
     }
