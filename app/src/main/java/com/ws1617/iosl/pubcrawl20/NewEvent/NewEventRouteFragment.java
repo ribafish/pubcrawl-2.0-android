@@ -11,7 +11,10 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.ws1617.iosl.pubcrawl20.DataModels.Event;
+import com.ws1617.iosl.pubcrawl20.DataModels.Pub;
 import com.ws1617.iosl.pubcrawl20.DataModels.PubMiniModel;
+import com.ws1617.iosl.pubcrawl20.DataModels.TimeSlot;
 import com.ws1617.iosl.pubcrawl20.Details.RouteFragment;
 import com.ws1617.iosl.pubcrawl20.R;
 
@@ -21,7 +24,7 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class NewEventRouteFragment extends Fragment  {
+public class NewEventRouteFragment extends Fragment {
 
     static final String TAG = "NewEventRouteFragment";
     //Views
@@ -31,7 +34,8 @@ public class NewEventRouteFragment extends Fragment  {
 
     //Data
     List<PubMiniModel> mSelectedPupsList = new ArrayList<>();
-
+    ArrayList<Long> mSelectedPubsID;
+    ArrayList <TimeSlot> mTimeSlotList;
     UpdatePubList updatePubListInterface;
 
 
@@ -98,6 +102,17 @@ public class NewEventRouteFragment extends Fragment  {
         }
     };
 
+    public Event updatePubListInfo(Event mEvent) {
+        mSelectedPubsID = new ArrayList<>();
+        mTimeSlotList = new ArrayList<>();
+        for (PubMiniModel selectedPub : mSelectedPupsList) {
+            mSelectedPubsID.add(selectedPub.getId());
+            mTimeSlotList.add(selectedPub.getTimeSlot());
+        }
+        mEvent.setPubIds(mSelectedPubsID);
+        mEvent.setTimeSlotList(mTimeSlotList);
+        return mEvent;
+    }
 
 
     public interface UpdatePubList {

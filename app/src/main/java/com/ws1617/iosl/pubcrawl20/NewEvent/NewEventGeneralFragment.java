@@ -80,7 +80,8 @@ public class NewEventGeneralFragment extends Fragment {
         String eventDesc = mEventDescription.getText().toString();
         Date date = new Date();
         try {
-            date = new SimpleDateFormat().parse(datePickerButton.getText().toString());
+            SimpleDateFormat dataFormat = new SimpleDateFormat("dd.mm.yyyy");
+            date = dataFormat.parse(datePickerButton.getText().toString());
         } catch (ParseException e) {
             e.printStackTrace();
         }

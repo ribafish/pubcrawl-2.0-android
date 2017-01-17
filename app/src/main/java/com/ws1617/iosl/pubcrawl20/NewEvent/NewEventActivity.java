@@ -10,6 +10,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import com.ws1617.iosl.pubcrawl20.DataModels.Event;
+import com.ws1617.iosl.pubcrawl20.Database.DatabaseHelper;
 import com.ws1617.iosl.pubcrawl20.NewEvent.adapters.NewEventPagerAdapter;
 import com.ws1617.iosl.pubcrawl20.R;
 
@@ -87,18 +88,32 @@ public class NewEventActivity extends AppCompatActivity  {
     public void onCollectDataClicked() {
         Event mEvent = new Event();
         mEvent = ((NewEventGeneralFragment) fragmentsList.get(0)).updateGeneralInfo(mEvent);
-        //mEvent = ((NewEventRouteFragment) fragmentsList.get(1)).updatePubListInfo(mEvent);
+        mEvent = ((NewEventRouteFragment) fragmentsList.get(1)).updatePubListInfo(mEvent);
 
-        /*DB.insertNewEvent(new InsertNewEventListener insertNewEventListener
-        {
-            void onSuccsess(){}
-            void onFaild(){}
-        }
-         );*/
 
-        //onSuccess
-        ShareEventDialog shareEventDialog = new ShareEventDialog();
-        shareEventDialog.show(getFragmentManager(),"shareEventDialog");
+        DatabaseHelper.addEvent(this,mEvent, new EventCreation(){
+            @Override
+            public void onSuccess() {
+                // Add to local DB or refresh it
+
+                //onSuccess adding to local DB
+                ShareEventDialog shareEventDialog = new ShareEventDialog();
+                shareEventDialog.show(getFragmentManager(),"shareEventDialog");
+            }
+
+            @Override
+            public void onFail() {
+                // show error
+            }
+        });
+
+
+
+    }
+
+    public interface EventCreation{
+        public void onSuccess();
+        public void onFail();
     }
 
 
