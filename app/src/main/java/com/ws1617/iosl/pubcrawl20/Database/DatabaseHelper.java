@@ -18,6 +18,7 @@ import com.ws1617.iosl.pubcrawl20.DataModels.Pub;
 import com.ws1617.iosl.pubcrawl20.NewEvent.NewEventActivity;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
@@ -79,12 +80,18 @@ public class DatabaseHelper {
             return;
         }
 
-        HashMap<String,String> params = new HashMap<>();
-        params.put("eventName","test");
+
+        JSONObject object = new JSONObject();
+        try {
+            object.put("eventName","android event");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
         final String url = "http://" + prefs.getString("server_ip", null) + "/" + EVENTS;
 
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, new JSONObject(params), new Response.Listener<JSONObject>() {
+        PubJsonObjectRequest jsonObjectRequest = new PubJsonObjectRequest(Request.Method.POST, url,
+                object, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
 
@@ -98,9 +105,9 @@ public class DatabaseHelper {
             }
         });
         requestQueue.add(jsonObjectRequest);
-
-
     }
+
+
 
     public static void downloadEvents(final Context context) {
         final String tag = TAG;

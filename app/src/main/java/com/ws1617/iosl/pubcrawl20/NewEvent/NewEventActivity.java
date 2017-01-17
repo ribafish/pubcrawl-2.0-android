@@ -8,9 +8,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.Toast;
 
 import com.ws1617.iosl.pubcrawl20.DataModels.Event;
 import com.ws1617.iosl.pubcrawl20.Database.DatabaseHelper;
+import com.ws1617.iosl.pubcrawl20.Database.EventDbHelper;
 import com.ws1617.iosl.pubcrawl20.NewEvent.adapters.NewEventPagerAdapter;
 import com.ws1617.iosl.pubcrawl20.R;
 
@@ -86,15 +88,18 @@ public class NewEventActivity extends AppCompatActivity  {
     InsertNewEventListener insertNewEventListener;
 
     public void onCollectDataClicked() {
-        Event mEvent = new Event();
-        mEvent = ((NewEventGeneralFragment) fragmentsList.get(0)).updateGeneralInfo(mEvent);
-        mEvent = ((NewEventRouteFragment) fragmentsList.get(1)).updatePubListInfo(mEvent);
+        Event event = new Event();
+        mEvent = ((NewEventGeneralFragment) fragmentsList.get(0)).updateGeneralInfo(event);
+        mEvent = ((NewEventRouteFragment) fragmentsList.get(1)).updatePubListInfo(event);
 
 
+        final Event mEvent = event;
         DatabaseHelper.addEvent(this,mEvent, new EventCreation(){
             @Override
             public void onSuccess() {
                 // Add to local DB or refresh it
+                EventDbHelper eventDbHelper = new EventDbHelper(getApplicationContext());
+                eventDbHelper.addEvent(mEvent);
 
                 //onSuccess adding to local DB
                 ShareEventDialog shareEventDialog = new ShareEventDialog();
@@ -104,6 +109,7 @@ public class NewEventActivity extends AppCompatActivity  {
             @Override
             public void onFail() {
                 // show error
+                Toast.makeText(getApplicationContext(), "Error while creating the Event .. ", Toast.LENGTH_SHORT).show();
             }
         });
 
