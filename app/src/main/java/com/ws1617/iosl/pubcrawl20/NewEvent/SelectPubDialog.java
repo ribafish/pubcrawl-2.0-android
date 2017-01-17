@@ -28,7 +28,11 @@ import com.ws1617.iosl.pubcrawl20.DataModels.TimeSlot;
 import com.ws1617.iosl.pubcrawl20.Database.PubDbHelper;
 import com.ws1617.iosl.pubcrawl20.R;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -55,6 +59,7 @@ public class SelectPubDialog extends DialogFragment {
     List<String> pubsListString;
     GoogleMap mGoogleMap;
     Integer pubPosition;
+    Date mStartDate, mEndDate;
 
 
     public void setPubListListener(OnSelectPubDialogDismissed onSelectPubDialogDismissed) {
@@ -140,13 +145,11 @@ public class SelectPubDialog extends DialogFragment {
         mPubsListSpinner = (Spinner) mRootView.findViewById(R.id.pub_dialog_pubs_list);
         mPubsListSpinner.setOnItemSelectedListener(pubListOnItemSelectedListener);
 
-        //TODO should be fetched from the DB
         initPubList();
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, pubsListString);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), R.layout.view_pubs_spinner_item, pubsListString);
         mPubsListSpinner.setAdapter(adapter);
     }
 
-    //TODO should be fetched from the local DB
     void initPubList() {
 
         PubDbHelper pubDbHelper = new PubDbHelper(getContext());
@@ -155,28 +158,6 @@ public class SelectPubDialog extends DialogFragment {
         for (Pub pub : pubsList) {
             pubsListString.add(pub.getPubName());
         }
-         /*pubsListString = new ArrayList<>();
-
-        Pub pub1 = new Pub(1, "pub 1", new LatLng(1, 1), 20);//new Pub("Dummy Pub " + 1, null, 1, new LatLng(52.5 + Math.random() * 0.1, 13.35 + Math.random() * 0.1));
-        pubsList.add(pub1);
-        pubsListString.add(pub1.getPubName());
-
-        Pub pub2 = //new Pub("Dummy Pub " + 2, null, 1, new LatLng(52.5 + Math.random() * 0.1, 13.35 + Math.random() * 0.1));
-        new Pub(2, "pub 2", new LatLng(1, 1), 20);
-        pubsList.add(pub2);
-        pubsListString.add(pub2.getPubName());
-
-        Pub pub3 =
-                new Pub(3, "pub 3", new LatLng(1, 1), 20);
-        // new Pub("Dummy Pub " + 3, null, 1, new LatLng(52.5 + Math.random() * 0.1, 13.35 + Math.random() * 0.1));
-        pubsList.add(pub3);
-        pubsListString.add(pub3.getPubName());
-
-        Pub pub4 =  new Pub(4, "pub 4", new LatLng(1, 1), 20);
-                // new Pub("Dummy Pub " + 4, null, 1, new LatLng(52.5 + Math.random() * 0.1, 13.35 + Math.random() * 0.1));
-        pubsList.add(pub4);
-        pubsListString.add(pub4.getPubName());
-*/
     }
 
     View.OnClickListener mDoneBtnClickedListener = new View.OnClickListener() {
@@ -186,9 +167,17 @@ public class SelectPubDialog extends DialogFragment {
                 case R.id.pub_dialog_pub_done: {
                     dismiss();
                     if (selectedPub != null) {
-                        PubMiniModel sb = new PubMiniModel(selectedPub,
-                                new TimeSlot(selectedPub.getId(), null, null));
-                        onSelectPubDialogDismissed.addPubToList(sb);
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm");
+                        try {
+                            mStartDate = dateFormat.parse(mTimeFrom.getText().toString());
+                            mEndDate = dateFormat.parse(mTimeTo.getText().toString());
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+                        PubMiniModel miniPubModel = new PubMiniModel(
+                                selectedPub,
+                                new TimeSlot(selectedPub.getId(), mStartDate, mEndDate));
+                        onSelectPubDialogDismissed.addPubToList(miniPubModel);
 
                         break;
                     }

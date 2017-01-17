@@ -139,7 +139,6 @@ public class RouteFragment extends DialogFragment implements NewEventRouteFragme
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         mPubsListView.setLayoutManager(linearLayoutManager);
 
-        //TODO  OnPubItemClickListener listener should be deleted or not null
         adapter = new SelectedPupListAdapter(mSelectedPupsList, this);
         mPubsListView.setAdapter(adapter);
 
