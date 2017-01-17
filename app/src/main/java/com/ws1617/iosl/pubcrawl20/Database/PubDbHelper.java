@@ -221,26 +221,25 @@ public class PubDbHelper extends SQLiteOpenHelper {
 
     public List<Pub> getAllPubs() {
         List<Pub> pubsList = new ArrayList<>();
-
         SQLiteDatabase db = this.getReadableDatabase();
-
         String query = "SELECT " + PUB_ID + " FROM " +
                 TABLE_PUBS;
-
         Cursor c = db.rawQuery(query, null);
-
         if (c != null && c.moveToFirst()) {
-            int pub_id = c.getInt(c.getColumnIndex(PUB_NAME));
-            Pub pub = getListlessPub(pub_id);
-            pubsList.add(pub);
+            do {
+                int pub_id = c.getInt(c.getColumnIndex(PUB_ID));
+                Pub pub = getListlessPub(pub_id);
+                pubsList.add(pub);
+            } while (c.moveToNext());
             c.close();
+
         } else {
             Log.e(TAG, "Can't find Pubs");
             String msg = c != null ? "Can't find pubs. cursor size is " + c.getCount() : "\"Can't find pubs . Cursor is null or database empty\"";
             throw new DatabaseException(msg);
         }
+        c.close();
         return pubsList;
-
     }
 
     public ArrayList<Long> getTopPersonIds(long pub_id) {

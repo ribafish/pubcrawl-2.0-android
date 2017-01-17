@@ -144,8 +144,6 @@ public class SelectPubDialog extends DialogFragment {
         initPubList();
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, pubsListString);
         mPubsListSpinner.setAdapter(adapter);
-
-
     }
 
     //TODO should be fetched from the local DB
@@ -153,7 +151,10 @@ public class SelectPubDialog extends DialogFragment {
 
         PubDbHelper pubDbHelper = new PubDbHelper(getContext());
         pubsList = pubDbHelper.getAllPubs();
-       pubsList = new ArrayList<>();
+        pubsListString = new ArrayList<>();
+        for (Pub pub : pubsList) {
+            pubsListString.add(pub.getPubName());
+        }
          /*pubsListString = new ArrayList<>();
 
         Pub pub1 = new Pub(1, "pub 1", new LatLng(1, 1), 20);//new Pub("Dummy Pub " + 1, null, 1, new LatLng(52.5 + Math.random() * 0.1, 13.35 + Math.random() * 0.1));
