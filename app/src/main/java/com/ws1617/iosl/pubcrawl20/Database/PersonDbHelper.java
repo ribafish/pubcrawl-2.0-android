@@ -91,7 +91,6 @@ public class PersonDbHelper extends SQLiteOpenHelper {
             values.put(EVENT_ID, event_id);
             db.insert(TABLE_PERSON_EVENTS, null, values);
         }
-        DatabaseManager.getInstance().closeDatabase();
     }
 
     public void addFriendIds(Person person) {
@@ -103,7 +102,6 @@ public class PersonDbHelper extends SQLiteOpenHelper {
             values.put(FRIEND_ID, event_id);
             db.insert(TABLE_PERSON_FRIENDS, null, values);
         }
-        DatabaseManager.getInstance().closeDatabase();
     }
 
     public void addFavouritePubIds(Person person) {
@@ -115,7 +113,6 @@ public class PersonDbHelper extends SQLiteOpenHelper {
             values.put(PUB_ID, event_id);
             db.insert(TABLE_PERSON_FAVOURITE_PUBS, null, values);
         }
-        DatabaseManager.getInstance().closeDatabase();
     }
 
     public void addOwnedEventIds(Person person) {
@@ -127,7 +124,6 @@ public class PersonDbHelper extends SQLiteOpenHelper {
             values.put(EVENT_ID, event_id);
             db.insert(TABLE_PERSON_OWNED_EVENTS, null, values);
         }
-        DatabaseManager.getInstance().closeDatabase();
     }
 
     public void addOwnedPubIds(Person person) {
@@ -139,7 +135,6 @@ public class PersonDbHelper extends SQLiteOpenHelper {
             values.put(PUB_ID, event_id);
             db.insert(TABLE_PERSON_OWNED_PUBS, null, values);
         }
-        DatabaseManager.getInstance().closeDatabase();
     }
 
     public void updatePerson(Person person) {
@@ -156,7 +151,6 @@ public class PersonDbHelper extends SQLiteOpenHelper {
         String[] selectionArgs = {String.valueOf(person.getId())};
 
         db.update(TABLE_PERSONS, values, selection, selectionArgs);
-        DatabaseManager.getInstance().closeDatabase();
         updateLists(person);
     }
 
@@ -181,7 +175,6 @@ public class PersonDbHelper extends SQLiteOpenHelper {
         db.delete(TABLE_PERSON_FAVOURITE_PUBS, selection, selectionArgs);
         db.delete(TABLE_PERSON_OWNED_EVENTS, selection, selectionArgs);
         db.delete(TABLE_PERSON_OWNED_PUBS, selection, selectionArgs);
-        DatabaseManager.getInstance().closeDatabase();
     }
 
     public void deletePerson(Person person) {
@@ -191,7 +184,6 @@ public class PersonDbHelper extends SQLiteOpenHelper {
         String[] selectionArgs = {String.valueOf(person.getId())};
 
         db.delete(TABLE_PERSONS, selection, selectionArgs);
-        DatabaseManager.getInstance().closeDatabase();
         deleteLists(person);
     }
 
@@ -215,7 +207,6 @@ public class PersonDbHelper extends SQLiteOpenHelper {
                 PERSON_ID + " = " + person_id;
 
         Cursor c = db.rawQuery(query, null);
-        DatabaseManager.getInstance().closeDatabase();
         if (c != null && c.moveToFirst()) {
 
             person.setDescription(c.getString(c.getColumnIndex(DESCRIPTION)));
@@ -241,7 +232,6 @@ public class PersonDbHelper extends SQLiteOpenHelper {
                 PERSON_ID + " = " + person_id;
 
         Cursor c = db.rawQuery(query, null);
-        DatabaseManager.getInstance().closeDatabase();
         if (c != null && c.moveToFirst()) {
             do {
                 list.add(c.getLong(c.getColumnIndex(EVENT_ID)));
@@ -263,7 +253,6 @@ public class PersonDbHelper extends SQLiteOpenHelper {
                 PERSON_ID + " = " + person_id;
 
         Cursor c = db.rawQuery(query, null);
-        DatabaseManager.getInstance().closeDatabase();
         if (c != null && c.moveToFirst()) {
             do {
                 list.add(c.getLong(c.getColumnIndex(FRIEND_ID)));
@@ -285,7 +274,6 @@ public class PersonDbHelper extends SQLiteOpenHelper {
                 PERSON_ID + " = " + person_id;
 
         Cursor c = db.rawQuery(query, null);
-        DatabaseManager.getInstance().closeDatabase();
         if (c != null && c.moveToFirst()) {
             do {
                 list.add(c.getLong(c.getColumnIndex(PUB_ID)));
@@ -307,7 +295,6 @@ public class PersonDbHelper extends SQLiteOpenHelper {
                 PERSON_ID + " = " + person_id;
 
         Cursor c = db.rawQuery(query, null);
-        DatabaseManager.getInstance().closeDatabase();
         if (c != null && c.moveToFirst()) {
             do {
                 list.add(c.getLong(c.getColumnIndex(EVENT_ID)));
@@ -329,7 +316,6 @@ public class PersonDbHelper extends SQLiteOpenHelper {
                 PERSON_ID + " = " + person_id;
 
         Cursor c = db.rawQuery(query, null);
-        DatabaseManager.getInstance().closeDatabase();
         if (c != null && c.moveToFirst()) {
             do {
                 list.add(c.getLong(c.getColumnIndex(PUB_ID)));

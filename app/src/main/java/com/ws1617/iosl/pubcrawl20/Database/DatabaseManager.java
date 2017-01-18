@@ -14,6 +14,7 @@ public class DatabaseManager {
   private static DatabaseManager instance;
   private static SQLiteOpenHelper mDatabaseHelper;
   private SQLiteDatabase mDatabase;
+  private boolean open = false;
 
   private DatabaseManager()   {}
 
@@ -34,20 +35,11 @@ public class DatabaseManager {
   }
 
   public synchronized SQLiteDatabase openDatabase() {
-    mOpenCounter+=1;
-    if(mOpenCounter == 1) {
+    if(!open) {
       // Opening new database
       mDatabase = mDatabaseHelper.getWritableDatabase();
     }
+    open = true;
     return mDatabase;
-  }
-
-  public synchronized void closeDatabase() {
-    mOpenCounter-=1;
-    if(mOpenCounter == 0) {
-      // Closing database
-      mDatabase.close();
-
-    }
   }
 }

@@ -76,7 +76,6 @@ public class EventDbHelper extends SQLiteOpenHelper {
 
 
         long row_id = db.insert(TABLE_EVENTS, null, values);
-        DatabaseManager.getInstance().closeDatabase();
         if (row_id == -1) {
             updateEvent(event);
         } else {
@@ -98,7 +97,6 @@ public class EventDbHelper extends SQLiteOpenHelper {
             values.put(END_TIME, ts.getEndTime().getTime());
             db.insert(TABLE_EVENT_TIMESLOTS, null, values);
         }
-        DatabaseManager.getInstance().closeDatabase();
     }
 
     public void addParticipants(Event event) {
@@ -111,7 +109,6 @@ public class EventDbHelper extends SQLiteOpenHelper {
             values.put(PARTICIPANT_ID, id);
             db.insert(TABLE_EVENT_PARTICIPANTS, null, values);
         }
-		DatabaseManager.getInstance().closeDatabase();
     }
 
     public void addPubs(Event event) {
@@ -124,7 +121,6 @@ public class EventDbHelper extends SQLiteOpenHelper {
             values.put(PUB_ID, id);
             db.insert(TABLE_EVENT_PUBS, null, values);
         }
-		DatabaseManager.getInstance().closeDatabase();
     }
 
 
@@ -147,7 +143,6 @@ public class EventDbHelper extends SQLiteOpenHelper {
         String[] selectionArgs = {String.valueOf(event.getId())};
 
         db.update(TABLE_EVENTS, values, selection, selectionArgs);
-		DatabaseManager.getInstance().closeDatabase();
         updateLists(event);
     }
 
@@ -160,7 +155,6 @@ public class EventDbHelper extends SQLiteOpenHelper {
         String[] selectionArgs = {String.valueOf(event_id)};
 
         db.update(TABLE_EVENTS, values, selection, selectionArgs);
-		DatabaseManager.getInstance().closeDatabase();
     }
 
     public void updateLists(Event event) {
@@ -180,7 +174,6 @@ public class EventDbHelper extends SQLiteOpenHelper {
         db.delete(TABLE_EVENT_TIMESLOTS, selection, selectionArgs);
         db.delete(TABLE_EVENT_PARTICIPANTS, selection, selectionArgs);
         db.delete(TABLE_EVENT_PUBS, selection, selectionArgs);
-        DatabaseManager.getInstance().closeDatabase();
     }
 
     public void deleteEvent(long event_id) {
@@ -190,7 +183,6 @@ public class EventDbHelper extends SQLiteOpenHelper {
         String[] selectionArgs = {String.valueOf(event_id)};
 
         db.delete(TABLE_EVENTS, selection, selectionArgs);
-        DatabaseManager.getInstance().closeDatabase();
         deleteLists(event_id);
     }
 
@@ -222,7 +214,6 @@ public class EventDbHelper extends SQLiteOpenHelper {
                 EVENT_ID + " = " + event_id;
 
         Cursor c = db.rawQuery(query, null);
-        DatabaseManager.getInstance().closeDatabase();
         if (c != null && c.moveToFirst()) {
 
             event = getListlessEventFromCursor(c);
@@ -255,7 +246,6 @@ public class EventDbHelper extends SQLiteOpenHelper {
                 EVENT_ID + " = " + event_id;
 
         Cursor c = db.rawQuery(query, null);
-        DatabaseManager.getInstance().closeDatabase();
         if (c != null && c.moveToFirst()) {
             do {
                 TimeSlot slot = new TimeSlot(
@@ -282,7 +272,6 @@ public class EventDbHelper extends SQLiteOpenHelper {
                 EVENT_ID + " = " + event_id;
 
         Cursor c = db.rawQuery(query, null);
-        DatabaseManager.getInstance().closeDatabase();
         if (c != null && c.moveToFirst()) {
             do {
                 list.add(c.getLong(c.getColumnIndex(PARTICIPANT_ID)));
@@ -304,7 +293,6 @@ public class EventDbHelper extends SQLiteOpenHelper {
                 EVENT_ID + " = " + event_id;
 
         Cursor c = db.rawQuery(query, null);
-        DatabaseManager.getInstance().closeDatabase();
         if (c != null && c.moveToFirst()) {
             do {
                 list.add(c.getLong(c.getColumnIndex(PUB_ID)));
@@ -324,7 +312,6 @@ public class EventDbHelper extends SQLiteOpenHelper {
         String query = "SELECT * FROM " + TABLE_EVENTS;
 
         Cursor c = db.rawQuery(query, null);
-        DatabaseManager.getInstance().closeDatabase();
         if (c != null && c.moveToFirst()) {
             do {
                 Event event = getListlessEventFromCursor(c);
