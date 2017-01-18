@@ -53,7 +53,7 @@ public class PubDbHelper extends SQLiteOpenHelper {
     }
 
     public void addPub(Pub pub) {
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
 
         ContentValues values = new ContentValues();
         values.put(PUB_ID, pub.getId());
@@ -77,7 +77,7 @@ public class PubDbHelper extends SQLiteOpenHelper {
     }
 
     public void addTopPersons(Pub pub) {
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
         ContentValues values;
 
         for (int i = 0; i<pub.getTopsListIds().size(); i++) {
@@ -90,7 +90,7 @@ public class PubDbHelper extends SQLiteOpenHelper {
     }
 
     public void addPubEvents(Pub pub) {
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
         ContentValues values;
 
         for (long id : pub.getEventsListIds()) {
@@ -102,7 +102,7 @@ public class PubDbHelper extends SQLiteOpenHelper {
     }
 
     public void addPubImages(Pub pub) {
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
         ContentValues values;
 
         for (int i = 0; i<pub.getTopsListIds().size(); i++) {
@@ -115,7 +115,7 @@ public class PubDbHelper extends SQLiteOpenHelper {
     }
 
     public void updatePub(Pub pub) {
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
 
         ContentValues values = new ContentValues();
         values.put(PUB_ID, pub.getId());
@@ -137,7 +137,7 @@ public class PubDbHelper extends SQLiteOpenHelper {
     }
 
     public void updatePubOwner(long event_id, long owner_id) {
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
         ContentValues values = new ContentValues();
         values.put(OWNER, owner_id);
 
@@ -156,7 +156,7 @@ public class PubDbHelper extends SQLiteOpenHelper {
     }
 
     public void deleteLists(long pub_id) {
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
 
         String selection = PUB_ID + " =?";
         String[] selectionArgs = {String.valueOf(pub_id)};
@@ -167,7 +167,7 @@ public class PubDbHelper extends SQLiteOpenHelper {
     }
 
     public void deletePub(long pub_id) {
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
 
         String selection = PUB_ID + " =?";
         String[] selectionArgs = {String.valueOf(pub_id)};
@@ -178,7 +178,7 @@ public class PubDbHelper extends SQLiteOpenHelper {
     }
 
     public Pub getListlessPub (long pub_id) throws DatabaseException {
-        SQLiteDatabase db = this.getReadableDatabase();
+        SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
         Pub pub = new Pub(pub_id);
 
         String query = "SELECT * FROM " +
@@ -218,7 +218,7 @@ public class PubDbHelper extends SQLiteOpenHelper {
     }
 
     public ArrayList<Long> getTopPersonIds(long pub_id) {
-        SQLiteDatabase db = this.getReadableDatabase();
+        SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
         ArrayList<Long> list = new ArrayList<>();
 
         String query = "SELECT * FROM " +
@@ -240,7 +240,7 @@ public class PubDbHelper extends SQLiteOpenHelper {
     }
 
     public ArrayList<Long> getPubEventIds (long pub_id) {
-        SQLiteDatabase db = this.getReadableDatabase();
+        SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
         ArrayList<Long> list = new ArrayList<>();
 
         String query = "SELECT * FROM " +
@@ -261,7 +261,7 @@ public class PubDbHelper extends SQLiteOpenHelper {
     }
 
     public ArrayList<Bitmap> getPubImages (long pub_id) {
-        SQLiteDatabase db = this.getReadableDatabase();
+        SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
         ArrayList<Bitmap> list = new ArrayList<>();
 
         String query = "SELECT * FROM " +

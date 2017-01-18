@@ -55,7 +55,7 @@ public class EventDbHelper extends SQLiteOpenHelper {
     }
 
     public void addEvent(Event event) {
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
 
         // Add to event table
         ContentValues values = new ContentValues();
@@ -71,9 +71,12 @@ public class EventDbHelper extends SQLiteOpenHelper {
             values.put(LONG_MIN, event.getMinLatLng().longitude);
             values.put(LAT_MAX, event.getMaxLatLng().latitude);
             values.put(LONG_MAX, event.getMaxLatLng().longitude);
-        } catch (Exception e) { e.printStackTrace(); }
+        }
+        catch (Exception e) { e.printStackTrace(); }
+
 
         long row_id = db.insert(TABLE_EVENTS, null, values);
+        DatabaseManager.getInstance().closeDatabase();
         if (row_id == -1) {
             updateEvent(event);
         } else {
@@ -84,7 +87,7 @@ public class EventDbHelper extends SQLiteOpenHelper {
     }
 
     public void addTimeslots(Event event) {
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
         ContentValues values;
 
         for (TimeSlot ts : event.getTimeSlotList()) {
@@ -95,10 +98,11 @@ public class EventDbHelper extends SQLiteOpenHelper {
             values.put(END_TIME, ts.getEndTime().getTime());
             db.insert(TABLE_EVENT_TIMESLOTS, null, values);
         }
+        DatabaseManager.getInstance().closeDatabase();
     }
 
     public void addParticipants(Event event) {
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
         ContentValues values;
 
         for (long id : event.getParticipantIds()) {
@@ -107,10 +111,11 @@ public class EventDbHelper extends SQLiteOpenHelper {
             values.put(PARTICIPANT_ID, id);
             db.insert(TABLE_EVENT_PARTICIPANTS, null, values);
         }
+		DatabaseManager.getInstance().closeDatabase();
     }
 
     public void addPubs(Event event) {
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
         ContentValues values;
 
         for (long id : event.getPubIds()) {
@@ -119,11 +124,12 @@ public class EventDbHelper extends SQLiteOpenHelper {
             values.put(PUB_ID, id);
             db.insert(TABLE_EVENT_PUBS, null, values);
         }
+		DatabaseManager.getInstance().closeDatabase();
     }
 
 
     public void updateEvent(Event event) {
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
         ContentValues values = new ContentValues();
         values.put(EVENT_ID, event.getId());
         values.put(EVENT_NAME, event.getEventName());
@@ -141,12 +147,12 @@ public class EventDbHelper extends SQLiteOpenHelper {
         String[] selectionArgs = {String.valueOf(event.getId())};
 
         db.update(TABLE_EVENTS, values, selection, selectionArgs);
-
+		DatabaseManager.getInstance().closeDatabase();
         updateLists(event);
     }
 
     public void updateEventOwner(long event_id, long owner_id) {
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
         ContentValues values = new ContentValues();
         values.put(OWNER, owner_id);
 
@@ -154,6 +160,7 @@ public class EventDbHelper extends SQLiteOpenHelper {
         String[] selectionArgs = {String.valueOf(event_id)};
 
         db.update(TABLE_EVENTS, values, selection, selectionArgs);
+		DatabaseManager.getInstance().closeDatabase();
     }
 
     public void updateLists(Event event) {
@@ -165,7 +172,7 @@ public class EventDbHelper extends SQLiteOpenHelper {
     }
 
     public void deleteLists(long event_id) {
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
 
         String selection = EVENT_ID + " =?";
         String[] selectionArgs = {String.valueOf(event_id)};
@@ -173,16 +180,17 @@ public class EventDbHelper extends SQLiteOpenHelper {
         db.delete(TABLE_EVENT_TIMESLOTS, selection, selectionArgs);
         db.delete(TABLE_EVENT_PARTICIPANTS, selection, selectionArgs);
         db.delete(TABLE_EVENT_PUBS, selection, selectionArgs);
+        DatabaseManager.getInstance().closeDatabase();
     }
 
     public void deleteEvent(long event_id) {
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
 
         String selection = EVENT_ID + " =?";
         String[] selectionArgs = {String.valueOf(event_id)};
 
         db.delete(TABLE_EVENTS, selection, selectionArgs);
-
+        DatabaseManager.getInstance().closeDatabase();
         deleteLists(event_id);
     }
 
@@ -206,7 +214,7 @@ public class EventDbHelper extends SQLiteOpenHelper {
     }
 
     public Event getListlessEvent(long event_id) throws DatabaseException {
-        SQLiteDatabase db = this.getReadableDatabase();
+        SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
         Event event;
 
         String query = "SELECT * FROM " +
@@ -214,7 +222,7 @@ public class EventDbHelper extends SQLiteOpenHelper {
                 EVENT_ID + " = " + event_id;
 
         Cursor c = db.rawQuery(query, null);
-
+        DatabaseManager.getInstance().closeDatabase();
         if (c != null && c.moveToFirst()) {
 
             event = getListlessEventFromCursor(c);
@@ -239,7 +247,7 @@ public class EventDbHelper extends SQLiteOpenHelper {
     }
 
     public ArrayList<TimeSlot> getTimeSlots(long event_id) {
-        SQLiteDatabase db = this.getReadableDatabase();
+        SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
         ArrayList<TimeSlot> timeSlots = new ArrayList<>();
 
         String query = "SELECT * FROM " +
@@ -247,6 +255,7 @@ public class EventDbHelper extends SQLiteOpenHelper {
                 EVENT_ID + " = " + event_id;
 
         Cursor c = db.rawQuery(query, null);
+        DatabaseManager.getInstance().closeDatabase();
         if (c != null && c.moveToFirst()) {
             do {
                 TimeSlot slot = new TimeSlot(
@@ -265,7 +274,7 @@ public class EventDbHelper extends SQLiteOpenHelper {
     }
 
     public ArrayList<Long> getParticipantIds(long event_id) {
-        SQLiteDatabase db = this.getReadableDatabase();
+        SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
         ArrayList<Long> list = new ArrayList<>();
 
         String query = "SELECT * FROM " +
@@ -273,6 +282,7 @@ public class EventDbHelper extends SQLiteOpenHelper {
                 EVENT_ID + " = " + event_id;
 
         Cursor c = db.rawQuery(query, null);
+        DatabaseManager.getInstance().closeDatabase();
         if (c != null && c.moveToFirst()) {
             do {
                 list.add(c.getLong(c.getColumnIndex(PARTICIPANT_ID)));
@@ -286,7 +296,7 @@ public class EventDbHelper extends SQLiteOpenHelper {
     }
 
     public ArrayList<Long> getPubIds(long event_id) {
-        SQLiteDatabase db = this.getReadableDatabase();
+        SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
         ArrayList<Long> list = new ArrayList<>();
 
         String query = "SELECT * FROM " +
@@ -294,6 +304,7 @@ public class EventDbHelper extends SQLiteOpenHelper {
                 EVENT_ID + " = " + event_id;
 
         Cursor c = db.rawQuery(query, null);
+        DatabaseManager.getInstance().closeDatabase();
         if (c != null && c.moveToFirst()) {
             do {
                 list.add(c.getLong(c.getColumnIndex(PUB_ID)));
@@ -307,12 +318,13 @@ public class EventDbHelper extends SQLiteOpenHelper {
     }
 
     public ArrayList<Event> getAllEvents() throws DatabaseException {
-        SQLiteDatabase db = this.getReadableDatabase();
+        SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
         ArrayList<Event> events = new ArrayList<>();
 
         String query = "SELECT * FROM " + TABLE_EVENTS;
 
         Cursor c = db.rawQuery(query, null);
+        DatabaseManager.getInstance().closeDatabase();
         if (c != null && c.moveToFirst()) {
             do {
                 Event event = getListlessEventFromCursor(c);
