@@ -97,7 +97,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(context, BarcodeCaptureActivity.class);
-                //TODO Add preferences for camera ui
                 intent.putExtra(BarcodeCaptureActivity.AutoFocus, sharedPrefs.getBoolean("barcode_focus", false));
                 intent.putExtra(BarcodeCaptureActivity.UseFlash, sharedPrefs.getBoolean("barcode_flash", false));
                 startActivityForResult(intent, RC_BARCODE_CAPTURE);
