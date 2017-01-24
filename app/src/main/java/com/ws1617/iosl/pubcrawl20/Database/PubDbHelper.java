@@ -10,30 +10,10 @@ import com.google.android.gms.maps.model.LatLng;
 import com.ws1617.iosl.pubcrawl20.DataModels.Pub;
 
 import java.util.ArrayList;
+import java.util.List;
 
-import static com.ws1617.iosl.pubcrawl20.Database.Contracts.PubContract.CREATE_PUBS_TABLE;
-import static com.ws1617.iosl.pubcrawl20.Database.Contracts.PubContract.CREATE_PUB_EVENTS_TABLE;
-import static com.ws1617.iosl.pubcrawl20.Database.Contracts.PubContract.CREATE_PUB_IMAGES_TABLE;
-import static com.ws1617.iosl.pubcrawl20.Database.Contracts.PubContract.CREATE_TOP_PERSONS_TABLE;
-import static com.ws1617.iosl.pubcrawl20.Database.Contracts.PubContract.EVENT_ID;
-import static com.ws1617.iosl.pubcrawl20.Database.Contracts.PubContract.IMAGE;
-import static com.ws1617.iosl.pubcrawl20.Database.Contracts.PubContract.ITERATOR;
-import static com.ws1617.iosl.pubcrawl20.Database.Contracts.PubContract.LATITUDE;
-import static com.ws1617.iosl.pubcrawl20.Database.Contracts.PubContract.LONGITUDE;
-import static com.ws1617.iosl.pubcrawl20.Database.Contracts.PubContract.OPENING_TIMES;
-import static com.ws1617.iosl.pubcrawl20.Database.Contracts.PubContract.OWNER;
-import static com.ws1617.iosl.pubcrawl20.Database.Contracts.PubContract.PERSON_ID;
-import static com.ws1617.iosl.pubcrawl20.Database.Contracts.PubContract.PRICES;
-import static com.ws1617.iosl.pubcrawl20.Database.Contracts.PubContract.PUB_ID;
-import static com.ws1617.iosl.pubcrawl20.Database.Contracts.PubContract.PUB_NAME;
-import static com.ws1617.iosl.pubcrawl20.Database.Contracts.PubContract.RATING;
-import static com.ws1617.iosl.pubcrawl20.Database.Contracts.PubContract.SIZE;
-import static com.ws1617.iosl.pubcrawl20.Database.Contracts.PubContract.TABLE_PUBS;
-import static com.ws1617.iosl.pubcrawl20.Database.Contracts.PubContract.TABLE_PUB_EVENTS;
-import static com.ws1617.iosl.pubcrawl20.Database.Contracts.PubContract.TABLE_PUB_IMAGES;
-import static com.ws1617.iosl.pubcrawl20.Database.Contracts.PubContract.TABLE_TOP_PERSONS;
-import static com.ws1617.iosl.pubcrawl20.Database.DatabaseHelper.bitmapToBytes;
-import static com.ws1617.iosl.pubcrawl20.Database.DatabaseHelper.bytesToBitmap;
+import static com.ws1617.iosl.pubcrawl20.Database.Contracts.PubContract.*;
+import static com.ws1617.iosl.pubcrawl20.Database.DatabaseHelper.*;
 
 /**
  * Created by Gasper Kojek on 20. 12. 2016.
@@ -94,7 +74,7 @@ public class PubDbHelper  {
         SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
         ContentValues values;
 
-        for (int i = 0; i<pub.getTopsListIds().size(); i++) {
+        for (int i = 0; i < pub.getTopsListIds().size(); i++) {
             values = new ContentValues();
             values.put(PUB_ID, pub.getId());
             values.put(PERSON_ID, pub.getTopsListIds().get(i));
@@ -119,7 +99,7 @@ public class PubDbHelper  {
         SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
         ContentValues values;
 
-        for (int i = 0; i<pub.getTopsListIds().size(); i++) {
+        for (int i = 0; i < pub.getTopsListIds().size(); i++) {
             values = new ContentValues();
             values.put(PUB_ID, pub.getId());
             values.put(ITERATOR, i);
@@ -196,7 +176,7 @@ public class PubDbHelper  {
         Pub pub = new Pub(pub_id);
 
         String query = "SELECT * FROM " +
-                TABLE_PUBS +  " WHERE " +
+                TABLE_PUBS + " WHERE " +
                 PUB_ID + " = " + pub_id;
 
         Cursor c = db.rawQuery(query, null);
@@ -214,14 +194,14 @@ public class PubDbHelper  {
 
             c.close();
         } else {
-            Log.e(TAG, "Can't find pub with id " + pub_id );
+            Log.e(TAG, "Can't find pub with id " + pub_id);
             throw new DatabaseException("Can't find pub with id " + pub_id + ". Cursor is null or database empty");
         }
 
         return pub;
     }
 
-    public Pub getPub (long pub_id) throws DatabaseException {
+    public Pub getPub(long pub_id) throws DatabaseException {
         Pub pub = getListlessPub(pub_id);
 
         pub.setTopsListIds(getTopPersonIds(pub_id));
@@ -231,12 +211,35 @@ public class PubDbHelper  {
         return pub;
     }
 
+    public List<Pub> getAllPubs() {
+        List<Pub> pubsList = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT " + PUB_ID + " FROM " +
+                TABLE_PUBS;
+        Cursor c = db.rawQuery(query, null);
+        if (c != null && c.moveToFirst()) {
+            do {
+                int pub_id = c.getInt(c.getColumnIndex(PUB_ID));
+                Pub pub = getListlessPub(pub_id);
+                pubsList.add(pub);
+            } while (c.moveToNext());
+            c.close();
+
+        } else {
+            Log.e(TAG, "Can't find Pubs");
+            String msg = c != null ? "Can't find pubs. cursor size is " + c.getCount() : "\"Can't find pubs . Cursor is null or database empty\"";
+            throw new DatabaseException(msg);
+        }
+        c.close();
+        return pubsList;
+    }
+
     public ArrayList<Long> getTopPersonIds(long pub_id) {
         SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
         ArrayList<Long> list = new ArrayList<>();
 
         String query = "SELECT * FROM " +
-                TABLE_TOP_PERSONS +  " WHERE " +
+                TABLE_TOP_PERSONS + " WHERE " +
                 PUB_ID + " = " + pub_id +
                 " ORDER BY " + ITERATOR + " ASC";
 
@@ -258,7 +261,7 @@ public class PubDbHelper  {
         ArrayList<Long> list = new ArrayList<>();
 
         String query = "SELECT * FROM " +
-                TABLE_PUB_EVENTS +  " WHERE " +
+                TABLE_PUB_EVENTS + " WHERE " +
                 PUB_ID + " = " + pub_id;
 
         Cursor c = db.rawQuery(query, null);
@@ -279,7 +282,7 @@ public class PubDbHelper  {
         ArrayList<Bitmap> list = new ArrayList<>();
 
         String query = "SELECT * FROM " +
-                TABLE_PUB_IMAGES +  " WHERE " +
+                TABLE_PUB_IMAGES + " WHERE " +
                 PUB_ID + " = " + pub_id;
 
         Cursor c = db.rawQuery(query, null);

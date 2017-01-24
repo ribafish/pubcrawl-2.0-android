@@ -13,6 +13,6 @@ class PubMiniComparator implements Comparator<PubMini> {
     @Override
     public int compare(PubMini pubMini, PubMini t1) {
         return new TimeSlotComparator(true, TimeSlotComparator.START)
-                .compare(pubMini.timeSlot, t1.timeSlot);
+                .compare(pubMini.getTimeSlot(), t1.getTimeSlot());
     }
 }

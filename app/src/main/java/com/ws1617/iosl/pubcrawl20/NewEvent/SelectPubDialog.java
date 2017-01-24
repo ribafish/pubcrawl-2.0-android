@@ -1,7 +1,6 @@
 package com.ws1617.iosl.pubcrawl20.NewEvent;
 
 import android.app.TimePickerDialog;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
@@ -24,25 +23,32 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.ws1617.iosl.pubcrawl20.DataModels.Pub;
+import com.ws1617.iosl.pubcrawl20.DataModels.PubMiniModel;
+import com.ws1617.iosl.pubcrawl20.DataModels.TimeSlot;
+import com.ws1617.iosl.pubcrawl20.Database.PubDbHelper;
 import com.ws1617.iosl.pubcrawl20.R;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
  * Created by Haneen on 11/29/2016.
  */
 
-public class PubListDialog extends DialogFragment {
+public class SelectPubDialog extends DialogFragment {
 
-    static final String TAG = "PubListDialog";
+    static final String TAG = "SelectPubDialog";
 
     //Listeners
     OnSelectPubDialogDismissed onSelectPubDialogDismissed;
 
     //Views
     Button mTimeFrom, mTimeTo, mDoneBtn;
-    Spinner mPubsListView;
+    Spinner mPubsListSpinner;
     TextView mPubName, mPubSize;
     SupportMapFragment mapFragment;
     View mRootView;
@@ -52,10 +58,9 @@ public class PubListDialog extends DialogFragment {
     List<Pub> pubsList;
     List<String> pubsListString;
     GoogleMap mGoogleMap;
+    Integer pubPosition;
+    Date mStartDate, mEndDate;
 
-
-    public PubListDialog() {
-    }
 
     public void setPubListListener(OnSelectPubDialogDismissed onSelectPubDialogDismissed) {
         this.onSelectPubDialogDismissed = onSelectPubDialogDismissed;
@@ -68,6 +73,9 @@ public class PubListDialog extends DialogFragment {
         mRootView = inflater.inflate(R.layout.view_pup_list, null);
         initView();
         initMapView();
+
+        if (pubPosition != null) mPubsListSpinner.setSelection(pubPosition);
+
         return mRootView;
 
     }
@@ -83,23 +91,18 @@ public class PubListDialog extends DialogFragment {
         // there is two lists. one is the selected list and the other is the full list
         // the itemPosition parameter that we get here is the position of the clicked item in the selected list
         // but the position that we need to pass to the dialog is the position of this item in the full list
-        int position = pubsList.indexOf(pub);
+        initPubList();
+        if (pubsList == null || pub == null)
+            return;
+        pubPosition = pubsList.indexOf(pub);
 
-        if (position >= pubsList.size()) return;
-        mPubsListView.setSelection(position);
+        if (pubPosition >= pubsList.size()) return;
+//        mPubsListSpinner.setSelection(pubPosition);
         // selectedPub =pub;
         //selectItem();
     }
 
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-
-    }
-
-
-//TODO check if this should be uncommented again
+    //TODO check if this should be uncommented again
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -110,13 +113,13 @@ public class PubListDialog extends DialogFragment {
     }
 
     private void initMapView() {
-         mapFragment = new SupportMapFragment();
+        mapFragment = new SupportMapFragment();
         FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.pub_dialog_map, mapFragment, TAG).commit();
         mapFragment.getMapAsync(new OnMapReadyCallback() {
             @Override
             public void onMapReady(GoogleMap googleMap) {
-               mGoogleMap = googleMap;
+                mGoogleMap = googleMap;
                 LatLng sydney = new LatLng(-34, 151);
                 mGoogleMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
                 mGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
@@ -139,41 +142,22 @@ public class PubListDialog extends DialogFragment {
         mTimeTo = (Button) mRootView.findViewById(R.id.pub_dialog_visit_to_date_picker);
         mTimeTo.setOnClickListener(mDoneBtnClickedListener);
 
-        mPubsListView = (Spinner) mRootView.findViewById(R.id.pub_dialog_pubs_list);
-        mPubsListView.setOnItemSelectedListener(pubListOnItemSelectedListener);
-        //TODO should be fetched from the DB
+        mPubsListSpinner = (Spinner) mRootView.findViewById(R.id.pub_dialog_pubs_list);
+        mPubsListSpinner.setOnItemSelectedListener(pubListOnItemSelectedListener);
+
         initPubList();
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, pubsListString);
-        mPubsListView.setAdapter(adapter);
-
-
-
-
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), R.layout.view_pubs_spinner_item, pubsListString);
+        mPubsListSpinner.setAdapter(adapter);
     }
 
-    //TODO should be fetched from the local DB
     void initPubList() {
 
-        pubsList = new ArrayList<>();
+        PubDbHelper pubDbHelper = new PubDbHelper(getContext());
+        pubsList = pubDbHelper.getAllPubs();
         pubsListString = new ArrayList<>();
-
-        Pub pub1 = new Pub(1, "pub 1", new LatLng(1, 1), 10);
-        pubsList.add(pub1);
-        pubsListString.add(pub1.getPubName());
-
-        Pub pub2 = new Pub(2, "pub 2", new LatLng(1, 1), 20);
-        pubsList.add(pub2);
-        pubsListString.add(pub2.getPubName());
-
-        Pub pub3 = new Pub(3, "pub 3", new LatLng(1, 1), 30);
-        pubsList.add(pub3);
-        pubsListString.add(pub3.getPubName());
-
-        Pub pub4 = new Pub(4, "pub 4", new LatLng(1, 1), 40);
-        pubsList.add(pub4);
-        pubsListString.add(pub4.getPubName());
-
-
+        for (Pub pub : pubsList) {
+            pubsListString.add(pub.getPubName());
+        }
     }
 
     View.OnClickListener mDoneBtnClickedListener = new View.OnClickListener() {
@@ -182,10 +166,20 @@ public class PubListDialog extends DialogFragment {
             switch (view.getId()) {
                 case R.id.pub_dialog_pub_done: {
                     dismiss();
-                    if (selectedPub != null)
-                        onSelectPubDialogDismissed.addPubToList(selectedPub);
-
-                    break;
+                    if (selectedPub != null) {
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm");
+                        try {
+                            mStartDate = dateFormat.parse(mTimeFrom.getText().toString());
+                            mEndDate = dateFormat.parse(mTimeTo.getText().toString());
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+                        PubMiniModel miniPubModel = new PubMiniModel(
+                                selectedPub,
+                                new TimeSlot(selectedPub.getId(), mStartDate, mEndDate));
+                        onSelectPubDialogDismissed.addPubToList(miniPubModel);
+                        break;
+                    }
                 }
                 case R.id.pub_dialog_visit_from_date_picker: {
                     new TimePickerDialog(getContext(), onTimeFromSetListener, 12, 00, true).show();
@@ -204,13 +198,13 @@ public class PubListDialog extends DialogFragment {
     TimePickerDialog.OnTimeSetListener onTimeFromSetListener = new TimePickerDialog.OnTimeSetListener() {
         @Override
         public void onTimeSet(TimePicker timePicker, int hours, int minutes) {
-            mTimeFrom.setText(hours + ":" + minutes );
+            mTimeFrom.setText(hours + ":" + minutes);
         }
     };
     TimePickerDialog.OnTimeSetListener onTimeToSetListener = new TimePickerDialog.OnTimeSetListener() {
         @Override
         public void onTimeSet(TimePicker timePicker, int hours, int minutes) {
-            mTimeTo.setText(hours + ":" + minutes );
+            mTimeTo.setText(hours + ":" + minutes);
         }
     };
 
@@ -234,6 +228,6 @@ public class PubListDialog extends DialogFragment {
     }
 
     interface OnSelectPubDialogDismissed {
-        void addPubToList(Pub newPub);
+        void addPubToList(PubMiniModel newPub);
     }
 }

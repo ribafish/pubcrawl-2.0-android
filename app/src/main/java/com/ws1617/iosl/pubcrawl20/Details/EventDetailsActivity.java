@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -72,11 +73,11 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
 
     private static final String TAG = "EventDetailsActivity";
 
-    private static final float PERCENTAGE_TO_SHOW_TITLE_AT_TOOLBAR  = 0.75f;
-    private static final float PERCENTAGE_TO_HIDE_TITLE_DETAILS     = 0.3f;
-    private static final int ALPHA_ANIMATIONS_DURATION              = 200;
+    private static final float PERCENTAGE_TO_SHOW_TITLE_AT_TOOLBAR = 0.75f;
+    private static final float PERCENTAGE_TO_HIDE_TITLE_DETAILS = 0.3f;
+    private static final int ALPHA_ANIMATIONS_DURATION = 200;
 
-    private boolean mIsTheTitleVisible          = false;
+    private boolean mIsTheTitleVisible = false;
     private boolean mIsTheTitleContainerVisible = true;
 
     private LinearLayout mCollapsableTitleContainer;
@@ -111,20 +112,43 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
         setContentView(R.layout.activity_event_details);
         rootView = (CoordinatorLayout) findViewById(R.id.event_details_root);
 
-        long id = getIntent().getLongExtra("id", -1);
-        getEvent(id);
+
+        initRouteFragment();
+
         initDescriptionExpanding();
 
         setupToolbar();
-        setupMap();
-        setupPubsListView();
-
+        //  setupMap();
+        //setupPubsListView();
 
 
         // TODO: change to the data load listener or smtn when database is ready
         populateFields();
         initDescriptionExpanding();
         setupParticipants();
+    }
+
+
+    void initRouteFragment() {
+        // this list should come from the DB and from outside the fragment
+        // the fragment it self get the data from outsource
+
+        //View mode
+        initVewMode();
+        //Edit mode
+        //TODO
+
+        RouteFragment routeFragment = RouteFragment.newInstance(RouteFragment.DIALOG_STATUS.VIEW_MODE);
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction().add(R.id.test_place_holder, routeFragment, "Route").commit();
+       // routeFragment.setListOfPubs(pubs);
+
+    }
+
+    void initVewMode() {
+        long id = getIntent().getLongExtra("id", -1);
+
+        getEvent(id);
     }
 
     private void setupToolbar() {
@@ -136,14 +160,16 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
         ViewPager viewPager = (ViewPager) findViewById(R.id.event_details_pager);
         TabLayout tabLayout = (TabLayout) findViewById(R.id.event_details_tabDots);
 
-        try{
+        try {
             String eventName = getIntent().getStringExtra("name");
 
             mToolbar.setTitle(eventName);
             mTitle.setText(eventName);
             mSubtitle.setText("Loading...");  //TODO
 
-        } catch (Exception e) { e.printStackTrace(); }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
 
         mAppBarLayout.addOnOffsetChangedListener(this);
@@ -241,14 +267,14 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
             }
         });
         if (participants.size() < 4) {
-            ((Button)findViewById(R.id.event_details_participants_show_all_btn)).setVisibility(View.GONE);
-            ((ImageView)findViewById(R.id.event_details_participants_gradient)).setVisibility(View.GONE);
+            ((Button) findViewById(R.id.event_details_participants_show_all_btn)).setVisibility(View.GONE);
+            ((ImageView) findViewById(R.id.event_details_participants_gradient)).setVisibility(View.GONE);
             ((RelativeLayout) findViewById(R.id.event_details_participants_layout)).getLayoutParams().height = RelativeLayout.LayoutParams.WRAP_CONTENT;
             setListViewHeightBasedOnItems(participantListView);
         } else {
             final int height280 = (int) (280 * getResources().getDisplayMetrics().density);
-            ((Button)findViewById(R.id.event_details_participants_show_all_btn)).setVisibility(View.VISIBLE);
-            ((ImageView)findViewById(R.id.event_details_participants_gradient)).setVisibility(View.VISIBLE);
+            ((Button) findViewById(R.id.event_details_participants_show_all_btn)).setVisibility(View.VISIBLE);
+            ((ImageView) findViewById(R.id.event_details_participants_gradient)).setVisibility(View.VISIBLE);
             ((RelativeLayout) findViewById(R.id.event_details_participants_layout)).getLayoutParams().height = height280;
             findViewById(R.id.event_details_participants_show_all_btn).setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -301,29 +327,30 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
         }
 
         if (pubs.size() > 0) {
-            pubAdapter.notifyDataSetChanged();
-            setListViewHeightBasedOnItems(pubListView);
+            //pubAdapter.notifyDataSetChanged();
+            //setListViewHeightBasedOnItems(pubListView);
         }
 
     }
 
-    private void setupPubsListView() {
-        pubAdapter = new PubAdapter(this, pubs);
+ /*   private void setupPubsListView() {
+        pubAdapter = new PubAdapter(this, mSelectedPupsList);
         pubListView = (ListView) findViewById(R.id.event_details_pubListView);
         pubListView.setAdapter(pubAdapter);
         pubListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent intent = new Intent(context, PubDetailsActivity.class);
-                intent.putExtra("name", pubs.get(i).getName());
-                intent.putExtra("id", pubs.get(i).getId());
+                intent.putExtra("name", mSelectedPupsList.get(i).getName());
+                intent.putExtra("id", mSelectedPupsList.get(i).getId());
                 startActivity(intent);
             }
         });
-    }
+    }*/
 
     /**
      * Sets ListView height to show all items
+     *
      * @param listView ListView to change height
      * @return the raw height set to the listView
      */
@@ -365,7 +392,7 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
 
      */
 
-    private void setupMap() {
+  /*  private void setupMap() {
         Log.d(TAG, "setupMap");
         FrameLayout mapContainer = (FrameLayout) findViewById(R.id.event_details_map_map);
 //        mapContainer.getLayoutParams().height = mapContainer.getLayoutParams().width;
@@ -414,26 +441,26 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
             }
         });
 
-    }
+    }*/
 
-    /**
-     *  Draws the event on the supplied map
-      * @param map map to draw the event on
-     *  @param unzoom float amount to un-zoom the map
-     */
-    public HashMap<Marker, Long> drawOnMap(GoogleMap map, float unzoom) {
+
+   /* public HashMap<Marker, Long> drawOnMap(GoogleMap map, float unzoom) {
         Log.d(TAG, "drawOnMap()");
+<<<<<<< HEAD
+        if (mSelectedPupsList.size() > 0 && map != null) {
+=======
         if (this.event == null) {
             Log.e(TAG, "drawOnMap: event == null");
             return null;
         }
         if (pubs.size() > 0 && map != null) {
+>>>>>>> master
             map.clear();
             HashMap<Marker, Long> markerLongHashMap = new HashMap<>();
             ArrayList<LatLng> latLngs = new ArrayList<>();
             LatLngBounds.Builder builder = new LatLngBounds.Builder();
-            for (int i = 0; i < pubs.size(); i++) {
-                PubMini pub = pubs.get(i);
+            for (int i = 0; i < mSelectedPupsList.size(); i++) {
+                PubMini pub = mSelectedPupsList.get(i);
 
                 Marker marker = map.addMarker(new MarkerOptions()
                         .position(pub.getLatLng())
@@ -461,7 +488,7 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
     }
 
     public long getPubIdFromMarker(Marker marker) throws ArrayIndexOutOfBoundsException{
-        for (PubMini pub : pubs) {
+        for (PubMini pub : mSelectedPupsList) {
             if(marker == pub.getMarker()) return pub.getId();
         }
         throw new ArrayIndexOutOfBoundsException("Can't find pub");
@@ -512,7 +539,7 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
 
         return bitmap;
     }
-
+*/
     /*
 
         Expandable / Collapsable toolbar animation functions
@@ -531,7 +558,7 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
     private void handleToolbarTitleVisibility(float percentage) {
         if (percentage >= PERCENTAGE_TO_SHOW_TITLE_AT_TOOLBAR) {
 
-            if(!mIsTheTitleVisible) {
+            if (!mIsTheTitleVisible) {
                 startAlphaAnimation(mToolbar, ALPHA_ANIMATIONS_DURATION, View.VISIBLE);
                 mIsTheTitleVisible = true;
             }
@@ -547,7 +574,7 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
 
     private void handleAlphaOnTitle(float percentage) {
         if (percentage >= PERCENTAGE_TO_HIDE_TITLE_DETAILS) {
-            if(mIsTheTitleContainerVisible) {
+            if (mIsTheTitleContainerVisible) {
                 startAlphaAnimation(mCollapsableTitleContainer, ALPHA_ANIMATIONS_DURATION, View.INVISIBLE);
                 mIsTheTitleContainerVisible = false;
             }
@@ -561,7 +588,7 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
         }
     }
 
-    public static void startAlphaAnimation (View v, long duration, int visibility) {
+    public static void startAlphaAnimation(View v, long duration, int visibility) {
         AlphaAnimation alphaAnimation = (visibility == View.VISIBLE)
                 ? new AlphaAnimation(0f, 1f)
                 : new AlphaAnimation(1f, 0f);
@@ -579,6 +606,7 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
      */
 
     private void getEvent(long id) {
+
         try {
             this.event = new EventDbHelper().getEvent(id);
 
@@ -609,6 +637,7 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
         Collections.sort(this.pubs, new PubMiniComparator());
 
         for (Long id : mIds) {
+
             try {
                 this.pubs.add(new PubMini(new PubDbHelper().getPub(id), null));
             } catch (DatabaseException de) {
@@ -617,7 +646,7 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
         }
     }
 
-    private void getParticipants (ArrayList<Long> ids) {
+    private void getParticipants(ArrayList<Long> ids) {
         for (long id : ids) {
             try {
                 this.participants.add(new PersonMini(new PersonDbHelper().getPerson(id)));
@@ -626,6 +655,7 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
             }
         }
     }
+
 
     private void getOwner (long id) {
         try {

@@ -18,32 +18,14 @@ import com.ws1617.iosl.pubcrawl20.DataModels.Person;
 import com.ws1617.iosl.pubcrawl20.DataModels.Pub;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 
-import static com.ws1617.iosl.pubcrawl20.Database.JsonParser.EMBEDDED;
-import static com.ws1617.iosl.pubcrawl20.Database.JsonParser.EVENTS;
-import static com.ws1617.iosl.pubcrawl20.Database.JsonParser.EVENT_OWNER;
-import static com.ws1617.iosl.pubcrawl20.Database.JsonParser.EVENT_PARTICIPANTS;
-import static com.ws1617.iosl.pubcrawl20.Database.JsonParser.EVENT_PUBS;
-import static com.ws1617.iosl.pubcrawl20.Database.JsonParser.PERSONS;
-import static com.ws1617.iosl.pubcrawl20.Database.JsonParser.PERSON_EVENTS;
-import static com.ws1617.iosl.pubcrawl20.Database.JsonParser.PERSON_FAVOURITE_PUBS;
-import static com.ws1617.iosl.pubcrawl20.Database.JsonParser.PERSON_FRIENDS;
-import static com.ws1617.iosl.pubcrawl20.Database.JsonParser.PERSON_OWNED_EVENTS;
-import static com.ws1617.iosl.pubcrawl20.Database.JsonParser.PERSON_OWNED_PUBS;
-import static com.ws1617.iosl.pubcrawl20.Database.JsonParser.PUBS;
-import static com.ws1617.iosl.pubcrawl20.Database.JsonParser.PUB_EVENTS;
-import static com.ws1617.iosl.pubcrawl20.Database.JsonParser.PUB_OWNER;
-import static com.ws1617.iosl.pubcrawl20.Database.JsonParser.PUB_TOP_PERSONS;
-import static com.ws1617.iosl.pubcrawl20.Database.JsonParser.parseJSONEvent;
-import static com.ws1617.iosl.pubcrawl20.Database.JsonParser.parseJSONResponseEvents;
-import static com.ws1617.iosl.pubcrawl20.Database.JsonParser.parseJsonResponsePersons;
-import static com.ws1617.iosl.pubcrawl20.Database.JsonParser.parseJsonResponsePubs;
-import static com.ws1617.iosl.pubcrawl20.Database.JsonParser.parsePersonJson;
-import static com.ws1617.iosl.pubcrawl20.Database.JsonParser.parsePubJson;
+import static com.ws1617.iosl.pubcrawl20.Database.JsonParser.*;
 
 
 /**
@@ -61,7 +43,7 @@ public class DatabaseHelper {
         return stream.toByteArray();
     }
 
-    public static Bitmap bytesToBitmap (byte[] image) {
+    public static Bitmap bytesToBitmap(byte[] image) {
         if (image == null) return null;
         else if (image.length == 0) return null;
         else return BitmapFactory.decodeByteArray(image, 0, image.length);
@@ -82,6 +64,49 @@ public class DatabaseHelper {
         EventDbHelper.onUpgrade(db, 0, 0);
         downloadEvents(context);
     }
+
+    public static void addEvent(Context context, final Event event,
+                                final NewEventActivity.EventCreation eventCreation) {
+
+        final String tag = TAG;
+        final String TAG = tag + ".AddEvent";
+
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        final RequestQueueHelper requestQueue = new RequestQueueHelper(context);
+
+        if (prefs.getString("server_ip", null) == null) {
+            Log.e(TAG, "server_ip == null");
+            return;
+        }
+
+
+        JSONObject object = new JSONObject();
+        try {
+            object.put("eventName","android event");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        final String url = "http://" + prefs.getString("server_ip", null) + "/" + EVENTS;
+
+        PubJsonObjectRequest jsonObjectRequest = new PubJsonObjectRequest(Request.Method.POST, url,
+                object, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+
+                eventCreation.onSuccess();
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                eventCreation.onFail();
+            }
+        });
+        requestQueue.add(jsonObjectRequest);
+    }
+
+
 
     public static void downloadEvents(final Context context) {
         final String tag = TAG;
@@ -115,7 +140,7 @@ public class DatabaseHelper {
                                                 ArrayList<Long> participantsIds = new ArrayList<>();
                                                 try {
                                                     JSONArray participantsJson = response.getJSONObject(EMBEDDED).getJSONArray(PERSONS);
-                                                    for (int i=0; i < participantsJson.length(); i++) {
+                                                    for (int i = 0; i < participantsJson.length(); i++) {
                                                         JSONObject jsonParticipant = participantsJson.getJSONObject(i);
                                                         participantsIds.add(parsePersonJson(jsonParticipant).getId());
                                                     }
@@ -145,7 +170,7 @@ public class DatabaseHelper {
                                                 ArrayList<Long> pubs = new ArrayList<>();
                                                 try {
                                                     JSONArray pubsJson = response.getJSONObject(EMBEDDED).getJSONArray(PUBS);
-                                                    for (int i=0; i < pubsJson.length(); i++) {
+                                                    for (int i = 0; i < pubsJson.length(); i++) {
                                                         JSONObject jsonPub = pubsJson.getJSONObject(i);
                                                         Pub p = parsePubJson(jsonPub);
                                                         pubs.add(p.getId());
@@ -257,7 +282,7 @@ public class DatabaseHelper {
                                                 ArrayList<Long> events = new ArrayList<>();
                                                 try {
                                                     JSONArray eventsJson = response.getJSONObject(EMBEDDED).getJSONArray(EVENTS);
-                                                    for (int i=0; i < eventsJson.length(); i++) {
+                                                    for (int i = 0; i < eventsJson.length(); i++) {
                                                         JSONObject jsonEvent = eventsJson.getJSONObject(i);
                                                         events.add(parseJSONEvent(jsonEvent).getId());
                                                     }
@@ -288,7 +313,7 @@ public class DatabaseHelper {
                                                 ArrayList<Long> topPersonIds = new ArrayList<>();
                                                 try {
                                                     JSONArray participantsJson = response.getJSONObject(EMBEDDED).getJSONArray(PERSONS);
-                                                    for (int i=0; i < participantsJson.length(); i++) {
+                                                    for (int i = 0; i < participantsJson.length(); i++) {
                                                         JSONObject jsonParticipant = participantsJson.getJSONObject(i);
                                                         topPersonIds.add(parsePersonJson(jsonParticipant).getId());
                                                     }
@@ -398,7 +423,7 @@ public class DatabaseHelper {
                                                 ArrayList<Long> events = new ArrayList<>();
                                                 try {
                                                     JSONArray eventsJson = response.getJSONObject(EMBEDDED).getJSONArray(EVENTS);
-                                                    for (int i=0; i < eventsJson.length(); i++) {
+                                                    for (int i = 0; i < eventsJson.length(); i++) {
                                                         JSONObject jsonEvent = eventsJson.getJSONObject(i);
                                                         events.add(parseJSONEvent(jsonEvent).getId());
                                                     }
@@ -429,7 +454,7 @@ public class DatabaseHelper {
                                                 ArrayList<Long> pubs = new ArrayList<>();
                                                 try {
                                                     JSONArray pubsJson = response.getJSONObject(EMBEDDED).getJSONArray(PUBS);
-                                                    for (int i=0; i < pubsJson.length(); i++) {
+                                                    for (int i = 0; i < pubsJson.length(); i++) {
                                                         JSONObject jsonPub = pubsJson.getJSONObject(i);
                                                         Pub p = parsePubJson(jsonPub);
                                                         pubs.add(p.getId());
@@ -461,7 +486,7 @@ public class DatabaseHelper {
                                                 ArrayList<Long> pubs = new ArrayList<>();
                                                 try {
                                                     JSONArray pubsJson = response.getJSONObject(EMBEDDED).getJSONArray(PUBS);
-                                                    for (int i=0; i < pubsJson.length(); i++) {
+                                                    for (int i = 0; i < pubsJson.length(); i++) {
                                                         JSONObject jsonPub = pubsJson.getJSONObject(i);
                                                         Pub p = parsePubJson(jsonPub);
                                                         pubs.add(p.getId());
@@ -494,7 +519,7 @@ public class DatabaseHelper {
                                                 ArrayList<Long> topPersonIds = new ArrayList<>();
                                                 try {
                                                     JSONArray participantsJson = response.getJSONObject(EMBEDDED).getJSONArray(PERSONS);
-                                                    for (int i=0; i < participantsJson.length(); i++) {
+                                                    for (int i = 0; i < participantsJson.length(); i++) {
                                                         JSONObject jsonParticipant = participantsJson.getJSONObject(i);
                                                         topPersonIds.add(parsePersonJson(jsonParticipant).getId());
                                                     }
@@ -525,7 +550,7 @@ public class DatabaseHelper {
                                                 ArrayList<Long> events = new ArrayList<>();
                                                 try {
                                                     JSONArray eventsJson = response.getJSONObject(EMBEDDED).getJSONArray(EVENTS);
-                                                    for (int i=0; i < eventsJson.length(); i++) {
+                                                    for (int i = 0; i < eventsJson.length(); i++) {
                                                         JSONObject jsonEvent = eventsJson.getJSONObject(i);
                                                         events.add(parseJSONEvent(jsonEvent).getId());
                                                     }

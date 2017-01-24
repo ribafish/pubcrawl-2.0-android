@@ -14,6 +14,7 @@ import android.widget.EditText;
 
 import com.ws1617.iosl.pubcrawl20.DataModels.Event;
 import com.ws1617.iosl.pubcrawl20.R;
+import com.ws1617.iosl.pubcrawl20.Utilites.DateTimeTools;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -23,7 +24,7 @@ import java.util.Date;
 public class NewEventGeneralFragment extends Fragment {
     private static final String TAG = "NewEventGeneralFragment";
     private View rootView;
-    private Button dataPickerButton;
+    private Button datePickerButton;
     EditText mEventTitleTxt, mEventDescription;
     SwitchCompat mTrackedSwitch;
     Event mEventPublicInfo;
@@ -42,12 +43,13 @@ public class NewEventGeneralFragment extends Fragment {
         mEventTitleTxt = (EditText) rootView.findViewById(R.id.event_new_title);
         mEventDescription = (EditText) rootView.findViewById(R.id.event_new_description);
         mTrackedSwitch = (SwitchCompat) rootView.findViewById(R.id.event_new_tracked);
-        dataPickerButton = (Button) rootView.findViewById(R.id.event_new_date_picker);
-        dataPickerButton.setOnClickListener(dataPickerEventListener);
+        datePickerButton = (Button) rootView.findViewById(R.id.event_new_date_picker);
+        datePickerButton.setOnClickListener(datePickerEventListener);
+        datePickerButton.setText(DateTimeTools.getCurrentDate());
 
     }
 
-    View.OnClickListener dataPickerEventListener = new View.OnClickListener() {
+    View.OnClickListener datePickerEventListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
             Calendar calendar = Calendar.getInstance();
@@ -62,7 +64,8 @@ public class NewEventGeneralFragment extends Fragment {
         @Override
         public void onDateSet(DatePicker view, int year, int monthOfYear,
                               int dayOfMonth) {
-            dataPickerButton.setText(dayOfMonth + "." + monthOfYear + "." + year);
+            int month= monthOfYear +1;
+            datePickerButton.setText(dayOfMonth + "." +  month + "." + year);
         }
     };
 
@@ -70,9 +73,6 @@ public class NewEventGeneralFragment extends Fragment {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-
-        // mEventPublicInfo = updateGeneralInfo();
-        //outState.putSerializable(TAG, mEventPublicInfo);
     }
 
     public Event updateGeneralInfo(Event event) {
@@ -80,7 +80,8 @@ public class NewEventGeneralFragment extends Fragment {
         String eventDesc = mEventDescription.getText().toString();
         Date date = new Date();
         try {
-            date = new SimpleDateFormat().parse(dataPickerButton.getText().toString());
+            SimpleDateFormat dataFormat = new SimpleDateFormat("dd.mm.yyyy");
+            date = dataFormat.parse(datePickerButton.getText().toString());
         } catch (ParseException e) {
             e.printStackTrace();
         }
