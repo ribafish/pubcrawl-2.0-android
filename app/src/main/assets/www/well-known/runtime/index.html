@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+
+    <meta charset="UTF-8">
+    <title></title>
+
+    <!-- Compiled and minified CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/css/materialize.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+  </head>
+  <body>
+    <div class="white-text">
+      <span><i class="settings-btn material-icons clickable-cell right" style="cursor: pointer; vertical-align: middle;">settings</i></span>
+    </div>
+
+    <div class="admin-page hide">
+        <div class="card" style="margin:0;">
+          <div class="card-content white-text center-align">
+            <div class="row">
+              <div class="col s4">
+                <button type="button" class="policies-page-show btn-flat">Policies</button>
+              </div>
+              <div class="col s4">
+                <button class="identities-page-show btn-flat">Identities</button>
+              </div>
+              <div class="col s4">
+                <button class="admin-page-exit btn-flat">Exit<i class="medium material-icons right">exit_to_app</i></button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="policies-section hide card">
+          <div class="card-content center-align">
+            <div class="row">
+              <div class="col s6 policy-active">
+              </div>
+              <div class="col s6 group-management">
+                <button type="button" class="group-management-btn btn">Manage groups</button>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col s6 push-s3">
+                <div class="policies-current"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card-action white-text center-align">
+            <button type="button" class="policy-add btn waves-effect waves-light"><i class="material-icons right">add</i>New policy</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal modal-fixed-footer rule-new">
+        <div class="modal-content">
+          <div class="center-align">
+            <a class='variables-types-btn dropdown-button btn' data-activates='variables-types'>Filter communications by:</a>
+            <ul id='variables-types' class='dropdown-content'></ul>
+          </div>
+          <div class="variable hide">
+            <div class="rule-new-title"></div>
+            <div class="row">
+              <div class="col s3 right-align offset-s1">
+                <div class="description"></div>
+              </div>
+              <div class="col s5">
+                <div class="config"></div>
+              </div>
+            </div>
+            <div class="row subscription-type center-align hide">
+              <p>Apply this rule to:</p>
+              <form>
+                <div class="col s6 push-s1">
+                  <p>
+                    <input class="subscription-decision" name="rule-new-subscription" type="radio" id="*"/>
+                    <label for="*">All subscribers</label>
+                  </p>
+                </div>
+                <div class="col s6">
+                  <p><input class="subscription-decision" name="rule-new-subscription" type="radio" id="preauthorised"/><label for="preauthorised">Previously authorised subscribers</label>
+                  </p>
+                </div>
+              </form>
+            </div>
+            <div class="row">
+              <div class="col s12">
+                <p>To which of your identities or hyperties do you want to apply this setting?</p>
+                <select class="scopes browser-default"></select>
+              </div>
+            </div>
+            <div class="row authorise-btns center-align">
+              <div class="col s12">
+                <p>Authorisation decision:</p>
+              </div>
+              <div class="row">
+                <form>
+                  <div class="col s6 push-s4">
+                    <p><input name="rule-new-decision" type="radio" id="block"/><label for="block">Block</label></p>
+                  </div>
+                  <div class="col s6">
+                    <p><input name="rule-new-decision" type="radio" id="allow"/><label for="allow">Allow</label></p>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button class="modal-close waves-effect waves-green btn-flat exit-btn" type="submit">Exit<i class="medium material-icons right">exit_to_app</i></button>
+          <button class="modal-close waves-effect waves-green btn-flat ok-btn" type="submit">Ok<i class="medium material-icons right">done</i></button>
+        </div>
+      </div>
+
+      <div class="modal modal-fixed-footer policy-new">
+        <div class="modal-content center-align">
+          <div class="row">
+            <div class="col s12">
+              <h5>Create a new policy</h5>
+              <p>Insert a title for the new policy and add rules to it in the preferences page.</p>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col s6 offset-s3">
+              <input class="input-name" placeholder="new policy title" required aria-required="true" type="text" id="policy-new-title">
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="modal-close waves-effect waves-green btn-flat exit-btn" type="submit">Exit<i class="medium material-icons right">exit_to_app</i></button>
+          <button class="modal-close waves-effect waves-green btn-flat policy-new-ok" type="submit">Ok<i class="medium material-icons right">done</i></button>
+        </div>
+      </div>
+
+      <div class="modal groups-management-modal">
+        <div class="modal-content center-align">
+          <div class="groups-show">
+            <div class="row">
+              <div class="col s12">
+                <h5>Groups of users</h5>
+                <p>Create groups of users and manage their members.
+              </div>
+            </div>
+            <div class="row">
+              <div class="col s6 push-s3">
+                <div class="groups-current"></div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col s12">
+                <button type="button" class="group-add btn waves-effect waves-light"><i class="material-icons right">add</i>New group</button>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button class="modal-close waves-effect waves-green btn-flat">Exit<i class="medium material-icons right">exit_to_app</i></button>
+            </div>
+          </div>
+          <div class="group-new hide">
+            <div class="row">
+              <div class="col s12">
+                <h5>Create a new group</h5>
+                <p>Insert a name for the new group and add members to it in the groups management section.</p>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col s6 offset-s3">
+                <input class="input-name" placeholder="new group name" required aria-required="true" type="text" id="group-new-name">
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button class="modal-close waves-effect waves-green btn-flat">Exit<i class="medium material-icons right">exit_to_app</i></button>
+              <button class="waves-effect waves-green btn-flat group-new-ok">Ok<i class="medium material-icons right">done</i></button>
+            </div>
+          </div>
+          <div class="member-new hide">
+            <div class="row">
+              <div class="col s12 member-new-intro"></div>
+            </div>
+            <div class="row">
+              <div class="col s6 offset-s3">
+                <input class="input-name" placeholder="new member email" required aria-required="true" type="email" id="member-new">
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button class="modal-close waves-effect waves-green btn-flat">Exit<i class="medium material-icons right">exit_to_app</i></button>
+              <button class="waves-effect waves-green btn-flat member-new-ok">Ok<i class="medium material-icons right">done</i></button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal modal-fixed-footer rule-details">
+        <div class="modal-content">
+          <div class="rule-title center-align"></div>
+          <div class="row subscription-type center-align hide">
+            <p>Apply this rule to:</p>
+            <form>
+              <div class="col s6 push-s1">
+                <p>
+                  <input class="subscription-decision" name="subscription" type="radio" id="all" />
+                  <label for="all">All subscribers</label>
+                </p>
+              </div>
+              <div class="col s6">
+                <p><input class="subscription-decision" name="subscription" type="radio" id="preauth"/><label for="preauth">Previously authorised subscribers</label>
+                </p>
+              </div>
+            </form>
+          </div>
+          <div class="row authorise-btns center-align">
+            <div class="col s12">
+              <p>Authorisation decision:</p>
+            </div>
+            <div class="row">
+              <form>
+                <div class="col s6 push-s4">
+                  <p><input class="decision" name="rule-update-decision" type="radio" id="btn-block"/><label for="btn-block">Block</label></p>
+                </div>
+                <div class="col s6">
+                  <p><input class="decision" name="rule-update-decision" type="radio" id="btn-allow"/><label for="btn-allow">Allow</label></p>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button class="modal-close waves-effect waves-green btn-flat exit-btn" type="submit">Exit<i class="medium material-icons right">exit_to_app</i></button>
+        </div>
+      </div>
+
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/js/materialize.min.js"></script>
+    <script src="core.js"></script>
+  </body>
+</html>

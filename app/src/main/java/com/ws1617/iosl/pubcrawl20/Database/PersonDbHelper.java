@@ -9,7 +9,6 @@ import android.graphics.Bitmap;
 import android.provider.ContactsContract;
 import android.util.Log;
 
-import com.google.firebase.database.DatabaseException;
 import com.ws1617.iosl.pubcrawl20.DataModels.Person;
 
 import java.util.ArrayList;

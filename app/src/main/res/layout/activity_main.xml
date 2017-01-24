@@ -45,14 +45,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end|bottom"
-        android:layout_margin="@dimen/fab_margin"
-        android:src="@drawable/ic_collapse" >
+        android:layout_margin="@dimen/fab_margin">
 
         <com.github.clans.fab.FloatingActionButton
             android:id="@+id/main_fab_menu_settings"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_settings"
             fab:fab_size="mini"
             fab:fab_label="@string/settings" />
 
@@ -60,7 +58,6 @@
             android:id="@+id/main_fab_menu_create_event"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_action_beer_plus_white"
             fab:fab_size="mini"
             fab:fab_label="@string/new_event" />
 
@@ -68,7 +65,6 @@
             android:id="@+id/main_fab_menu_qr_scan"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/qrcode"
             fab:fab_size="mini"
             fab:fab_label="@string/scan_qr" />
 
@@ -76,11 +72,8 @@
             android:id="@+id/main_fab_menu_search"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_search_24dp"
             fab:fab_size="mini"
             fab:fab_label="@string/search" />
-
-
 
     </com.github.clans.fab.FloatingActionMenu>
 
