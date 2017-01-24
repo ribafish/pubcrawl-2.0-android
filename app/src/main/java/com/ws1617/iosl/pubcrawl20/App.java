@@ -14,6 +14,7 @@ import com.ws1617.iosl.pubcrawl20.Database.SQLDatabase;
 public class App extends Application {
 
   private static Context appContext;
+
   @Override
   public void onCreate() {
     super.onCreate();
@@ -21,6 +22,7 @@ public class App extends Application {
     SQLiteOpenHelper dbHelper = new SQLDatabase(this);
     DatabaseManager.initializeInstance(dbHelper);
   }
+
   public static Context getAppContext() {
     return appContext;
   }

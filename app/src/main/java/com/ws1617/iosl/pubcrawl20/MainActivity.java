@@ -1,11 +1,17 @@
 package com.ws1617.iosl.pubcrawl20;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.location.Location;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -16,7 +22,10 @@ import android.widget.Toast;
 
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
+import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.CommonStatusCodes;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.vision.barcode.Barcode;
 import com.ws1617.iosl.pubcrawl20.Details.EventDetailsActivity;
 import com.ws1617.iosl.pubcrawl20.Details.PubDetailsActivity;
@@ -28,7 +37,7 @@ import com.ws1617.iosl.pubcrawl20.ScanQR.BarcodeCaptureActivity;
  * Github: https://github.com/ribafish/
  */
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -39,6 +48,8 @@ public class MainActivity extends AppCompatActivity {
      * {@link android.support.v4.app.FragmentStatePagerAdapter}.
      */
     private MainFragmentPagerAdapter mainFragmentPagerAdapter;
+    private GoogleApiClient mGoogleApiClient;
+    private static Location mLastLocation;
 
     /**
      * The {@link ViewPager} that will host the section contents.
@@ -53,6 +64,25 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         context = this;
+
+        /**
+         * Check for Location permissions
+         */
+        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, 2);
+
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            // Create an instance of GoogleAPIClient.
+            if (mGoogleApiClient == null) {
+                mGoogleApiClient = new GoogleApiClient.Builder(this)
+                  .addConnectionCallbacks(this)
+                  .addOnConnectionFailedListener(this)
+                  .addApi(LocationServices.API)
+                  .build();
+            }
+        }
+
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.main_toolbar);
         setSupportActionBar(toolbar);
@@ -69,8 +99,8 @@ public class MainActivity extends AppCompatActivity {
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
 
-        /*Set images for Floating Buttons in Fragment to support Floating Button Vector Drawables for pre Lollipop Devices
-        * see https://github.com/Clans/FloatingActionButton/issues/273 */
+        /**Set images for Floating Buttons in Fragment to support Floating Button Vector Drawables for pre Lollipop Devices
+         * see https://github.com/Clans/FloatingActionButton/issues/273 **/
         final FloatingActionMenu fabMenu = (FloatingActionMenu) findViewById(R.id.fab_menu);
         FloatingActionButton fabSettings = (FloatingActionButton) findViewById(R.id.main_fab_menu_settings);
         fabSettings.setImageDrawable(AppCompatDrawableManager.get().getDrawable(this, R.drawable.ic_settings));
@@ -119,16 +149,16 @@ public class MainActivity extends AppCompatActivity {
             if (resultCode == CommonStatusCodes.SUCCESS) {
                 if (data != null) {
                     Barcode barcode = data.getParcelableExtra(BarcodeCaptureActivity.BarcodeObject);
-                    if(barcode.displayValue.isEmpty())
+                    if (barcode.displayValue.isEmpty())
                         Toast.makeText(this, "failed", Toast.LENGTH_LONG).show();
                     else {
-                        if(barcode.displayValue.contains("/event/")) {
+                        if (barcode.displayValue.contains("/event/")) {
                             Intent intent = new Intent(context, EventDetailsActivity.class);
                             intent.putExtra("name", "Test Event");
                             intent.putExtra("id", (long) 14);
                             startActivity(intent);
                         }
-                        if(barcode.displayValue.contains("/pub/")) {
+                        if (barcode.displayValue.contains("/pub/")) {
                             Intent intent = new Intent(context, PubDetailsActivity.class);
                             intent.putExtra("name", "Test Pub");
                             intent.putExtra("id", (long) 9);
@@ -146,4 +176,39 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onStart() {
+        mGoogleApiClient.connect();
+        super.onStart();
+    }
+
+    @Override
+    protected void onStop() {
+        mGoogleApiClient.disconnect();
+        super.onStop();
+    }
+
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
+    }
+
+    public static Location getLocation() throws NullPointerException {
+        if(mLastLocation != null)
+            return mLastLocation;
+        throw new NullPointerException();
+    }
 }

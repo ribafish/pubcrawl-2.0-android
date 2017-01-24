@@ -1,10 +1,12 @@
 package com.ws1617.iosl.pubcrawl20.DisplayEvents;
 
+import android.Manifest;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -14,6 +16,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
@@ -46,6 +49,7 @@ import com.ws1617.iosl.pubcrawl20.Database.RequestQueueHelper;
 import com.ws1617.iosl.pubcrawl20.Details.EventDetailsActivity;
 import com.ws1617.iosl.pubcrawl20.Details.PersonDetailsActivity;
 import com.ws1617.iosl.pubcrawl20.Details.PubDetailsActivity;
+import com.ws1617.iosl.pubcrawl20.MainActivity;
 import com.ws1617.iosl.pubcrawl20.R;
 
 import java.util.ArrayList;
@@ -57,7 +61,7 @@ import static com.ws1617.iosl.pubcrawl20.Database.DatabaseHelper.resetWholeDatab
  * Created by gaspe on 8. 11. 2016.
  */
 
-public class DisplayEventsFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnPolylineClickListener, GoogleMap.OnMarkerClickListener{
+public class DisplayEventsFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnPolylineClickListener, GoogleMap.OnMarkerClickListener {
     public static final String TITLE = "Home";
     private static final String TAG = "DisplayEventsFragment";
     private View rootView;
@@ -67,8 +71,8 @@ public class DisplayEventsFragment extends Fragment implements OnMapReadyCallbac
     private EventAdapter eventAdapter;
     private BroadcastReceiver receiver;
 
-    public DisplayEventsFragment() {}
-
+    public DisplayEventsFragment() {
+    }
 
 
     @Nullable
@@ -171,15 +175,28 @@ public class DisplayEventsFragment extends Fragment implements OnMapReadyCallbac
     public void onMapReady(GoogleMap googleMap) {
         map = googleMap;
 
-        LatLng startpos = new LatLng(52.525387,13.38595);
+        LatLng startpos = new LatLng(52.525387, 13.38595);
 //        map.addMarker(new MarkerOptions().position(tub).title("TUB - TEL"));
-        map.moveCamera(CameraUpdateFactory.newCameraPosition( new CameraPosition.Builder().target(startpos).zoom(13).build()));
+
+        map.moveCamera(CameraUpdateFactory.newCameraPosition(new CameraPosition.Builder().target(startpos).zoom(13).build()));
         map.setOnPolylineClickListener(this);
         map.setOnMarkerClickListener(this);
-
-
+        activateMyLocation();
         for (EventMini e : eventList) {
             drawEventOnMap(e.getEventId(), e.getPubs());
+        }
+    }
+
+    private void activateMyLocation() {
+        if (ActivityCompat.checkSelfPermission(this.getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this.getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            map.setMyLocationEnabled(true);
+            try
+            {
+                LatLng latLng = new LatLng(MainActivity.getLocation().getLatitude(), MainActivity.getLocation().getLongitude());
+                map.moveCamera(CameraUpdateFactory.newCameraPosition(new CameraPosition.Builder().target(latLng).zoom(13).build()));
+            } catch (NullPointerException e) {
+                e.printStackTrace();
+            }
         }
     }
 
