@@ -5,9 +5,7 @@ import android.content.Context;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import com.ws1617.iosl.pubcrawl20.Database.DatabaseManager;
-import com.ws1617.iosl.pubcrawl20.Database.EventDbHelper;
-import com.ws1617.iosl.pubcrawl20.Database.PersonDbHelper;
-import com.ws1617.iosl.pubcrawl20.Database.PubDbHelper;
+import com.ws1617.iosl.pubcrawl20.Database.SQLDatabase;
 
 /**
  * Created by Icke-Hier on 18.01.2017.
@@ -20,9 +18,7 @@ public class App extends Application {
   public void onCreate() {
     super.onCreate();
     appContext = this;
-    SQLiteOpenHelper dbHelper = new PersonDbHelper(this);
-    new EventDbHelper(this);
-    new PubDbHelper(this);
+    SQLiteOpenHelper dbHelper = new SQLDatabase(this);
     DatabaseManager.initializeInstance(dbHelper);
   }
   public static Context getAppContext() {

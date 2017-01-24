@@ -1,10 +1,8 @@
 package com.ws1617.iosl.pubcrawl20.Database;
 
 import android.content.ContentValues;
-import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
 import android.graphics.Bitmap;
 import android.util.Log;
 
@@ -15,23 +13,43 @@ import com.ws1617.iosl.pubcrawl20.DataModels.TimeSlot;
 import java.util.ArrayList;
 import java.util.Date;
 
-import static com.ws1617.iosl.pubcrawl20.Database.Contracts.EventContract.*;
-import static com.ws1617.iosl.pubcrawl20.Database.DatabaseHelper.*;
+import static com.ws1617.iosl.pubcrawl20.Database.Contracts.EventContract.CREATE_EVENTS_TABLE;
+import static com.ws1617.iosl.pubcrawl20.Database.Contracts.EventContract.CREATE_PARTICIPANTS_TABLE;
+import static com.ws1617.iosl.pubcrawl20.Database.Contracts.EventContract.CREATE_PUBS_TABLE;
+import static com.ws1617.iosl.pubcrawl20.Database.Contracts.EventContract.CREATE_TIMESLOTS_TABLE;
+import static com.ws1617.iosl.pubcrawl20.Database.Contracts.EventContract.DATE;
+import static com.ws1617.iosl.pubcrawl20.Database.Contracts.EventContract.DESCRIPTION;
+import static com.ws1617.iosl.pubcrawl20.Database.Contracts.EventContract.END_TIME;
+import static com.ws1617.iosl.pubcrawl20.Database.Contracts.EventContract.EVENT_ID;
+import static com.ws1617.iosl.pubcrawl20.Database.Contracts.EventContract.EVENT_NAME;
+import static com.ws1617.iosl.pubcrawl20.Database.Contracts.EventContract.IMAGE;
+import static com.ws1617.iosl.pubcrawl20.Database.Contracts.EventContract.LAT_MAX;
+import static com.ws1617.iosl.pubcrawl20.Database.Contracts.EventContract.LAT_MIN;
+import static com.ws1617.iosl.pubcrawl20.Database.Contracts.EventContract.LONG_MAX;
+import static com.ws1617.iosl.pubcrawl20.Database.Contracts.EventContract.LONG_MIN;
+import static com.ws1617.iosl.pubcrawl20.Database.Contracts.EventContract.OWNER;
+import static com.ws1617.iosl.pubcrawl20.Database.Contracts.EventContract.PARTICIPANT_ID;
+import static com.ws1617.iosl.pubcrawl20.Database.Contracts.EventContract.PUB_ID;
+import static com.ws1617.iosl.pubcrawl20.Database.Contracts.EventContract.START_TIME;
+import static com.ws1617.iosl.pubcrawl20.Database.Contracts.EventContract.TABLE_EVENTS;
+import static com.ws1617.iosl.pubcrawl20.Database.Contracts.EventContract.TABLE_EVENT_PARTICIPANTS;
+import static com.ws1617.iosl.pubcrawl20.Database.Contracts.EventContract.TABLE_EVENT_PUBS;
+import static com.ws1617.iosl.pubcrawl20.Database.Contracts.EventContract.TABLE_EVENT_TIMESLOTS;
+import static com.ws1617.iosl.pubcrawl20.Database.Contracts.EventContract.TRACKED;
+import static com.ws1617.iosl.pubcrawl20.Database.DatabaseHelper.bitmapToBytes;
+import static com.ws1617.iosl.pubcrawl20.Database.DatabaseHelper.bytesToBitmap;
 
 /**
  * Created by Gasper Kojek on 20. 12. 2016.
  * Github: https://github.com/ribafish/
  */
 
-public class EventDbHelper extends SQLiteOpenHelper {
+public class EventDbHelper {
     private static final String TAG = "EventDbHelper";
 
-    public EventDbHelper(Context context) {
-        super(context, DATABASE_NAME, null, DATABASE_VERSION);
-    }
+    public EventDbHelper()  {}
 
-    @Override
-    public void onCreate(SQLiteDatabase db) {
+    public static void onCreate(SQLiteDatabase db) {
         // create event tables
         db.execSQL(CREATE_EVENTS_TABLE);
         db.execSQL(CREATE_TIMESLOTS_TABLE);
@@ -39,8 +57,7 @@ public class EventDbHelper extends SQLiteOpenHelper {
         db.execSQL(CREATE_PUBS_TABLE);
     }
 
-    @Override
-    public void onUpgrade(SQLiteDatabase db, int i, int i1) {
+    public static void onUpgrade(SQLiteDatabase db, int i, int i1) {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_EVENTS);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_EVENT_TIMESLOTS);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_EVENT_PARTICIPANTS);
@@ -49,8 +66,7 @@ public class EventDbHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    @Override
-    public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+    public static void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         onUpgrade(db, oldVersion, newVersion);
     }
 

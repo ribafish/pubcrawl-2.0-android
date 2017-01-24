@@ -1,35 +1,47 @@
 package com.ws1617.iosl.pubcrawl20.Database;
 
 import android.content.ContentValues;
-import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
 import android.graphics.Bitmap;
-import android.provider.ContactsContract;
 import android.util.Log;
 
 import com.ws1617.iosl.pubcrawl20.DataModels.Person;
 
 import java.util.ArrayList;
 
-import static com.ws1617.iosl.pubcrawl20.Database.Contracts.PersonContract.*;
-import static com.ws1617.iosl.pubcrawl20.Database.DatabaseHelper.*;
+import static com.ws1617.iosl.pubcrawl20.Database.Contracts.PersonContract.CREATE_PERSONS_TABLE;
+import static com.ws1617.iosl.pubcrawl20.Database.Contracts.PersonContract.CREATE_PERSON_EVENTS_TABLE;
+import static com.ws1617.iosl.pubcrawl20.Database.Contracts.PersonContract.CREATE_PERSON_FRIENDS_TABLE;
+import static com.ws1617.iosl.pubcrawl20.Database.Contracts.PersonContract.CREATE_PERSON_OWNED_EVENTS_TABLE;
+import static com.ws1617.iosl.pubcrawl20.Database.Contracts.PersonContract.CREATE_PERSON_OWNED_PUBS_TABLE;
+import static com.ws1617.iosl.pubcrawl20.Database.Contracts.PersonContract.CREATE_PERSON_PUBS_FAVOURITE_TABLE;
+import static com.ws1617.iosl.pubcrawl20.Database.Contracts.PersonContract.DESCRIPTION;
+import static com.ws1617.iosl.pubcrawl20.Database.Contracts.PersonContract.EMAIL;
+import static com.ws1617.iosl.pubcrawl20.Database.Contracts.PersonContract.EVENT_ID;
+import static com.ws1617.iosl.pubcrawl20.Database.Contracts.PersonContract.FRIEND_ID;
+import static com.ws1617.iosl.pubcrawl20.Database.Contracts.PersonContract.IMAGE;
+import static com.ws1617.iosl.pubcrawl20.Database.Contracts.PersonContract.PERSON_ID;
+import static com.ws1617.iosl.pubcrawl20.Database.Contracts.PersonContract.PUB_ID;
+import static com.ws1617.iosl.pubcrawl20.Database.Contracts.PersonContract.TABLE_PERSONS;
+import static com.ws1617.iosl.pubcrawl20.Database.Contracts.PersonContract.TABLE_PERSON_EVENTS;
+import static com.ws1617.iosl.pubcrawl20.Database.Contracts.PersonContract.TABLE_PERSON_FAVOURITE_PUBS;
+import static com.ws1617.iosl.pubcrawl20.Database.Contracts.PersonContract.TABLE_PERSON_FRIENDS;
+import static com.ws1617.iosl.pubcrawl20.Database.Contracts.PersonContract.TABLE_PERSON_OWNED_EVENTS;
+import static com.ws1617.iosl.pubcrawl20.Database.Contracts.PersonContract.TABLE_PERSON_OWNED_PUBS;
+import static com.ws1617.iosl.pubcrawl20.Database.Contracts.PersonContract.USERNAME;
+import static com.ws1617.iosl.pubcrawl20.Database.DatabaseHelper.bitmapToBytes;
+import static com.ws1617.iosl.pubcrawl20.Database.DatabaseHelper.bytesToBitmap;
 
 /**
  * Created by Gasper Kojek on 20. 12. 2016.
  * Github: https://github.com/ribafish/
  */
 
-public class PersonDbHelper extends SQLiteOpenHelper {
+public class PersonDbHelper {
     private static final String TAG = "PersonDbHelper";
 
-    public PersonDbHelper(Context context) {
-        super(context, DATABASE_NAME, null, DATABASE_VERSION);
-    }
-
-    @Override
-    public void onCreate(SQLiteDatabase db) {
+    public static void onCreate(SQLiteDatabase db) {
         // create person tables
         db.execSQL(CREATE_PERSONS_TABLE);
         db.execSQL(CREATE_PERSON_EVENTS_TABLE);
@@ -40,8 +52,7 @@ public class PersonDbHelper extends SQLiteOpenHelper {
 
     }
 
-    @Override
-    public void onUpgrade(SQLiteDatabase db, int i, int i1) {
+    public static void onUpgrade(SQLiteDatabase db, int i, int i1) {
         // drop older person tables
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_PERSONS);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_PERSON_EVENTS);
@@ -53,8 +64,7 @@ public class PersonDbHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    @Override
-    public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+    public static void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         onUpgrade(db, oldVersion, newVersion);
     }
 

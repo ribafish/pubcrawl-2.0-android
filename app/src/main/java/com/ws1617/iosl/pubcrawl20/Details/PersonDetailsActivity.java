@@ -568,7 +568,7 @@ public class PersonDetailsActivity extends AppCompatActivity implements AppBarLa
 
     private void getPerson(long id) {
         try {
-            person = new PersonDbHelper(this).getPerson(id);
+            person = new PersonDbHelper().getPerson(id);
         } catch (DatabaseException e) {
             e.printStackTrace();
             Toast.makeText(getApplicationContext(),
@@ -586,16 +586,16 @@ public class PersonDetailsActivity extends AppCompatActivity implements AppBarLa
     }
 
     private PersonMini getPersonMini(long id) throws DatabaseException {
-        return new PersonMini(new PersonDbHelper(this).getPerson(id));
+        return new PersonMini(new PersonDbHelper().getPerson(id));
     }
 
 
     private EventMini getEventMini(long id) throws DatabaseException {
-        return new EventMini(new EventDbHelper(this).getEvent(id));
+        return new EventMini(new EventDbHelper().getEvent(id));
     }
 
     private PubMini getPubMini(long id) throws DatabaseException {
-        return new PubMini(new PubDbHelper(this).getPub(id), null);
+        return new PubMini(new PubDbHelper().getPub(id), null);
     }
 
     private void getFriends() {

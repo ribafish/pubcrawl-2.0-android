@@ -226,8 +226,8 @@ public class DisplayEventsFragment extends Fragment implements OnMapReadyCallbac
         eventList.clear();
 
         final Context context = getActivity();
-        EventDbHelper eventDbHelper = new EventDbHelper(context);
-        PubDbHelper pubDbHelper = new PubDbHelper(context);
+        EventDbHelper eventDbHelper = new EventDbHelper();
+        PubDbHelper pubDbHelper = new PubDbHelper();
         try {
             ArrayList<Event> el = eventDbHelper.getAllEvents();
             for (Event e : el) {

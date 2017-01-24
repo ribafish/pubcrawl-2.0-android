@@ -580,7 +580,7 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
 
     private void getEvent(long id) {
         try {
-            this.event = new EventDbHelper(this).getEvent(id);
+            this.event = new EventDbHelper().getEvent(id);
 
             getPubMinis(this.event.getPubIds(), this.event.getTimeSlotList());
             getParticipants(this.event.getParticipantIds());
@@ -599,7 +599,7 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
         for (TimeSlot t : slots) {
             try {
                 long id = t.getPubId();
-                this.pubs.add(new PubMini(new PubDbHelper(this).getPub(id), t));
+                this.pubs.add(new PubMini(new PubDbHelper().getPub(id), t));
                 mIds.remove(id);
             } catch (DatabaseException de) {
                 de.printStackTrace();
@@ -610,7 +610,7 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
 
         for (Long id : mIds) {
             try {
-                this.pubs.add(new PubMini(new PubDbHelper(this).getPub(id), null));
+                this.pubs.add(new PubMini(new PubDbHelper().getPub(id), null));
             } catch (DatabaseException de) {
                 de.printStackTrace();
             }
@@ -620,7 +620,7 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
     private void getParticipants (ArrayList<Long> ids) {
         for (long id : ids) {
             try {
-                this.participants.add(new PersonMini(new PersonDbHelper(this).getPerson(id)));
+                this.participants.add(new PersonMini(new PersonDbHelper().getPerson(id)));
             } catch (DatabaseException e) {
                 e.printStackTrace();
             }
@@ -629,7 +629,7 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
 
     private void getOwner (long id) {
         try {
-            owner = new PersonMini(new PersonDbHelper(this).getPerson(id));
+            owner = new PersonMini(new PersonDbHelper().getPerson(id));
         } catch (DatabaseException e) {
             e.printStackTrace();
         }

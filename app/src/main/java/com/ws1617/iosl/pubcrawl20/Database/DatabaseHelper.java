@@ -22,7 +22,27 @@ import org.json.JSONObject;
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 
-import static com.ws1617.iosl.pubcrawl20.Database.JsonParser.*;
+import static com.ws1617.iosl.pubcrawl20.Database.JsonParser.EMBEDDED;
+import static com.ws1617.iosl.pubcrawl20.Database.JsonParser.EVENTS;
+import static com.ws1617.iosl.pubcrawl20.Database.JsonParser.EVENT_OWNER;
+import static com.ws1617.iosl.pubcrawl20.Database.JsonParser.EVENT_PARTICIPANTS;
+import static com.ws1617.iosl.pubcrawl20.Database.JsonParser.EVENT_PUBS;
+import static com.ws1617.iosl.pubcrawl20.Database.JsonParser.PERSONS;
+import static com.ws1617.iosl.pubcrawl20.Database.JsonParser.PERSON_EVENTS;
+import static com.ws1617.iosl.pubcrawl20.Database.JsonParser.PERSON_FAVOURITE_PUBS;
+import static com.ws1617.iosl.pubcrawl20.Database.JsonParser.PERSON_FRIENDS;
+import static com.ws1617.iosl.pubcrawl20.Database.JsonParser.PERSON_OWNED_EVENTS;
+import static com.ws1617.iosl.pubcrawl20.Database.JsonParser.PERSON_OWNED_PUBS;
+import static com.ws1617.iosl.pubcrawl20.Database.JsonParser.PUBS;
+import static com.ws1617.iosl.pubcrawl20.Database.JsonParser.PUB_EVENTS;
+import static com.ws1617.iosl.pubcrawl20.Database.JsonParser.PUB_OWNER;
+import static com.ws1617.iosl.pubcrawl20.Database.JsonParser.PUB_TOP_PERSONS;
+import static com.ws1617.iosl.pubcrawl20.Database.JsonParser.parseJSONEvent;
+import static com.ws1617.iosl.pubcrawl20.Database.JsonParser.parseJSONResponseEvents;
+import static com.ws1617.iosl.pubcrawl20.Database.JsonParser.parseJsonResponsePersons;
+import static com.ws1617.iosl.pubcrawl20.Database.JsonParser.parseJsonResponsePubs;
+import static com.ws1617.iosl.pubcrawl20.Database.JsonParser.parsePersonJson;
+import static com.ws1617.iosl.pubcrawl20.Database.JsonParser.parsePubJson;
 
 
 /**
@@ -33,7 +53,7 @@ import static com.ws1617.iosl.pubcrawl20.Database.JsonParser.*;
 public class DatabaseHelper {
     private static final String TAG = "DatabaseHelper";
 
-    public static final int DATABASE_VERSION = 2;
+    public static final int DATABASE_VERSION = 3;
     public static final String DATABASE_NAME = "PubCrawl20.db";
 
 
@@ -58,9 +78,11 @@ public class DatabaseHelper {
         resetPersonsDatabase(context);
     }
 
+    @Deprecated
     public static void resetEventsDatabase(Context context) {
-        EventDbHelper db = new EventDbHelper(context);
-        db.onUpgrade(db.getWritableDatabase(), 0, 0);   // resets database
+        EventDbHelper db = new EventDbHelper();
+        //TODO
+        //db.onUpgrade(db.getWritableDatabase(), 0, 0);   // resets database
 
         downloadEvents(context);
     }
@@ -68,7 +90,7 @@ public class DatabaseHelper {
     public static void downloadEvents(final Context context) {
         final String tag = TAG;
         final String TAG = tag + ".downloadEvents";
-        final EventDbHelper db = new EventDbHelper(context);
+        final EventDbHelper db = new EventDbHelper();
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         final RequestQueueHelper requestQueue = new RequestQueueHelper(context);
 
@@ -197,9 +219,11 @@ public class DatabaseHelper {
 
     }
 
+    @Deprecated
     public static void resetPubsDatabase(Context context) {
-        PubDbHelper db = new PubDbHelper(context);
-        db.onUpgrade(db.getWritableDatabase(), 0, 0);   // resets database
+        PubDbHelper db = new PubDbHelper();
+        //TODO
+        //db.onUpgrade(db.getWritableDatabase(), 0, 0);   // resets database
 
         downloadPubs(context);
     }
@@ -207,7 +231,7 @@ public class DatabaseHelper {
     public static void downloadPubs(final Context context) {
         final String tag = TAG;
         final String TAG = tag + ".downloadPubs";
-        final PubDbHelper db = new PubDbHelper(context);
+        final PubDbHelper db = new PubDbHelper();
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         final RequestQueueHelper requestQueue = new RequestQueueHelper(context);
 
@@ -335,9 +359,11 @@ public class DatabaseHelper {
         requestQueue.add(pubsRequest);
     }
 
+    @Deprecated
     public static void resetPersonsDatabase(Context context) {
-        PersonDbHelper db = new PersonDbHelper(context);
-        db.onUpgrade(db.getWritableDatabase(), 0, 0);   // resets database
+        PersonDbHelper db = new PersonDbHelper();
+        //TODO
+        //db.onUpgrade(db.getWritableDatabase(), 0, 0);   // resets database
 
         downloadPersons(context);
     }
@@ -345,7 +371,7 @@ public class DatabaseHelper {
     public static void downloadPersons(final Context context) {
         final String tag = TAG;
         final String TAG = tag + ".downloadPersons";
-        final PersonDbHelper db = new PersonDbHelper(context);
+        final PersonDbHelper db = new PersonDbHelper();
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         final RequestQueueHelper requestQueue = new RequestQueueHelper(context);
 

@@ -1,10 +1,8 @@
 package com.ws1617.iosl.pubcrawl20.Database;
 
 import android.content.ContentValues;
-import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
 import android.graphics.Bitmap;
 import android.util.Log;
 
@@ -13,23 +11,41 @@ import com.ws1617.iosl.pubcrawl20.DataModels.Pub;
 
 import java.util.ArrayList;
 
-import static com.ws1617.iosl.pubcrawl20.Database.Contracts.PubContract.*;
-import static com.ws1617.iosl.pubcrawl20.Database.DatabaseHelper.*;
+import static com.ws1617.iosl.pubcrawl20.Database.Contracts.PubContract.CREATE_PUBS_TABLE;
+import static com.ws1617.iosl.pubcrawl20.Database.Contracts.PubContract.CREATE_PUB_EVENTS_TABLE;
+import static com.ws1617.iosl.pubcrawl20.Database.Contracts.PubContract.CREATE_PUB_IMAGES_TABLE;
+import static com.ws1617.iosl.pubcrawl20.Database.Contracts.PubContract.CREATE_TOP_PERSONS_TABLE;
+import static com.ws1617.iosl.pubcrawl20.Database.Contracts.PubContract.EVENT_ID;
+import static com.ws1617.iosl.pubcrawl20.Database.Contracts.PubContract.IMAGE;
+import static com.ws1617.iosl.pubcrawl20.Database.Contracts.PubContract.ITERATOR;
+import static com.ws1617.iosl.pubcrawl20.Database.Contracts.PubContract.LATITUDE;
+import static com.ws1617.iosl.pubcrawl20.Database.Contracts.PubContract.LONGITUDE;
+import static com.ws1617.iosl.pubcrawl20.Database.Contracts.PubContract.OPENING_TIMES;
+import static com.ws1617.iosl.pubcrawl20.Database.Contracts.PubContract.OWNER;
+import static com.ws1617.iosl.pubcrawl20.Database.Contracts.PubContract.PERSON_ID;
+import static com.ws1617.iosl.pubcrawl20.Database.Contracts.PubContract.PRICES;
+import static com.ws1617.iosl.pubcrawl20.Database.Contracts.PubContract.PUB_ID;
+import static com.ws1617.iosl.pubcrawl20.Database.Contracts.PubContract.PUB_NAME;
+import static com.ws1617.iosl.pubcrawl20.Database.Contracts.PubContract.RATING;
+import static com.ws1617.iosl.pubcrawl20.Database.Contracts.PubContract.SIZE;
+import static com.ws1617.iosl.pubcrawl20.Database.Contracts.PubContract.TABLE_PUBS;
+import static com.ws1617.iosl.pubcrawl20.Database.Contracts.PubContract.TABLE_PUB_EVENTS;
+import static com.ws1617.iosl.pubcrawl20.Database.Contracts.PubContract.TABLE_PUB_IMAGES;
+import static com.ws1617.iosl.pubcrawl20.Database.Contracts.PubContract.TABLE_TOP_PERSONS;
+import static com.ws1617.iosl.pubcrawl20.Database.DatabaseHelper.bitmapToBytes;
+import static com.ws1617.iosl.pubcrawl20.Database.DatabaseHelper.bytesToBitmap;
 
 /**
  * Created by Gasper Kojek on 20. 12. 2016.
  * Github: https://github.com/ribafish/
  */
 
-public class PubDbHelper extends SQLiteOpenHelper {
+public class PubDbHelper  {
     private static final String TAG = "PubDbHelper";
 
-    public PubDbHelper(Context context) {
-        super(context, DATABASE_NAME, null, DATABASE_VERSION);
-    }
+    public PubDbHelper()    {}
 
-    @Override
-    public void onCreate(SQLiteDatabase db) {
+    public static void onCreate(SQLiteDatabase db) {
         // create pub tables
         db.execSQL(CREATE_PUBS_TABLE);
         db.execSQL(CREATE_TOP_PERSONS_TABLE);
@@ -37,8 +53,7 @@ public class PubDbHelper extends SQLiteOpenHelper {
         db.execSQL(CREATE_PUB_IMAGES_TABLE);
     }
 
-    @Override
-    public void onUpgrade(SQLiteDatabase db, int i, int i1) {
+    public static void onUpgrade(SQLiteDatabase db, int i, int i1) {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_PUBS);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_TOP_PERSONS);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_PUB_EVENTS);
@@ -47,8 +62,7 @@ public class PubDbHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    @Override
-    public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+    public static void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         onUpgrade(db, oldVersion, newVersion);
     }
 

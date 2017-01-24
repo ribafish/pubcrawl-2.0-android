@@ -481,7 +481,7 @@ public class PubDetailsActivity extends AppCompatActivity implements AppBarLayou
 
     private void getPub(long id) {
         try {
-            pub = new PubDbHelper(this).getPub(id);
+            pub = new PubDbHelper().getPub(id);
 
             getTopPeople(pub.getTopsListIds());
             getEvents(pub.getEventsListIds());
@@ -501,12 +501,12 @@ public class PubDetailsActivity extends AppCompatActivity implements AppBarLayou
     }
 
     private PersonMini getPersonMini(long id) throws DatabaseException {
-        return new PersonMini(new PersonDbHelper(this).getPerson(id));
+        return new PersonMini(new PersonDbHelper().getPerson(id));
     }
 
 
     private EventMini getEventMini(long id) throws DatabaseException{
-        return new EventMini(new EventDbHelper(this).getEvent(id));
+        return new EventMini(new EventDbHelper().getEvent(id));
     }
 
     private void getTopPeople(ArrayList<Long> ids) {
