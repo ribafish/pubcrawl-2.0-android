@@ -45,7 +45,7 @@
 
         android:layout_gravity="end|bottom"
         android:layout_margin="@dimen/fab_margin"
-        android:background="@color/wallet_highlighted_text_holo_dark"
+        android:background="@color/dark_gray"
         android:src="@drawable/check" />
 
 

@@ -9,7 +9,6 @@ import android.graphics.Bitmap;
 import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
-import com.google.firebase.database.DatabaseException;
 import com.ws1617.iosl.pubcrawl20.DataModels.Pub;
 
 import java.util.ArrayList;
@@ -228,15 +227,25 @@ public class PubDbHelper extends SQLiteOpenHelper {
         if (c != null && c.moveToFirst()) {
             do {
                 int pub_id = c.getInt(c.getColumnIndex(PUB_ID));
-                Pub pub = getListlessPub(pub_id);
-                pubsList.add(pub);
+                Pub pub = null;
+                try {
+                    pub = getListlessPub(pub_id);
+                    pubsList.add(pub);
+                } catch (DatabaseException e) {
+                    e.printStackTrace();
+                }
+
             } while (c.moveToNext());
             c.close();
 
         } else {
             Log.e(TAG, "Can't find Pubs");
             String msg = c != null ? "Can't find pubs. cursor size is " + c.getCount() : "\"Can't find pubs . Cursor is null or database empty\"";
-            throw new DatabaseException(msg);
+            try {
+                throw new DatabaseException(msg);
+            } catch (DatabaseException e) {
+                e.printStackTrace();
+            }
         }
         c.close();
         return pubsList;
