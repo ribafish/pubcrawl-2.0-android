@@ -3,8 +3,7 @@ package com.ws1617.iosl.pubcrawl20.NewEvent;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import android.support.v4.app.FragmentManager;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,8 +11,11 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.ws1617.iosl.pubcrawl20.DataModels.Event;
 import com.ws1617.iosl.pubcrawl20.DataModels.Pub;
-import com.ws1617.iosl.pubcrawl20.NewEvent.adapters.SelectedPupListAdapter;
+import com.ws1617.iosl.pubcrawl20.DataModels.PubMiniModel;
+import com.ws1617.iosl.pubcrawl20.DataModels.TimeSlot;
+import com.ws1617.iosl.pubcrawl20.Details.RouteFragment;
 import com.ws1617.iosl.pubcrawl20.R;
 
 import java.util.ArrayList;
@@ -22,22 +24,19 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class NewEventRouteFragment extends Fragment implements SelectedPupListAdapter.OnPubItemClickListener {
+public class NewEventRouteFragment extends Fragment {
 
     static final String TAG = "NewEventRouteFragment";
     //Views
     View rootView;
     Button mAddPubBtn;
-    RecyclerView mSelectedPupListView;
-    SelectedPupListAdapter adapter;
-    PubListDialog mPubItemDialog;
+    SelectPubDialog mPubItemDialog;
 
     //Data
-    List<Pub> mSelectedPupsList;
-
-    public NewEventRouteFragment() {
-        // Required empty public constructor
-    }
+    List<PubMiniModel> mSelectedPupsList = new ArrayList<>();
+    ArrayList<Long> mSelectedPubsID;
+    ArrayList <TimeSlot> mTimeSlotList;
+    UpdatePubList updatePubListInterface;
 
 
     @Override
@@ -45,10 +44,34 @@ public class NewEventRouteFragment extends Fragment implements SelectedPupListAd
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         rootView = inflater.inflate(R.layout.fragment_new_event_route, container, false);
-        initView();
+
+        initRouteFragment();
+
+        mAddPubBtn = (Button) rootView.findViewById(R.id.event_new_add_pub);
+        mAddPubBtn.setOnClickListener(addPubClickListener);
+
+        //initView();
         return rootView;
     }
 
+
+    void initRouteFragment() {
+
+        RouteFragment routeFragment = RouteFragment.newInstance(RouteFragment.DIALOG_STATUS.EDIT_MODE);
+        try {
+            updatePubListInterface = routeFragment;
+        } catch (ClassCastException ex) {
+
+            throw new ClassCastException(
+                    routeFragment.toString() + " must implement OnPlayerSelectionSetListener");
+        }
+
+        routeFragment.setListOfPubs(mSelectedPupsList);
+
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        fragmentManager.beginTransaction().add(R.id.event_new_selected_pub_list, routeFragment, "Route").commit();
+
+    }
 
     @Override
     public void setMenuVisibility(boolean menuVisible) {
@@ -60,50 +83,40 @@ public class NewEventRouteFragment extends Fragment implements SelectedPupListAd
         }
     }
 
-    private void initView() {
-        // init pups list
-        mSelectedPupsList = new ArrayList<>();
-        // mSelectedPupsList.add( new Pub(1,"Date",new LatLng(1,1),1));
-
-        mAddPubBtn = (Button) rootView.findViewById(R.id.event_new_add_pub);
-        mAddPubBtn.setOnClickListener(addPubClickListener);
-        //selected list
-        mSelectedPupListView = (RecyclerView) rootView.findViewById(R.id.event_new_selected_pub_list);
-
-
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
-        mSelectedPupListView.setLayoutManager(linearLayoutManager);
-
-        adapter = new SelectedPupListAdapter(mSelectedPupsList, this);
-        mSelectedPupListView.setAdapter(adapter);
-
-    }
-
 
     View.OnClickListener addPubClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            mPubItemDialog = new PubListDialog();
+            mPubItemDialog = new SelectPubDialog();
             mPubItemDialog.setPubListListener(onSelectPubDialogDismissed);
             mPubItemDialog.show(getChildFragmentManager(), TAG + "pub");
         }
     };
 
-
-    PubListDialog.OnSelectPubDialogDismissed onSelectPubDialogDismissed = new PubListDialog.OnSelectPubDialogDismissed() {
+    SelectPubDialog.OnSelectPubDialogDismissed onSelectPubDialogDismissed = new SelectPubDialog.OnSelectPubDialogDismissed() {
         @Override
-        public void addPubToList(Pub newPub) {
+        public void addPubToList(PubMiniModel newPub) {
             mSelectedPupsList.add(newPub);
-            adapter.notifyItemChanged(mSelectedPupsList.size());
+            updatePubListInterface.onNewPub(newPub);
+            //TODO init the map as well
+
         }
     };
 
-    @Override
-    public void onPubItemClicked(int itemPosition) {
-        if (mPubItemDialog != null) {
-            mPubItemDialog.setPubListListener(onSelectPubDialogDismissed);
-            mPubItemDialog.showSelectedPub(mSelectedPupsList.get(itemPosition));
-            mPubItemDialog.show(getChildFragmentManager(), TAG + "pub");
+    public Event updatePubListInfo(Event mEvent) {
+        mSelectedPubsID = new ArrayList<>();
+        mTimeSlotList = new ArrayList<>();
+        for (PubMiniModel selectedPub : mSelectedPupsList) {
+            mSelectedPubsID.add(selectedPub.getId());
+            mTimeSlotList.add(selectedPub.getTimeSlot());
         }
+        mEvent.setPubIds(mSelectedPubsID);
+        mEvent.setTimeSlotList(mTimeSlotList);
+        return mEvent;
+    }
+
+
+    public interface UpdatePubList {
+        void onNewPub(PubMiniModel pub);
     }
 }

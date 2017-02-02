@@ -297,7 +297,7 @@ public class PersonDetailsActivity extends AppCompatActivity implements AppBarLa
             findViewById(R.id.person_details_favourite_pubs_show_all_btn).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Log.d(TAG, "expand favourite pubs onClick");
+                    Log.d(TAG, "expand favourite mSelectedPupsList onClick");
                     Bundle args = new Bundle();
                     args.putString("title", getString(R.string.favourite_pubs));
                     FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
@@ -349,7 +349,7 @@ public class PersonDetailsActivity extends AppCompatActivity implements AppBarLa
             findViewById(R.id.person_details_owned_pubs_show_all_btn).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Log.d(TAG, "expand owned pubs onClick");
+                    Log.d(TAG, "expand owned mSelectedPupsList onClick");
                     Bundle args = new Bundle();
                     args.putString("title", getString(R.string.owned_pubs));
                     FragmentTransaction ft = getSupportFragmentManager().beginTransaction();

@@ -52,6 +52,7 @@
                 android:paddingTop="15dp">
 
                 <TextView
+                    android:id="@+id/txt_time_from"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="12:00" />
@@ -62,6 +63,7 @@
                     android:text="to" />
 
                 <TextView
+                    android:id="@+id/txt_time_to"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="13:00" />
@@ -79,6 +81,8 @@
                     android:id="@+id/selected_pub_item_title"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
+                    android:textSize="18sp"
+                    android:gravity="center_vertical"
                     android:layout_weight="1" />
 
                 <TextView

@@ -6,7 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.ws1617.iosl.pubcrawl20.DataModels.Pub;
+import com.ws1617.iosl.pubcrawl20.DataModels.PubMiniModel;
 import com.ws1617.iosl.pubcrawl20.R;
 
 import java.util.List;
@@ -16,11 +16,11 @@ import java.util.List;
  */
 
 public class SelectedPupListAdapter extends RecyclerView.Adapter<SelectedPupListAdapter.pupViewHolder> {
-    List<Pub> selectedPups;
+    List<PubMiniModel> selectedPups;
     OnPubItemClickListener mOnPubItemClickListener;
 
 
-    public SelectedPupListAdapter(List<Pub> selectedPups, OnPubItemClickListener listener) {
+    public SelectedPupListAdapter(List<PubMiniModel> selectedPups, OnPubItemClickListener listener) {
         this.selectedPups = selectedPups;
         mOnPubItemClickListener = listener;
     }
@@ -35,7 +35,7 @@ public class SelectedPupListAdapter extends RecyclerView.Adapter<SelectedPupList
 
     @Override
     public void onBindViewHolder(pupViewHolder holder, int position) {
-        Pub pub = selectedPups.get(position);
+        PubMiniModel pub = selectedPups.get(position);
         holder.setPubData(pub);
 
     }
@@ -48,18 +48,20 @@ public class SelectedPupListAdapter extends RecyclerView.Adapter<SelectedPupList
     public class pupViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         TextView pubName;
-        TextView pubTime;
+        TextView startTime,endTime;
 
         public pupViewHolder(View itemView) {
             super(itemView);
             itemView.setOnClickListener(this);
             pubName = (TextView) itemView.findViewById(R.id.selected_pub_item_title);
-            pubTime = (TextView) itemView.findViewById(R.id.selected_pub_item_time);
+            startTime = (TextView) itemView.findViewById(R.id.txt_time_from);
+            endTime = (TextView) itemView.findViewById(R.id.txt_time_to);
         }
 
-        public void setPubData(Pub pub) {
-            pubName.setText(pub.getPubName());
-            pubTime.setText(pub.getOpeningTimes());
+        public void setPubData(PubMiniModel pub) {
+            pubName.setText(pub.getName());
+            startTime.setText(pub.getTimeSlot().getStartTimeAsString());
+            endTime.setText(pub.getTimeSlot().getEndTimeAsString());
         }
 
         @Override
