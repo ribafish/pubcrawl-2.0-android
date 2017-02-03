@@ -33,8 +33,6 @@ public class NewEventActivity extends AppCompatActivity  {
         fragmentsList = new ArrayList<>();
         fragmentsList.add(new NewEventGeneralFragment());
         fragmentsList.add(new NewEventRouteFragment());
-        fragmentsList.add(new NewEventShareFragment());
-
     }
 
 

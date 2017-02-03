@@ -25,8 +25,7 @@ public class NewEventPagerAdapter extends FragmentPagerAdapter  {
     private Context context;
     private int[] imageResId = {
             R.drawable.ic_assignment,
-            R.drawable.ic_pin_drop,
-            R.drawable.ic_share
+            R.drawable.ic_pin_drop
     };
 
     public NewEventPagerAdapter(FragmentManager fm, Context context, List<Fragment> fragmentsList) {
@@ -43,8 +42,6 @@ public class NewEventPagerAdapter extends FragmentPagerAdapter  {
                     return fragmentsList.get(0);
                 case 1:
                     return fragmentsList.get(1);
-                case 2:
-                    return fragmentsList.get(2);
                 default:
                     return fragmentsList.get(0);
             }
