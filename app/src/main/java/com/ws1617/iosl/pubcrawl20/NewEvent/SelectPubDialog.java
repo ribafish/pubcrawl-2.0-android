@@ -49,15 +49,13 @@ public class SelectPubDialog extends DialogFragment {
     //Views
     Button mTimeFrom, mTimeTo, mDoneBtn;
     Spinner mPubsListSpinner;
-    TextView mPubName, mPubSize;
-    SupportMapFragment mapFragment;
+    TextView  mPubSize;
     View mRootView;
 
     //Data
     Pub selectedPub;
     List<Pub> pubsList;
     List<String> pubsListString;
-    GoogleMap mGoogleMap;
     Integer pubPosition;
     Date mStartDate, mEndDate;
 
@@ -72,8 +70,6 @@ public class SelectPubDialog extends DialogFragment {
 
         mRootView = inflater.inflate(R.layout.view_pup_list, null);
         initView();
-        initMapView();
-
         if (pubPosition != null) mPubsListSpinner.setSelection(pubPosition);
 
         return mRootView;
@@ -97,41 +93,18 @@ public class SelectPubDialog extends DialogFragment {
         pubPosition = pubsList.indexOf(pub);
 
         if (pubPosition >= pubsList.size()) return;
-//        mPubsListSpinner.setSelection(pubPosition);
-        // selectedPub =pub;
-        //selectItem();
     }
 
-    //TODO check if this should be uncommented again
     @Override
     public void onDestroy() {
         super.onDestroy();
-       /* if (null != getChildFragmentManager() && mapFragment!= null)
-            getActivity().getSupportFragmentManager().beginTransaction()
-                    .remove(mapFragment)
-                    .commit();*/
-    }
+     }
 
-    private void initMapView() {
-        mapFragment = new SupportMapFragment();
-        FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.pub_dialog_map, mapFragment, TAG).commit();
-        mapFragment.getMapAsync(new OnMapReadyCallback() {
-            @Override
-            public void onMapReady(GoogleMap googleMap) {
-                mGoogleMap = googleMap;
-                LatLng sydney = new LatLng(-34, 151);
-                mGoogleMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-                mGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
-            }
-        });
-    }
 
 
     private void initView() {
 
-        mPubName = (TextView) mRootView.findViewById(R.id.pub_dialog_pub_name);
-        mPubSize = (TextView) mRootView.findViewById(R.id.pub_dialog_pub_size);
+         mPubSize = (TextView) mRootView.findViewById(R.id.pub_dialog_pub_size);
 
         mDoneBtn = (Button) mRootView.findViewById(R.id.pub_dialog_pub_done);
         mDoneBtn.setOnClickListener(mDoneBtnClickedListener);
@@ -223,7 +196,6 @@ public class SelectPubDialog extends DialogFragment {
     };
 
     private void selectItem() {
-        mPubName.setText(this.selectedPub.getPubName());
         mPubSize.setText(String.valueOf(this.selectedPub.getSize()));
     }
 
