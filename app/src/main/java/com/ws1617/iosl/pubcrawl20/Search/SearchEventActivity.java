@@ -1,28 +1,24 @@
 package com.ws1617.iosl.pubcrawl20.Search;
 
-import android.app.Activity;
-import android.app.Notification;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.PersistableBundle;
-import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
-import android.util.AttributeSet;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.View;
 
+import com.ws1617.iosl.pubcrawl20.Database.EventDbHelper;
 import com.ws1617.iosl.pubcrawl20.R;
 
 /**
  * Created by Haneen on 04/02/2017.
  */
 
-public class SearchEventActivity extends AppCompatActivity {
+public class SearchEventActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
 
     @Override
     public void onCreate(Bundle savedInstanceState, PersistableBundle persistentState) {
@@ -44,6 +40,7 @@ public class SearchEventActivity extends AppCompatActivity {
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             String query = intent.getStringExtra(SearchManager.QUERY);
             //use the query to search your data somehow
+
         }
 
     }
@@ -60,6 +57,17 @@ public class SearchEventActivity extends AppCompatActivity {
             searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
             searchView.setIconifiedByDefault(false);
         }
+        return true;
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        friendListAdapter.getFilter().filter(newText);
         return true;
     }
 }
