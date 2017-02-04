@@ -63,6 +63,14 @@
             android:parentActivityName=".MainActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
+
+        <activity
+            android:name=".Search.SearchEvent"
+            android:label="Search Event"
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
+        
         <activity android:name=".Details.EventDetailsActivity">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
