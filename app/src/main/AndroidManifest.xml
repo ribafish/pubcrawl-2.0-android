@@ -65,12 +65,20 @@
             android:theme="@style/AppTheme" />
 
         <activity
-            android:name=".Search.SearchEvent"
-            android:label="Search Event"
+            android:name=".Search.SearchEventActivity"
+            android:label="Search"
+            android:launchMode="singleTop"
             android:parentActivityName=".MainActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
-        
+            android:theme="@style/AppTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
+        </activity>
+
         <activity android:name=".Details.EventDetailsActivity">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
