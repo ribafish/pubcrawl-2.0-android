@@ -37,6 +37,7 @@ public class DatabaseHelper {
     private static final String TAG = "DatabaseHelper";
 
     public static byte[] bitmapToBytes (Bitmap bmp) {
+
         if (bmp == null) return null;
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         bmp.compress(Bitmap.CompressFormat.PNG, 0, stream);

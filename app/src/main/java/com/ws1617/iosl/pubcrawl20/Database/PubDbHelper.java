@@ -173,6 +173,7 @@ public class PubDbHelper  {
 
     public Pub getListlessPub (long pub_id) throws DatabaseException {
         SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
+
         Pub pub = new Pub(pub_id);
 
         String query = "SELECT * FROM " +
@@ -213,22 +214,32 @@ public class PubDbHelper  {
 
     public List<Pub> getAllPubs() {
         List<Pub> pubsList = new ArrayList<>();
-        SQLiteDatabase db = this.getReadableDatabase();
+        SQLiteDatabase db =DatabaseManager.getInstance().openDatabase();
         String query = "SELECT " + PUB_ID + " FROM " +
                 TABLE_PUBS;
         Cursor c = db.rawQuery(query, null);
         if (c != null && c.moveToFirst()) {
             do {
                 int pub_id = c.getInt(c.getColumnIndex(PUB_ID));
-                Pub pub = getListlessPub(pub_id);
-                pubsList.add(pub);
+                Pub pub = null;
+                try {
+                    pub = getListlessPub(pub_id);
+                    pubsList.add(pub);
+                } catch (DatabaseException e) {
+                    e.printStackTrace();
+                }
+
             } while (c.moveToNext());
             c.close();
 
         } else {
             Log.e(TAG, "Can't find Pubs");
             String msg = c != null ? "Can't find pubs. cursor size is " + c.getCount() : "\"Can't find pubs . Cursor is null or database empty\"";
-            throw new DatabaseException(msg);
+            try {
+                throw new DatabaseException(msg);
+            } catch (DatabaseException e) {
+                e.printStackTrace();
+            }
         }
         c.close();
         return pubsList;
@@ -258,6 +269,7 @@ public class PubDbHelper  {
 
     public ArrayList<Long> getPubEventIds (long pub_id) {
         SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
+
         ArrayList<Long> list = new ArrayList<>();
 
         String query = "SELECT * FROM " +
@@ -279,6 +291,7 @@ public class PubDbHelper  {
 
     public ArrayList<Bitmap> getPubImages (long pub_id) {
         SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
+
         ArrayList<Bitmap> list = new ArrayList<>();
 
         String query = "SELECT * FROM " +

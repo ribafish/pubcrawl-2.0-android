@@ -72,7 +72,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, 2);
 
 
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+       if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+               && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             // Create an instance of GoogleAPIClient.
             if (mGoogleApiClient == null) {
                 mGoogleApiClient = new GoogleApiClient.Builder(this)
@@ -81,7 +82,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                   .addApi(LocationServices.API)
                   .build();
             }
-        }
+       }
 
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.main_toolbar);
@@ -178,13 +179,13 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
     @Override
     protected void onStart() {
-        mGoogleApiClient.connect();
+        if(mGoogleApiClient != null)mGoogleApiClient.connect();
         super.onStart();
     }
 
     @Override
     protected void onStop() {
-        mGoogleApiClient.disconnect();
+        if(mGoogleApiClient != null)  mGoogleApiClient.disconnect();
         super.onStop();
     }
 

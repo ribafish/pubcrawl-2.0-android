@@ -33,8 +33,6 @@ public class NewEventActivity extends AppCompatActivity  {
         fragmentsList = new ArrayList<>();
         fragmentsList.add(new NewEventGeneralFragment());
         fragmentsList.add(new NewEventRouteFragment());
-        fragmentsList.add(new NewEventShareFragment());
-
     }
 
 
@@ -98,7 +96,7 @@ public class NewEventActivity extends AppCompatActivity  {
             @Override
             public void onSuccess() {
                 // Add to local DB or refresh it
-                EventDbHelper eventDbHelper = new EventDbHelper(getApplicationContext());
+                EventDbHelper eventDbHelper = new EventDbHelper();
                 eventDbHelper.addEvent(mEvent);
 
                 //onSuccess adding to local DB
