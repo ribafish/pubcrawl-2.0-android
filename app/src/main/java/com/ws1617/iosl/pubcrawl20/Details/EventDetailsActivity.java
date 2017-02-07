@@ -22,6 +22,8 @@ import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -190,6 +192,24 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
         tabLayout.setupWithViewPager(viewPager, true);
 
         startAlphaAnimation(mToolbar, 0, View.INVISIBLE);
+
+        mToolbar.inflateMenu(R.menu.event_details_menu);
+        mToolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.event_details_menu_add:
+                        //TODO
+                        return true;
+                    case R.id.event_details_menu_remove:
+                        //TODO
+                        return true;
+                }
+
+                return true;
+
+            }
+        });
     }
 
 
