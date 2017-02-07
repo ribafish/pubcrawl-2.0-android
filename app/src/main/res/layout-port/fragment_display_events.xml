@@ -16,79 +16,12 @@
         android:animateLayoutChanges="true"
         class="com.google.android.gms.maps.SupportMapFragment"/>
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/display_events_map_expand"
-        android:background="@android:color/transparent"
-        android:animateLayoutChanges="true">
-
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="4dp"
-            android:src="@drawable/rectangle"
-            android:animateLayoutChanges="true"
-            android:id="@+id/display_events_map_expand_bar"/>
-
-        <ImageView
-            android:layout_width="40dp"
-            android:layout_height="12dp"
-            android:layout_centerHorizontal="true"
-            android:src="@drawable/rectangle"
-            android:animateLayoutChanges="true"
-            android:id="@+id/display_events_map_expand_arrow_place"
-            android:layout_below="@+id/display_events_map_expand_bar"/>
-
-        <ImageView
-            android:layout_width="12dp"
-            android:layout_height="12dp"
-            android:rotation="90"
-            android:animateLayoutChanges="true"
-            android:src="@drawable/trapeze_side"
-            android:layout_below="@+id/display_events_map_expand_bar"
-            android:layout_toRightOf="@+id/display_events_map_expand_arrow_place"
-            android:layout_toEndOf="@+id/display_events_map_expand_arrow_place"/>
-
-        <ImageView
-            android:layout_width="12dp"
-            android:layout_height="12dp"
-            android:rotation="180"
-            android:animateLayoutChanges="true"
-            android:src="@drawable/trapeze_side"
-            android:layout_below="@+id/display_events_map_expand_bar"
-            android:layout_toLeftOf="@+id/display_events_map_expand_arrow_place"
-            android:layout_toStartOf="@+id/display_events_map_expand_arrow_place"/>
-
-        <ImageView
-            android:id="@+id/display_events_map_expand_more"
-            android:layout_width="18dp"
-            android:layout_height="18dp"
-            android:padding="0dp"
-            android:layout_margin="0dp"
-            android:animateLayoutChanges="true"
-            app:srcCompat="@drawable/ic_expand_more"
-            android:tint="@color/background_grey_50"
-            android:layout_centerHorizontal="true"
-            android:visibility="gone"/>
-
-        <ImageView
-            android:id="@+id/display_events_map_expand_less"
-            android:layout_width="18dp"
-            android:layout_height="18dp"
-            android:padding="0dp"
-            android:layout_margin="0dp"
-            android:animateLayoutChanges="true"
-            app:srcCompat="@drawable/ic_expand_less"
-            android:tint="@color/background_grey_50"
-            android:layout_centerHorizontal="true"/>
-
-    </RelativeLayout>
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:animateLayoutChanges="true" >
+        android:animateLayoutChanges="true"
+        android:visibility="gone">
 
         <Button
             android:text="Refresh"
@@ -138,11 +71,84 @@
 
     </LinearLayout>
 
-    <com.ws1617.iosl.pubcrawl20.DisplayEvents.CustomRecyclerView
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:id="@+id/eventsRecyclerView"
-        android:animateLayoutChanges="false"
-        android:layout_weight="1"/>
+        android:layout_weight="1">
+
+        <com.ws1617.iosl.pubcrawl20.DisplayEvents.CustomRecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/eventsRecyclerView"
+            android:animateLayoutChanges="false"
+            android:clipToPadding="false"
+            android:paddingTop="8dp"
+            />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/display_events_map_expand"
+            android:background="@drawable/transparent"
+            android:animateLayoutChanges="false">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="4dp"
+                android:src="@drawable/rectangle"
+                android:id="@+id/display_events_map_expand_bar"/>
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="12dp"
+                android:layout_centerHorizontal="true"
+                android:src="@drawable/rectangle"
+                android:id="@+id/display_events_map_expand_arrow_place"
+                android:layout_below="@+id/display_events_map_expand_bar"/>
+
+            <ImageView
+                android:layout_width="12dp"
+                android:layout_height="12dp"
+                android:rotation="90"
+                android:src="@drawable/trapeze_side"
+                android:layout_below="@+id/display_events_map_expand_bar"
+                android:layout_toRightOf="@+id/display_events_map_expand_arrow_place"
+                android:layout_toEndOf="@+id/display_events_map_expand_arrow_place"/>
+
+            <ImageView
+                android:layout_width="12dp"
+                android:layout_height="12dp"
+                android:rotation="180"
+                android:src="@drawable/trapeze_side"
+                android:layout_below="@+id/display_events_map_expand_bar"
+                android:layout_toLeftOf="@+id/display_events_map_expand_arrow_place"
+                android:layout_toStartOf="@+id/display_events_map_expand_arrow_place"/>
+
+            <ImageView
+                android:id="@+id/display_events_map_expand_more"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:padding="0dp"
+                android:layout_margin="0dp"
+                app:srcCompat="@drawable/ic_expand_more"
+                android:tint="@color/background_grey_50"
+                android:layout_centerHorizontal="true"
+                android:visibility="gone"/>
+
+            <ImageView
+                android:id="@+id/display_events_map_expand_less"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:padding="0dp"
+                android:layout_margin="0dp"
+                android:animateLayoutChanges="true"
+                app:srcCompat="@drawable/ic_expand_less"
+                android:tint="@color/background_grey_50"
+                android:layout_centerHorizontal="true"/>
+
+        </RelativeLayout>
+
+
+    </RelativeLayout>
 
 </LinearLayout>
