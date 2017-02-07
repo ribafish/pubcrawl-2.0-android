@@ -148,4 +148,5 @@
     <string name="owned_pubs">Owned pubs</string>
     <string name="events_created">Events created</string>
     <string name="sync_now">Sync now</string>
+    <string name="join">JOIN</string>
 </resources>
