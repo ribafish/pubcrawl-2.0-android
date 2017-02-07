@@ -56,7 +56,7 @@
             android:label="@string/title_activity_settings"
             android:parentActivityName=".MainActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".ScanQR.BarcodeCaptureActivity"
             android:label="Read Barcode"
