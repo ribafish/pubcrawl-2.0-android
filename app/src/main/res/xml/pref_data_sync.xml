@@ -18,4 +18,8 @@
         <intent android:action="android.settings.SYNC_SETTINGS" />
     </Preference>
 
+    <Preference android:title="@string/sync_now"
+        android:key="sync_now"
+        android:persistent="false"/>
+
 </PreferenceScreen>

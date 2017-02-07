@@ -28,6 +28,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -96,15 +98,22 @@ public class DisplayEventsFragment extends Fragment implements OnMapReadyCallbac
             }
         });
 
-        Button hide = (Button) rootView.findViewById(R.id.btn_hide);
+        RelativeLayout hide = (RelativeLayout) rootView.findViewById(R.id.display_events_map_expand);
+        hide.setClickable(true);
         hide.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 View map = rootView.findViewById(R.id.homeMapView);
+                ImageView more = (ImageView) rootView.findViewById(R.id.display_events_map_expand_more);
+                ImageView less = (ImageView) rootView.findViewById(R.id.display_events_map_expand_less);
                 if (map.getVisibility() == View.GONE) {
                     map.setVisibility(View.VISIBLE);
+                    more.setVisibility(View.GONE);
+                    less.setVisibility(View.VISIBLE);
                 } else {
                     map.setVisibility(View.GONE);
+                    more.setVisibility(View.VISIBLE);
+                    less.setVisibility(View.GONE);
                 }
             }
         });

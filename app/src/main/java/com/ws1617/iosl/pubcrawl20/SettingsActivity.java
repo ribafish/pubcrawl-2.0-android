@@ -28,6 +28,8 @@ import android.view.ViewGroup;
 
 import java.util.List;
 
+import static com.ws1617.iosl.pubcrawl20.Database.DatabaseHelper.resetWholeDatabase;
+
 /**
  * Created by Gasper Kojek on 9. 11. 2016.
  * Github: https://github.com/ribafish/
@@ -280,6 +282,14 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             // updated to reflect the new value, per the Android Design
             // guidelines.
             bindPreferenceSummaryToValue(findPreference("sync_frequency"));
+            final Context context = getActivity();
+            findPreference("sync_now").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    resetWholeDatabase(context);
+                    return true;
+                }
+            });
         }
 
         @Override

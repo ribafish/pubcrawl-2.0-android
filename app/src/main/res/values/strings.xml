@@ -83,6 +83,7 @@
 
     <string name="pref_title_sync_frequency">Sync frequency</string>
     <string-array name="pref_sync_frequency_titles">
+        <item>5 minutes</item>
         <item>15 minutes</item>
         <item>30 minutes</item>
         <item>1 hour</item>
@@ -91,6 +92,7 @@
         <item>Never</item>
     </string-array>
     <string-array name="pref_sync_frequency_values">
+        <item>5</item>
         <item>15</item>
         <item>30</item>
         <item>60</item>
@@ -145,4 +147,5 @@
     <string name="favourite_pubs">Favourite pubs</string>
     <string name="owned_pubs">Owned pubs</string>
     <string name="events_created">Events created</string>
+    <string name="sync_now">Sync now</string>
 </resources>
