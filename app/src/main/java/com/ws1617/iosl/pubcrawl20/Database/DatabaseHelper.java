@@ -93,11 +93,14 @@ public class DatabaseHelper {
         final String tag = TAG;
         final String TAG = tag + ".AddEvent";
 
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         final RequestQueueHelper requestQueue = new RequestQueueHelper(context);
 
-        if (prefs.getString("server_ip", null) == null) {
-            Log.e(TAG, "server_ip == null");
+        final String url;
+
+        try {
+            url = getServerUrl(context) + EVENTS;
+        } catch (StringIndexOutOfBoundsException e) {
+            Log.e(TAG, e.getLocalizedMessage());
             return;
         }
 
@@ -108,8 +111,6 @@ public class DatabaseHelper {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
-        final String url = "http://" + prefs.getString("server_ip", null) + "/" + EVENTS;
 
         PubJsonObjectRequest jsonObjectRequest = new PubJsonObjectRequest(Request.Method.POST, url,
                 object, new Response.Listener<JSONObject>() {
@@ -134,15 +135,16 @@ public class DatabaseHelper {
         final String tag = TAG;
         final String TAG = tag + ".downloadEvents";
         final EventDbHelper db = new EventDbHelper();
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         final RequestQueueHelper requestQueue = new RequestQueueHelper(context);
 
-        if (prefs.getString("server_ip", null) == null) {
-            Log.e(TAG, "server_ip == null");
+        final String url;
+
+        try {
+            url = getServerUrl(context) + EVENTS;
+        } catch (StringIndexOutOfBoundsException e) {
+            Log.e(TAG, e.getLocalizedMessage());
             return;
         }
-
-        final String url = "http://" + prefs.getString("server_ip", null) + "/" + EVENTS;
 
         JsonObjectRequest eventsRequest = new JsonObjectRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONObject>() {
@@ -276,15 +278,15 @@ public class DatabaseHelper {
         final String tag = TAG;
         final String TAG = tag + ".downloadPubs";
         final PubDbHelper db = new PubDbHelper();
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         final RequestQueueHelper requestQueue = new RequestQueueHelper(context);
+        final String url;
 
-        if (prefs.getString("server_ip", null) == null) {
-            Log.e(TAG, "server_ip == null");
+        try {
+            url = getServerUrl(context) + PUBS;
+        } catch (StringIndexOutOfBoundsException e) {
+            Log.e(TAG, e.getLocalizedMessage());
             return;
         }
-
-        final String url = "http://" + prefs.getString("server_ip", null) + "/" + PUBS;
 
         JsonObjectRequest pubsRequest = new JsonObjectRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONObject>() {
@@ -417,15 +419,15 @@ public class DatabaseHelper {
         final String tag = TAG;
         final String TAG = tag + ".downloadPersons";
         final PersonDbHelper db = new PersonDbHelper();
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         final RequestQueueHelper requestQueue = new RequestQueueHelper(context);
+        final String url;
 
-        if (prefs.getString("server_ip", null) == null) {
-            Log.e(TAG, "server_ip == null");
+        try {
+            url = getServerUrl(context) + PERSONS;
+        } catch (StringIndexOutOfBoundsException e) {
+            Log.e(TAG, e.getLocalizedMessage());
             return;
         }
-
-        final String url = "http://" + prefs.getString("server_ip", null) + "/" + PERSONS;
 
         JsonObjectRequest personsRequest = new JsonObjectRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONObject>() {
@@ -619,6 +621,22 @@ public class DatabaseHelper {
                     }
                 });
         requestQueue.add(personsRequest);
+    }
+
+    public static String getServerUrl(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        String url;
+
+        if (prefs.getString("server_ip", null) == null || prefs.getString("server_ip", "").length() < 10) {
+            Log.e(TAG, "Server url not set, setting default");
+            url = "http://134.158.74.243:8080/";
+        } else {
+            url = prefs.getString("server_ip", "").replace(" ", "") + "/";
+        }
+
+        if (!url.startsWith("http")) url = "http://" + url;
+
+        return url;
     }
 
 }
