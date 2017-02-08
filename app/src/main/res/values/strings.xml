@@ -160,4 +160,5 @@
     <string name="alert_add_friend_message">Do you want to add this person as your friend?</string>
     <string name="alert_remove_friend_title">Remove friend?</string>
     <string name="alert_remove_friend_message">Are you sure you want to remove this friend?</string>
+    <string name="favourite">FAVOURITE</string>
 </resources>

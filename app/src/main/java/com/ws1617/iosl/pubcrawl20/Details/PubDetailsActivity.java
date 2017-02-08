@@ -226,9 +226,53 @@ public class PubDetailsActivity extends AppCompatActivity implements AppBarLayou
 
 
         startAlphaAnimation(mToolbar, 0, View.INVISIBLE);
+
+        mToolbar.inflateMenu(R.menu.pub_details_menu);
+        mToolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.pub_details_menu_add:
+                        addFavourite(true);
+                        return true;
+                    case R.id.pub_details_menu_remove:
+                        addFavourite(false);
+                        return true;
+                }
+                return true;
+            }
+        });
+        ImageView appBarAddButton = (ImageView) findViewById(R.id.pub_details_layout_add_button);
+        appBarAddButton.setClickable(true);
+        appBarAddButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(mToolbar.getMenu().findItem(R.id.pub_details_menu_add).isVisible()) {
+                    addFavourite(true);
+                } else {
+                    addFavourite(false);
+                }
+            }
+        });
     }
 
+    public void addFavourite(boolean favourite) {
+        //TODO
+        updateAddButtons(favourite);
+    }
 
+    public void updateAddButtons(boolean favourite) {
+        ImageView appBarJoinButton = (ImageView) findViewById(R.id.pub_details_layout_add_button);
+        if (favourite) {
+            mToolbar.getMenu().findItem(R.id.pub_details_menu_add).setVisible(false);
+            mToolbar.getMenu().findItem(R.id.pub_details_menu_remove).setVisible(true);
+            appBarJoinButton.setImageResource(R.drawable.ic_favorite_black_24dp);
+        } else {
+            mToolbar.getMenu().findItem(R.id.pub_details_menu_add).setVisible(true);
+            mToolbar.getMenu().findItem(R.id.pub_details_menu_remove).setVisible(false);
+            appBarJoinButton.setImageResource(R.drawable.ic_favorite_border_black_24dp);
+        }
+    }
 
 
     private void initOpeningTimesExpanding() {

@@ -109,13 +109,13 @@
                 </LinearLayout>
 
                 <ImageView
-                    android:layout_margin="6dp"
-                    android:layout_width="36dp"
-                    android:layout_height="36dp"
-                    android:id="@+id/event_details.layout.add_button"
-                    app:srcCompat="@drawable/ic_event_add_black_24dp"
-                    android:tint="@android:color/white"
-                    />
+                android:layout_margin="6dp"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:id="@+id/event_details.layout.add_button"
+                app:srcCompat="@drawable/ic_event_add_black_24dp"
+                android:tint="@android:color/white"
+                />
 
             </LinearLayout>
 
