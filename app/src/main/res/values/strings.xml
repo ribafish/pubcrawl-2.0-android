@@ -150,4 +150,8 @@
     <string name="sync_now">Sync now</string>
     <string name="join">JOIN</string>
     <string name="leave">LEAVE</string>
+    <string name="alert_join_event_title">Join event?</string>
+    <string name="alert_join_event_message">Are you sure you want to join this event?</string>
+    <string name="alert_leave_event_title">Leave event?</string>
+    <string name="alert_leave_event_message">Are you sure you want to leave this event?</string>
 </resources>
