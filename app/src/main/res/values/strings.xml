@@ -154,4 +154,10 @@
     <string name="alert_join_event_message">Are you sure you want to join this event?</string>
     <string name="alert_leave_event_title">Leave event?</string>
     <string name="alert_leave_event_message">Are you sure you want to leave this event?</string>
+    <string name="add">ADD</string>
+    <string name="remove">REMOVE</string>
+    <string name="alert_add_friend_title">Add friend?</string>
+    <string name="alert_add_friend_message">Do you want to add this person as your friend?</string>
+    <string name="alert_remove_friend_title">Remove friend?</string>
+    <string name="alert_remove_friend_message">Are you sure you want to remove this friend?</string>
 </resources>

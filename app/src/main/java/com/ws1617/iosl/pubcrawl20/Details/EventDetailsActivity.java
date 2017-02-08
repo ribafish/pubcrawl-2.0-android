@@ -195,18 +195,6 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
 
         startAlphaAnimation(mToolbar, 0, View.INVISIBLE);
 
-        ImageView appBarJoinButton = (ImageView) findViewById(R.id.event_details_layout_add_button);
-        appBarJoinButton.setClickable(true);
-        appBarJoinButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(mToolbar.getMenu().findItem(R.id.event_details_menu_add).isVisible()) {
-                    joinEvent(true);
-                } else {
-                    joinEvent(false);
-                }
-            }
-        });
         mToolbar.inflateMenu(R.menu.event_details_menu);
         mToolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
@@ -219,9 +207,19 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
                         joinEvent(false);
                         return true;
                 }
-
                 return true;
-
+            }
+        });
+        ImageView appBarJoinButton = (ImageView) findViewById(R.id.event_details_layout_add_button);
+        appBarJoinButton.setClickable(true);
+        appBarJoinButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(mToolbar.getMenu().findItem(R.id.event_details_menu_add).isVisible()) {
+                    joinEvent(true);
+                } else {
+                    joinEvent(false);
+                }
             }
         });
     }

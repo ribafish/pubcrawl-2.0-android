@@ -1,6 +1,7 @@
 package com.ws1617.iosl.pubcrawl20.Details;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -9,11 +10,13 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -466,6 +469,96 @@ public class PersonDetailsActivity extends AppCompatActivity implements AppBarLa
 
 
         startAlphaAnimation(mToolbar, 0, View.INVISIBLE);
+
+        mToolbar.inflateMenu(R.menu.person_details_menu);
+        mToolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.person_details_menu_add:
+                        addFriend(true);
+                        return true;
+                    case R.id.person_details_menu_remove:
+                        addFriend(false);
+                        return true;
+                }
+                return true;
+            }
+        });
+        ImageView appBarAddButton = (ImageView) findViewById(R.id.person_details_layout_add_button);
+        appBarAddButton.setClickable(true);
+        appBarAddButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(mToolbar.getMenu().findItem(R.id.person_details_menu_add).isVisible()) {
+                    addFriend(true);
+                } else {
+                    addFriend(false);
+                }
+            }
+        });
+    }
+
+    public void addFriend(boolean add) {
+        AlertDialog dialog = new AlertDialog.Builder(this).create();
+        if (add){
+            dialog.setTitle(getString(R.string.alert_add_friend_title));
+            dialog.setMessage(getString(R.string.alert_add_friend_message));
+            dialog.setButton(AlertDialog.BUTTON_NEGATIVE,
+                    getString(R.string.cancel),
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            dialogInterface.dismiss();
+                        }
+                    });
+            dialog.setButton(DialogInterface.BUTTON_POSITIVE,
+                    getString(R.string.add),
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            // TODO: add friend
+                            updateAddButtons(true);
+                            dialogInterface.dismiss();
+                        }
+                    });
+            dialog.show();
+        } else {
+            dialog.setTitle(getString(R.string.alert_remove_friend_title));
+            dialog.setMessage(getString(R.string.alert_remove_friend_message));
+            dialog.setButton(AlertDialog.BUTTON_NEGATIVE,
+                    getString(R.string.cancel),
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            dialogInterface.dismiss();
+                        }
+                    });
+            dialog.setButton(DialogInterface.BUTTON_POSITIVE,
+                    getString(R.string.remove),
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            // TODO: remove friend
+                            updateAddButtons(false);
+                            dialogInterface.dismiss();
+                        }
+                    });
+            dialog.show();
+        }
+    }
+
+    public void updateAddButtons(boolean friends) {
+        ImageView appBarJoinButton = (ImageView) findViewById(R.id.person_details_layout_add_button);
+        if (friends) {
+            mToolbar.getMenu().findItem(R.id.person_details_menu_add).setVisible(false);
+            mToolbar.getMenu().findItem(R.id.person_details_menu_remove).setVisible(true);
+            appBarJoinButton.setImageResource(R.drawable.ic_person_friends_black_24dp);
+        } else {
+            mToolbar.getMenu().findItem(R.id.person_details_menu_add).setVisible(true);
+            mToolbar.getMenu().findItem(R.id.person_details_menu_remove).setVisible(false);
+            appBarJoinButton.setImageResource(R.drawable.ic_person_add_black_24dp);
+        }
     }
 
     private void initDescriptionExpanding() {

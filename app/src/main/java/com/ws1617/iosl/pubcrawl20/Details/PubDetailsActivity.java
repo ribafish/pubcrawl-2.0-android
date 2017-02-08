@@ -1,6 +1,7 @@
 package com.ws1617.iosl.pubcrawl20.Details;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -10,11 +11,13 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -224,6 +227,9 @@ public class PubDetailsActivity extends AppCompatActivity implements AppBarLayou
 
         startAlphaAnimation(mToolbar, 0, View.INVISIBLE);
     }
+
+
+
 
     private void initOpeningTimesExpanding() {
         final CardView openingTimesCard = (CardView) findViewById(R.id.pub_details_times_card);
