@@ -16,6 +16,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.ws1617.iosl.pubcrawl20.DataModels.Event;
 import com.ws1617.iosl.pubcrawl20.DataModels.Person;
 import com.ws1617.iosl.pubcrawl20.DataModels.Pub;
+import com.ws1617.iosl.pubcrawl20.NewEvent.NewEventActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;

@@ -158,6 +158,8 @@ public class DisplayEventsFragment extends Fragment implements OnMapReadyCallbac
         return rootView;
     }
 
+
+
     @Override
     public void onResume() {
         super.onResume();
