@@ -45,7 +45,7 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
     TextView noPersonsTxt;
     PersonListAdapter personListAdapter;
 
-    RelativeLayout searchOverLay;
+    LinearLayout searchOverLay;
     LinearLayout searchResultContainer;
 
 
@@ -107,7 +107,7 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
             listsVisibility = View.VISIBLE;
         }
 
-        searchOverLay = (RelativeLayout) findViewById(R.id.search_overlay);
+        searchOverLay = (LinearLayout) findViewById(R.id.search_overlay);
         searchOverLay.setVisibility(showSearchOverly);
 
         searchResultContainer = (LinearLayout) findViewById(R.id.search_result_container);
