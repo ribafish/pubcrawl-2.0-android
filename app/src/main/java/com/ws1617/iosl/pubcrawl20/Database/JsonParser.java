@@ -120,11 +120,33 @@ public class JsonParser {
     public static Event parseJSONEvent (JSONObject jsonEvent) throws JSONException, ParseException {
         final Event event = new Event();
         DateFormat dateFormat = new SimpleDateFormat(EVENT_DATE_FORMAT, Locale.ENGLISH);
-        event.setDate(dateFormat.parse(jsonEvent.getString(EVENT_DATE)));
-        event.setEventName(jsonEvent.getString(EVENT_NAME));
-        event.setDescription(jsonEvent.getString(EVENT_DESCRIPTION));
-        event.setTracked(jsonEvent.getBoolean(EVENT_TRACKED));
-        event.setImage(decodeBitmapBase64(jsonEvent.getString(EVENT_IMAGE)));
+        try {
+            event.setDate(dateFormat.parse(jsonEvent.getString(EVENT_DATE)));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        try {
+            event.setEventName(jsonEvent.getString(EVENT_NAME));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        try {
+            event.setDescription(jsonEvent.getString(EVENT_DESCRIPTION));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        try {
+            event.setTracked(jsonEvent.getBoolean(EVENT_TRACKED));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        try {
+            event.setImage(decodeBitmapBase64(jsonEvent.getString(EVENT_IMAGE)));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         try {
             event.setMinLatLng(new LatLng(
                     jsonEvent.getDouble(EVENT_LAT_MIN),
