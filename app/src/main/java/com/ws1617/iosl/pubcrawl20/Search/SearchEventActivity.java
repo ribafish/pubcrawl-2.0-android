@@ -166,7 +166,7 @@ public class SearchEventActivity extends AppCompatActivity implements SearchView
 
         @Override
         public EventItem onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_row_events, parent, false);
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.event_search_list_row, parent, false);
             EventItem eventView = new EventItem(view);
             return eventView;
         }
