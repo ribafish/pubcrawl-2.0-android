@@ -1,5 +1,7 @@
 package com.ws1617.iosl.pubcrawl20.Search;
 
+import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +10,7 @@ import android.widget.TextView;
 
 import com.ws1617.iosl.pubcrawl20.DataModels.Person;
 import com.ws1617.iosl.pubcrawl20.Database.PersonDbHelper;
+import com.ws1617.iosl.pubcrawl20.Details.PersonDetailsActivity;
 import com.ws1617.iosl.pubcrawl20.R;
 
 import java.util.ArrayList;
@@ -24,8 +27,11 @@ public class PersonListAdapter extends RecyclerView.Adapter<PersonListAdapter.Pe
     List<PersonMini> personsList = new ArrayList<>();
     List<PersonMini> personsListCopy;
 
-    public PersonListAdapter() {
+    Context context;
+
+    public PersonListAdapter(Context context) {
         getAllPersons();
+        this.context = context;
         personsListCopy = personsList;
     }
 
@@ -48,8 +54,16 @@ public class PersonListAdapter extends RecyclerView.Adapter<PersonListAdapter.Pe
 
     @Override
     public void onBindViewHolder(PersonItem holder, int position) {
-        PersonMini personMini = personsList.get(position);
+        final PersonMini personMini = personsList.get(position);
         holder.name.setText(personMini.getName());
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context,PersonDetailsActivity.class);
+                intent.putExtra("id",personMini.getId());
+                context.startActivity(intent);
+            }
+        });
 
     }
 
@@ -75,13 +89,15 @@ public class PersonListAdapter extends RecyclerView.Adapter<PersonListAdapter.Pe
         notifyDataSetChanged();
     }
 
-    public class PersonItem extends RecyclerView.ViewHolder {
+    public class PersonItem extends RecyclerView.ViewHolder  {
 
         TextView name;
 
         public PersonItem(View itemView) {
             super(itemView);
             name = (TextView) itemView.findViewById(R.id.person_name);
+
         }
+
     }
 }

@@ -82,7 +82,7 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
         pubsListAdapter = new PubsListAdapter();
         pubsList.setAdapter(pubsListAdapter);
 
-        personListAdapter = new PersonListAdapter();
+        personListAdapter = new PersonListAdapter(this);
         personsList.setAdapter(personListAdapter);
 
         //set layout manager
