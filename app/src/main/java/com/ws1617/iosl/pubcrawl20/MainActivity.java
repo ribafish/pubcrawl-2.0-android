@@ -31,7 +31,7 @@ import com.ws1617.iosl.pubcrawl20.Details.EventDetailsActivity;
 import com.ws1617.iosl.pubcrawl20.Details.PubDetailsActivity;
 import com.ws1617.iosl.pubcrawl20.NewEvent.NewEventActivity;
 import com.ws1617.iosl.pubcrawl20.ScanQR.BarcodeCaptureActivity;
-import com.ws1617.iosl.pubcrawl20.Search.SearchEventActivity;
+import com.ws1617.iosl.pubcrawl20.Search.SearchActivity;
 
 /**
  * Created by Gasper Kojek on 9. 11. 2016.
@@ -135,7 +135,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(context, SearchEventActivity.class);
+                Intent intent = new Intent(context, SearchActivity.class);
                 context.startActivity(intent);
                 fabMenu.close(false);
             }
