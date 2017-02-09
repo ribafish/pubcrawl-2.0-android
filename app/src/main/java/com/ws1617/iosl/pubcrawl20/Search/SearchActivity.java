@@ -54,7 +54,7 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_search_event);
+        setContentView(R.layout.activity_search);
 
         initSearchResultView();
         initViewsVisibility(false);
