@@ -1,5 +1,7 @@
 package com.ws1617.iosl.pubcrawl20.Search;
 
+import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -9,6 +11,7 @@ import android.widget.TextView;
 
 import com.ws1617.iosl.pubcrawl20.DataModels.Pub;
 import com.ws1617.iosl.pubcrawl20.Database.PubDbHelper;
+import com.ws1617.iosl.pubcrawl20.Details.PubDetailsActivity;
 import com.ws1617.iosl.pubcrawl20.R;
 
 import java.util.ArrayList;
@@ -24,6 +27,7 @@ public class PubsListAdapter extends RecyclerView.Adapter<PubsListAdapter.PubIte
 
     List<PubMini> pubsList;
     List<PubMini> pubsListCopy;
+    Context context;
 
     private void getPubs() {
         pubsList = new ArrayList<>();
@@ -36,8 +40,9 @@ public class PubsListAdapter extends RecyclerView.Adapter<PubsListAdapter.PubIte
         notifyDataSetChanged();
     }
 
-    public PubsListAdapter() {
+    public PubsListAdapter(Context context) {
         getPubs();
+        this.context = context;
         pubsListCopy = pubsList;
     }
 
@@ -52,7 +57,16 @@ public class PubsListAdapter extends RecyclerView.Adapter<PubsListAdapter.PubIte
 
     @Override
     public void onBindViewHolder(PubItem holder, int position) {
-        holder.name.setText(pubsList.get(position).getName());
+        final PubMini pubItem = pubsList.get(position);
+        holder.name.setText(pubItem.getName());
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, PubDetailsActivity.class);
+                intent.putExtra("id",pubItem.getId());
+                context.startActivity(intent);
+            }
+        });
     }
 
     @Override

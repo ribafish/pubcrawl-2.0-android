@@ -76,10 +76,10 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
         noPersonsTxt = (TextView) findViewById(R.id.no_res_person);
 
         // set adapters
-        eventsListAdapter = new EventsListAdapter();
+        eventsListAdapter = new EventsListAdapter(this);
         eventsList.setAdapter(eventsListAdapter);
 
-        pubsListAdapter = new PubsListAdapter();
+        pubsListAdapter = new PubsListAdapter(this);
         pubsList.setAdapter(pubsListAdapter);
 
         personListAdapter = new PersonListAdapter(this);

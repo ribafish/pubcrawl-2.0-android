@@ -1,5 +1,7 @@
 package com.ws1617.iosl.pubcrawl20.Search;
 
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -15,6 +17,7 @@ import com.ws1617.iosl.pubcrawl20.DataModels.Pub;
 import com.ws1617.iosl.pubcrawl20.Database.DatabaseException;
 import com.ws1617.iosl.pubcrawl20.Database.EventDbHelper;
 import com.ws1617.iosl.pubcrawl20.Database.PubDbHelper;
+import com.ws1617.iosl.pubcrawl20.Details.EventDetailsActivity;
 import com.ws1617.iosl.pubcrawl20.R;
 
 import java.text.SimpleDateFormat;
@@ -31,6 +34,7 @@ public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.Ev
     static final String TAG = EventsListAdapter.class.getName();
     List<EventMini> eventListCopy;
     List<EventMini> eventList;
+    Context context;
 
     private void getEvents() {
         eventList = new ArrayList<>();
@@ -59,8 +63,9 @@ public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.Ev
 
     }
 
-    public EventsListAdapter() {
+    public EventsListAdapter(Context context) {
         getEvents();
+        this.context = context;
         eventListCopy = eventList;
     }
 
@@ -90,9 +95,18 @@ public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.Ev
 
     @Override
     public void onBindViewHolder(EventItem holder, int position) {
-        holder.name.setText(eventList.get(position).getName());
+        final EventMini  eventItem = eventList.get(position);
+        holder.name.setText(eventItem.getName());
         SimpleDateFormat localDateFormat = new SimpleDateFormat("E, MMM d, yyyy");
-        holder.date.setText(localDateFormat.format(eventList.get(position).getDate()));
+        holder.date.setText(localDateFormat.format(eventItem.getDate()));
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, EventDetailsActivity.class);
+                intent.putExtra("id",eventItem.getEventId());
+                context.startActivity(intent);
+            }
+        });
     }
 
     @Override
