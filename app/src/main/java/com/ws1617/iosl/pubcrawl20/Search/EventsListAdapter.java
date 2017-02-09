@@ -83,7 +83,7 @@ public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.Ev
 
     @Override
     public EventItem onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.event_list_row, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.event_search_list_row, parent, false);
         EventItem eventView = new EventItem(view);
         return eventView;
     }
@@ -91,12 +91,6 @@ public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.Ev
     @Override
     public void onBindViewHolder(EventItem holder, int position) {
         holder.name.setText(eventList.get(position).getName());
-        holder.description.setText(eventList.get(position).getDescription());
-        if (eventList.get(position).isSelected()) {
-            holder.relativeLayout.setBackgroundColor(Color.LTGRAY);
-        } else {
-            holder.relativeLayout.setBackgroundColor(Color.WHITE);
-        }
         SimpleDateFormat localDateFormat = new SimpleDateFormat("E, MMM d, yyyy");
         holder.date.setText(localDateFormat.format(eventList.get(position).getDate()));
     }
@@ -108,17 +102,12 @@ public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.Ev
 
 
     class EventItem extends RecyclerView.ViewHolder {
-        public TextView name, description, date;
-        public RelativeLayout relativeLayout;
-        public Button btn_details;
+        public TextView name, date;
 
         public EventItem(View itemView) {
             super(itemView);
             this.name = (TextView) itemView.findViewById(R.id.event_name);
-            this.description = (TextView) itemView.findViewById(R.id.event_description);
-            this.relativeLayout = (RelativeLayout) itemView.findViewById(R.id.event_layout);
-            this.btn_details = (Button) itemView.findViewById(R.id.event_details_btn);
-            this.date = (TextView) itemView.findViewById(R.id.event_date);
+          this.date = (TextView) itemView.findViewById(R.id.event_date);
         }
     }
 

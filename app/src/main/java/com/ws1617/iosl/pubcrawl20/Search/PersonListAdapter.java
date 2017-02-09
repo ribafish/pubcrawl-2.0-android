@@ -4,7 +4,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ws1617.iosl.pubcrawl20.DataModels.Person;
@@ -42,7 +41,7 @@ public class PersonListAdapter extends RecyclerView.Adapter<PersonListAdapter.Pe
 
     @Override
     public PersonItem onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.person_list_row, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.person_search_list_row, parent, false);
         PersonItem personView = new PersonItem(view);
         return personView;
     }

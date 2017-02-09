@@ -44,7 +44,7 @@ public class PubsListAdapter extends RecyclerView.Adapter<PubsListAdapter.PubIte
 
     @Override
     public PubItem onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.pub_list_row, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.pub_search_list_row, parent, false);
         PubsListAdapter.PubItem pubItem = new PubsListAdapter.PubItem(view);
         return pubItem;
     }

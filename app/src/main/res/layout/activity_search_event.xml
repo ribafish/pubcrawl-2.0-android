@@ -14,14 +14,28 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:visibility="gone">
+            android:visibility="visible">
 
-            <TextView
-                android:layout_width="match_parent"
+            <LinearLayout
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="-------- Events -------"
-                android:textColor="@color/colorPrimary"
-                android:textSize="25sp" />
+
+                android:background="@color/colorPrimary"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:src="@drawable/search_event" />
+
+                <TextView
+                    android:layout_width="311dp"
+                    android:layout_height="wrap_content"
+                    android:text="-------- Events -------"
+                    android:textColor="@android:color/white"
+                    android:textSize="25sp" />
+            </LinearLayout>
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/events_list"
@@ -38,12 +52,26 @@
                 android:text=" no result found "
                 android:textSize="20sp" />
 
-            <TextView
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="-------- Pubs -------"
-                android:textColor="@color/colorPrimary"
-                android:textSize="25sp" />
+
+                android:background="@color/colorPrimary"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:src="@drawable/search_pub" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="-------- Pubs -------"
+                    android:textColor="@android:color/white"
+                    android:textSize="25sp" />
+            </LinearLayout>
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/pubs_list"
@@ -60,12 +88,28 @@
                 android:text=" no result found "
                 android:textSize="20sp" />
 
-            <TextView
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="-------- Person -------"
-                android:textColor="@color/colorPrimary"
-                android:textSize="25sp" />
+                android:gravity="center_vertical"
+
+                android:background="@color/colorPrimary"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:src="@drawable/search_person" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="-------- Person -------"
+                    android:textColor="@android:color/white"
+                    android:textSize="25sp" />
+
+
+            </LinearLayout>
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/persons_list"
@@ -90,7 +134,7 @@
             android:layout_marginTop="40dp"
             android:gravity="center_horizontal"
             android:orientation="vertical"
-            android:visibility="visible">
+            android:visibility="gone">
 
             <TextView
                 android:id="@+id/textView"

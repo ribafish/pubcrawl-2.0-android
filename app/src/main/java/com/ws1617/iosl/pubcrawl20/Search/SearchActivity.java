@@ -3,6 +3,7 @@ package com.ws1617.iosl.pubcrawl20.Search;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -144,6 +145,7 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
             searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
             searchView.setIconifiedByDefault(false);
             searchView.setOnQueryTextListener(this);
+
         }
         return true;
     }
