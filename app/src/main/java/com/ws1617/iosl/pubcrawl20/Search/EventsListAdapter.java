@@ -32,12 +32,6 @@ public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.Ev
     List<EventMini> eventListCopy;
     List<EventMini> eventList;
 
-    public boolean isSearchResultAvailable() {
-        return searchResultAvailable;
-    }
-
-    boolean searchResultAvailable;
-
     private void getEvents() {
         eventList = new ArrayList<>();
         EventDbHelper eventDbHelper = new EventDbHelper();
@@ -67,7 +61,6 @@ public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.Ev
 
     public EventsListAdapter() {
         getEvents();
-        searchResultAvailable = eventList.size() > 0 ? true:false;
         eventListCopy = eventList;
     }
 
@@ -90,7 +83,7 @@ public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.Ev
 
     @Override
     public EventItem onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_row_events, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.event_list_row, parent, false);
         EventItem eventView = new EventItem(view);
         return eventView;
     }

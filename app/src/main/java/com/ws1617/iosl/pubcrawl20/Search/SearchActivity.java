@@ -28,22 +28,22 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
     static String TAG = SearchActivity.class.getName().toString();
 
 
-    RecyclerView.LayoutManager layoutManager;
+    RecyclerView.LayoutManager eventLayoutManager;
+    RecyclerView.LayoutManager pubLayoutManager;
+    RecyclerView.LayoutManager personLayoutManager;
 
     RecyclerView eventsList;
     TextView noEventsTxt;
     EventsListAdapter eventsListAdapter;
-    boolean eventResultAvailable;
 
     RecyclerView pubsList;
     TextView noPubsTxt;
     PubsListAdapter pubsListAdapter;
-    boolean pubsResultAvailable;
 
 
     RecyclerView personsList;
     TextView noPersonsTxt;
-    boolean personResultAvailable;
+    PersonListAdapter personListAdapter;
 
     RelativeLayout searchOverLay;
     LinearLayout searchResultContainer;
@@ -64,6 +64,7 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
 
     private void initSearchResultView() {
 
+        //lists
         eventsList = (RecyclerView) findViewById(R.id.events_list);
         pubsList = (RecyclerView) findViewById(R.id.pubs_list);
         personsList = (RecyclerView) findViewById(R.id.persons_list);
@@ -80,11 +81,18 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
         pubsListAdapter = new PubsListAdapter();
         pubsList.setAdapter(pubsListAdapter);
 
+        personListAdapter = new PersonListAdapter();
+        personsList.setAdapter(personListAdapter);
+
         //set layout manager
-         /*layoutManager = new LinearLayoutManager(this);
-            eventsList.setLayoutManager(layoutManager);
-             pubsList.setLayoutManager(layoutManager);
-             personsList.setLayoutManager(layoutManager);*/
+        eventLayoutManager = new LinearLayoutManager(this);
+        eventsList.setLayoutManager(eventLayoutManager);
+
+        pubLayoutManager = new LinearLayoutManager(this);
+        pubsList.setLayoutManager(pubLayoutManager);
+
+        personLayoutManager = new LinearLayoutManager(this);
+        personsList.setLayoutManager(personLayoutManager);
 
     }
 
@@ -130,7 +138,6 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
         MenuInflater menuInflater = getMenuInflater();
         menuInflater.inflate(R.menu.search_menu, menu);
 
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
             SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
             SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
@@ -143,8 +150,9 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
 
     @Override
     public boolean onQueryTextSubmit(String query) {
-        eventsListAdapter.filter(query,EventSearchListener );
-        pubsListAdapter.filter(query,PubSearchListener);
+        eventsListAdapter.filter(query, EventSearchListener);
+        pubsListAdapter.filter(query, PubSearchListener);
+        personListAdapter.filter(query,personSearchListener);
         return true;
     }
 
@@ -153,8 +161,8 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
         if (newText.length() == 0) initViewsVisibility(false);
         else initViewsVisibility(true);
 
-        eventsListAdapter.filter(newText,EventSearchListener);
-        pubsListAdapter.filter(newText,PubSearchListener);
+        eventsListAdapter.filter(newText, EventSearchListener);
+        pubsListAdapter.filter(newText, PubSearchListener);
         return true;
     }
 
@@ -163,11 +171,11 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
         @Override
         public void setSearchResultSize(int size) {
             if (size <= 0) {
-                noEventsTxt.setVisibility(View.GONE);
-                eventsList.setVisibility(View.VISIBLE);
-            } else {
                 noEventsTxt.setVisibility(View.VISIBLE);
                 eventsList.setVisibility(View.GONE);
+            } else {
+                noEventsTxt.setVisibility(View.GONE);
+                eventsList.setVisibility(View.VISIBLE);
             }
         }
     };
@@ -176,11 +184,24 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
         @Override
         public void setSearchResultSize(int size) {
             if (size <= 0) {
-                noPersonsTxt.setVisibility(View.GONE);
-                pubsList.setVisibility(View.VISIBLE);
-            } else {
                 noPersonsTxt.setVisibility(View.VISIBLE);
                 pubsList.setVisibility(View.GONE);
+            } else {
+                noPersonsTxt.setVisibility(View.GONE);
+                pubsList.setVisibility(View.VISIBLE);
+            }
+        }
+    };
+
+    SearchResultView personSearchListener = new SearchResultView() {
+        @Override
+        public void setSearchResultSize(int size) {
+            if (size <= 0) {
+                noPersonsTxt.setVisibility(View.VISIBLE);
+                personsList.setVisibility(View.GONE);
+            } else {
+                noPersonsTxt.setVisibility(View.GONE);
+                personsList.setVisibility(View.VISIBLE);
             }
         }
     };

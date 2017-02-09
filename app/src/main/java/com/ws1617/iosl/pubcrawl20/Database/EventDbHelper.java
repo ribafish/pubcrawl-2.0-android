@@ -71,6 +71,7 @@ public class EventDbHelper {
         onUpgrade(db, oldVersion, newVersion);
     }
 
+    //TODO the returned state doesnt reflect the correct event addition state .. it doesnt return false at all
     public boolean addEvent(Event event) {
         SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
 
@@ -90,7 +91,7 @@ public class EventDbHelper {
             values.put(LONG_MAX, event.getMaxLatLng().longitude);
         } catch (Exception e) {
             e.printStackTrace();
-            return false;
+
         }
 
 
@@ -324,6 +325,8 @@ public class EventDbHelper {
 
         return list;
     }
+
+
 
     public ArrayList<Event> getAllEvents() throws DatabaseException {
         SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();

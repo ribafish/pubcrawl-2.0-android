@@ -25,12 +25,6 @@ public class PubsListAdapter extends RecyclerView.Adapter<PubsListAdapter.PubIte
     List<PubMini> pubsList;
     List<PubMini> pubsListCopy;
 
-    public boolean isSearchResultAvailable() {
-        return searchResultAvailable;
-    }
-
-    boolean searchResultAvailable;
-
     private void getPubs() {
         pubsList = new ArrayList<>();
         PubDbHelper pubDbHelper = new PubDbHelper();
@@ -39,13 +33,11 @@ public class PubsListAdapter extends RecyclerView.Adapter<PubsListAdapter.PubIte
             PubMini eventMini = new PubMini(e);
             pubsList.add(eventMini);
         }
-        Log.d(TAG, "eventAdapter.notifyDataSetChanged()");
         notifyDataSetChanged();
     }
 
     public PubsListAdapter() {
         getPubs();
-        searchResultAvailable = pubsList.size() > 0 ? true:false;
         pubsListCopy = pubsList;
     }
 
