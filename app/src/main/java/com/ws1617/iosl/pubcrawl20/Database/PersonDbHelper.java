@@ -344,18 +344,21 @@ public class PersonDbHelper {
         SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
         ArrayList<Person> list = new ArrayList<>();
 
-        String query = "SELECT * FROM " + TABLE_PERSON_OWNED_PUBS;
+        String query = "SELECT " + PERSON_ID + " FROM " +
+                TABLE_PERSONS;
 
         Cursor c = db.rawQuery(query, null);
         if (c != null && c.moveToFirst()) {
             do {
-
+                int person_id = c.getInt(c.getColumnIndex(PERSON_ID));
+                Person person = null;
                 try {
-                    Person person = getPerson(c.getLong(c.getColumnIndex(PUB_ID)));
+                    person = getPerson(person_id);
                     list.add(person);
                 } catch (DatabaseException e) {
                     e.printStackTrace();
                 }
+
 
             } while (c.moveToNext());
             c.close();

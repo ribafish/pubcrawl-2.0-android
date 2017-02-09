@@ -22,17 +22,15 @@ public class PersonListAdapter extends RecyclerView.Adapter<PersonListAdapter.Pe
 
     static final String TAG = PersonListAdapter.class.getName();
 
-    List<PersonMini> personsList;
+    List<PersonMini> personsList = new ArrayList<>();
     List<PersonMini> personsListCopy;
 
     public PersonListAdapter() {
         getAllPersons();
-        this.personsList = personsListCopy;
+        personsListCopy = personsList;
     }
 
     private void getAllPersons() {
-
-        personsList = new ArrayList<>();
         PersonDbHelper personDbHelper = new PersonDbHelper();
         List<Person> el = personDbHelper.getAllPersons();
         for (Person e : el) {

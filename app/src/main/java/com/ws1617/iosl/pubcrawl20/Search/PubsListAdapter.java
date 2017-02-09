@@ -53,14 +53,6 @@ public class PubsListAdapter extends RecyclerView.Adapter<PubsListAdapter.PubIte
     @Override
     public void onBindViewHolder(PubItem holder, int position) {
         holder.name.setText(pubsList.get(position).getName());
-       /* holder.description.setText(pubsList.get(position).get());
-        if (eventList.get(position).isSelected()) {
-            holder.relativeLayout.setBackgroundColor(Color.LTGRAY);
-        } else {
-            holder.relativeLayout.setBackgroundColor(Color.WHITE);
-        }
-        SimpleDateFormat localDateFormat = new SimpleDateFormat("E, MMM d, yyyy");
-        holder.date.setText(localDateFormat.format(pubsList.get(position).getDate()));*/
     }
 
     @Override
@@ -87,17 +79,11 @@ public class PubsListAdapter extends RecyclerView.Adapter<PubsListAdapter.PubIte
 
     class PubItem extends RecyclerView.ViewHolder {
 
-        TextView number;
         TextView name;
-        TextView time;
-
 
         public PubItem(View itemView) {
             super(itemView);
-           // number = (TextView) itemView.findViewById(R.id.pub_number);
             name = (TextView) itemView.findViewById(R.id.pub_name);
-            //time = (TextView) itemView.findViewById(R.id.pub_time);
-
         }
     }
 }

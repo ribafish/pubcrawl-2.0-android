@@ -152,7 +152,7 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
     public boolean onQueryTextSubmit(String query) {
         eventsListAdapter.filter(query, EventSearchListener);
         pubsListAdapter.filter(query, PubSearchListener);
-        personListAdapter.filter(query,personSearchListener);
+        personListAdapter.filter(query, personSearchListener);
         return true;
     }
 
@@ -163,6 +163,7 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
 
         eventsListAdapter.filter(newText, EventSearchListener);
         pubsListAdapter.filter(newText, PubSearchListener);
+        personListAdapter.filter(newText, personSearchListener);
         return true;
     }
 
@@ -184,10 +185,10 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
         @Override
         public void setSearchResultSize(int size) {
             if (size <= 0) {
-                noPersonsTxt.setVisibility(View.VISIBLE);
+                noPubsTxt.setVisibility(View.VISIBLE);
                 pubsList.setVisibility(View.GONE);
             } else {
-                noPersonsTxt.setVisibility(View.GONE);
+                noPubsTxt.setVisibility(View.GONE);
                 pubsList.setVisibility(View.VISIBLE);
             }
         }
