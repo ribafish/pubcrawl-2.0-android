@@ -8,6 +8,7 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 import com.ws1617.iosl.pubcrawl20.Database.SslTools.ExtHttpClientStack;
+import com.ws1617.iosl.pubcrawl20.Database.SslTools.NukeSSLCerts;
 import com.ws1617.iosl.pubcrawl20.Database.SslTools.SslHttpClient;
 import com.ws1617.iosl.pubcrawl20.R;
 
@@ -28,10 +29,12 @@ public class RequestQueueHelper {
     private Context context;
 
     public RequestQueueHelper(Context context) {
-        keystore = context.getResources().openRawResource(R.raw.keystore);
-        requestQueue = Volley.newRequestQueue(context,
-                new ExtHttpClientStack(
-                        new SslHttpClient(keystore, "adminadmin", 8443)));
+//        keystore = context.getResources().openRawResource(R.raw.keystore);
+//        requestQueue = Volley.newRequestQueue(context,
+//                new ExtHttpClientStack(
+//                        new SslHttpClient(keystore, "adminadmin", 8443)));
+        NukeSSLCerts.nuke();
+        requestQueue = Volley.newRequestQueue(context);
         requestNumber = new AtomicInteger(0);
         this.context = context;
     }
