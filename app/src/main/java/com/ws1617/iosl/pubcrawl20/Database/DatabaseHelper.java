@@ -9,6 +9,7 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -25,8 +26,29 @@ import org.json.JSONObject;
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
-import static com.ws1617.iosl.pubcrawl20.Database.JsonParser.*;
+import static com.ws1617.iosl.pubcrawl20.Database.JsonParser.EMBEDDED;
+import static com.ws1617.iosl.pubcrawl20.Database.JsonParser.EVENTS;
+import static com.ws1617.iosl.pubcrawl20.Database.JsonParser.EVENT_OWNER;
+import static com.ws1617.iosl.pubcrawl20.Database.JsonParser.EVENT_PARTICIPANTS;
+import static com.ws1617.iosl.pubcrawl20.Database.JsonParser.EVENT_PUBS;
+import static com.ws1617.iosl.pubcrawl20.Database.JsonParser.PERSONS;
+import static com.ws1617.iosl.pubcrawl20.Database.JsonParser.PERSON_EVENTS;
+import static com.ws1617.iosl.pubcrawl20.Database.JsonParser.PERSON_FAVOURITE_PUBS;
+import static com.ws1617.iosl.pubcrawl20.Database.JsonParser.PERSON_FRIENDS;
+import static com.ws1617.iosl.pubcrawl20.Database.JsonParser.PERSON_OWNED_EVENTS;
+import static com.ws1617.iosl.pubcrawl20.Database.JsonParser.PERSON_OWNED_PUBS;
+import static com.ws1617.iosl.pubcrawl20.Database.JsonParser.PUBS;
+import static com.ws1617.iosl.pubcrawl20.Database.JsonParser.PUB_EVENTS;
+import static com.ws1617.iosl.pubcrawl20.Database.JsonParser.PUB_OWNER;
+import static com.ws1617.iosl.pubcrawl20.Database.JsonParser.PUB_TOP_PERSONS;
+import static com.ws1617.iosl.pubcrawl20.Database.JsonParser.parseJSONEvent;
+import static com.ws1617.iosl.pubcrawl20.Database.JsonParser.parseJSONResponseEvents;
+import static com.ws1617.iosl.pubcrawl20.Database.JsonParser.parseJsonResponsePersons;
+import static com.ws1617.iosl.pubcrawl20.Database.JsonParser.parseJsonResponsePubs;
+import static com.ws1617.iosl.pubcrawl20.Database.JsonParser.parsePersonJson;
+import static com.ws1617.iosl.pubcrawl20.Database.JsonParser.parsePubJson;
 
 
 /**
@@ -599,7 +621,17 @@ public class DatabaseHelper {
                         Toast.makeText(context, "Can't connect to server.", Toast.LENGTH_SHORT).show();
                         requestQueue.gotResponse();
                     }
-                });
+                }
+        )
+        {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("client_id", "649804390923-7mov7q7g42kbod1do8ikvhtgdu0m58ai.apps.googleusercontent.com");
+                params.put("client_secret", "3zRUO4fOIBwLlIU8VntClGB6");
+                return params;
+            }
+        };
         requestQueue.add(personsRequest);
     }
 
