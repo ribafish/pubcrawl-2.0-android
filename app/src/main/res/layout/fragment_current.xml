@@ -1,11 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_height="match_parent"
+    android:gravity="center">
 
-    <TextView
-        android:text="Current crawl info"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/textView6" />
+        android:layout_gravity="center_vertical"
+        android:orientation="vertical"
+        android:id="@+id/current_no_events_layout"
+        android:visibility="visible">
+        <ImageView
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_margin="8dp"
+            android:layout_gravity="center_horizontal"
+            app:srcCompat="@drawable/ic_mood_bad_black_24dp"
+            android:tint="@android:color/darker_gray"/>
+        <TextView
+            android:text="@string/no_joined_events"
+            android:layout_gravity="center_horizontal"
+            android:textAlignment="center"
+            android:maxLines="4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView6" />
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="@string/find_events"
+            android:id="@+id/current_find_events_btn"
+            android:textColor="@color/colorPrimary"
+            style="@style/Widget.AppCompat.Button.Borderless" />
+    </LinearLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:visibility="gone"
+        android:id="@+id/current.event.recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clipToPadding="false"
+        android:scrollbars="vertical" />
 </LinearLayout>

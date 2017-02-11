@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:animateLayoutChanges="true">
+    <android.support.v7.widget.CardView
+        android:animateLayoutChanges="true"
+        android:id="@+id/current.event_card"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="6dp"
+        android:elevation="4dp"
+        card_view:cardCornerRadius="0dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:animateLayoutChanges="true" >
+
+            <TextView
+                android:id="@+id/current.name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:text="@string/event_title"
+                android:layout_marginBottom="8dp"
+                android:textSize="20sp"
+                />
+
+            <TextView
+                android:id="@+id/current.id.title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/current.name"
+                android:text="@string/id"
+                android:layout_marginBottom="6dp"
+                android:textSize="16sp"
+                />
+
+            <TextView
+                android:id="@+id/current.id"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/current.id.title"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:text="@string/unknown"
+                />
+
+            <TextView
+                android:id="@+id/current.starts.title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/current.id.title"
+                android:text="@string/starts"
+                android:layout_marginBottom="6dp"
+                android:textSize="16sp"
+                />
+
+            <TextView
+                android:id="@+id/current.starts"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/current.starts.title"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:text="@string/unknown"
+                />
+
+            <TextView
+                android:id="@+id/current.participants.title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/current.starts.title"
+                android:text="@string/participants"
+                android:layout_marginBottom="6dp"
+                android:textSize="16sp"
+                />
+
+            <TextView
+                android:id="@+id/current.participants"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/current.participants.title"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:text="@string/unknown"
+                />
+
+            <RelativeLayout
+                android:id="@+id/current.description.root.layout"
+                android:layout_below="@+id/current.participants.title"
+                android:animateLayoutChanges="true"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <RelativeLayout
+                    android:id="@+id/current.description.layout"
+                    android:animateLayoutChanges="true"
+                    android:layout_width="match_parent"
+                    android:layout_height="125dp"
+                    android:maxHeight="125dp"
+
+                    >
+
+                    <TextView
+                        android:id="@+id/current.description.title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentTop="true"
+                        android:text="@string/description"
+                        android:layout_marginBottom="8dp"
+                        android:textSize="16sp"
+                        />
+
+                    <TextView
+                        android:id="@+id/current.description"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/current.description.title"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:text="@string/lorem"
+                        android:ellipsize="end"
+                        android:layout_margin="4dp"
+                        />
+
+                </RelativeLayout>
+
+                <ImageView
+                    android:visibility="visible"
+                    android:id="@+id/current.description.gradient"
+                    android:layout_width="match_parent"
+                    android:layout_height="28dp"
+                    android:layout_alignParentBottom="true"
+                    android:alpha="1"
+                    android:src="@drawable/text_truncate_shadow"/>
+
+                <ImageView
+                    android:visibility="visible"
+                    android:id="@+id/current.description.arrow"
+                    android:layout_width="match_parent"
+                    android:layout_height="22dp"
+                    android:layout_alignParentBottom="true"
+                    android:alpha="1"
+                    app:srcCompat="@drawable/ic_expand_more" />
+
+            </RelativeLayout>
+
+            <FrameLayout
+                android:id="@+id/current.route_holder"
+                android:layout_below="@+id/current.description.root.layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+    </RelativeLayout>
+
+    </android.support.v7.widget.CardView>
+
+</LinearLayout>
