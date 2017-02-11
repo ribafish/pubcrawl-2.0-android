@@ -2,6 +2,7 @@ package com.ws1617.iosl.pubcrawl20.DataModels;
 
 import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
+import android.text.format.DateFormat;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Polyline;
@@ -56,22 +57,22 @@ public class Event {
         this.participantIds = participantIds;
     }
 
-    public Event addPub (long pubId) {
+    public Event addPub(long pubId) {
         this.pubIds.add(pubId);
         return this;
     }
 
-    public Event addPubs (List<Long> pubs) {
+    public Event addPubs(List<Long> pubs) {
         this.pubIds.addAll(pubs);
         return this;
     }
 
-    public Event removePub (long pubId) {
+    public Event removePub(long pubId) {
         this.pubIds.remove(pubId);
         return this;
     }
 
-    public Event removePubs (List<Long> pubs) {
+    public Event removePubs(List<Long> pubs) {
         this.pubIds.removeAll(pubs);
         return this;
     }
@@ -90,8 +91,14 @@ public class Event {
         return date;
     }
 
+    public String getShortDate() {
+        return DateFormat.format("dd", date) + "." + DateFormat.format("MM", date) + "." + DateFormat.format("yyyy", date);
+    }
+
+
     public String getDescription() {
-        return description;
+        if (description.isEmpty()) return "";
+        else return description;
     }
 
     public boolean isTracked() {
@@ -175,7 +182,8 @@ public class Event {
     }
 
     public ArrayList<TimeSlot> getTimeSlotList() {
-        return timeSlotList;
+        if (timeSlotList == null || timeSlotList.size() == 0) return new ArrayList<>();
+        else return timeSlotList;
     }
 
     public void setTimeSlotList(ArrayList<TimeSlot> timeSlotList) {

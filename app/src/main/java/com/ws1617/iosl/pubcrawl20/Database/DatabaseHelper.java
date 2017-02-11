@@ -57,7 +57,7 @@ import static com.ws1617.iosl.pubcrawl20.Database.JsonParser.parsePubJson;
 public class DatabaseHelper {
     private static final String TAG = "DatabaseHelper";
 
-    public static byte[] bitmapToBytes (Bitmap bmp) {
+    public static byte[] bitmapToBytes(Bitmap bmp) {
 
         if (bmp == null) return null;
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
@@ -89,25 +89,31 @@ public class DatabaseHelper {
 
     public static void addEvent(Context context, final Event event,
                                 final NewEventActivity.EventCreation eventCreation) {
-
-        final String tag = TAG;
-        final String TAG = tag + ".AddEvent";
-
         final RequestQueueHelper requestQueue = new RequestQueueHelper(context);
-
         final String url;
-
         try {
             url = getServerUrl(context) + EVENTS;
         } catch (StringIndexOutOfBoundsException e) {
             Log.e(TAG, e.getLocalizedMessage());
             return;
         }
-
-
         JSONObject object = new JSONObject();
         try {
-            object.put("eventName","android event");
+            object.put("eventName", event.getEventName());
+            object.put("date", event.getShortDate());
+            object.put("description", event.getDescription());
+            object.put("latmax", event.getMaxLatLng().latitude);
+            object.put("lngmax", event.getMaxLatLng().longitude);
+            object.put("latmin", event.getMinLatLng().latitude);
+            object.put("lngmin", event.getMinLatLng().longitude);
+            object.put("tracked", false);
+            object.put("eventImage", null);
+
+            /*object.put("timeslotList",event.getTimeSlotList());
+
+
+            object.put("_links");
+           ;*/
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -116,9 +122,7 @@ public class DatabaseHelper {
                 object, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-
                 eventCreation.onSuccess();
-
             }
         }, new Response.ErrorListener() {
             @Override
@@ -128,7 +132,6 @@ public class DatabaseHelper {
         });
         requestQueue.add(jsonObjectRequest);
     }
-
 
 
     public static void downloadEvents(final Context context) {

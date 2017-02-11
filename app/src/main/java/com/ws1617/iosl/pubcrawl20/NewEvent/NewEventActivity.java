@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.ws1617.iosl.pubcrawl20.DataModels.Event;
+import com.ws1617.iosl.pubcrawl20.Database.DatabaseException;
 import com.ws1617.iosl.pubcrawl20.Database.DatabaseHelper;
 import com.ws1617.iosl.pubcrawl20.Database.EventDbHelper;
 import com.ws1617.iosl.pubcrawl20.NewEvent.adapters.NewEventPagerAdapter;
@@ -19,13 +20,12 @@ import com.ws1617.iosl.pubcrawl20.R;
 import java.util.ArrayList;
 import java.util.List;
 
-public class NewEventActivity extends AppCompatActivity  {
+public class NewEventActivity extends AppCompatActivity {
 
     FloatingActionButton mCreateEventBtn;
     NewEventPagerAdapter mFragmentPagerAdapter;
-    private Event mEvent;
     private List<Fragment> fragmentsList;
-     final static String EVENT_TAG = "EVENT_TAG";
+    final static String EVENT_TAG = "EVENT_TAG";
 
 
     public void initFragmentList() {
@@ -36,17 +36,11 @@ public class NewEventActivity extends AppCompatActivity  {
     }
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_event);
 
-        if (savedInstanceState == null)
-            mEvent = new Event();
-        else {
-            mEvent = (Event) savedInstanceState.getSerializable(EVENT_TAG);
-        }
         initFragmentList();
         initView();
 
@@ -61,7 +55,7 @@ public class NewEventActivity extends AppCompatActivity  {
 
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
-         mFragmentPagerAdapter = new NewEventPagerAdapter
+        mFragmentPagerAdapter = new NewEventPagerAdapter
                 (getSupportFragmentManager(), getApplicationContext(),
                         fragmentsList);
 
@@ -79,53 +73,61 @@ public class NewEventActivity extends AppCompatActivity  {
     View.OnClickListener newEventClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-           onCollectDataClicked();
+            onCollectDataClicked();
         }
     };
 
-    InsertNewEventListener insertNewEventListener;
 
     public void onCollectDataClicked() {
-        Event event = new Event();
-        mEvent = ((NewEventGeneralFragment) fragmentsList.get(0)).updateGeneralInfo(event);
-        mEvent = ((NewEventRouteFragment) fragmentsList.get(1)).updatePubListInfo(event);
+        final Event event = new Event();
+        ((NewEventGeneralFragment) fragmentsList.get(0)).updateGeneralInfo(event);
+        ((NewEventRouteFragment) fragmentsList.get(1)).updatePubListInfo(event);
 
+        if (!checkSatisfyMinReq(event))
+            return;
+        else {
 
-        final Event mEvent = event;
-        DatabaseHelper.addEvent(this,mEvent, new EventCreation(){
-            @Override
-            public void onSuccess() {
-                // Add to local DB or refresh it
-                EventDbHelper eventDbHelper = new EventDbHelper();
-
-                if (eventDbHelper.addEvent(mEvent)) {
-                    //onSuccess adding to local DB
+            DatabaseHelper.addEvent(this, event, new EventCreation() {
+                @Override
+                public void onSuccess() {
+                    //refresh the whole DB
+                    DatabaseHelper.resetEventsDatabase(getApplicationContext());
+                    //show the code
                     ShareEventDialog shareEventDialog = new ShareEventDialog();
                     shareEventDialog.show(getFragmentManager(), "shareEventDialog");
-                } else {
+                }
+
+                @Override
+                public void onFail() {
+                    // show error
                     Toast.makeText(getApplicationContext(), "Error while creating the Event .. ", Toast.LENGTH_SHORT).show();
                 }
-            }
-
-            @Override
-            public void onFail() {
-                // show error
-                Toast.makeText(getApplicationContext(), "Error while creating the Event .. ", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-
-
+            });
+        }
     }
 
-    public interface EventCreation{
+
+    private boolean checkSatisfyMinReq(Event event) {
+        if (event.getEventName() == null || event.getEventName().trim().length() == 0) {
+            Toast.makeText(this, "You cant create event without name!!!  ", Toast.LENGTH_SHORT).show();
+            return false;
+        } else if (event.getPubIds().size() < 2) {
+            Toast.makeText(this, "You should at least provide two pubs", Toast.LENGTH_SHORT).show();
+            return false;
+        } else
+            return true;
+    }
+
+    public interface EventCreation {
         public void onSuccess();
+
         public void onFail();
     }
 
 
-    interface InsertNewEventListener{
+    interface InsertNewEventListener {
         void onSuccessfulInsert();
+
         void onFaildInsert();
     }
 }
