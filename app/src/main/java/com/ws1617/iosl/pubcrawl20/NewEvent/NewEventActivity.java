@@ -92,7 +92,7 @@ public class NewEventActivity extends AppCompatActivity  {
 
 
         final Event mEvent = event;
-        DatabaseHelper.addEvent(this,mEvent, new EventCreation(){
+        DatabaseHelper.addEvent(this, mEvent, new EventCreation(){
             @Override
             public void onSuccess() {
                 // Add to local DB or refresh it

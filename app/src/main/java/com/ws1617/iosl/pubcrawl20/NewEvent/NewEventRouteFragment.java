@@ -104,6 +104,7 @@ public class NewEventRouteFragment extends Fragment {
     };
 
     public Event updatePubListInfo(Event mEvent) {
+        double latmin, latmax, longmin, longmax;
         mSelectedPubsID = new ArrayList<>();
         mTimeSlotList = new ArrayList<>();
         for (PubMiniModel selectedPub : mSelectedPupsList) {
