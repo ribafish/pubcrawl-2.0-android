@@ -1,56 +1,35 @@
 {
   "project_info": {
-    "project_number": "370382635660",
-    "project_id": "firebase-pubcrawl2"
+    "project_number": "649804390923",
+    "firebase_url": "https://blinding-heat-6511.firebaseio.com",
+    "project_id": "blinding-heat-6511",
+    "storage_bucket": "blinding-heat-6511.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:370382635660:android:27d689d63f1b7a06",
-        "android_client_info": {
-          "package_name": "com.google.samples.quickstart.signin"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "370382635660-odespmd45hlvvor75kefaiesb8fis65v.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyB7UqcE2gAwQpTif3G4VvAFKZ8hjqAdHDU"
-        }
-      ],
-      "services": {
-        "analytics_service": {
-          "status": 1
-        },
-        "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
-        },
-        "ads_service": {
-          "status": 1
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:370382635660:android:8bf3386a5aaedd35",
+        "mobilesdk_app_id": "1:649804390923:android:8bf3386a5aaedd35",
         "android_client_info": {
           "package_name": "com.ws1617.iosl.pubcrawl20"
         }
       },
       "oauth_client": [
         {
-          "client_id": "370382635660-odespmd45hlvvor75kefaiesb8fis65v.apps.googleusercontent.com",
+          "client_id": "649804390923-f00gi9oudaipa2m2ii442t8ae6groaor.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ws1617.iosl.pubcrawl20",
+            "certificate_hash": "72DCAA173DE12AF654E4E17E9D352D8DE59EF537"
+          }
+        },
+        {
+          "client_id": "649804390923-7mov7q7g42kbod1do8ikvhtgdu0m58ai.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyB7UqcE2gAwQpTif3G4VvAFKZ8hjqAdHDU"
+          "current_key": "AIzaSyAHrwDTOAONm4tLfc3caIhIo2-3NPUb71g"
         }
       ],
       "services": {
@@ -58,11 +37,16 @@
           "status": 1
         },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "649804390923-7mov7q7g42kbod1do8ikvhtgdu0m58ai.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         },
         "ads_service": {
-          "status": 1
+          "status": 2
         }
       }
     }

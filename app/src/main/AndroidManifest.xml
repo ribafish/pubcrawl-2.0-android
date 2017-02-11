@@ -109,7 +109,6 @@
                     android:scheme="http" />
             </intent-filter>
         </activity>
-        >>>>>>> master
         <activity android:name=".Details.PersonDetailsActivity" />
     </application>
 

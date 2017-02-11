@@ -5,12 +5,14 @@ android {
         config {
             keyAlias 'pubcrawl'
             keyPassword 'pubcrawl'
-            storeFile file('D:/android_test/pubcrawl-2.0-android/app/keystore.jks')
+            storeFile file('D:/TU_Berlin/Iosl/Android/pubcrawl-2.0-android/app/keystore.jks')
             storePassword 'iosl2017'
         }
     }
     compileSdkVersion 25
     buildToolsVersion "24.0.3"
+
+    useLibrary 'org.apache.http.legacy'
     defaultConfig {
         applicationId "com.ws1617.iosl.pubcrawl20"
         minSdkVersion 15
