@@ -7,7 +7,12 @@ import android.util.Log;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
+import com.ws1617.iosl.pubcrawl20.Database.SslTools.ExtHttpClientStack;
+import com.ws1617.iosl.pubcrawl20.Database.SslTools.NukeSSLCerts;
+import com.ws1617.iosl.pubcrawl20.Database.SslTools.SslHttpClient;
+import com.ws1617.iosl.pubcrawl20.R;
 
+import java.io.InputStream;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -18,11 +23,17 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class RequestQueueHelper {
     private static final String TAG = "RequestQueueHelper";
     private RequestQueue requestQueue;
+    private InputStream keystore;
     private AtomicInteger requestNumber;
     public static final String BROADCAST_INTENT = "com.ws1617.iosl.pubcrawl20.DatabaseRefreshedBroadcast";
     private Context context;
 
     public RequestQueueHelper(Context context) {
+//        keystore = context.getResources().openRawResource(R.raw.keystore);
+//        requestQueue = Volley.newRequestQueue(context,
+//                new ExtHttpClientStack(
+//                        new SslHttpClient(keystore, "adminadmin", 8443)));
+        NukeSSLCerts.nuke();
         requestQueue = Volley.newRequestQueue(context);
         requestNumber = new AtomicInteger(0);
         this.context = context;

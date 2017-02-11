@@ -28,7 +28,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/btn_refresh"
             android:layout_weight="1"
-            android:visibility="gone"/>
+            android:visibility="visible"/>
 
         <Button
             android:text="Hide/Show"

@@ -87,6 +87,7 @@ public class NewEventActivity extends AppCompatActivity {
             return;
         else {
 
+
             DatabaseHelper.addEvent(this, event, new EventCreation() {
                 @Override
                 public void onSuccess() {
