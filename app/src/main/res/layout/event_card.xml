@@ -3,14 +3,16 @@
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
+    android:padding="8dp"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:animateLayoutChanges="true">
+
     <android.support.v7.widget.CardView
         android:animateLayoutChanges="true"
         android:id="@+id/current.event_card"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_margin="6dp"
         android:elevation="4dp"
         card_view:cardCornerRadius="0dp">
@@ -18,6 +20,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:padding="8dp"
             android:animateLayoutChanges="true" >
 
             <TextView
@@ -110,9 +113,7 @@
                     android:animateLayoutChanges="true"
                     android:layout_width="match_parent"
                     android:layout_height="125dp"
-                    android:maxHeight="125dp"
-
-                    >
+                    android:maxHeight="125dp" >
 
                     <TextView
                         android:id="@+id/current.description.title"
@@ -145,7 +146,7 @@
                     android:id="@+id/current.description.gradient"
                     android:layout_width="match_parent"
                     android:layout_height="28dp"
-                    android:layout_alignParentBottom="true"
+                    android:layout_alignBottom="@+id/current.description.layout"
                     android:alpha="1"
                     android:src="@drawable/text_truncate_shadow"/>
 
@@ -154,17 +155,46 @@
                     android:id="@+id/current.description.arrow"
                     android:layout_width="match_parent"
                     android:layout_height="22dp"
-                    android:layout_alignParentBottom="true"
+                    android:layout_alignBottom="@+id/current.description.layout"
                     android:alpha="1"
                     app:srcCompat="@drawable/ic_expand_more" />
 
             </RelativeLayout>
 
-            <FrameLayout
-                android:id="@+id/current.route_holder"
+            <LinearLayout
                 android:layout_below="@+id/current.description.root.layout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/current.route.title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:layout_weight="0.5"
+                    android:text="@string/route"
+                    android:textSize="20sp" />
+
+                <com.google.android.gms.maps.MapView
+                    android:id="@+id/current.route.mapview"
+                    xmlns:map="http://schemas.android.com/apk/res-auto"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:layout_weight="2"
+                    android:animateLayoutChanges="true"
+                    android:layout_marginBottom="5dp"
+                    map:liteMode="true"
+                    map:mapType="normal"
+                    map:cameraZoom="15"/>
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/current.pubs.recyclerview"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
+
+            </LinearLayout>
     </RelativeLayout>
 
     </android.support.v7.widget.CardView>
