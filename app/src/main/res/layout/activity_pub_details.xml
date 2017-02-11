@@ -80,25 +80,41 @@
                 android:layout_weight="1"
                 android:id="@+id/pub_details.layout.title"
                 android:padding="8dp"
-                android:orientation="vertical"
+                android:orientation="horizontal"
                 android:background="@color/colorPrimary"
                 app:layout_collapseMode="parallax"
                 app:layout_collapseParallaxMultiplier="0.3">
-                <TextView
-                    android:layout_width="match_parent"
+
+                <LinearLayout
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:textColor="@android:color/white"
-                    android:text="Title"
-                    android:textSize="30sp"
-                    android:id="@+id/pub_details.title" />
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textColor="@android:color/white"
-                    android:layout_marginTop="4dp"
-                    android:layout_marginBottom="4dp"
-                    android:text="Subtitle"
-                    android:id="@+id/pub_details.subtitle" />
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@android:color/white"
+                        android:text="Title"
+                        android:textSize="30sp"
+                        android:id="@+id/pub_details.title" />
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@android:color/white"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginBottom="4dp"
+                        android:text="Subtitle"
+                        android:id="@+id/pub_details.subtitle" />
+                </LinearLayout>
+
+                <ImageView
+                    android:layout_margin="6dp"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:id="@+id/pub_details.layout.add_button"
+                    app:srcCompat="@drawable/ic_favorite_border_black_24dp"
+                    android:tint="@android:color/white"
+                    />
 
             </LinearLayout>
 

@@ -1,6 +1,7 @@
 package com.ws1617.iosl.pubcrawl20.Details;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -10,11 +11,13 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -223,7 +226,54 @@ public class PubDetailsActivity extends AppCompatActivity implements AppBarLayou
 
 
         startAlphaAnimation(mToolbar, 0, View.INVISIBLE);
+
+        mToolbar.inflateMenu(R.menu.pub_details_menu);
+        mToolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.pub_details_menu_add:
+                        addFavourite(true);
+                        return true;
+                    case R.id.pub_details_menu_remove:
+                        addFavourite(false);
+                        return true;
+                }
+                return true;
+            }
+        });
+        ImageView appBarAddButton = (ImageView) findViewById(R.id.pub_details_layout_add_button);
+        appBarAddButton.setClickable(true);
+        appBarAddButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(mToolbar.getMenu().findItem(R.id.pub_details_menu_add).isVisible()) {
+                    addFavourite(true);
+                } else {
+                    addFavourite(false);
+                }
+            }
+        });
     }
+
+    public void addFavourite(boolean favourite) {
+        //TODO
+        updateAddButtons(favourite);
+    }
+
+    public void updateAddButtons(boolean favourite) {
+        ImageView appBarJoinButton = (ImageView) findViewById(R.id.pub_details_layout_add_button);
+        if (favourite) {
+            mToolbar.getMenu().findItem(R.id.pub_details_menu_add).setVisible(false);
+            mToolbar.getMenu().findItem(R.id.pub_details_menu_remove).setVisible(true);
+            appBarJoinButton.setImageResource(R.drawable.ic_favorite_black_24dp);
+        } else {
+            mToolbar.getMenu().findItem(R.id.pub_details_menu_add).setVisible(true);
+            mToolbar.getMenu().findItem(R.id.pub_details_menu_remove).setVisible(false);
+            appBarJoinButton.setImageResource(R.drawable.ic_favorite_border_black_24dp);
+        }
+    }
+
 
     private void initOpeningTimesExpanding() {
         final CardView openingTimesCard = (CardView) findViewById(R.id.pub_details_times_card);

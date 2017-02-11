@@ -69,7 +69,7 @@
             android:theme="@style/AppTheme" />
 
         <activity
-            android:name=".Search.SearchEventActivity"
+            android:name=".Search.SearchActivity"
             android:label="Search"
             android:launchMode="singleTop"
             android:parentActivityName=".MainActivity"

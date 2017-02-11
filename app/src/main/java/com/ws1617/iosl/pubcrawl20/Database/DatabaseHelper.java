@@ -74,9 +74,9 @@ public class DatabaseHelper {
     }
 
     public static void resetWholeDatabase(Context context) {
-        resetEventsDatabase(context);
         resetPubsDatabase(context);
         resetPersonsDatabase(context);
+        resetEventsDatabase(context);
     }
 
     @Deprecated
@@ -182,7 +182,7 @@ public class DatabaseHelper {
                                         new Response.ErrorListener() {
                                             @Override
                                             public void onErrorResponse(VolleyError error) {
-                                                Log.e(TAG, "Error for event id " + event.getId());
+                                                Log.e(TAG, "VolleyError for event id " + event.getId());
                                                 Log.e(TAG, "participantRequest: " + error.getLocalizedMessage());
                                                 requestQueue.gotResponse();
                                             }
@@ -213,7 +213,7 @@ public class DatabaseHelper {
                                         new Response.ErrorListener() {
                                             @Override
                                             public void onErrorResponse(VolleyError error) {
-                                                Log.e(TAG, "Error for event id " + event.getId());
+                                                Log.e(TAG, "VolleyError for event id " + event.getId());
                                                 Log.e(TAG, "pubsRequest: " + error.getLocalizedMessage());
                                                 requestQueue.gotResponse();
                                             }
@@ -236,7 +236,7 @@ public class DatabaseHelper {
                                         new Response.ErrorListener() {
                                             @Override
                                             public void onErrorResponse(VolleyError error) {
-                                                Log.e(TAG, "Error for event id " + event.getId());
+                                                Log.e(TAG, "VolleyError for event id " + event.getId());
                                                 Log.e(TAG, "ownerRequest: " + error.getLocalizedMessage());
                                                 requestQueue.gotResponse();
                                             }
@@ -255,7 +255,7 @@ public class DatabaseHelper {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Log.e(TAG, "eventsRequest Error: " + error.toString());
+                        Log.e(TAG, "VolleyError eventsRequest: " + error.toString());
                         error.printStackTrace();
                         Toast.makeText(context, "Can't connect to server.", Toast.LENGTH_SHORT).show();
                         requestQueue.gotResponse();
@@ -325,7 +325,7 @@ public class DatabaseHelper {
                                         new Response.ErrorListener() {
                                             @Override
                                             public void onErrorResponse(VolleyError error) {
-                                                Log.e(TAG, "Error for pub id " + pub.getId());
+                                                Log.e(TAG, "VolleyError for pub id " + pub.getId());
                                                 Log.e(TAG, "pubEventsRequest error: " + error.getLocalizedMessage());
                                                 requestQueue.gotResponse();
                                             }
@@ -356,7 +356,7 @@ public class DatabaseHelper {
                                         new Response.ErrorListener() {
                                             @Override
                                             public void onErrorResponse(VolleyError error) {
-                                                Log.e(TAG, "Error for pub id " + pub.getId());
+                                                Log.e(TAG, "VolleyError for pub id " + pub.getId());
                                                 Log.e(TAG, "topPersonsRequest: " + error.getLocalizedMessage());
                                                 requestQueue.gotResponse();
                                             }
@@ -380,7 +380,7 @@ public class DatabaseHelper {
                                         new Response.ErrorListener() {
                                             @Override
                                             public void onErrorResponse(VolleyError error) {
-                                                Log.e(TAG, "Error for pub id " + pub.getId());
+                                                Log.e(TAG, "VolleyError for pub id " + pub.getId());
                                                 Log.e(TAG, "ownerRequest: " + error.getLocalizedMessage());
                                                 requestQueue.gotResponse();
                                             }
@@ -398,7 +398,7 @@ public class DatabaseHelper {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.e(TAG, "pubsRequest Error: " + error.toString());
+                Log.e(TAG, "VolleyError pubsRequest: " + error.toString());
                 error.printStackTrace();
                 Toast.makeText(context, "Can't connect to server.", Toast.LENGTH_SHORT).show();
                 requestQueue.gotResponse();
@@ -466,7 +466,7 @@ public class DatabaseHelper {
                                         new Response.ErrorListener() {
                                             @Override
                                             public void onErrorResponse(VolleyError error) {
-                                                Log.e(TAG, "Error for person id " + person.getId());
+                                                Log.e(TAG, "VolleyError for person id " + person.getId());
                                                 Log.e(TAG, "ownEventsRequest error: " + error.getLocalizedMessage());
                                                 requestQueue.gotResponse();
                                             }
@@ -498,7 +498,7 @@ public class DatabaseHelper {
                                         new Response.ErrorListener() {
                                             @Override
                                             public void onErrorResponse(VolleyError error) {
-                                                Log.e(TAG, "Error for person id " + person.getId());
+                                                Log.e(TAG, "VolleyError for person id " + person.getId());
                                                 Log.e(TAG, "favouritePubsRequest error: " + error.getLocalizedMessage());
                                                 requestQueue.gotResponse();
                                             }
@@ -530,7 +530,7 @@ public class DatabaseHelper {
                                         new Response.ErrorListener() {
                                             @Override
                                             public void onErrorResponse(VolleyError error) {
-                                                Log.e(TAG, "Error for person id " + person.getId());
+                                                Log.e(TAG, "VolleyError for person id " + person.getId());
                                                 Log.e(TAG, "ownedPubsRequest error: " + error.getLocalizedMessage());
                                                 requestQueue.gotResponse();
                                             }
@@ -562,7 +562,7 @@ public class DatabaseHelper {
                                         new Response.ErrorListener() {
                                             @Override
                                             public void onErrorResponse(VolleyError error) {
-                                                Log.e(TAG, "Error for person id " + person.getId());
+                                                Log.e(TAG, "VolleyError for person id " + person.getId());
                                                 Log.e(TAG, "topPersonsRequest: " + error.getLocalizedMessage());
                                                 requestQueue.gotResponse();
                                             }
@@ -593,7 +593,7 @@ public class DatabaseHelper {
                                         new Response.ErrorListener() {
                                             @Override
                                             public void onErrorResponse(VolleyError error) {
-                                                Log.e(TAG, "Error for person id " + person.getId());
+                                                Log.e(TAG, "VolleyError for person id " + person.getId());
                                                 Log.e(TAG, "eventsRequest error: " + error.getLocalizedMessage());
                                                 requestQueue.gotResponse();
                                             }
@@ -616,7 +616,7 @@ public class DatabaseHelper {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Log.e(TAG, "personsRequest Error: " + error.toString());
+                        Log.e(TAG, "VolleyError personsRequest: " + error.toString());
                         error.printStackTrace();
                         Toast.makeText(context, "Can't connect to server.", Toast.LENGTH_SHORT).show();
                         requestQueue.gotResponse();
@@ -641,7 +641,7 @@ public class DatabaseHelper {
 
         if (prefs.getString("server_ip", null) == null || prefs.getString("server_ip", "").length() < 10) {
             Log.e(TAG, "Server url not set, setting default");
-            url = "http://134.158.74.243:8080/";
+            url = "https://vm-74243.lal.in2p3.fr:8443/";
         } else {
             url = prefs.getString("server_ip", "").replace(" ", "") + "/";
         }

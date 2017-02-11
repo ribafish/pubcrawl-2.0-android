@@ -47,7 +47,8 @@ import static com.ws1617.iosl.pubcrawl20.Database.DatabaseHelper.bytesToBitmap;
 public class EventDbHelper {
     private static final String TAG = "EventDbHelper";
 
-    public EventDbHelper()  {}
+    public EventDbHelper() {
+    }
 
     public static void onCreate(SQLiteDatabase db) {
         // create event tables
@@ -70,7 +71,8 @@ public class EventDbHelper {
         onUpgrade(db, oldVersion, newVersion);
     }
 
-    public void addEvent(Event event) {
+    //TODO the returned state doesnt reflect the correct event addition state .. it doesnt return false at all
+    public boolean addEvent(Event event) {
         SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
 
         // Add to event table
@@ -87,8 +89,10 @@ public class EventDbHelper {
             values.put(LONG_MIN, event.getMinLatLng().longitude);
             values.put(LAT_MAX, event.getMaxLatLng().latitude);
             values.put(LONG_MAX, event.getMaxLatLng().longitude);
+        } catch (Exception e) {
+            e.printStackTrace();
+
         }
-        catch (Exception e) { e.printStackTrace(); }
 
 
         long row_id = db.insert(TABLE_EVENTS, null, values);
@@ -99,6 +103,7 @@ public class EventDbHelper {
             addParticipants(event);
             addPubs(event);
         }
+        return true;
     }
 
     public void addTimeslots(Event event) {
@@ -226,7 +231,7 @@ public class EventDbHelper {
         Event event;
 
         String query = "SELECT * FROM " +
-                TABLE_EVENTS +  " WHERE " +
+                TABLE_EVENTS + " WHERE " +
                 EVENT_ID + " = " + event_id;
 
         Cursor c = db.rawQuery(query, null);
@@ -236,14 +241,14 @@ public class EventDbHelper {
 
             c.close();
         } else {
-            Log.e(TAG, "Can't find event with id " + event_id );
+            Log.e(TAG, "Can't find event with id " + event_id);
             throw new DatabaseException("Can't find event with id " + event_id + ". Cursor is null or database empty");
         }
 
         return event;
     }
 
-    public Event getEvent (long event_id) throws DatabaseException {
+    public Event getEvent(long event_id) throws DatabaseException {
         Event event = getListlessEvent(event_id);
 
         event.setTimeSlotList(getTimeSlots(event_id));
@@ -258,7 +263,7 @@ public class EventDbHelper {
         ArrayList<TimeSlot> timeSlots = new ArrayList<>();
 
         String query = "SELECT * FROM " +
-                TABLE_EVENT_TIMESLOTS +  " WHERE " +
+                TABLE_EVENT_TIMESLOTS + " WHERE " +
                 EVENT_ID + " = " + event_id;
 
         Cursor c = db.rawQuery(query, null);
@@ -284,7 +289,7 @@ public class EventDbHelper {
         ArrayList<Long> list = new ArrayList<>();
 
         String query = "SELECT * FROM " +
-                TABLE_EVENT_PARTICIPANTS +  " WHERE " +
+                TABLE_EVENT_PARTICIPANTS + " WHERE " +
                 EVENT_ID + " = " + event_id;
 
         Cursor c = db.rawQuery(query, null);
@@ -305,7 +310,7 @@ public class EventDbHelper {
         ArrayList<Long> list = new ArrayList<>();
 
         String query = "SELECT * FROM " +
-                TABLE_EVENT_PUBS +  " WHERE " +
+                TABLE_EVENT_PUBS + " WHERE " +
                 EVENT_ID + " = " + event_id;
 
         Cursor c = db.rawQuery(query, null);
@@ -320,6 +325,8 @@ public class EventDbHelper {
 
         return list;
     }
+
+
 
     public ArrayList<Event> getAllEvents() throws DatabaseException {
         SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();

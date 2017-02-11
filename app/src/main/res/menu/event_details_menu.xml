@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/event_details.menu.add"
+        android:icon="@drawable/ic_event_add_black_24dp"
+        android:visible="true"
+        app:showAsAction="always"
+        android:title="@string/join"/>
+
+    <item
+        android:id="@+id/event_details.menu.remove"
+        android:icon="@drawable/ic_event_joined_black_24dp"
+        android:visible="false"
+        app:showAsAction="always"
+        android:title="@string/leave"/>
+</menu>

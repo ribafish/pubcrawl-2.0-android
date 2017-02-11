@@ -9,6 +9,7 @@ import android.util.Log;
 import com.ws1617.iosl.pubcrawl20.DataModels.Person;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static com.ws1617.iosl.pubcrawl20.Database.Contracts.PersonContract.CREATE_PERSONS_TABLE;
 import static com.ws1617.iosl.pubcrawl20.Database.Contracts.PersonContract.CREATE_PERSON_EVENTS_TABLE;
@@ -213,7 +214,7 @@ public class PersonDbHelper {
         Person person = new Person(person_id);
 
         String query = "SELECT * FROM " +
-                TABLE_PERSONS +  " WHERE " +
+                TABLE_PERSONS + " WHERE " +
                 PERSON_ID + " = " + person_id;
 
         Cursor c = db.rawQuery(query, null);
@@ -227,18 +228,18 @@ public class PersonDbHelper {
 
             c.close();
         } else {
-            Log.e(TAG, "Can't find person with id " + person_id );
+            Log.e(TAG, "Can't find person with id " + person_id);
             throw new DatabaseException("Can't find person with id " + person_id + ". Cursor is null or database empty");
         }
         return person;
     }
 
-    public ArrayList<Long> getEventIds(long person_id) throws DatabaseException{
+    public ArrayList<Long> getEventIds(long person_id) throws DatabaseException {
         SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
         ArrayList<Long> list = new ArrayList<>();
 
         String query = "SELECT * FROM " +
-                TABLE_PERSON_EVENTS +  " WHERE " +
+                TABLE_PERSON_EVENTS + " WHERE " +
                 PERSON_ID + " = " + person_id;
 
         Cursor c = db.rawQuery(query, null);
@@ -259,7 +260,7 @@ public class PersonDbHelper {
         ArrayList<Long> list = new ArrayList<>();
 
         String query = "SELECT * FROM " +
-                TABLE_PERSON_FRIENDS +  " WHERE " +
+                TABLE_PERSON_FRIENDS + " WHERE " +
                 PERSON_ID + " = " + person_id;
 
         Cursor c = db.rawQuery(query, null);
@@ -280,7 +281,7 @@ public class PersonDbHelper {
         ArrayList<Long> list = new ArrayList<>();
 
         String query = "SELECT * FROM " +
-                TABLE_PERSON_FAVOURITE_PUBS +  " WHERE " +
+                TABLE_PERSON_FAVOURITE_PUBS + " WHERE " +
                 PERSON_ID + " = " + person_id;
 
         Cursor c = db.rawQuery(query, null);
@@ -301,7 +302,7 @@ public class PersonDbHelper {
         ArrayList<Long> list = new ArrayList<>();
 
         String query = "SELECT * FROM " +
-                TABLE_PERSON_OWNED_EVENTS +  " WHERE " +
+                TABLE_PERSON_OWNED_EVENTS + " WHERE " +
                 PERSON_ID + " = " + person_id;
 
         Cursor c = db.rawQuery(query, null);
@@ -322,7 +323,7 @@ public class PersonDbHelper {
         ArrayList<Long> list = new ArrayList<>();
 
         String query = "SELECT * FROM " +
-                TABLE_PERSON_OWNED_PUBS +  " WHERE " +
+                TABLE_PERSON_OWNED_PUBS + " WHERE " +
                 PERSON_ID + " = " + person_id;
 
         Cursor c = db.rawQuery(query, null);
@@ -338,4 +339,34 @@ public class PersonDbHelper {
         return list;
     }
 
+    public List<Person> getAllPersons() {
+
+        SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
+        ArrayList<Person> list = new ArrayList<>();
+
+        String query = "SELECT " + PERSON_ID + " FROM " +
+                TABLE_PERSONS;
+
+        Cursor c = db.rawQuery(query, null);
+        if (c != null && c.moveToFirst()) {
+            do {
+                int person_id = c.getInt(c.getColumnIndex(PERSON_ID));
+                Person person = null;
+                try {
+                    person = getPerson(person_id);
+                    list.add(person);
+                } catch (DatabaseException e) {
+                    e.printStackTrace();
+                }
+
+
+            } while (c.moveToNext());
+            c.close();
+        } else {
+            Log.w(TAG, "getFavouritePubIds: Cursor is null or database empty");
+        }
+
+
+        return list;
+    }
 }

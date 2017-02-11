@@ -92,16 +92,19 @@ public class NewEventActivity extends AppCompatActivity  {
 
 
         final Event mEvent = event;
-        DatabaseHelper.addEvent(this,mEvent, new EventCreation(){
+        DatabaseHelper.addEvent(this, mEvent, new EventCreation(){
             @Override
             public void onSuccess() {
                 // Add to local DB or refresh it
                 EventDbHelper eventDbHelper = new EventDbHelper();
-                eventDbHelper.addEvent(mEvent);
 
-                //onSuccess adding to local DB
-                ShareEventDialog shareEventDialog = new ShareEventDialog();
-                shareEventDialog.show(getFragmentManager(),"shareEventDialog");
+                if (eventDbHelper.addEvent(mEvent)) {
+                    //onSuccess adding to local DB
+                    ShareEventDialog shareEventDialog = new ShareEventDialog();
+                    shareEventDialog.show(getFragmentManager(), "shareEventDialog");
+                } else {
+                    Toast.makeText(getApplicationContext(), "Error while creating the Event .. ", Toast.LENGTH_SHORT).show();
+                }
             }
 
             @Override

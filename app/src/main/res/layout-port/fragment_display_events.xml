@@ -20,8 +20,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:animateLayoutChanges="true"
-        android:visibility="gone">
+        android:animateLayoutChanges="true" >
 
         <Button
             android:text="Refresh"
@@ -29,7 +28,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/btn_refresh"
             android:layout_weight="1"
-            android:visibility="gone"/>
+            android:visibility="visible"/>
 
         <Button
             android:text="Hide/Show"
@@ -46,8 +45,7 @@
             android:gravity="center_horizontal"
             android:layout_weight="1"
             android:text="Event details"
-            android:id="@+id/btn1"
-            android:visibility="gone"/>
+            android:id="@+id/btn1"/>
 
         <Button
             android:layout_width="wrap_content"
@@ -56,8 +54,7 @@
             android:gravity="center_horizontal"
             android:layout_weight="1"
             android:text="Pub details"
-            android:id="@+id/btn2"
-            android:visibility="gone"/>
+            android:id="@+id/btn2"/>
 
         <Button
             android:layout_width="wrap_content"
@@ -66,8 +63,7 @@
             android:gravity="center_horizontal"
             android:layout_weight="1"
             android:text="Person details"
-            android:id="@+id/btn3"
-            android:visibility="gone"/>
+            android:id="@+id/btn3"/>
 
     </LinearLayout>
 

@@ -22,6 +22,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.Locale;
 
 /**
@@ -120,11 +121,34 @@ public class JsonParser {
     public static Event parseJSONEvent (JSONObject jsonEvent) throws JSONException, ParseException {
         final Event event = new Event();
         DateFormat dateFormat = new SimpleDateFormat(EVENT_DATE_FORMAT, Locale.ENGLISH);
-        event.setDate(dateFormat.parse(jsonEvent.getString(EVENT_DATE)));
-        event.setEventName(jsonEvent.getString(EVENT_NAME));
-        event.setDescription(jsonEvent.getString(EVENT_DESCRIPTION));
-        event.setTracked(jsonEvent.getBoolean(EVENT_TRACKED));
-        event.setImage(decodeBitmapBase64(jsonEvent.getString(EVENT_IMAGE)));
+        try {
+//            event.setDate(dateFormat.parse(jsonEvent.getString(EVENT_DATE)));
+            event.setDate(new Date(jsonEvent.getLong(EVENT_DATE)));
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        try {
+            event.setEventName(jsonEvent.getString(EVENT_NAME));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        try {
+            event.setDescription(jsonEvent.getString(EVENT_DESCRIPTION));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        try {
+            event.setTracked(jsonEvent.getBoolean(EVENT_TRACKED));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        try {
+            event.setImage(decodeBitmapBase64(jsonEvent.getString(EVENT_IMAGE)));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         try {
             event.setMinLatLng(new LatLng(
                     jsonEvent.getDouble(EVENT_LAT_MIN),
@@ -142,13 +166,25 @@ public class JsonParser {
             DateFormat timeSlotFormat = new SimpleDateFormat(EVENT_TIMESLOT_TIME_FORMAT, Locale.ENGLISH);
             JSONArray jsonTimeSlots = jsonEvent.getJSONArray(EVENT_TIMESLOTS);
             for (int i = 0; i < jsonTimeSlots.length(); i++) {
-                JSONObject slot = jsonTimeSlots.getJSONObject(i);
-                TimeSlot ts = new TimeSlot(
-                        slot.getLong(EVENT_TIMESLOT_PUB_ID),
-                        timeSlotFormat.parse(slot.getString(EVENT_TIMESLOT_START)),
-                        timeSlotFormat.parse(slot.getString(EVENT_TIMESLOT_END))
-                );
-                timeSlots.add(ts);
+                try {
+                    JSONObject slot = jsonTimeSlots.getJSONObject(i);
+//                    TimeSlot ts = new TimeSlot(
+//                            slot.getLong(EVENT_TIMESLOT_PUB_ID),
+//                            timeSlotFormat.parse(slot.getString(EVENT_TIMESLOT_START)),
+//                            timeSlotFormat.parse(slot.getString(EVENT_TIMESLOT_END))
+//                    );
+                    TimeSlot ts = new TimeSlot(
+                            slot.getLong(EVENT_TIMESLOT_PUB_ID),
+                            new Date(slot.getLong(EVENT_TIMESLOT_START)),
+                            new Date(slot.getLong(EVENT_TIMESLOT_END))
+                    );
+                    timeSlots.add(ts);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+//                catch (ParseException e) {
+//                    e.printStackTrace();
+//                }
             }
             event.setTimeSlotList(timeSlots);
         } catch (Exception e) {
