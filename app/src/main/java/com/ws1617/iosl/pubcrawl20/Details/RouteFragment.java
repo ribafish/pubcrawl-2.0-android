@@ -154,6 +154,7 @@ public class RouteFragment extends DialogFragment implements NewEventRouteFragme
     @Override
     public void onPubItemClicked(int itemPosition, boolean isLongClick) {
         if (!isLongClick) {
+            if(mSelectedPupsList.size()<=0) return;
             Intent intent = new Intent(getContext(), PubDetailsActivity.class);
             intent.putExtra("id", mSelectedPupsList.get(itemPosition).getId());
             getActivity().startActivity(intent);
