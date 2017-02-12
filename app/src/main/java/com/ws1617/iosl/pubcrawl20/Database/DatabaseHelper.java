@@ -119,9 +119,6 @@ public class DatabaseHelper {
             object.put("eventImage", null);
             object.put("timeslotList", timeSlotToJsonArray(event.getTimeSlotList()));
 
-
-             /* object.put("_links");
-           ;*/
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -130,6 +127,11 @@ public class DatabaseHelper {
                 object, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
+                addPubsListToEvent();
+
+
+                //should be called after successfully adding the pubsList
+                // should show spinner until every thing is created successfully
                 eventCreation.onSuccess();
             }
         }, new Response.ErrorListener() {
@@ -157,6 +159,10 @@ public class DatabaseHelper {
             }
         });
         requestQueue.add(jsonObjectRequest);
+    }
+
+    public static void addPubsListToEvent(){
+
     }
 
 

@@ -86,22 +86,26 @@ public class NewEventActivity extends AppCompatActivity {
         if (!checkSatisfyMinReq(event))
             return;
         else {
-
+            //TODO:show dialog without the QRCode , just a spinner
+            final ShareEventDialog shareEventDialog = new ShareEventDialog();
+            shareEventDialog.show(getFragmentManager(), "shareEventDialog");
 
             DatabaseHelper.addEvent(this, event, new EventCreation() {
                 @Override
                 public void onSuccess() {
                     //refresh the whole DB
                     DatabaseHelper.resetEventsDatabase(getApplicationContext());
-                    //show the code
-                    ShareEventDialog shareEventDialog = new ShareEventDialog();
-                    shareEventDialog.show(getFragmentManager(), "shareEventDialog");
+                    //TODO:show the QRCode + hide the spinner
+                    shareEventDialog.initQRCodeView();
+
                 }
 
                 @Override
                 public void onFail() {
                     // show error
                     Toast.makeText(getApplicationContext(), "Error while creating the Event .. ", Toast.LENGTH_SHORT).show();
+                    // TODO: dismiss the dialog
+                    shareEventDialog.dismiss();
                 }
             });
         }
