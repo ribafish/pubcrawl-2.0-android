@@ -72,7 +72,7 @@ public class EventDbHelper {
     }
 
     //TODO the returned state doesnt reflect the correct event addition state .. it doesnt return false at all
-    public boolean addEvent(Event event) {
+    public void addEvent(Event event) {
         SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
 
         // Add to event table
@@ -103,7 +103,6 @@ public class EventDbHelper {
             addParticipants(event);
             addPubs(event);
         }
-        return true;
     }
 
     public void addTimeslots(Event event) {

@@ -1,5 +1,6 @@
 package com.ws1617.iosl.pubcrawl20.Details;
 
+import com.ws1617.iosl.pubcrawl20.DataModels.PubMiniModel;
 import com.ws1617.iosl.pubcrawl20.DataModels.TimeSlotComparator;
 
 import java.util.Comparator;
@@ -9,9 +10,9 @@ import java.util.Comparator;
  * Github: https://github.com/ribafish/
  */
 
-class PubMiniComparator implements Comparator<PubMini> {
+class PubMiniModelComparator implements Comparator<PubMiniModel> {
     @Override
-    public int compare(PubMini pubMini, PubMini t1) {
+    public int compare(PubMiniModel pubMini, PubMiniModel t1) {
         return new TimeSlotComparator(true, TimeSlotComparator.START)
                 .compare(pubMini.getTimeSlot(), t1.getTimeSlot());
     }

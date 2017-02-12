@@ -5,12 +5,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.Rect;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
@@ -24,7 +18,6 @@ import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -32,7 +25,6 @@ import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
@@ -41,19 +33,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.GoogleMapOptions;
-import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptor;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.LatLngBounds;
-import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.maps.model.PolylineOptions;
 import com.ws1617.iosl.pubcrawl20.DataModels.Event;
+import com.ws1617.iosl.pubcrawl20.DataModels.PubMiniModel;
 import com.ws1617.iosl.pubcrawl20.DataModels.TimeSlot;
 import com.ws1617.iosl.pubcrawl20.Database.DatabaseException;
 import com.ws1617.iosl.pubcrawl20.Database.EventDbHelper;
@@ -64,9 +47,6 @@ import com.ws1617.iosl.pubcrawl20.R;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
-
-import static android.graphics.Bitmap.Config.ARGB_8888;
 
 /**
  * Created by Gasper Kojek on 2. 12. 2016.
@@ -93,7 +73,7 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
     private CoordinatorLayout rootView;
 
     private Event event;
-    private ArrayList<PubMini> pubs = new ArrayList<>();
+    private ArrayList<PubMiniModel> pubs = new ArrayList<>();
     private ArrayList<PersonMini> participants = new ArrayList<>();
     private PersonMini owner;
 
@@ -136,16 +116,12 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
     void initRouteFragment() {
         // this list should come from the DB and from outside the fragment
         // the fragment it self get the data from outsource
-
-        //View mode
         initVewMode();
-        //Edit mode
-        //TODO
 
         RouteFragment routeFragment = RouteFragment.newInstance(RouteFragment.DIALOG_STATUS.VIEW_MODE);
         FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction().add(R.id.test_place_holder, routeFragment, "Route").commit();
-       // routeFragment.setListOfPubs(pubs);
+        fragmentManager.beginTransaction().add(R.id.route_place_holder, routeFragment, "Route").commit();
+        routeFragment.setListOfPubs(pubs);
 
     }
 
@@ -728,7 +704,7 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
             }
         }
 
-        Collections.sort(this.pubs, new PubMiniComparator());
+        Collections.sort(this.pubs, new PubMiniModelComparator());
 
         for (Long id : mIds) {
 

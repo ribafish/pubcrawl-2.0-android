@@ -9,13 +9,19 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.Response;
+import com.android.volley.ServerError;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.ws1617.iosl.pubcrawl20.DataModels.Event;
 import com.ws1617.iosl.pubcrawl20.DataModels.Person;
 import com.ws1617.iosl.pubcrawl20.DataModels.Pub;
+import com.ws1617.iosl.pubcrawl20.DataModels.TimeSlot;
 import com.ws1617.iosl.pubcrawl20.NewEvent.NewEventActivity;
 
 import org.json.JSONArray;
@@ -23,8 +29,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
+import java.io.UnsupportedEncodingException;
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import static com.ws1617.iosl.pubcrawl20.Database.JsonParser.EMBEDDED;
 import static com.ws1617.iosl.pubcrawl20.Database.JsonParser.EVENTS;
@@ -57,7 +66,7 @@ import static com.ws1617.iosl.pubcrawl20.Database.JsonParser.parsePubJson;
 public class DatabaseHelper {
     private static final String TAG = "DatabaseHelper";
 
-    public static byte[] bitmapToBytes (Bitmap bmp) {
+    public static byte[] bitmapToBytes(Bitmap bmp) {
 
         if (bmp == null) return null;
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
@@ -89,25 +98,30 @@ public class DatabaseHelper {
 
     public static void addEvent(Context context, final Event event,
                                 final NewEventActivity.EventCreation eventCreation) {
-
-        final String tag = TAG;
-        final String TAG = tag + ".AddEvent";
-
         final RequestQueueHelper requestQueue = new RequestQueueHelper(context);
-
         final String url;
-
         try {
             url = getServerUrl(context) + EVENTS;
         } catch (StringIndexOutOfBoundsException e) {
             Log.e(TAG, e.getLocalizedMessage());
             return;
         }
-
-
         JSONObject object = new JSONObject();
         try {
-            object.put("eventName","android event");
+            object.put("eventName", event.getEventName());
+            object.put("date", event.getDate().getTime());
+            object.put("description", event.getDescription());
+            object.put("latmax", event.getMaxLatLng().latitude);
+            object.put("lngmax", event.getMaxLatLng().longitude);
+            object.put("latmin", event.getMinLatLng().latitude);
+            object.put("lngmin", event.getMinLatLng().longitude);
+            object.put("tracked", false);
+            object.put("eventImage", null);
+            object.put("timeslotList", timeSlotToJsonArray(event.getTimeSlotList()));
+
+
+             /* object.put("_links");
+           ;*/
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -116,20 +130,51 @@ public class DatabaseHelper {
                 object, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-
                 eventCreation.onSuccess();
-
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                eventCreation.onFail();
+                // As of f605da3 the following should work
+                NetworkResponse response = error.networkResponse;
+                if (error instanceof ServerError && response != null) {
+                    try {
+                        String res = new String(response.data,
+                                HttpHeaderParser.parseCharset(response.headers, "utf-8"));
+                        // Now you can use any deserializer to make sense of data
+                        JSONObject obj = new JSONObject(res);
+                    } catch (UnsupportedEncodingException e1) {
+                        // Couldn't properly decode data to string
+                        eventCreation.onFail();
+                        e1.printStackTrace();
+                    } catch (JSONException e2) {
+                        // returned data is not JSONObject?
+                        eventCreation.onFail();
+                        e2.printStackTrace();
+                    }
+                }
+
             }
         });
         requestQueue.add(jsonObjectRequest);
     }
 
 
+    public static JSONArray timeSlotToJsonArray(List<TimeSlot> timeSlotList) {
+        JSONArray timeSlot = new JSONArray();
+        for (TimeSlot ts : timeSlotList) {
+            JSONObject object = new JSONObject();
+            try {
+                object.put("startingTime", String.valueOf(ts.getStartTime().getTime()));
+                object.put("endingTime",  String.valueOf(ts.getEndTime().getTime()));
+                object.put("pubId", ts.getPubId());
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            timeSlot.put(object);
+        }
+        return timeSlot;
+    }
 
     public static void downloadEvents(final Context context) {
         final String tag = TAG;

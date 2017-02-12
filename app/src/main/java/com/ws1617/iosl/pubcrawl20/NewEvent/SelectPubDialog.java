@@ -60,6 +60,8 @@ public class SelectPubDialog extends DialogFragment {
     Date mStartDate, mEndDate;
 
 
+
+
     public void setPubListListener(OnSelectPubDialogDismissed onSelectPubDialogDismissed) {
         this.onSelectPubDialogDismissed = onSelectPubDialogDismissed;
     }
@@ -81,6 +83,8 @@ public class SelectPubDialog extends DialogFragment {
         super.onViewCreated(view, savedInstanceState);
 
     }
+
+
 
     public void showSelectedPub(Pub pub) {
 
@@ -199,7 +203,7 @@ public class SelectPubDialog extends DialogFragment {
         mPubSize.setText(String.valueOf(this.selectedPub.getSize()));
     }
 
-    interface OnSelectPubDialogDismissed {
+    public interface OnSelectPubDialogDismissed {
         void addPubToList(PubMiniModel newPub);
     }
 }
