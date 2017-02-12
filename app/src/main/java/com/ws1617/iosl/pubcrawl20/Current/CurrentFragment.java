@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
+import com.google.android.gms.maps.MapView;
 import com.ws1617.iosl.pubcrawl20.DataModels.Event;
 import com.ws1617.iosl.pubcrawl20.DataModels.Pub;
 import com.ws1617.iosl.pubcrawl20.DataModels.TimeSlot;
@@ -117,6 +118,62 @@ public class CurrentFragment extends Fragment {
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+        if (adapter != null) {
+            for (MapView m : adapter.getMapViews()) {
+                try {
+                    m.onStart();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (adapter != null) {
+            for (MapView m : adapter.getMapViews()) {
+                try {
+                    m.onStop();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+        if (adapter != null) {
+            for (MapView m : adapter.getMapViews()) {
+                try {
+                    m.onLowMemory();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        if (adapter != null) {
+            for (MapView m : adapter.getMapViews()) {
+                try {
+                    m.onDestroy();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        super.onDestroy();
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
         receiver = new BroadcastReceiver() {
@@ -130,12 +187,43 @@ public class CurrentFragment extends Fragment {
         };
         IntentFilter filter = new IntentFilter(RequestQueueHelper.BROADCAST_INTENT);
         getContext().registerReceiver(receiver, filter);
+        if (adapter != null) {
+            for (MapView m : adapter.getMapViews()) {
+                try {
+                    m.onResume();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
     @Override
     public void onPause() {
         super.onPause();
         getContext().unregisterReceiver(receiver);
+        if (adapter != null) {
+            for (MapView m : adapter.getMapViews()) {
+                try {
+                    m.onPause();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (adapter != null) {
+            for (MapView m : adapter.getMapViews()) {
+                try {
+                    m.onSaveInstanceState(outState);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
 }

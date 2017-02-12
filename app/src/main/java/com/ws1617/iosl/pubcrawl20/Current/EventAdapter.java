@@ -1,6 +1,7 @@
 package com.ws1617.iosl.pubcrawl20.Current;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -36,6 +37,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.ws1617.iosl.pubcrawl20.DataModels.PubMiniModel;
 import com.ws1617.iosl.pubcrawl20.Details.MapDialogFragment;
+import com.ws1617.iosl.pubcrawl20.Details.PubDetailsActivity;
 import com.ws1617.iosl.pubcrawl20.Details.RouteFragment;
 import com.ws1617.iosl.pubcrawl20.NewEvent.adapters.SelectedPupListAdapter;
 import com.ws1617.iosl.pubcrawl20.R;
@@ -59,6 +61,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
     private List<EventMini> eventMiniList;
     final private DisplayMetrics metrics;
     final private FragmentManager fragmentManager;
+    private ArrayList<MapView> mapViews = new ArrayList<>();
 
 
     public class EventViewHolder extends RecyclerView.ViewHolder implements OnMapReadyCallback {
@@ -88,8 +91,18 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
             pubsRecyclerView = (RecyclerView) view.findViewById(R.id.current_pubs_recyclerview);
             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(mContext);
             pubsRecyclerView.setLayoutManager(linearLayoutManager);
-            adapter = new SelectedPupListAdapter(pubs, null);
+            adapter = new SelectedPupListAdapter(pubs, new SelectedPupListAdapter.OnPubItemClickListener() {
+                @Override
+                public void onPubItemClicked(int itemPosition) {
+                    Intent intent = new Intent(mContext, PubDetailsActivity.class);
+                    intent.putExtra("name", "Test Pub");
+                    intent.putExtra("id", pubs.get(itemPosition).getId());
+                    mContext.startActivity(intent);
+                }
+            });
             pubsRecyclerView.setAdapter(adapter);
+
+            Log.d(TAG, "EventViewHolder constructor pubs.size = " + pubs.size());
 
             mapView = (MapView) view.findViewById(R.id.current_route_mapview);
             if (mapView != null)
@@ -97,16 +110,26 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
                 mapView.onCreate(null);
                 mapView.onResume();
                 mapView.getMapAsync(this);
+            } else {
+                Log.e(TAG, "mapView == null");
             }
         }
 
         @Override
-        public void onMapReady(GoogleMap googleMap) {
+        public void onMapReady(final GoogleMap googleMap) {
+            Log.d(TAG, "onMapReady()");
             MapsInitializer.initialize(mContext);
             map = googleMap;
+            try {
+                drawOnMap(googleMap, 0, pubs);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             map.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {    // Sometimes wouldn't load the map
                 @Override
                 public void onMapLoaded() {
+                    Log.d(TAG, "onMapLoaded()");
+
                     // googleMap.setPadding(left, top, right, bottom)
                     map.setPadding(20, 140, 20, 20);
                     map.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
@@ -245,7 +268,9 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.event_card, parent, false);
 
-        return new EventViewHolder(itemView);
+        EventViewHolder ev = new EventViewHolder(itemView);
+        mapViews.add(ev.mapView);
+        return ev;
     }
 
     @Override
@@ -261,6 +286,8 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
         initDescriptionExpanding(mContext, holder);
         initRoute(holder, event);
     }
+
+
 
     private void initDescriptionExpanding(final Context context, final EventViewHolder holder) {
         final RelativeLayout rootLayout = holder.rootLayout;
@@ -315,20 +342,33 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
     }
 
     private void initRoute(final EventViewHolder holder, EventMini event) {
-        holder.pubs = event.getPubs();
-        holder.refreshMap();
+        holder.pubs.clear();
+        holder.pubs.addAll(event.getPubs());
+        holder.adapter.notifyDataSetChanged();
+        try {
+            holder.drawOnMap(holder.map, 0, event.getPubs());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+//        holder.refreshMap();
     }
 
     //Recycling GoogleMap for list item
     @Override
     public void onViewRecycled(EventViewHolder holder)
     {
+        Log.d(TAG, "onViewRecycled");
         // Cleanup MapView here?
         if (holder.map != null)
         {
+            Log.d(TAG, "holder.map != null");
             holder.map.clear();
             holder.map.setMapType(GoogleMap.MAP_TYPE_NONE);
         }
+    }
+
+    public ArrayList<MapView> getMapViews() {
+        return mapViews;
     }
 
 
