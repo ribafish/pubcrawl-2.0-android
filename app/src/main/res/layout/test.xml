@@ -7,7 +7,7 @@
     android:background="@android:color/holo_blue_bright">
 
     <FrameLayout
-        android:id="@+id/test_place_holder"
+        android:id="@+id/route_place_holder"
         android:layout_width="match_parent"
         android:layout_height="match_parent"></FrameLayout>
 
