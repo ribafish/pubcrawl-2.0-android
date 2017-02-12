@@ -115,7 +115,7 @@ public class RouteFragment extends DialogFragment implements NewEventRouteFragme
 
 
     private void addPub(PubMiniModel pub) {
-        adapter.notifyItemChanged(mSelectedPupsList.size());
+        adapter.notifyDataSetChanged();
         refreshMap();
     }
 
@@ -151,14 +151,21 @@ public class RouteFragment extends DialogFragment implements NewEventRouteFragme
 
     @Override
     public void onPubItemClicked(int itemPosition) {
+        mSelectedPupsList.remove(itemPosition);
         if (currentDialogStatus == DIALOG_STATUS.VIEW_MODE) return;
         mPubItemDialog = new SelectPubDialog();
-        //mPubItemDialog.setPubListListener(onSelectPubDialogDismissed);
-        //TODO get pub by pubID
-       // mPubItemDialog.showSelectedPub(mSelectedPupsList.get(itemPosition).getPub());
+        mPubItemDialog.setPubListListener(onSelectPubDialogDismissed);
         mPubItemDialog.show(getChildFragmentManager(), TAG + "pub");
 
     }
+
+    SelectPubDialog.OnSelectPubDialogDismissed onSelectPubDialogDismissed = new SelectPubDialog.OnSelectPubDialogDismissed() {
+        @Override
+        public void addPubToList(PubMiniModel newPub) {
+                mSelectedPupsList.add(newPub);
+                onNewPub(newPub);
+        }
+    };
 
     /*
      * Map functions
