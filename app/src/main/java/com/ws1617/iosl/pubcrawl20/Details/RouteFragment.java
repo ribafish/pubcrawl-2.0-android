@@ -151,7 +151,8 @@ public class RouteFragment extends DialogFragment implements NewEventRouteFragme
 
     @Override
     public void onPubItemClicked(int itemPosition) {
-        mSelectedPupsList.remove(itemPosition);
+        if (mSelectedPupsList != null && mSelectedPupsList.size() >= 0)
+            mSelectedPupsList.remove(itemPosition);
         if (currentDialogStatus == DIALOG_STATUS.VIEW_MODE) return;
         mPubItemDialog = new SelectPubDialog();
         mPubItemDialog.setPubListListener(onSelectPubDialogDismissed);
@@ -162,8 +163,8 @@ public class RouteFragment extends DialogFragment implements NewEventRouteFragme
     SelectPubDialog.OnSelectPubDialogDismissed onSelectPubDialogDismissed = new SelectPubDialog.OnSelectPubDialogDismissed() {
         @Override
         public void addPubToList(PubMiniModel newPub) {
-                mSelectedPupsList.add(newPub);
-                onNewPub(newPub);
+            mSelectedPupsList.add(newPub);
+            onNewPub(newPub);
         }
     };
 
