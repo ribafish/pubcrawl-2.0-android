@@ -1,5 +1,6 @@
 package com.ws1617.iosl.pubcrawl20.Details;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -31,6 +32,7 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.ws1617.iosl.pubcrawl20.DataModels.Pub;
 import com.ws1617.iosl.pubcrawl20.DataModels.PubMiniModel;
 import com.ws1617.iosl.pubcrawl20.NewEvent.NewEventRouteFragment;
 import com.ws1617.iosl.pubcrawl20.NewEvent.SelectPubDialog;
@@ -150,14 +152,20 @@ public class RouteFragment extends DialogFragment implements NewEventRouteFragme
 
 
     @Override
-    public void onPubItemClicked(int itemPosition) {
-        if (mSelectedPupsList != null && mSelectedPupsList.size() >= 0)
+    public void onPubItemClicked(int itemPosition, boolean isLongClick) {
+        if (!isLongClick) {
+            Intent intent = new Intent(getContext(), PubDetailsActivity.class);
+            intent.putExtra("id", mSelectedPupsList.get(itemPosition).getId());
+            getActivity().startActivity(intent);
+        } else if (isLongClick && currentDialogStatus == DIALOG_STATUS.EDIT_MODE) {
+            if (mSelectedPupsList == null || mSelectedPupsList.size() <= 0) return;
+            Pub selectedPub = new Pub(mSelectedPupsList.get(itemPosition).getId());
             mSelectedPupsList.remove(itemPosition);
-        if (currentDialogStatus == DIALOG_STATUS.VIEW_MODE) return;
-        mPubItemDialog = new SelectPubDialog();
-        mPubItemDialog.setPubListListener(onSelectPubDialogDismissed);
-        mPubItemDialog.show(getChildFragmentManager(), TAG + "pub");
-
+            mPubItemDialog = new SelectPubDialog();
+            mPubItemDialog.setPubListListener(onSelectPubDialogDismissed);
+            mPubItemDialog.showSelectedPub(selectedPub);
+            mPubItemDialog.show(getChildFragmentManager(), TAG + "pub");
+        }
     }
 
     SelectPubDialog.OnSelectPubDialogDismissed onSelectPubDialogDismissed = new SelectPubDialog.OnSelectPubDialogDismissed() {
