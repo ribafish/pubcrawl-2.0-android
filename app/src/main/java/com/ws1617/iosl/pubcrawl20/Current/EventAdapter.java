@@ -171,6 +171,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
                             return true;
                         }
                     });
+                    mapView.onResume();
                 }
             });
         }
@@ -215,11 +216,6 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
             map.moveCamera(CameraUpdateFactory.newLatLngZoom(map.getCameraPosition().target, map.getCameraPosition().zoom - unzoom));
             return markerLongHashMap;
 
-        }
-
-        private void refreshMap() {
-            mapView.getMapAsync(this);
-            adapter.notifyDataSetChanged();
         }
 
         private BitmapDescriptor getCustomMarkerIcon(int i) {
@@ -344,13 +340,13 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
     private void initRoute(final EventViewHolder holder, EventMini event) {
         holder.pubs.clear();
         holder.pubs.addAll(event.getPubs());
+        holder.mapView.onResume();
         holder.adapter.notifyDataSetChanged();
         try {
             holder.drawOnMap(holder.map, 0, event.getPubs());
         } catch (Exception e) {
             e.printStackTrace();
         }
-//        holder.refreshMap();
     }
 
     //Recycling GoogleMap for list item
@@ -361,10 +357,16 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
         // Cleanup MapView here?
         if (holder.map != null)
         {
-            Log.d(TAG, "holder.map != null");
+            Log.d(TAG, "onViewRecycled: holder.map != null");
             holder.map.clear();
             holder.map.setMapType(GoogleMap.MAP_TYPE_NONE);
+//            try {
+//                holder.drawOnMap(holder.map, 0, holder.pubs);
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
         }
+        holder.mapView.onResume();
     }
 
     public ArrayList<MapView> getMapViews() {
