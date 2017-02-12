@@ -54,6 +54,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.ws1617.iosl.pubcrawl20.DataModels.Event;
+import com.ws1617.iosl.pubcrawl20.DataModels.PubMiniModel;
 import com.ws1617.iosl.pubcrawl20.DataModels.TimeSlot;
 import com.ws1617.iosl.pubcrawl20.Database.DatabaseException;
 import com.ws1617.iosl.pubcrawl20.Database.EventDbHelper;
@@ -93,7 +94,7 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
     private CoordinatorLayout rootView;
 
     private Event event;
-    private ArrayList<PubMini> pubs = new ArrayList<>();
+    private ArrayList<PubMiniModel> pubs = new ArrayList<>();
     private ArrayList<PersonMini> participants = new ArrayList<>();
     private PersonMini owner;
 
@@ -136,16 +137,12 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
     void initRouteFragment() {
         // this list should come from the DB and from outside the fragment
         // the fragment it self get the data from outsource
-
-        //View mode
         initVewMode();
-        //Edit mode
-        //TODO
 
         RouteFragment routeFragment = RouteFragment.newInstance(RouteFragment.DIALOG_STATUS.VIEW_MODE);
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().add(R.id.test_place_holder, routeFragment, "Route").commit();
-       // routeFragment.setListOfPubs(pubs);
+        routeFragment.setListOfPubs(pubs);
 
     }
 
@@ -728,7 +725,7 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
             }
         }
 
-        Collections.sort(this.pubs, new PubMiniComparator());
+        Collections.sort(this.pubs, new PubMiniModelComparator());
 
         for (Long id : mIds) {
 
