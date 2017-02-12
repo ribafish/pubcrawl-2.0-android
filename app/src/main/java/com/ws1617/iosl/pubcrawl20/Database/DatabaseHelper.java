@@ -16,9 +16,12 @@ import com.android.volley.ServerError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.ws1617.iosl.pubcrawl20.DataModels.Event;
 import com.ws1617.iosl.pubcrawl20.DataModels.Person;
 import com.ws1617.iosl.pubcrawl20.DataModels.Pub;
+import com.ws1617.iosl.pubcrawl20.DataModels.TimeSlot;
 import com.ws1617.iosl.pubcrawl20.NewEvent.NewEventActivity;
 
 import org.json.JSONArray;
@@ -27,8 +30,10 @@ import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.UnsupportedEncodingException;
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import static com.ws1617.iosl.pubcrawl20.Database.JsonParser.EMBEDDED;
 import static com.ws1617.iosl.pubcrawl20.Database.JsonParser.EVENTS;
@@ -112,11 +117,10 @@ public class DatabaseHelper {
             object.put("lngmin", event.getMinLatLng().longitude);
             object.put("tracked", false);
             object.put("eventImage", null);
+            object.put("timeslotList", timeSlotToJsonArray(event.getTimeSlotList()));
 
-           /*object.put("timeslotList",event.getTimeSlotList());
 
-
-            object.put("_links");
+             /* object.put("_links");
            ;*/
         } catch (JSONException e) {
             e.printStackTrace();
@@ -155,6 +159,22 @@ public class DatabaseHelper {
         requestQueue.add(jsonObjectRequest);
     }
 
+
+    public static JSONArray timeSlotToJsonArray(List<TimeSlot> timeSlotList) {
+        JSONArray timeSlot = new JSONArray();
+        for (TimeSlot ts : timeSlotList) {
+            JSONObject object = new JSONObject();
+            try {
+                object.put("startingTime", String.valueOf(ts.getStartTime().getTime()));
+                object.put("endingTime",  String.valueOf(ts.getEndTime().getTime()));
+                object.put("pubId", ts.getPubId());
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            timeSlot.put(object);
+        }
+        return timeSlot;
+    }
 
     public static void downloadEvents(final Context context) {
         final String tag = TAG;
