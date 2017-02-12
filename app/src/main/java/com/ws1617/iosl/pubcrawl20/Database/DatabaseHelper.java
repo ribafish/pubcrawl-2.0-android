@@ -9,9 +9,12 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.Response;
+import com.android.volley.ServerError;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.ws1617.iosl.pubcrawl20.DataModels.Event;
 import com.ws1617.iosl.pubcrawl20.DataModels.Person;
@@ -23,6 +26,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -100,7 +104,7 @@ public class DatabaseHelper {
         JSONObject object = new JSONObject();
         try {
             object.put("eventName", event.getEventName());
-            object.put("date", event.getShortDate());
+            object.put("date", event.getDate().getTime());
             object.put("description", event.getDescription());
             object.put("latmax", event.getMaxLatLng().latitude);
             object.put("lngmax", event.getMaxLatLng().longitude);
@@ -109,7 +113,7 @@ public class DatabaseHelper {
             object.put("tracked", false);
             object.put("eventImage", null);
 
-            /*object.put("timeslotList",event.getTimeSlotList());
+           /*object.put("timeslotList",event.getTimeSlotList());
 
 
             object.put("_links");
@@ -127,7 +131,25 @@ public class DatabaseHelper {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                eventCreation.onFail();
+                // As of f605da3 the following should work
+                NetworkResponse response = error.networkResponse;
+                if (error instanceof ServerError && response != null) {
+                    try {
+                        String res = new String(response.data,
+                                HttpHeaderParser.parseCharset(response.headers, "utf-8"));
+                        // Now you can use any deserializer to make sense of data
+                        JSONObject obj = new JSONObject(res);
+                    } catch (UnsupportedEncodingException e1) {
+                        // Couldn't properly decode data to string
+                        eventCreation.onFail();
+                        e1.printStackTrace();
+                    } catch (JSONException e2) {
+                        // returned data is not JSONObject?
+                        eventCreation.onFail();
+                        e2.printStackTrace();
+                    }
+                }
+
             }
         });
         requestQueue.add(jsonObjectRequest);
