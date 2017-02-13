@@ -9,6 +9,7 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -16,6 +17,7 @@ import com.android.volley.ServerError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.ws1617.iosl.pubcrawl20.App;
 import com.ws1617.iosl.pubcrawl20.DataModels.Event;
 import com.ws1617.iosl.pubcrawl20.DataModels.Person;
 import com.ws1617.iosl.pubcrawl20.DataModels.Pub;
@@ -29,7 +31,9 @@ import org.json.JSONObject;
 import java.io.ByteArrayOutputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static com.ws1617.iosl.pubcrawl20.Database.JsonParser.EMBEDDED;
 import static com.ws1617.iosl.pubcrawl20.Database.JsonParser.EVENTS;
@@ -304,7 +308,15 @@ public class DatabaseHelper {
                                                 Log.e(TAG, "participantRequest: " + error.getLocalizedMessage());
                                                 requestQueue.gotResponse();
                                             }
-                                        });
+                                        })
+                                {
+                                    @Override
+                                    public Map<String, String> getHeaders() throws AuthFailureError {
+                                        Map<String, String> params = new HashMap<String, String>();
+                                        params.put("Authorization", "Bearer " + App.getToken());
+                                        return params;
+                                    }
+                                };
 
                                 String pubsListURL = url + "/" + event.getId() + "/" + EVENT_PUBS;
                                 JsonObjectRequest pubsRequest = new JsonObjectRequest(Request.Method.GET, pubsListURL, null,
@@ -335,7 +347,15 @@ public class DatabaseHelper {
                                                 Log.e(TAG, "pubsRequest: " + error.getLocalizedMessage());
                                                 requestQueue.gotResponse();
                                             }
-                                        });
+                                        })
+                                {
+                                    @Override
+                                    public Map<String, String> getHeaders() throws AuthFailureError {
+                                        Map<String, String> params = new HashMap<String, String>();
+                                        params.put("Authorization", "Bearer " + App.getToken());
+                                        return params;
+                                    }
+                                };
 
                                 String ownerUrl = url + "/" + event.getId() + "/" + EVENT_OWNER;
                                 JsonObjectRequest ownerRequest = new JsonObjectRequest(Request.Method.GET, ownerUrl, null,
@@ -358,7 +378,15 @@ public class DatabaseHelper {
                                                 Log.e(TAG, "ownerRequest: " + error.getLocalizedMessage());
                                                 requestQueue.gotResponse();
                                             }
-                                        });
+                                        })
+                                {
+                                    @Override
+                                    public Map<String, String> getHeaders() throws AuthFailureError {
+                                        Map<String, String> params = new HashMap<String, String>();
+                                        params.put("Authorization", "Bearer " + App.getToken());
+                                        return params;
+                                    }
+                                };
 
                                 requestQueue.add(participantRequest);
                                 requestQueue.add(pubsRequest);
@@ -378,7 +406,15 @@ public class DatabaseHelper {
                         Toast.makeText(context, "Can't connect to server.", Toast.LENGTH_SHORT).show();
                         requestQueue.gotResponse();
                     }
-                });
+                })
+        {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("Authorization", "Bearer " + App.getToken());
+                return params;
+            }
+        };
         // Add the request to the RequestQueue.
         requestQueue.add(eventsRequest);
 
@@ -502,7 +538,15 @@ public class DatabaseHelper {
                                                 Log.e(TAG, "ownerRequest: " + error.getLocalizedMessage());
                                                 requestQueue.gotResponse();
                                             }
-                                        });
+                                        })
+                                {
+                                    @Override
+                                    public Map<String, String> getHeaders() throws AuthFailureError {
+                                        Map<String, String> params = new HashMap<String, String>();
+                                        params.put("Authorization", "Bearer " + App.getToken());
+                                        return params;
+                                    }
+                                };
 
                                 requestQueue.add(pubEventsRequest);
                                 requestQueue.add(topPersonsRequest);
@@ -521,7 +565,15 @@ public class DatabaseHelper {
                 Toast.makeText(context, "Can't connect to server.", Toast.LENGTH_SHORT).show();
                 requestQueue.gotResponse();
             }
-        });
+        })
+        {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("Authorization", "Bearer " + App.getToken());
+                return params;
+            }
+        };
         requestQueue.add(pubsRequest);
     }
 
@@ -588,7 +640,15 @@ public class DatabaseHelper {
                                                 Log.e(TAG, "ownEventsRequest error: " + error.getLocalizedMessage());
                                                 requestQueue.gotResponse();
                                             }
-                                        });
+                                        })
+                                {
+                                    @Override
+                                    public Map<String, String> getHeaders() throws AuthFailureError {
+                                        Map<String, String> params = new HashMap<String, String>();
+                                        params.put("Authorization", "Bearer " + App.getToken());
+                                        return params;
+                                    }
+                                };
 
                                 String favouritePubsURL = url + "/" + person.getId() + "/" + PERSON_FAVOURITE_PUBS;
                                 JsonObjectRequest favouritePubsRequest = new JsonObjectRequest(Request.Method.GET, favouritePubsURL, null,
@@ -620,7 +680,15 @@ public class DatabaseHelper {
                                                 Log.e(TAG, "favouritePubsRequest error: " + error.getLocalizedMessage());
                                                 requestQueue.gotResponse();
                                             }
-                                        });
+                                        })
+                                {
+                                    @Override
+                                    public Map<String, String> getHeaders() throws AuthFailureError {
+                                        Map<String, String> params = new HashMap<String, String>();
+                                        params.put("Authorization", "Bearer " + App.getToken());
+                                        return params;
+                                    }
+                                };
 
                                 String ownPubsURL = url + "/" + person.getId() + "/" + PERSON_OWNED_PUBS;
                                 JsonObjectRequest ownedPubsRequest = new JsonObjectRequest(Request.Method.GET, ownPubsURL, null,
@@ -652,7 +720,15 @@ public class DatabaseHelper {
                                                 Log.e(TAG, "ownedPubsRequest error: " + error.getLocalizedMessage());
                                                 requestQueue.gotResponse();
                                             }
-                                        });
+                                        })
+                                {
+                                    @Override
+                                    public Map<String, String> getHeaders() throws AuthFailureError {
+                                        Map<String, String> params = new HashMap<String, String>();
+                                        params.put("Authorization", "Bearer " + App.getToken());
+                                        return params;
+                                    }
+                                };
 
 
                                 String firendsURL = url + "/" + person.getId() + "/" + PERSON_FRIENDS;
@@ -684,7 +760,15 @@ public class DatabaseHelper {
                                                 Log.e(TAG, "topPersonsRequest: " + error.getLocalizedMessage());
                                                 requestQueue.gotResponse();
                                             }
-                                        });
+                                        })
+                                {
+                                    @Override
+                                    public Map<String, String> getHeaders() throws AuthFailureError {
+                                        Map<String, String> params = new HashMap<String, String>();
+                                        params.put("Authorization", "Bearer " + App.getToken());
+                                        return params;
+                                    }
+                                };
 
                                 String eventsListURL = url + "/" + person.getId() + "/" + PERSON_EVENTS;
                                 JsonObjectRequest eventsRequest = new JsonObjectRequest(Request.Method.GET, eventsListURL, null,
@@ -715,7 +799,15 @@ public class DatabaseHelper {
                                                 Log.e(TAG, "eventsRequest error: " + error.getLocalizedMessage());
                                                 requestQueue.gotResponse();
                                             }
-                                        });
+                                        })
+                                {
+                                    @Override
+                                    public Map<String, String> getHeaders() throws AuthFailureError {
+                                        Map<String, String> params = new HashMap<String, String>();
+                                        params.put("Authorization", "Bearer " + App.getToken());
+                                        return params;
+                                    }
+                                };
                                 requestQueue.add(ownEventsRequest);
                                 requestQueue.add(favouritePubsRequest);
                                 requestQueue.add(ownedPubsRequest);
@@ -739,7 +831,16 @@ public class DatabaseHelper {
                         Toast.makeText(context, "Can't connect to server.", Toast.LENGTH_SHORT).show();
                         requestQueue.gotResponse();
                     }
-                });
+                }
+        )
+        {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("Authorization", "Bearer " + App.getToken());
+                return params;
+        }
+        };
         requestQueue.add(personsRequest);
     }
 
