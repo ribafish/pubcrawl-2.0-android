@@ -14,6 +14,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.ws1617.iosl.pubcrawl20.App;
 import com.ws1617.iosl.pubcrawl20.DataModels.Event;
 import com.ws1617.iosl.pubcrawl20.DataModels.Person;
 import com.ws1617.iosl.pubcrawl20.DataModels.Pub;
@@ -260,7 +261,15 @@ public class DatabaseHelper {
                         Toast.makeText(context, "Can't connect to server.", Toast.LENGTH_SHORT).show();
                         requestQueue.gotResponse();
                     }
-                });
+                })
+        {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("Authorization", App.getToken());
+                return params;
+            }
+        };
         // Add the request to the RequestQueue.
         requestQueue.add(eventsRequest);
 
@@ -403,7 +412,15 @@ public class DatabaseHelper {
                 Toast.makeText(context, "Can't connect to server.", Toast.LENGTH_SHORT).show();
                 requestQueue.gotResponse();
             }
-        });
+        })
+        {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("Authorization", App.getToken());
+                return params;
+            }
+        };
         requestQueue.add(pubsRequest);
     }
 
@@ -625,12 +642,11 @@ public class DatabaseHelper {
         )
         {
             @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
+            public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> params = new HashMap<String, String>();
-                params.put("client_id", "649804390923-7mov7q7g42kbod1do8ikvhtgdu0m58ai.apps.googleusercontent.com");
-                params.put("client_secret", "3zRUO4fOIBwLlIU8VntClGB6");
+                params.put("Authorization", App.getToken());
                 return params;
-            }
+        }
         };
         requestQueue.add(personsRequest);
     }

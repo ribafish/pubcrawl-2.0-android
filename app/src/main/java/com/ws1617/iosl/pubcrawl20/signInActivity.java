@@ -8,6 +8,12 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -19,6 +25,12 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.OptionalPendingResult;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Scope;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
@@ -124,6 +136,7 @@ public class SignInActivity extends AppCompatActivity implements
 
       String authCode = acct.getServerAuthCode();
       mTextAuthCode.setText("Auth Code: " + authCode);
+      getToken(authCode);
     } else {
       // Signed out, show unauthenticated UI.
       Log.d(TAG, "Signed out - Should be here!");
@@ -178,6 +191,49 @@ public class SignInActivity extends AppCompatActivity implements
   private void showApp() {
     Intent intent = new Intent(this, MainActivity.class);
     this.startActivity(intent);
+  }
+
+  private void getToken(final String authCode) {
+    RequestQueue queue = Volley.newRequestQueue(this);
+    String url = "https://www.googleapis.com/oauth2/v4/token";
+    StringRequest postRequest = new StringRequest(Request.Method.POST, url,
+      new Response.Listener<String>()
+      {
+        @Override
+        public void onResponse(String response) {
+          // response
+          Log.d("Response", response);
+          try {
+            JSONObject jsonObject = new JSONObject(response);
+            App.setToken(jsonObject.getString("access_token"));
+          } catch (JSONException e) {
+            e.printStackTrace();
+          }
+
+        }
+      },
+      new Response.ErrorListener()
+      {
+        @Override
+        public void onErrorResponse(VolleyError error) {
+          // error
+          Log.d("Error.Response", error.getMessage());
+        }
+      }
+    ) {
+      @Override
+      protected Map<String, String> getParams()
+      {
+        Map<String, String>  params = new HashMap<String, String>();
+        params.put("code", authCode);
+        params.put("client_id", "649804390923-7mov7q7g42kbod1do8ikvhtgdu0m58ai.apps.googleusercontent.com");
+        params.put("client_secret",  "3zRUO4fOIBwLlIU8VntClGB6");
+        params.put("redirect_uri",  "https://developers.google.com/oauthplayground");
+        params.put("grant_type",  "authorization_code");
+        return params;
+      }
+    };
+    queue.add(postRequest);
   }
 
   @Override
