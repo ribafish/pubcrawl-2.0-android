@@ -163,4 +163,6 @@
     <string name="alert_remove_friend_title">Remove friend?</string>
     <string name="alert_remove_friend_message">Are you sure you want to remove this friend?</string>
     <string name="favourite">FAVOURITE</string>
+    <string name="no_joined_events">You havent joined any events yet...</string>
+    <string name="find_events">Find events</string>
 </resources>

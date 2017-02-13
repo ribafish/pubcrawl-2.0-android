@@ -49,7 +49,7 @@ public class SelectPubDialog extends DialogFragment {
     //Views
     Button mTimeFrom, mTimeTo, mDoneBtn;
     Spinner mPubsListSpinner;
-    TextView  mPubSize;
+    TextView mPubSize;
     View mRootView;
 
     //Data
@@ -82,6 +82,7 @@ public class SelectPubDialog extends DialogFragment {
 
     }
 
+
     public void showSelectedPub(Pub pub) {
 
         // there is two lists. one is the selected list and the other is the full list
@@ -90,21 +91,24 @@ public class SelectPubDialog extends DialogFragment {
         initPubList();
         if (pubsList == null || pub == null)
             return;
-        pubPosition = pubsList.indexOf(pub);
-
+        for (int i = 0 ; i < pubsList.size(); i++) {
+            if (pubsList.get(i).getId() == pub.getId()) {
+                pubPosition = i;
+                break;
+            }
+        }
         if (pubPosition >= pubsList.size()) return;
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-     }
-
+    }
 
 
     private void initView() {
 
-         mPubSize = (TextView) mRootView.findViewById(R.id.pub_dialog_pub_size);
+        mPubSize = (TextView) mRootView.findViewById(R.id.pub_dialog_pub_size);
 
         mDoneBtn = (Button) mRootView.findViewById(R.id.pub_dialog_pub_done);
         mDoneBtn.setOnClickListener(mDoneBtnClickedListener);
@@ -199,7 +203,7 @@ public class SelectPubDialog extends DialogFragment {
         mPubSize.setText(String.valueOf(this.selectedPub.getSize()));
     }
 
-    interface OnSelectPubDialogDismissed {
+    public interface OnSelectPubDialogDismissed {
         void addPubToList(PubMiniModel newPub);
     }
 }

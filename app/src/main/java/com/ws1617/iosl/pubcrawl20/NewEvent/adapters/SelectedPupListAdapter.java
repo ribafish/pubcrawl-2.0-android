@@ -45,7 +45,7 @@ public class SelectedPupListAdapter extends RecyclerView.Adapter<SelectedPupList
         return selectedPups.size();
     }
 
-    public class pupViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class pupViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
 
         TextView pubName;
         TextView startTime,endTime;
@@ -53,6 +53,7 @@ public class SelectedPupListAdapter extends RecyclerView.Adapter<SelectedPupList
         public pupViewHolder(View itemView) {
             super(itemView);
             itemView.setOnClickListener(this);
+            itemView.setOnLongClickListener(this);
             pubName = (TextView) itemView.findViewById(R.id.selected_pub_item_title);
             startTime = (TextView) itemView.findViewById(R.id.txt_time_from);
             endTime = (TextView) itemView.findViewById(R.id.txt_time_to);
@@ -66,12 +67,19 @@ public class SelectedPupListAdapter extends RecyclerView.Adapter<SelectedPupList
 
         @Override
         public void onClick(View view) {
-            mOnPubItemClickListener.onPubItemClicked(getAdapterPosition());
+            mOnPubItemClickListener.onPubItemClicked(getAdapterPosition(),false);
+        }
+
+
+        @Override
+        public boolean onLongClick(View view) {
+            mOnPubItemClickListener.onPubItemClicked(getAdapterPosition(),true);
+            return true;
         }
     }
 
 
     public interface OnPubItemClickListener {
-        void onPubItemClicked(int itemPosition);
+        void onPubItemClicked(int itemPosition, boolean isLongClick);
     }
 }

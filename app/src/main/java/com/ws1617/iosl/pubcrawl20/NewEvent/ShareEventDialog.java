@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
@@ -33,6 +34,9 @@ public class ShareEventDialog extends DialogFragment {
     View rootView;
     String mBarcodeData = "test";
 
+    LinearLayout inProcessView;
+    LinearLayout qrCodeView;
+
     public ShareEventDialog() {
     }
 
@@ -44,7 +48,12 @@ public class ShareEventDialog extends DialogFragment {
         rootView = LayoutInflater.from(getActivity()).inflate(R.layout.view_invite_dialog
                 , null);
         alertDialog.setView(rootView);
-        initDialogView(rootView);
+        //initQRCodeView(rootView);
+
+        inProcessView = (LinearLayout) rootView.findViewById(R.id.spinner_placeholder);
+        qrCodeView = (LinearLayout) rootView.findViewById(R.id.qrcode_placeholder);
+
+        initInProcessView();
         return alertDialog.create();
     }
 
@@ -59,10 +68,14 @@ public class ShareEventDialog extends DialogFragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        // initDialogView(rootView);
+
     }
 
-    void initDialogView(View rootView) {
+    public void initQRCodeView() {
+
+        inProcessView.setVisibility(View.GONE);
+        qrCodeView.setVisibility(View.VISIBLE);
+
         mQrCodeImg = (ImageView) rootView.findViewById(R.id.invite_barcode);
         Bitmap bmp = null;
         try {
@@ -73,6 +86,11 @@ public class ShareEventDialog extends DialogFragment {
         } catch (WriterException e) {
             e.printStackTrace();
         }
+    }
+
+    public void  initInProcessView(){
+        inProcessView.setVisibility(View.VISIBLE);
+        qrCodeView.setVisibility(View.GONE);
     }
 
 
@@ -98,5 +116,7 @@ public class ShareEventDialog extends DialogFragment {
         bitmap.setPixels(pixels, 0, w, 0, 0, w, h);
         return bitmap;
     }
+
+
 }
 

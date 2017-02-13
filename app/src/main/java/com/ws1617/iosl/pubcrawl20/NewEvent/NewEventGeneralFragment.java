@@ -16,10 +16,12 @@ import com.ws1617.iosl.pubcrawl20.DataModels.Event;
 import com.ws1617.iosl.pubcrawl20.R;
 import com.ws1617.iosl.pubcrawl20.Utilites.DateTimeTools;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 public class NewEventGeneralFragment extends Fragment {
     private static final String TAG = "NewEventGeneralFragment";
@@ -64,8 +66,8 @@ public class NewEventGeneralFragment extends Fragment {
         @Override
         public void onDateSet(DatePicker view, int year, int monthOfYear,
                               int dayOfMonth) {
-            int month= monthOfYear +1;
-            datePickerButton.setText(dayOfMonth + "." +  month + "." + year);
+            int month = monthOfYear + 1;
+            datePickerButton.setText(dayOfMonth + "." + month + "." + year);
         }
     };
 
@@ -76,12 +78,16 @@ public class NewEventGeneralFragment extends Fragment {
     }
 
     public Event updateGeneralInfo(Event event) {
-        String eventTitle = mEventTitleTxt.getText().toString();
+
+        String eventTitle = mEventTitleTxt.getText().toString().trim();
         String eventDesc = mEventDescription.getText().toString();
         Date date = new Date();
+
+        String EVENT_DATE_FORMAT = "dd.MM.yyyy";
+        DateFormat dateFormat = new SimpleDateFormat(EVENT_DATE_FORMAT, Locale.ENGLISH);
+
         try {
-            SimpleDateFormat dataFormat = new SimpleDateFormat("dd.mm.yyyy");
-            date = dataFormat.parse(datePickerButton.getText().toString());
+            date = dateFormat.parse(datePickerButton.getText().toString());
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -91,10 +97,6 @@ public class NewEventGeneralFragment extends Fragment {
         event.setEventName(eventTitle);
         event.setDescription(eventDesc);
         event.setTracked(tracked);
-
-
         return event;
     }
-
-
 }

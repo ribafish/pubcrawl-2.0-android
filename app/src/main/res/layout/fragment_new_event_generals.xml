@@ -14,6 +14,7 @@
         android:layout_alignParentTop="true"
         android:checked="true"
         android:clickable="true"
+        android:visibility="gone"
         android:elevation="1dp"
         android:text="@string/event_tracked" />
 
