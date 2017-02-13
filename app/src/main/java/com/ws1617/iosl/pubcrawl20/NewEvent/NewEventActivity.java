@@ -11,9 +11,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.ws1617.iosl.pubcrawl20.DataModels.Event;
-import com.ws1617.iosl.pubcrawl20.Database.DatabaseException;
 import com.ws1617.iosl.pubcrawl20.Database.DatabaseHelper;
-import com.ws1617.iosl.pubcrawl20.Database.EventDbHelper;
 import com.ws1617.iosl.pubcrawl20.NewEvent.adapters.NewEventPagerAdapter;
 import com.ws1617.iosl.pubcrawl20.R;
 
@@ -86,7 +84,6 @@ public class NewEventActivity extends AppCompatActivity {
         if (!checkSatisfyMinReq(event))
             return;
         else {
-            //TODO:show dialog without the QRCode , just a spinner
             final ShareEventDialog shareEventDialog = new ShareEventDialog();
             shareEventDialog.show(getFragmentManager(), "shareEventDialog");
 
@@ -95,16 +92,13 @@ public class NewEventActivity extends AppCompatActivity {
                 public void onSuccess() {
                     //refresh the whole DB
                     DatabaseHelper.resetEventsDatabase(getApplicationContext());
-                    //TODO:show the QRCode + hide the spinner
                     shareEventDialog.initQRCodeView();
-
                 }
 
                 @Override
                 public void onFail() {
                     // show error
                     Toast.makeText(getApplicationContext(), "Error while creating the Event .. ", Toast.LENGTH_SHORT).show();
-                    // TODO: dismiss the dialog
                     shareEventDialog.dismiss();
                 }
             });

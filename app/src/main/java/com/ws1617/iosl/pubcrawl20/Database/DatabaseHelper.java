@@ -16,8 +16,6 @@ import com.android.volley.ServerError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 import com.ws1617.iosl.pubcrawl20.DataModels.Event;
 import com.ws1617.iosl.pubcrawl20.DataModels.Person;
 import com.ws1617.iosl.pubcrawl20.DataModels.Pub;
@@ -30,9 +28,7 @@ import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.UnsupportedEncodingException;
-import java.sql.Time;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import static com.ws1617.iosl.pubcrawl20.Database.JsonParser.EMBEDDED;
@@ -96,16 +92,7 @@ public class DatabaseHelper {
         downloadEvents(context);
     }
 
-    public static void addEvent(Context context, final Event event,
-                                final NewEventActivity.EventCreation eventCreation) {
-        final RequestQueueHelper requestQueue = new RequestQueueHelper(context);
-        final String url;
-        try {
-            url = getServerUrl(context) + EVENTS;
-        } catch (StringIndexOutOfBoundsException e) {
-            Log.e(TAG, e.getLocalizedMessage());
-            return;
-        }
+    private static JSONObject prepareEventObj(Event event,Context context) {
         JSONObject object = new JSONObject();
         try {
             object.put("eventName", event.getEventName());
@@ -118,53 +105,135 @@ public class DatabaseHelper {
             object.put("tracked", false);
             object.put("eventImage", null);
             object.put("timeslotList", timeSlotToJsonArray(event.getTimeSlotList()));
-
+            object.put("pubsList", pubLinksToJsonArray(event.getPubIds(),context));
         } catch (JSONException e) {
             e.printStackTrace();
         }
+        return object;
+    }
+
+    private static JSONArray pubLinksToJsonArray(ArrayList<Long> PubIds,Context context) {
+        JSONArray pubsList = new JSONArray();
+        for (Long id : PubIds) {
+            String link = getServerUrl(context)+PUBS +"/"+id;
+            pubsList.put(link);
+        }
+        return pubsList;
+    }
+
+    private static void onLocalErrorResponse(VolleyError error, NewEventActivity.EventCreation eventCreation) {
+        // As of f605da3 the following should work
+        NetworkResponse response = error.networkResponse;
+        if (error instanceof ServerError && response != null) {
+            try {
+                String res = new String(response.data,
+                        HttpHeaderParser.parseCharset(response.headers, "utf-8"));
+                // Now you can use any deserializer to make sense of data
+                JSONObject obj = new JSONObject(res);
+            } catch (UnsupportedEncodingException e1) {
+                // Couldn't properly decode data to string
+                eventCreation.onFail();
+                e1.printStackTrace();
+            } catch (JSONException e2) {
+                // returned data is not JSONObject?
+                eventCreation.onFail();
+                e2.printStackTrace();
+            }
+        }
+    }
+
+    public static void addEvent(final Context context, final Event event,
+                                final NewEventActivity.EventCreation eventCreation) {
+        final RequestQueueHelper requestQueue = new RequestQueueHelper(context);
+        final String url;
+        try {
+            url = getServerUrl(context) + EVENTS;
+        } catch (StringIndexOutOfBoundsException e) {
+            Log.e(TAG, e.getLocalizedMessage());
+            return;
+        }
+        JSONObject object = prepareEventObj(event,context);
 
         PubJsonObjectRequest jsonObjectRequest = new PubJsonObjectRequest(Request.Method.POST, url,
                 object, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-                addPubsListToEvent();
-
-
-                //should be called after successfully adding the pubsList
-                // should show spinner until every thing is created successfully
                 eventCreation.onSuccess();
+                //patchPubsListToEvent(context,event,eventCreation);
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                // As of f605da3 the following should work
-                NetworkResponse response = error.networkResponse;
-                if (error instanceof ServerError && response != null) {
-                    try {
-                        String res = new String(response.data,
-                                HttpHeaderParser.parseCharset(response.headers, "utf-8"));
-                        // Now you can use any deserializer to make sense of data
-                        JSONObject obj = new JSONObject(res);
-                    } catch (UnsupportedEncodingException e1) {
-                        // Couldn't properly decode data to string
-                        eventCreation.onFail();
-                        e1.printStackTrace();
-                    } catch (JSONException e2) {
-                        // returned data is not JSONObject?
-                        eventCreation.onFail();
-                        e2.printStackTrace();
-                    }
-                }
-
+                onLocalErrorResponse(error, eventCreation);
             }
         });
         requestQueue.add(jsonObjectRequest);
     }
 
-    public static void addPubsListToEvent(){
+    public static void patchPubsListToEvent(Context context, Event event, final NewEventActivity.EventCreation eventCreation) {
+        final RequestQueueHelper requestQueue = new RequestQueueHelper(context);
+        final String url;
+        try {
+            url = getServerUrl(context) + EVENTS + "/" + event.getId() + "/" + "pubsList";
+        } catch (StringIndexOutOfBoundsException e) {
+            Log.e(TAG, e.getLocalizedMessage());
+            return;
+        }
+        JSONObject mainObject = preparePubsListObje(event);
 
+        PubJsonObjectRequest jsonObjectRequest = new PubJsonObjectRequest(Request.Method.PATCH, url,
+                mainObject, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                eventCreation.onSuccess();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                onLocalErrorResponse(error, eventCreation);
+            }
+        });
+        requestQueue.add(jsonObjectRequest);
     }
 
+
+    private static JSONObject preparePubsListObje(Event event) {
+        JSONObject mainObject = new JSONObject();
+        try {
+            JSONArray pubsJsonArray = new JSONArray();
+            List<Long> pubsListID = event.getPubIds();
+            for (Long pubID : pubsListID) {
+                PubDbHelper pubDbHelper = new PubDbHelper();
+                try {
+                    Pub pub = pubDbHelper.getPub(pubID);
+                    JSONObject pubJsonObj = new JSONObject();
+                    pubJsonObj.put("pubName", pub.getPubName());
+                    pubJsonObj.put("pubImage", pub.getImages());
+                    pubJsonObj.put("price", pub.getPrices());
+                    pubJsonObj.put("rating", pub.getRating());
+                    pubJsonObj.put("lat", pub.getLatLng().latitude);
+                    pubJsonObj.put("lng", pub.getLatLng().longitude);
+                    pubJsonObj.put("description", pub.getDescription());
+                    pubJsonObj.put("adress", "null");
+                    pubJsonObj.put("size", pub.getSize());
+                    pubJsonObj.put("closingTime", "null");
+                    pubJsonObj.put("openingTime", "null");
+
+                  /*  pubJsonObj.put("_links", pub.getRating());*/
+
+                    pubsJsonArray.put(pubJsonObj);
+                } catch (DatabaseException e) {
+                    e.printStackTrace();
+                }
+            }
+            JSONObject embeddedObj = new JSONObject();
+            embeddedObj.put("pubs", pubsJsonArray);
+            mainObject.put("_embedded", embeddedObj);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return mainObject;
+    }
 
     public static JSONArray timeSlotToJsonArray(List<TimeSlot> timeSlotList) {
         JSONArray timeSlot = new JSONArray();
@@ -172,7 +241,7 @@ public class DatabaseHelper {
             JSONObject object = new JSONObject();
             try {
                 object.put("startingTime", String.valueOf(ts.getStartTime().getTime()));
-                object.put("endingTime",  String.valueOf(ts.getEndTime().getTime()));
+                object.put("endingTime", String.valueOf(ts.getEndTime().getTime()));
                 object.put("pubId", ts.getPubId());
             } catch (JSONException e) {
                 e.printStackTrace();
