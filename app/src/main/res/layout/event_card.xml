@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:map="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:padding="8dp"
     android:layout_width="match_parent"
@@ -179,14 +180,14 @@
                 <com.google.android.gms.maps.MapView
                     android:id="@+id/current.route.mapview"
                     xmlns:map="http://schemas.android.com/apk/res-auto"
+                    android:name="com.google.android.gms.maps.SupportMapFragment"
                     android:layout_width="match_parent"
                     android:layout_height="200dp"
                     android:layout_weight="2"
-                    android:animateLayoutChanges="true"
                     android:layout_marginBottom="5dp"
                     map:liteMode="true"
                     map:mapType="normal"
-                    map:cameraZoom="15"/>
+                    map:cameraZoom="0"/>
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/current.pubs.recyclerview"

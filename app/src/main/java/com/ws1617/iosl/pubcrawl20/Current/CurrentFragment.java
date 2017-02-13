@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
@@ -38,7 +39,6 @@ import java.util.ArrayList;
  */
 
 public class CurrentFragment extends Fragment {
-    public static final String TITLE = "Current";
     private static final String TAG = "CurrentFragment";
     private ArrayList<EventMini> events = new ArrayList<>();
     private EventAdapter adapter;
@@ -60,10 +60,13 @@ public class CurrentFragment extends Fragment {
         adapter = new EventAdapter(getActivity(), events, metrics, fm);
 
         LinearLayoutManager llm = new LinearLayoutManager(getContext());
+        GridLayoutManager glm = new GridLayoutManager(getContext(), 1, GridLayoutManager.VERTICAL, false);
 
         recyclerView = (RecyclerView) rootView.findViewById(R.id.current_event_recycler_view);
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(llm);
+        // Delay attaching adapter to onResume
+//        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(glm);
+        recyclerView.setHasFixedSize(true);
 
         getEvents();
 
@@ -118,59 +121,13 @@ public class CurrentFragment extends Fragment {
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-        if (adapter != null) {
-            for (MapView m : adapter.getMapViews()) {
-                try {
-                    m.onStart();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        if (adapter != null) {
-            for (MapView m : adapter.getMapViews()) {
-                try {
-                    m.onStop();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-    }
-
-    @Override
     public void onLowMemory() {
         super.onLowMemory();
         if (adapter != null) {
             for (MapView m : adapter.getMapViews()) {
-                try {
-                    m.onLowMemory();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                m.onLowMemory();
             }
         }
-    }
-
-    @Override
-    public void onDestroy() {
-        if (adapter != null) {
-            for (MapView m : adapter.getMapViews()) {
-                try {
-                    m.onDestroy();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        super.onDestroy();
     }
 
     @Override
@@ -186,14 +143,11 @@ public class CurrentFragment extends Fragment {
             }
         };
         IntentFilter filter = new IntentFilter(RequestQueueHelper.BROADCAST_INTENT);
+        recyclerView.setAdapter(adapter);
         getContext().registerReceiver(receiver, filter);
         if (adapter != null) {
             for (MapView m : adapter.getMapViews()) {
-                try {
-                    m.onResume();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                m.onResume();
             }
         }
     }
@@ -204,26 +158,19 @@ public class CurrentFragment extends Fragment {
         getContext().unregisterReceiver(receiver);
         if (adapter != null) {
             for (MapView m : adapter.getMapViews()) {
-                try {
-                    m.onPause();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                m.onPause();
             }
         }
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
+    public void onDestroy() {
         if (adapter != null) {
             for (MapView m : adapter.getMapViews()) {
-                try {
-                    m.onSaveInstanceState(outState);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                m.onDestroy();
             }
         }
+        super.onDestroy();
     }
+
 }
