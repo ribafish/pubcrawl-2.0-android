@@ -100,7 +100,7 @@ public class EventViewHolder extends RecyclerView.ViewHolder implements OnMapRea
 
 
     @Override
-    public void onPubItemClicked(int itemPosition) {
+    public void onPubItemClicked(int itemPosition, boolean isLongClick) {
         Intent intent = new Intent(mContext, PubDetailsActivity.class);
         intent.putExtra("name", "Test Pub");
         intent.putExtra("id", pubs.get(itemPosition).getId());
