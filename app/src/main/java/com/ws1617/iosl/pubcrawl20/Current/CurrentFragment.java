@@ -21,6 +21,7 @@ import android.widget.LinearLayout;
 
 import com.google.android.gms.maps.MapView;
 import com.ws1617.iosl.pubcrawl20.DataModels.Event;
+import com.ws1617.iosl.pubcrawl20.DataModels.EventComparator;
 import com.ws1617.iosl.pubcrawl20.DataModels.Pub;
 import com.ws1617.iosl.pubcrawl20.DataModels.TimeSlot;
 import com.ws1617.iosl.pubcrawl20.Database.DatabaseException;
@@ -32,6 +33,7 @@ import com.ws1617.iosl.pubcrawl20.R;
 
 import java.sql.Time;
 import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * Created by Gasper Kojek on 9. 11. 2016.
@@ -113,6 +115,7 @@ public class CurrentFragment extends Fragment {
         if (events.size() > 0) {
             recyclerView.setVisibility(View.VISIBLE);
             noEventsLayout.setVisibility(View.GONE);
+            Collections.sort(events, new EventMiniComparator());
         } else {
             recyclerView.setVisibility(View.GONE);
             noEventsLayout.setVisibility(View.VISIBLE);
