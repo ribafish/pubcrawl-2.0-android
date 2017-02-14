@@ -141,9 +141,10 @@ public class DisplayEventsFragment extends Fragment implements OnMapReadyCallbac
         ((Button) rootView.findViewById(R.id.btn3)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                SharedPreferences sharedPref = view.getContext().getSharedPreferences(getString(R.string.preference_user), Context.MODE_PRIVATE);
+                int id = sharedPref.getInt(getString(R.string.user_id), -1);
                 Intent intent = new Intent(getContext(), PersonDetailsActivity.class);
-                intent.putExtra("name", "Test Person");
-                intent.putExtra("id", (long) 1);
+                intent.putExtra("id", id);
                 startActivity(intent);
             }
         });

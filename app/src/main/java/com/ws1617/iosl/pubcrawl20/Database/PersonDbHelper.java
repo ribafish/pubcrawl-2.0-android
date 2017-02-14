@@ -74,12 +74,7 @@ public class PersonDbHelper {
         long row_id;
 
         // add to person table
-        ContentValues values = new ContentValues();
-        values.put(PERSON_ID, person.getId());
-        values.put(DESCRIPTION, person.getDescription());
-        values.put(EMAIL, person.getEmail());
-        values.put(IMAGE, bitmapToBytes(person.getImages().get(0)));
-        values.put(USERNAME, person.getName());
+        ContentValues values = person.getContentValues();
 
         row_id = db.insert(TABLE_PERSONS, null, values);
         if (row_id == -1) { // Error - already exists -> update the person
@@ -154,7 +149,7 @@ public class PersonDbHelper {
         ContentValues values = new ContentValues();
         values.put(PERSON_ID, person.getId());
         values.put(DESCRIPTION, person.getDescription());
-        values.put(EMAIL, person.getEmail());
+        values.put(EMAIL, person.getMail());
         values.put(IMAGE, bitmapToBytes(person.getImages().get(0)));
         values.put(USERNAME, person.getName());
 

@@ -86,7 +86,7 @@ public class JsonParser {
     // Person
     public static final String PERSONS = "crawlers";
     private static final String PERSON_NAME = "userName";
-    private static final String PERSON_EMAIL = "email";
+    private static final String PERSON_PROFILE = "profile";
     private static final String PERSON_DESCRIPTION = "description";
     private static final String PERSON_IMAGE = "userImage";
 
@@ -271,9 +271,15 @@ public class JsonParser {
         Person person = new Person(id);
 
         person.setName(jsonPerson.getString(PERSON_NAME));
-        person.setEmail(jsonPerson.getString(PERSON_EMAIL));
-        person.setDescription(jsonPerson.getString(PERSON_DESCRIPTION));
-        person.setImage(decodeBitmapBase64(jsonPerson.getString(PERSON_IMAGE)));
+        person.setEmail(jsonPerson.getString(PERSON_PROFILE));
+        try {
+            person.setDescription(jsonPerson.getString(PERSON_DESCRIPTION));
+            person.setImage(decodeBitmapBase64(jsonPerson.getString(PERSON_IMAGE)));
+        }
+        catch (JSONException e) {
+            Log.d(TAG, e.getLocalizedMessage());
+        }
+
 
         Log.d(TAG, "Parsed person: " + person);
 

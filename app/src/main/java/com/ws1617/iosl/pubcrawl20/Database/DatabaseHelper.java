@@ -23,6 +23,7 @@ import com.ws1617.iosl.pubcrawl20.DataModels.Person;
 import com.ws1617.iosl.pubcrawl20.DataModels.Pub;
 import com.ws1617.iosl.pubcrawl20.DataModels.TimeSlot;
 import com.ws1617.iosl.pubcrawl20.NewEvent.NewEventActivity;
+import com.ws1617.iosl.pubcrawl20.R;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -850,7 +851,7 @@ public class DatabaseHelper {
 
         if (prefs.getString("server_ip", null) == null || prefs.getString("server_ip", "").length() < 10) {
             Log.e(TAG, "Server url not set, setting default");
-            url = "https://vm-74243.lal.in2p3.fr:8443/";
+            url = context.getResources().getString(R.string.url);
         } else {
             url = prefs.getString("server_ip", "").replace(" ", "") + "/";
         }

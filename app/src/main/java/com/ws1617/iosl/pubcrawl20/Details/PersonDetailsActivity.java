@@ -90,7 +90,7 @@ public class PersonDetailsActivity extends AppCompatActivity implements AppBarLa
         setContentView(R.layout.activity_person_details);
         context = getApplicationContext();
 
-        long id = getIntent().getLongExtra("id", -1);
+        long id = getIntent().getIntExtra("id", -1);
 
         getPerson(id);
 
