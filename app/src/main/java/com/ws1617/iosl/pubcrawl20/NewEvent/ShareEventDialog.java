@@ -9,6 +9,7 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
@@ -32,6 +33,7 @@ public class ShareEventDialog extends DialogFragment {
     //Views
     ImageView mQrCodeImg;
     View rootView;
+    Button closeBtn;
     String mBarcodeData = "test";
 
     LinearLayout inProcessView;
@@ -47,8 +49,15 @@ public class ShareEventDialog extends DialogFragment {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
         rootView = LayoutInflater.from(getActivity()).inflate(R.layout.view_invite_dialog
                 , null);
+        closeBtn = (Button) rootView.findViewById(R.id.invite_dialog_pub_done);
+        closeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), MainActivity.class);
+                getActivity().startActivity(intent);
+            }
+        });
         alertDialog.setView(rootView);
-        //initQRCodeView(rootView);
 
         inProcessView = (LinearLayout) rootView.findViewById(R.id.spinner_placeholder);
         qrCodeView = (LinearLayout) rootView.findViewById(R.id.qrcode_placeholder);
@@ -88,7 +97,7 @@ public class ShareEventDialog extends DialogFragment {
         }
     }
 
-    public void  initInProcessView(){
+    public void initInProcessView() {
         inProcessView.setVisibility(View.VISIBLE);
         qrCodeView.setVisibility(View.GONE);
     }

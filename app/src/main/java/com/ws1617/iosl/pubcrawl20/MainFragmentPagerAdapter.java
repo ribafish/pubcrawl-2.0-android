@@ -5,7 +5,6 @@ import android.graphics.drawable.Drawable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.AppCompatDrawableManager;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -14,7 +13,6 @@ import android.text.style.ImageSpan;
 import com.ws1617.iosl.pubcrawl20.Chat.ChatFragment;
 import com.ws1617.iosl.pubcrawl20.DisplayEvents.DisplayEventsFragment;
 import com.ws1617.iosl.pubcrawl20.Current.CurrentFragment;
-import com.ws1617.iosl.pubcrawl20.NotificationHistory.NotificationHistoryFragment;
 
 /**
  * Created by Gasper Kojek on 8. 11. 2016.
@@ -25,13 +23,12 @@ import com.ws1617.iosl.pubcrawl20.NotificationHistory.NotificationHistoryFragmen
  * one of the sections/tabs/pages.
  */
 public class MainFragmentPagerAdapter extends FragmentPagerAdapter {
-    private static int PAGES_NUM  = 4;
+    private static int PAGES_NUM  = 3;
     private Context context;
     private int[] imageResId = {
             R.drawable.beer_white,
             R.drawable.ic_info_outline_24dp,
-            R.drawable.ic_chat_bubble_24dp,
-            R.drawable.ic_assignment
+            R.drawable.ic_chat_bubble_24dp
     };
 
     public MainFragmentPagerAdapter(FragmentManager fm, Context context) {
@@ -48,8 +45,6 @@ public class MainFragmentPagerAdapter extends FragmentPagerAdapter {
                 return new CurrentFragment();
             case 2:
                 return new ChatFragment();
-            case 3:
-                return new NotificationHistoryFragment();
             default:
                 return new DisplayEventsFragment();
         }
