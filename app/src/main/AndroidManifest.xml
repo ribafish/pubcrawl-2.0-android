@@ -33,7 +33,7 @@
             android:value="AIzaSyBr9NWyMTllR-2AsS543TgWjMaRruQE5P4" />
 
         <activity
-            android:name=".SignInActivity"
+            android:name=".StartActivity"
             android:noHistory="true"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme">

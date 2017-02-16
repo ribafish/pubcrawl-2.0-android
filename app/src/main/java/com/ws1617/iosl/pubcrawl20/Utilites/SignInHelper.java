@@ -23,7 +23,7 @@ import com.ws1617.iosl.pubcrawl20.Database.DatabaseHelper;
 import com.ws1617.iosl.pubcrawl20.Database.PersonDbHelper;
 import com.ws1617.iosl.pubcrawl20.Database.RequestQueueHelper;
 import com.ws1617.iosl.pubcrawl20.R;
-import com.ws1617.iosl.pubcrawl20.SignInActivity;
+import com.ws1617.iosl.pubcrawl20.StartActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -43,9 +43,9 @@ import static com.ws1617.iosl.pubcrawl20.Database.JsonParser.PERSONS;
 public class SignInHelper {
 
   private static final String TAG = "SignInHelper";
-  private final SignInActivity activity;
+  private final StartActivity activity;
 
-  public SignInHelper(SignInActivity act) {
+  public SignInHelper(StartActivity act) {
     activity = act;
   }
 
