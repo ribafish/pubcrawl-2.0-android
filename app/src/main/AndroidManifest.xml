@@ -51,11 +51,10 @@
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
 
-
-
         <activity
             android:name=".NewEvent.NewEventActivity"
             android:configChanges="orientation"
+            android:noHistory="true"
             android:parentActivityName=".MainActivity"
             android:screenOrientation="portrait">
             <meta-data
@@ -65,12 +64,14 @@
         <activity
             android:name=".SettingsActivity"
             android:parentActivityName=".MainActivity"
+            android:noHistory="true"
             android:label="@string/title_activity_settings"
             android:theme="@style/AppTheme"
             android:configChanges="orientation"
             android:screenOrientation="portrait"/>
         <activity
             android:name=".ScanQR.BarcodeCaptureActivity"
+            android:noHistory="true"
             android:label="Read Barcode"
             android:parentActivityName=".MainActivity"
             android:screenOrientation="portrait"
@@ -78,6 +79,7 @@
 
         <activity
             android:name=".Search.SearchActivity"
+            android:noHistory="true"
             android:label="Search"
             android:launchMode="singleTop"
             android:parentActivityName=".MainActivity"

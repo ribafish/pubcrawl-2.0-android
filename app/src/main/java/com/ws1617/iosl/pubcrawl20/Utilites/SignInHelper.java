@@ -17,7 +17,10 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.ws1617.iosl.pubcrawl20.App;
+import com.ws1617.iosl.pubcrawl20.DataModels.Person;
+import com.ws1617.iosl.pubcrawl20.Database.DatabaseException;
 import com.ws1617.iosl.pubcrawl20.Database.DatabaseHelper;
+import com.ws1617.iosl.pubcrawl20.Database.PersonDbHelper;
 import com.ws1617.iosl.pubcrawl20.Database.RequestQueueHelper;
 import com.ws1617.iosl.pubcrawl20.R;
 import com.ws1617.iosl.pubcrawl20.SignInActivity;
@@ -63,7 +66,6 @@ public class SignInHelper {
           } catch (JSONException e) {
             e.printStackTrace();
           }
-
         }
       },
       new Response.ErrorListener()
@@ -90,7 +92,7 @@ public class SignInHelper {
     queue.add(postRequest);
   }
 
-  private void getCrawlerID(final GoogleSignInAccount acc) {
+  private void setCrawlerID(final GoogleSignInAccount acc) {
     final RequestQueueHelper requestQueue = new RequestQueueHelper(activity);
     String url = DatabaseHelper.getServerUrl(activity)+ "/crawlers/";
     JsonObjectRequest personrequest = new JsonObjectRequest(Request.Method.GET, url, null,
@@ -99,13 +101,15 @@ public class SignInHelper {
         public void onResponse(JSONObject response) {
           try {
             JSONArray crawlersJSON = response.getJSONObject(EMBEDDED).getJSONArray(PERSONS);
+            boolean knownUser = false;
             for (int i = 0; i < crawlersJSON.length(); i++) {
               JSONObject jsonCrawler = crawlersJSON.getJSONObject(i);
               if(jsonCrawler.getString("profile").equals(acc.getEmail())) {
-                setCrawler(jsonCrawler);
+                knownUser = setCrawler(jsonCrawler);
+                if(knownUser) break;
               }
             }
-            createCrawler(acc);
+            if(!knownUser) createCrawler(acc);
           } catch (Exception e) {
             Log.e(TAG, "eventsRequest error: " + e.getLocalizedMessage());
           }
@@ -130,19 +134,19 @@ public class SignInHelper {
     requestQueue.add(personrequest);
   }
 
-  private void createCrawler(GoogleSignInAccount acc) {
+  private void createCrawler(final GoogleSignInAccount acc) {
     try {
       RequestQueueHelper requestQueue = new RequestQueueHelper(activity);
       String url = DatabaseHelper.getServerUrl(activity)+ "/crawlers/";
       JSONObject jsonBody = new JSONObject();
       jsonBody.put("userName", acc.getDisplayName());
       jsonBody.put("profile", acc.getEmail());
-      jsonBody.put("Authorization", "Bearer " + App.getToken());
       final String requestBody = jsonBody.toString();
 
       StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
         @Override
         public void onResponse(String response) {
+          setCrawlerID(acc);
           Log.i("VOLLEY", response);
         }
       }, new Response.ErrorListener() {
@@ -167,6 +171,13 @@ public class SignInHelper {
         }
 
         @Override
+        public Map<String, String> getHeaders() throws AuthFailureError {
+          Map<String, String> params = new HashMap<String, String>();
+          params.put("Authorization", "Bearer " + App.getToken());
+          return params;
+        }
+
+        @Override
         protected Response<String> parseNetworkResponse(NetworkResponse response) {
           String responseString = "";
           if (response != null) {
@@ -187,12 +198,29 @@ public class SignInHelper {
     SharedPreferences sharedPref = activity.getSharedPreferences(activity.getString(R.string.preference_user), Context.MODE_PRIVATE);
     int id = sharedPref.getInt(activity.getString(R.string.user_id), -1);
     if(id == -1) {
-      getCrawlerID(acc);
+      setCrawlerID(acc);
     }
+    checkUser(acc, id);
     activity.showApp();
   }
 
-  private void setCrawler(JSONObject json) {
+	/**
+   * Method to check if user in shared prefs is correct
+   * @param acc
+   * @param id
+   */
+  private void checkUser(GoogleSignInAccount acc, int id) {
+    Person person = null;
+    try {
+      person = new PersonDbHelper().getPerson(id);
+    } catch (DatabaseException e) {
+      Log.d(TAG, "Person: id " + id + " not in database, needed to create");
+    }
+    if(person!=null)  return;
+    setCrawlerID(acc);
+  }
+
+  private boolean setCrawler(JSONObject json) {
     Log.i(TAG, json.toString());
     SharedPreferences sharedPref = activity.getSharedPreferences(activity.getString(R.string.preference_user), Context.MODE_PRIVATE);
     try {
@@ -203,8 +231,9 @@ public class SignInHelper {
       sharedPref.edit().putInt(activity.getString(R.string.user_id), getIDfromURL(link)).apply();
     } catch (JSONException e) {
       e.printStackTrace();
-      return;
+      return false;
     }
+    return true;
   }
 
   /**
