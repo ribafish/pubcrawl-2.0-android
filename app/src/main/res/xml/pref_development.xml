@@ -4,10 +4,10 @@
         android:capitalize="none"
         android:inputType="textAutoComplete"
         android:key="server_ip"
-        android:defaultValue="https://vm-74243.lal.in2p3.fr:8445/"
+        android:defaultValue="https://vm-74243.lal.in2p3.fr:8443/"
         android:maxLines="1"
         android:selectAllOnFocus="true"
-        android:hint="https://vm-74243.lal.in2p3.fr:8445/"
+        android:hint="https://vm-74243.lal.in2p3.fr:8443/"
         android:singleLine="true"
         android:title="Server address" />
 
