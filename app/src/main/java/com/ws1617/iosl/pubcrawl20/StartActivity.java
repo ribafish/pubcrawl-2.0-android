@@ -87,7 +87,6 @@ public class StartActivity extends AppCompatActivity implements
 			opr.setResultCallback(new ResultCallback<GoogleSignInResult>() {
 				@Override
 				public void onResult(GoogleSignInResult googleSignInResult) {
-					hideProgressDialog();
 					handleSignInResult(googleSignInResult);
 				}
 			});
@@ -119,10 +118,10 @@ public class StartActivity extends AppCompatActivity implements
 			GoogleSignInAccount acct = result.getSignInAccount();
 			SignInHelper signIn = new SignInHelper(this);
 			signIn.getToken(acct);
-
 		} else {
+			hideProgressDialog();
 			// Signed out, show unauthenticated UI.
-			Log.d(TAG, "Signed out - Shouldnt be here!");
+			Log.d(TAG, "No signin found!");
 		}
 	}
 	// [END handleSignInResult]
@@ -172,6 +171,7 @@ public class StartActivity extends AppCompatActivity implements
 	public void showApp() {
 		Intent intent = new Intent(this, MainActivity.class);
 		this.startActivity(intent);
+		finish();
 	}
 
 

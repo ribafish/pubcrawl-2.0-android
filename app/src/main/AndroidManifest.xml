@@ -34,7 +34,6 @@
 
         <activity
             android:name=".StartActivity"
-            android:noHistory="true"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme">
             <intent-filter>
