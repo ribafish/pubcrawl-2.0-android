@@ -171,7 +171,15 @@ public class DatabaseHelper {
             public void onErrorResponse(VolleyError error) {
                 onLocalErrorResponse(error, eventCreation);
             }
-        });
+        })
+        {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("Authorization", "Bearer " + App.getToken());
+                return params;
+            }
+        };
         requestQueue.add(jsonObjectRequest);
     }
 
@@ -197,7 +205,15 @@ public class DatabaseHelper {
             public void onErrorResponse(VolleyError error) {
                 onLocalErrorResponse(error, eventCreation);
             }
-        });
+        })
+        {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("Authorization", "Bearer " + App.getToken());
+                return params;
+            }
+        };
         requestQueue.add(jsonObjectRequest);
     }
 
