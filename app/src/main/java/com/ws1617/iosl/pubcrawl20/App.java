@@ -34,6 +34,6 @@ public class App extends Application {
   }
 
   public static String getToken() {
-    return token.isEmpty() ? "" : token;
+    return token == null ? "" : token.isEmpty() ? "" : token;
   }
 }

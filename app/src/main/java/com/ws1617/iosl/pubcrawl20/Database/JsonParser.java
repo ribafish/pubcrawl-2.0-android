@@ -85,10 +85,10 @@ public class JsonParser {
 
     // Person
     public static final String PERSONS = "crawlers";
-    private static final String PERSON_NAME = "userName";
-    private static final String PERSON_PROFILE = "profile";
-    private static final String PERSON_DESCRIPTION = "description";
-    private static final String PERSON_IMAGE = "userImage";
+    public static final String PERSON_NAME = "userName";
+    public static final String PERSON_PROFILE = "profileID";
+    public static final String PERSON_DESCRIPTION = "description";
+    public static final String PERSON_IMAGE = "userImage";
 
     public static final String PERSON = "crawler";
     public static final String PERSON_OWNED_EVENTS = "ownEvents";

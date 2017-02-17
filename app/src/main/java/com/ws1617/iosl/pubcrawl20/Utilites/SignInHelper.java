@@ -33,8 +33,11 @@ import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.ws1617.iosl.pubcrawl20.Database.DatabaseHelper.resetPersonsDatabase;
 import static com.ws1617.iosl.pubcrawl20.Database.JsonParser.EMBEDDED;
 import static com.ws1617.iosl.pubcrawl20.Database.JsonParser.PERSONS;
+import static com.ws1617.iosl.pubcrawl20.Database.JsonParser.PERSON_NAME;
+import static com.ws1617.iosl.pubcrawl20.Database.JsonParser.PERSON_PROFILE;
 
 /**
  * Created by Icke-Hier on 14.02.2017.
@@ -101,15 +104,19 @@ public class SignInHelper {
         public void onResponse(JSONObject response) {
           try {
             JSONArray crawlersJSON = response.getJSONObject(EMBEDDED).getJSONArray(PERSONS);
-            boolean knownUser = false;
+            //boolean knownUser = false;
             for (int i = 0; i < crawlersJSON.length(); i++) {
               JSONObject jsonCrawler = crawlersJSON.getJSONObject(i);
-              if(jsonCrawler.getString("profile").equals(acc.getEmail())) {
-                knownUser = setCrawler(jsonCrawler);
-                if(knownUser) break;
+              if(isKnownUser(jsonCrawler, acc)) {
+                requestQueue.gotResponse();
+                return;
               }
+              /*if(jsonCrawler.getString("profile").equals(acc.getEmail())) {
+                isKnownUser = setCrawler(jsonCrawler);
+                if(isKnownUser) break;
+              }*/
             }
-            if(!knownUser) createCrawler(acc);
+            createCrawler(acc);
           } catch (Exception e) {
             Log.e(TAG, "eventsRequest error: " + e.getLocalizedMessage());
           }
@@ -134,19 +141,27 @@ public class SignInHelper {
     requestQueue.add(personrequest);
   }
 
+  private boolean isKnownUser(JSONObject jsonCrawler, GoogleSignInAccount acc) throws JSONException {
+    if(jsonCrawler.getString(PERSON_PROFILE).equals(acc.getId()))
+      return setCrawler(jsonCrawler);
+    return false;
+  }
+
   private void createCrawler(final GoogleSignInAccount acc) {
     try {
       RequestQueueHelper requestQueue = new RequestQueueHelper(activity);
       String url = DatabaseHelper.getServerUrl(activity)+ "/crawlers/";
       JSONObject jsonBody = new JSONObject();
-      jsonBody.put("userName", acc.getDisplayName());
-      jsonBody.put("profile", acc.getEmail());
+      jsonBody.put(PERSON_NAME, acc.getDisplayName());
+      jsonBody.put(PERSON_PROFILE, acc.getId());
       final String requestBody = jsonBody.toString();
 
       StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
         @Override
         public void onResponse(String response) {
           setCrawlerID(acc);
+          resetPersonsDatabase(activity);
+          Log.i(TAG, "reset Person database to add crawler " +acc.getId());
           Log.i("VOLLEY", response);
         }
       }, new Response.ErrorListener() {

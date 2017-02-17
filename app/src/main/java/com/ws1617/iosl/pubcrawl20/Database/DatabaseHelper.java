@@ -848,6 +848,8 @@ public class DatabaseHelper {
     public static String getServerUrl(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         String url;
+        boolean test = prefs.getString("server_ip", null) == null;
+        int size = prefs.getString("server_ip", "").length();
 
         if (prefs.getString("server_ip", null) == null || prefs.getString("server_ip", "").length() < 10) {
             Log.e(TAG, "Server url not set, setting default");
