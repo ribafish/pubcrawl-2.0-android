@@ -12,29 +12,8 @@ import com.ws1617.iosl.pubcrawl20.DataModels.Pub;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.ws1617.iosl.pubcrawl20.Database.Contracts.PubContract.CREATE_PUBS_TABLE;
-import static com.ws1617.iosl.pubcrawl20.Database.Contracts.PubContract.CREATE_PUB_EVENTS_TABLE;
-import static com.ws1617.iosl.pubcrawl20.Database.Contracts.PubContract.CREATE_PUB_IMAGES_TABLE;
-import static com.ws1617.iosl.pubcrawl20.Database.Contracts.PubContract.CREATE_TOP_PERSONS_TABLE;
-import static com.ws1617.iosl.pubcrawl20.Database.Contracts.PubContract.EVENT_ID;
-import static com.ws1617.iosl.pubcrawl20.Database.Contracts.PubContract.IMAGE;
-import static com.ws1617.iosl.pubcrawl20.Database.Contracts.PubContract.ITERATOR;
-import static com.ws1617.iosl.pubcrawl20.Database.Contracts.PubContract.LATITUDE;
-import static com.ws1617.iosl.pubcrawl20.Database.Contracts.PubContract.LONGITUDE;
-import static com.ws1617.iosl.pubcrawl20.Database.Contracts.PubContract.OPENING_TIMES;
-import static com.ws1617.iosl.pubcrawl20.Database.Contracts.PubContract.OWNER;
-import static com.ws1617.iosl.pubcrawl20.Database.Contracts.PubContract.PERSON_ID;
-import static com.ws1617.iosl.pubcrawl20.Database.Contracts.PubContract.PRICES;
-import static com.ws1617.iosl.pubcrawl20.Database.Contracts.PubContract.PUB_ID;
-import static com.ws1617.iosl.pubcrawl20.Database.Contracts.PubContract.PUB_NAME;
-import static com.ws1617.iosl.pubcrawl20.Database.Contracts.PubContract.RATING;
-import static com.ws1617.iosl.pubcrawl20.Database.Contracts.PubContract.SIZE;
-import static com.ws1617.iosl.pubcrawl20.Database.Contracts.PubContract.TABLE_PUBS;
-import static com.ws1617.iosl.pubcrawl20.Database.Contracts.PubContract.TABLE_PUB_EVENTS;
-import static com.ws1617.iosl.pubcrawl20.Database.Contracts.PubContract.TABLE_PUB_IMAGES;
-import static com.ws1617.iosl.pubcrawl20.Database.Contracts.PubContract.TABLE_TOP_PERSONS;
-import static com.ws1617.iosl.pubcrawl20.Database.DatabaseHelper.bitmapToBytes;
-import static com.ws1617.iosl.pubcrawl20.Database.DatabaseHelper.bytesToBitmap;
+import static com.ws1617.iosl.pubcrawl20.Database.Contracts.PubContract.*;
+import static com.ws1617.iosl.pubcrawl20.Database.DatabaseHelper.*;
 
 /**
  * Created by Gasper Kojek on 20. 12. 2016.

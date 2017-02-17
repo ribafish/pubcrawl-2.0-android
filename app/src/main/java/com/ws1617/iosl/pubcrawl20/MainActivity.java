@@ -51,6 +51,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     private MainFragmentPagerAdapter mainFragmentPagerAdapter;
     private GoogleApiClient mGoogleApiClient;
     private static Location mLastLocation;
+    private long _mBackTime = 0L;
+
 
     /**
      * The {@link ViewPager} that will host the section contents.
@@ -153,6 +155,16 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             }
         });
 
+    }
+
+    @Override
+    public void onBackPressed() {
+      long tm = System.currentTimeMillis();
+      if (tm - _mBackTime < 60000)
+        finish();
+      _mBackTime = tm;
+      Toast.makeText(this, R.string.App_Exit, Toast.LENGTH_SHORT).show();
+      return;
     }
 
     @Override

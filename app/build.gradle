@@ -5,19 +5,20 @@ android {
         config {
             keyAlias 'pubcrawl'
             keyPassword 'pubcrawl'
-            storeFile file('D:/Dropbox/FAKS/Erasmus/IoSL/pubcrawl_2_0/pubcrawl-2.0-android/app/keystore.jks')
+            storeFile file('D:/android_test/pubcrawl-2.0-android/app/keystore.jks')
             storePassword 'iosl2017'
         }
     }
     compileSdkVersion 25
     buildToolsVersion "24.0.3"
+
+    useLibrary 'org.apache.http.legacy'
     defaultConfig {
         applicationId "com.ws1617.iosl.pubcrawl20"
         minSdkVersion 15
         targetSdkVersion 25
         versionCode 10
         versionName "1.0"
-        useLibrary 'org.apache.http.legacy'
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
     }
@@ -25,6 +26,10 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.config
+        }
+        debug {
+            signingConfig signingConfigs.config
         }
     }
 }
@@ -34,19 +39,18 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile 'com.android.support:appcompat-v7:25.1.0'
-    compile 'com.android.support:design:25.1.0'
+    compile project(path: ':CordovaLib')
+    compile 'com.android.support:appcompat-v7:25.1.1'
+    compile 'com.android.support:design:25.1.1'
     compile 'com.google.android.gms:play-services-maps:9.8.0'
     compile 'com.google.android.gms:play-services-vision:9.8.0'
     compile 'com.google.android.gms:play-services-location:9.8.0'
-    compile 'com.android.support:support-v4:25.1.0'
+    compile 'com.google.android.gms:play-services-auth:9.8.0'
+    compile 'com.android.support:support-v4:25.1.1'
     compile 'com.github.clans:fab:1.6.4'
-    compile 'com.android.support:support-vector-drawable:25.1.0'
+    compile 'com.android.support:support-vector-drawable:25.1.1'
     compile 'com.android.volley:volley:1.0.0'
-    compile 'com.android.support:cardview-v7:25.1.0'
-    testCompile 'junit:junit:4.12'
+    compile 'com.android.support:cardview-v7:25.1.1'
     compile 'com.google.zxing:core:3.2.1'
-    compile project(path: ':CordovaLib')
-    compile 'com.google.code.gson:gson:2.4'
-    compile files('libs/khandroid-httpclient-4.2.3.jar')
+    testCompile 'junit:junit:4.12'
 }

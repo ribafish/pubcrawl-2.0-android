@@ -1,9 +1,17 @@
 package com.ws1617.iosl.pubcrawl20.DataModels;
 
+import android.content.ContentValues;
 import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
+
+import static com.ws1617.iosl.pubcrawl20.Database.Contracts.PersonContract.DESCRIPTION;
+import static com.ws1617.iosl.pubcrawl20.Database.Contracts.PersonContract.EMAIL;
+import static com.ws1617.iosl.pubcrawl20.Database.Contracts.PersonContract.IMAGE;
+import static com.ws1617.iosl.pubcrawl20.Database.Contracts.PersonContract.PERSON_ID;
+import static com.ws1617.iosl.pubcrawl20.Database.Contracts.PersonContract.USERNAME;
 
 /**
  * Created by Gasper Kojek on 3. 12. 2016.
@@ -14,7 +22,7 @@ public class Person {
     private long id;
     private String name;
     private String email;
-    private String description;
+    private String description = "";
     private ArrayList<Bitmap> images = new ArrayList<>();
     private ArrayList<Long> friendIds = new ArrayList<>();
     private ArrayList<Long> eventIds = new ArrayList<>();
@@ -75,7 +83,7 @@ public class Person {
         this.id = id;
     }
 
-    public String getEmail() {
+    public String getMail() {
         return email;
     }
 
@@ -102,6 +110,15 @@ public class Person {
 
     public ArrayList<Bitmap> getImages() {
         return images;
+    }
+
+    public byte[] getImageInBytes(int pos) {
+        if(images.isEmpty()) return null;
+        Bitmap bmp = images.get(pos);
+        if (bmp == null) return null;
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bmp.compress(Bitmap.CompressFormat.PNG, 0, stream);
+        return stream.toByteArray();
     }
 
     public void setImages(ArrayList<Bitmap> images) {
@@ -169,5 +186,15 @@ public class Person {
     public void setImage(Bitmap image) {
         if (images == null) images = new ArrayList<>();
         this.images.add(image);
+    }
+
+    public ContentValues getContentValues() {
+        ContentValues values = new ContentValues();
+        values.put(PERSON_ID, getId());
+        values.put(DESCRIPTION, getDescription());
+        values.put(IMAGE, getImageInBytes(0));
+        values.put(EMAIL, getMail());
+        values.put(USERNAME, getName());
+        return  values;
     }
 }
