@@ -247,15 +247,49 @@ public class EventDbHelper {
         return event;
     }
 
+
+    public Event getFirstMatchEvent(String event_name) throws DatabaseException {
+        SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
+        Event event;
+
+        String query = "SELECT * FROM " +
+                TABLE_EVENTS ;//+ " WHERE " + EVENT_NAME + " = \""+event_name+"\" ";
+
+        Cursor c = db.rawQuery(query, null);
+        if (c != null && c.moveToFirst()) {
+
+            event = getListlessEventFromCursor(c);
+
+            c.close();
+        } else {
+            Log.e(TAG, "Can't find event with name " + event_name);
+            return null;
+        }
+
+        return event;
+    }
+
     public Event getEvent(long event_id) throws DatabaseException {
         Event event = getListlessEvent(event_id);
-
         event.setTimeSlotList(getTimeSlots(event_id));
         event.setParticipantIds(getParticipantIds(event_id));
         event.setPubIds(getPubIds(event_id));
 
         return event;
     }
+
+
+    public Event getEvent(String event_name) throws DatabaseException {
+        Event event = getEvent(19);
+        if (event == null) return null;
+        Long event_id = event.getId();
+        event.setTimeSlotList(getTimeSlots(event_id));
+        event.setParticipantIds(getParticipantIds(event_id));
+        event.setPubIds(getPubIds(event_id));
+
+        return event;
+    }
+
 
     public ArrayList<TimeSlot> getTimeSlots(long event_id) {
         SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
@@ -324,7 +358,6 @@ public class EventDbHelper {
 
         return list;
     }
-
 
 
     public ArrayList<Event> getAllEvents() throws DatabaseException {

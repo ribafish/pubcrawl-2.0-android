@@ -31,7 +31,7 @@ public class ShareEventDialog extends DialogFragment {
     ImageView mQrCodeImg;
     View rootView;
     Button closeBtn;
-    String mBarcodeData = "test";
+    public static String mBarcodeData = "/event/";
 
     LinearLayout inProcessView;
     LinearLayout qrCodeView;
@@ -76,7 +76,7 @@ public class ShareEventDialog extends DialogFragment {
 
     }
 
-    public void initQRCodeView() {
+    public void initQRCodeView(String event_name) {
 
         inProcessView.setVisibility(View.GONE);
         qrCodeView.setVisibility(View.VISIBLE);
@@ -85,7 +85,7 @@ public class ShareEventDialog extends DialogFragment {
         Bitmap bmp = null;
         try {
 
-            bmp = encodeAsBitmap(mBarcodeData);
+            bmp = encodeAsBitmap(mBarcodeData+event_name);
             mQrCodeImg.setImageBitmap(bmp);
 
         } catch (WriterException e) {

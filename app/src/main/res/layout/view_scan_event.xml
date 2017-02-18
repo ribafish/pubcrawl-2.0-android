@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="360dp">
+
+    <LinearLayout
+        android:id="@+id/notfound_placeholder"
+        android:layout_width="match_parent"
+        android:layout_height="360dp"
+        android:orientation="vertical"
+        android:padding="10dp"
+        android:visibility="visible">
+        <Button
+            android:id="@+id/invite_dialog_pub_done"
+            style="@style/Widget.AppCompat.Button.Borderless.Colored"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="left"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/ic_close"
+            android:textColor="@color/colorPrimary" />
+        />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="25sp"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            android:padding="20dp"
+            android:text="Sorry.. event is not found.. might be already deleted !!"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_margin="20dp"
+            android:layout_gravity="center"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_not_found"/>
+     </LinearLayout>
+    <LinearLayout
+        android:id="@+id/spinner_placeholder"
+        android:layout_width="match_parent"
+        android:layout_height="360dp"
+        android:orientation="vertical"
+        android:padding="10dp"
+        android:visibility="gone"
+        android:gravity="center">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_margin="20dp"
+            android:focusable="false"
+            android:gravity="center_horizontal"
+            android:textSize="20sp"
+            android:text="We are searching for your event ... "/>
+
+        <ProgressBar
+            android:layout_marginTop="10dp"
+            android:id="@+id/progressBar"
+            android:layout_width="90dp"
+            android:layout_height="90dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:max="500"
+            android:progress="0"
+            android:progressDrawable="@drawable/circular" ></ProgressBar>
+
+    </LinearLayout>
+
+</RelativeLayout>

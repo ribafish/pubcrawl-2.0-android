@@ -92,7 +92,7 @@ public class NewEventActivity extends AppCompatActivity {
                 public void onSuccess() {
                     //refresh the whole DB
                     DatabaseHelper.resetEventsDatabase(getApplicationContext());
-                    shareEventDialog.initQRCodeView();
+                    shareEventDialog.initQRCodeView(event.getEventName());
                 }
 
                 @Override
