@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -18,6 +19,8 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.OptionalPendingResult;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Scope;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.vision.text.Text;
 import com.ws1617.iosl.pubcrawl20.Utilites.SignInHelper;
 
 
@@ -33,6 +36,8 @@ public class StartActivity extends AppCompatActivity implements
 
 	private GoogleApiClient mGoogleApiClient;
 	private ProgressDialog mProgressDialog;
+	private SignInButton signInButton;
+	private TextView textViewFailed;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +45,10 @@ public class StartActivity extends AppCompatActivity implements
 		setContentView(R.layout.activity_sign_in);
 
 		// Button listeners
-		findViewById(R.id.sign_in_button).setOnClickListener(this);
+		signInButton = (SignInButton) findViewById(R.id.sign_in_button);
+		signInButton.setOnClickListener(this);
+
+		textViewFailed = (TextView) findViewById(R.id.textViewFailed);
 
 		// [START configure_signin]
 		// Configure sign-in to request the user's ID, email address, and basic
@@ -120,6 +128,7 @@ public class StartActivity extends AppCompatActivity implements
 			signIn.getToken(acct);
 		} else {
 			hideProgressDialog();
+			showLogin();
 			// Signed out, show unauthenticated UI.
 			Log.d(TAG, "No signin found!");
 		}
@@ -139,6 +148,21 @@ public class StartActivity extends AppCompatActivity implements
 		// be available.
 		Log.d(TAG, "onConnectionFailed:" + connectionResult);
 	}
+
+	// [START signOut]
+	public void signOut() {
+		Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
+			new ResultCallback<Status>() {
+				@Override
+				public void onResult(Status status) {
+					// [START_EXCLUDE]
+					textViewFailed.setVisibility(View.VISIBLE);
+					signInButton.setVisibility(View.GONE);
+					// [END_EXCLUDE]
+				}
+			});
+	}
+	// [END signOut]
 
 	private void showProgressDialog() {
 		if (mProgressDialog == null) {
@@ -171,10 +195,13 @@ public class StartActivity extends AppCompatActivity implements
 	public void showApp() {
 		Intent intent = new Intent(this, MainActivity.class);
 		this.startActivity(intent);
+		hideProgressDialog();
 		finish();
 	}
 
-
+	private void showLogin() {
+		signInButton.setVisibility(View.VISIBLE);
+	}
 
 	@Override
 	protected void onPause() {

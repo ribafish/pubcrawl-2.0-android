@@ -3,6 +3,7 @@ package com.ws1617.iosl.pubcrawl20.Utilites;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkResponse;
@@ -20,6 +21,7 @@ import com.ws1617.iosl.pubcrawl20.App;
 import com.ws1617.iosl.pubcrawl20.DataModels.Person;
 import com.ws1617.iosl.pubcrawl20.Database.DatabaseException;
 import com.ws1617.iosl.pubcrawl20.Database.DatabaseHelper;
+import com.ws1617.iosl.pubcrawl20.Database.JsonParser;
 import com.ws1617.iosl.pubcrawl20.Database.PersonDbHelper;
 import com.ws1617.iosl.pubcrawl20.Database.RequestQueueHelper;
 import com.ws1617.iosl.pubcrawl20.R;
@@ -98,11 +100,11 @@ public class SignInHelper {
   private void setCrawlerID(final GoogleSignInAccount acc) {
     final RequestQueueHelper requestQueue = new RequestQueueHelper(activity);
     String url = DatabaseHelper.getServerUrl(activity)+ "/crawlers/";
-    JsonObjectRequest personrequest = new JsonObjectRequest(Request.Method.GET, url, null,
+    JsonObjectRequest personRequest = new JsonObjectRequest(Request.Method.GET, url, null,
       new Response.Listener<JSONObject>() {
         @Override
         public void onResponse(JSONObject response) {
-          handleResponse(response, acc);
+          handleResponse(response, acc, false);
           requestQueue.gotResponse();
         }
       },
@@ -121,13 +123,12 @@ public class SignInHelper {
         return params;
       }
     };
-    requestQueue.add(personrequest);
+    requestQueue.add(personRequest);
   }
 
-  private void handleResponse(JSONObject json, GoogleSignInAccount acc) {
+  private void handleResponse(JSONObject json, GoogleSignInAccount acc, boolean newAccount) {
     try {
       JSONArray crawlersJSON = json.getJSONObject(EMBEDDED).getJSONArray(PERSONS);
-      //boolean knownUser = false;
       for (int i = 0; i < crawlersJSON.length(); i++) {
         JSONObject jsonCrawler = crawlersJSON.getJSONObject(i);
         if(jsonCrawler.getString(PERSON_PROFILE).equals(acc.getId()) && setCrawlerInApp(jsonCrawler)) {
@@ -135,47 +136,86 @@ public class SignInHelper {
         }
       }
       //Crawler unknown: Create new one
-      createCrawler(acc);
+      if(newAccount) createCrawler(acc);
+      else {
+        Toast.makeText(activity, R.string.error_creating_acc, Toast.LENGTH_LONG).show();
+        Log.d(TAG, "Error creating account!");
+        activity.signOut();
+      }
     } catch (Exception e) {
       Log.e(TAG, "eventsRequest error: " + e.getLocalizedMessage());
     }
   }
 
   private void createCrawler(final GoogleSignInAccount acc) {
-    final RequestQueueHelper requestQueue = new RequestQueueHelper(activity);
-    String url = DatabaseHelper.getServerUrl(activity)+ "/crawlers/";
-    JsonObjectRequest createRequest = new JsonObjectRequest(Request.Method.POST, url, null,
-      new Response.Listener<JSONObject>() {
+    try {
+      final RequestQueueHelper requestQueue = new RequestQueueHelper(activity);
+      String url = DatabaseHelper.getServerUrl(activity) + "/crawlers/";
+      JsonObjectRequest createRequest = new JsonObjectRequest(Request.Method.POST, url, null,
+        new Response.Listener<JSONObject>() {
+          @Override
+          public void onResponse(JSONObject response) {
+            handleResponse(response, acc, true);
+            requestQueue.gotResponse();
+          }
+        },
+        new Response.ErrorListener() {
+          @Override
+          public void onErrorResponse(VolleyError error) {
+            Log.e(TAG, "eventsRequest error: " + error.getLocalizedMessage());
+            requestQueue.gotResponse();
+          }
+        }) {
         @Override
-        public void onResponse(JSONObject response) {
-          handleResponse(response, acc);
-          requestQueue.gotResponse();
+        public Map<String, String> getHeaders() throws AuthFailureError {
+          Map<String, String> params = new HashMap<String, String>();
+          params.put("Authorization", "Bearer " + App.getToken());
+          return params;
         }
-      },
-      new Response.ErrorListener() {
-        @Override
-        public void onErrorResponse(VolleyError error) {
-          Log.e(TAG, "eventsRequest error: " + error.getLocalizedMessage());
-          requestQueue.gotResponse();
-        }
-      })
-    {
-      @Override
-      public Map<String, String> getParams() throws AuthFailureError {
-        Map<String, String> params = new HashMap<String, String>();
-        params.put(PERSON_NAME, acc.getDisplayName());
-        params.put(PERSON_PROFILE, acc.getId());
-        return params;
-      }
 
-      @Override
-      public Map<String, String> getHeaders() throws AuthFailureError {
-        Map<String, String> params = new HashMap<String, String>();
-        params.put("Authorization", "Bearer " + App.getToken());
-        return params;
-      }
-    };
-    requestQueue.add(createRequest);
+        @Override
+        protected Map<String, String> getParams()
+        {
+          Map<String, String>  params = new HashMap<String, String>();
+          params.put(PERSON_NAME, acc.getDisplayName());
+          params.put(PERSON_PROFILE, acc.getId());
+          return params;
+        }
+      };
+      requestQueue.add(createRequest);
+    } catch (Exception e) {
+      Log.e(TAG, "eventsRequest error: " + e.getLocalizedMessage());
+    }
+  }
+
+  public void deleteCrawler(int id) {
+    try {
+      final RequestQueueHelper requestQueue = new RequestQueueHelper(activity);
+      String url = DatabaseHelper.getServerUrl(activity) + "/crawlers/" +id;
+      JsonObjectRequest createRequest = new JsonObjectRequest(Request.Method.DELETE, url, null,
+        new Response.Listener<JSONObject>() {
+          @Override
+          public void onResponse(JSONObject response) {
+          }
+        },
+        new Response.ErrorListener() {
+          @Override
+          public void onErrorResponse(VolleyError error) {
+            Log.e(TAG, "eventsRequest error: " + error.getLocalizedMessage());
+            requestQueue.gotResponse();
+          }
+        }) {
+        @Override
+        public Map<String, String> getHeaders() throws AuthFailureError {
+          Map<String, String> params = new HashMap<String, String>();
+          params.put("Authorization", "Bearer " + App.getToken());
+          return params;
+        }
+      };
+      requestQueue.add(createRequest);
+    } catch (Exception e) {
+      Log.e(TAG, "eventsRequest error: " + e.getLocalizedMessage());
+    }
   }
 
   private void getCrawler(final GoogleSignInAccount acc) {
@@ -185,7 +225,6 @@ public class SignInHelper {
       setCrawlerID(acc);
     }
     checkUser(acc, id);
-    activity.showApp();
   }
 
 	/**
@@ -200,8 +239,11 @@ public class SignInHelper {
     } catch (DatabaseException e) {
       Log.d(TAG, "Person: id " + id + " not in database, needed to create");
     }
-    if(person!=null)  return;
-    setCrawlerID(acc);
+    if(person==null) {
+      setCrawlerID(acc);
+      return;
+    }
+    activity.showApp();
   }
 
   private boolean setCrawlerInApp(JSONObject json) {
