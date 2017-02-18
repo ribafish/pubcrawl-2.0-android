@@ -29,6 +29,7 @@ import com.ws1617.iosl.pubcrawl20.Database.DatabaseHelper;
 import com.ws1617.iosl.pubcrawl20.Database.EventDbHelper;
 import com.ws1617.iosl.pubcrawl20.Database.PubDbHelper;
 import com.ws1617.iosl.pubcrawl20.Database.RequestQueueHelper;
+import com.ws1617.iosl.pubcrawl20.MainActivity;
 import com.ws1617.iosl.pubcrawl20.R;
 
 import java.sql.Time;
@@ -76,7 +77,11 @@ public class CurrentFragment extends Fragment {
         findEvents.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                try {
+                    ((MainActivity)getActivity()).setTab(0);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         });
 

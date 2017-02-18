@@ -235,4 +235,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             return mLastLocation;
         throw new NullPointerException();
     }
+
+    public void setTab(int num) {
+        mViewPager.setCurrentItem(num);
+    }
 }

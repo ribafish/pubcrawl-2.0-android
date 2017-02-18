@@ -9,6 +9,7 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -31,6 +32,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.ws1617.iosl.pubcrawl20.DataModels.PubMiniModel;
+import com.ws1617.iosl.pubcrawl20.Details.EventDetailsActivity;
 import com.ws1617.iosl.pubcrawl20.Details.MapDialogFragment;
 import com.ws1617.iosl.pubcrawl20.Details.PubDetailsActivity;
 import com.ws1617.iosl.pubcrawl20.NewEvent.adapters.SelectedPupListAdapter;
@@ -96,6 +98,19 @@ public class EventViewHolder extends RecyclerView.ViewHolder implements OnMapRea
         } else {
             Log.e(TAG, "mapView == null" + eventString);
         }
+
+        CardView card = (CardView) view.findViewById(R.id.current_event_card);
+        card.setClickable(true);
+        card.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //TODO: test
+                Intent intent = new Intent(mContext, EventDetailsActivity.class);
+                intent.putExtra("name", name.getText());
+                intent.putExtra("id", Long.parseLong(eventId.getText().toString()));
+                mContext.startActivity(intent);
+            }
+        });
     }
 
 
