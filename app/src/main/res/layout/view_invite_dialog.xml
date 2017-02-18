@@ -1,15 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="360dp">
 
     <LinearLayout
         android:id="@+id/qrcode_placeholder"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="360dp"
         android:orientation="vertical"
         android:padding="10dp"
         android:visibility="visible">
+        <Button
+            android:id="@+id/invite_dialog_pub_done"
+            style="@style/Widget.AppCompat.Button.Borderless.Colored"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="left"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/ic_close"
+            android:textColor="@color/colorPrimary" />
+        />
 
         <TextView
             android:layout_width="match_parent"
@@ -30,23 +41,13 @@
             android:focusable="false"
             android:gravity="center_horizontal" />
 
-        <Button
-            android:id="@+id/invite_dialog_pub_done"
-            style="@style/Widget.AppCompat.Button.Borderless.Colored"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right"
-            android:layout_below="@id/invite_barcode"
-            android:layout_marginTop="40dp"
-            android:text="Close"
-            android:textColor="@color/colorPrimary" />
-            />
+
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/spinner_placeholder"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="360dp"
         android:orientation="vertical"
         android:padding="10dp"
         android:visibility="gone"
