@@ -61,8 +61,12 @@ public class SelectedPupListAdapter extends RecyclerView.Adapter<SelectedPupList
 
         public void setPubData(PubMiniModel pub) {
             pubName.setText(pub.getName());
-            startTime.setText(pub.getTimeSlot().getStartTimeAsString());
-            endTime.setText(pub.getTimeSlot().getEndTimeAsString());
+            try {
+                startTime.setText(pub.getTimeSlot().getStartTimeAsString());
+                endTime.setText(pub.getTimeSlot().getEndTimeAsString());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
         @Override
