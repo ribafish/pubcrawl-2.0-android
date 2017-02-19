@@ -1,8 +1,10 @@
 package com.ws1617.iosl.pubcrawl20.Details;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -33,9 +35,11 @@ import android.widget.Toast;
 
 import com.ws1617.iosl.pubcrawl20.DataModels.Person;
 import com.ws1617.iosl.pubcrawl20.Database.DatabaseException;
+import com.ws1617.iosl.pubcrawl20.Database.DatabaseHelper;
 import com.ws1617.iosl.pubcrawl20.Database.EventDbHelper;
 import com.ws1617.iosl.pubcrawl20.Database.PersonDbHelper;
 import com.ws1617.iosl.pubcrawl20.Database.PubDbHelper;
+import com.ws1617.iosl.pubcrawl20.Database.RequestQueueHelper;
 import com.ws1617.iosl.pubcrawl20.R;
 
 import java.util.ArrayList;
@@ -83,6 +87,8 @@ public class PersonDetailsActivity extends AppCompatActivity implements AppBarLa
     private EventAdapter ownedEventsAdapter;
     private ListView ownedEventsListView;
 
+    private BroadcastReceiver receiver;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,6 +110,28 @@ public class PersonDetailsActivity extends AppCompatActivity implements AppBarLa
 
         populateFields();
         initDescriptionExpanding();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        receiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                if (intent.getAction().equals(RequestQueueHelper.BROADCAST_INTENT)) {
+                    Log.d(TAG, "Got database refreshed broadcast");
+                    getPerson(person.getId());
+                }
+            }
+        };
+        IntentFilter filter = new IntentFilter(RequestQueueHelper.BROADCAST_INTENT);
+        registerReceiver(receiver, filter);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        unregisterReceiver(receiver);
     }
 
     private void populateFields() {
@@ -483,6 +511,9 @@ public class PersonDetailsActivity extends AppCompatActivity implements AppBarLa
                         return true;
                     case R.id.person_details_menu_remove:
                         addFriend(false);
+                        return true;
+                    case R.id.person_details_menu_refresh:
+                        DatabaseHelper.resetWholeDatabase(context);
                         return true;
                 }
                 return true;

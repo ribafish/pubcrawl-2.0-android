@@ -223,6 +223,9 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
                     case R.id.event_details_menu_remove:
                         joinEvent(false);
                         return true;
+                    case R.id.event_details_menu_refresh:
+                        DatabaseHelper.resetWholeDatabase(context);
+                        return true;
                 }
                 return true;
             }
@@ -593,7 +596,11 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
             }
         }
 
-        Collections.sort(this.pubs, new PubMiniModelComparator());
+        try {
+            Collections.sort(this.pubs, new PubMiniModelComparator());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         for (Long id : mIds) {
 

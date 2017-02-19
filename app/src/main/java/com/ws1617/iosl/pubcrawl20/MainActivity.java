@@ -27,6 +27,7 @@ import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.vision.barcode.Barcode;
+import com.ws1617.iosl.pubcrawl20.Database.DatabaseHelper;
 import com.ws1617.iosl.pubcrawl20.Details.EventDetailsActivity;
 import com.ws1617.iosl.pubcrawl20.Details.PubDetailsActivity;
 import com.ws1617.iosl.pubcrawl20.NewEvent.NewEventActivity;
@@ -114,6 +115,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         fabScanQR.setImageDrawable(AppCompatDrawableManager.get().getDrawable(this, R.drawable.qrcode));
         FloatingActionButton fabSearch = (FloatingActionButton) findViewById(R.id.main_fab_menu_search);
         fabSearch.setImageDrawable(AppCompatDrawableManager.get().getDrawable(this, R.drawable.ic_search_24dp));
+        FloatingActionButton fabRefresh = (FloatingActionButton) findViewById(R.id.main_fab_menu_refresh);
+        fabRefresh.setImageResource(R.drawable.ic_sync_black_24dp);
 
         fabSettings.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -151,6 +154,13 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                 intent.putExtra(BarcodeCaptureActivity.AutoFocus, sharedPrefs.getBoolean("barcode_focus", false));
                 intent.putExtra(BarcodeCaptureActivity.UseFlash, sharedPrefs.getBoolean("barcode_flash", false));
                 startActivityForResult(intent, RC_BARCODE_CAPTURE);
+                fabMenu.close(true);
+            }
+        });
+        fabRefresh.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DatabaseHelper.resetWholeDatabase(context);
                 fabMenu.close(true);
             }
         });
