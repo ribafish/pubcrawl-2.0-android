@@ -61,7 +61,7 @@ public class PersonDetailsActivity extends AppCompatActivity implements AppBarLa
     private Context context;
 
     private Person person;
-    private ArrayList<Bitmap> images;
+    private ArrayList<Bitmap> images = new ArrayList<>();;
 
     private ArrayList<PersonMini> friends = new ArrayList<>();
     private PersonAdapter friendsAdapter;
@@ -114,6 +114,11 @@ public class PersonDetailsActivity extends AppCompatActivity implements AppBarLa
             mTitle.setText(person.getName());
             mSubtitle.setText("Id: " + String.valueOf(person.getId()));
             mToolbar.setTitle(person.getName());
+            if (person.getImage() != null) {
+                images.clear();
+                images.add(person.getImage());
+                imageCarouselPager.notifyDataSetChanged();
+            }
 
             // Description card
             ((TextView) findViewById(R.id.person_details_description)).setText(person.getDescription());
@@ -459,8 +464,6 @@ public class PersonDetailsActivity extends AppCompatActivity implements AppBarLa
 
         } catch (Exception e) { e.printStackTrace(); }
 
-        ArrayList<Bitmap> images = new ArrayList<Bitmap>();
-        images.add(BitmapFactory.decodeResource(getResources(), R.mipmap.bestpub));
         images.add(BitmapFactory.decodeResource(getResources(), R.mipmap.bestpub));
         imageCarouselPager = new ImageCarouselPager(this, images);
         viewPager.setAdapter(imageCarouselPager);

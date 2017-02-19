@@ -150,7 +150,7 @@ public class PersonDbHelper {
         values.put(PERSON_ID, person.getId());
         values.put(DESCRIPTION, person.getDescription());
         values.put(EMAIL, person.getMail());
-        values.put(IMAGE, bitmapToBytes(person.getImages().get(0)));
+        values.put(IMAGE, bitmapToBytes(person.getImage()));
         values.put(USERNAME, person.getName());
 
         String selection = PERSON_ID + " =?";

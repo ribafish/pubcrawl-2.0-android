@@ -3,6 +3,7 @@ package com.ws1617.iosl.pubcrawl20.Details;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -34,6 +35,7 @@ import android.widget.Toast;
 
 import com.ws1617.iosl.pubcrawl20.DataModels.Pub;
 import com.ws1617.iosl.pubcrawl20.Database.DatabaseException;
+import com.ws1617.iosl.pubcrawl20.Database.DatabaseHelper;
 import com.ws1617.iosl.pubcrawl20.Database.EventDbHelper;
 import com.ws1617.iosl.pubcrawl20.Database.PersonDbHelper;
 import com.ws1617.iosl.pubcrawl20.Database.PubDbHelper;
@@ -256,9 +258,21 @@ public class PubDetailsActivity extends AppCompatActivity implements AppBarLayou
         });
     }
 
-    public void addFavourite(boolean favourite) {
+    public void addFavourite(final boolean favourite) {
         //TODO
-        updateAddButtons(favourite);
+        final Context context = this;
+        DatabaseHelper.addFavouritePub(this, pub.getId(), favourite, new DetailsCallback() {
+            @Override
+            public void onSuccess() {
+                updateAddButtons(favourite);
+            }
+
+            @Override
+            public void onFail() {
+                Toast.makeText(context, "Can't connect to server", Toast.LENGTH_SHORT).show();
+            }
+        });
+
     }
 
     public void updateAddButtons(boolean favourite) {

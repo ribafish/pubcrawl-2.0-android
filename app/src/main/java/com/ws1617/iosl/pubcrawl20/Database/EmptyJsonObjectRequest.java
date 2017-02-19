@@ -13,15 +13,16 @@ import java.io.UnsupportedEncodingException;
 
 /**
  * Created by Haneen on 17/01/2017.
+ * Allows empty responses from server (useful on some PATH or POST requests)
  */
 
-public class PubJsonObjectRequest extends JsonObjectRequest {
+public class EmptyJsonObjectRequest extends JsonObjectRequest {
 
-    public PubJsonObjectRequest(int method, String url, JSONObject jsonRequest, Response.Listener<JSONObject> listener, Response.ErrorListener errorListener) {
+    public EmptyJsonObjectRequest(int method, String url, JSONObject jsonRequest, Response.Listener<JSONObject> listener, Response.ErrorListener errorListener) {
         super(method, url, jsonRequest, listener, errorListener);
     }
 
-    public PubJsonObjectRequest(String url, JSONObject jsonRequest, Response.Listener<JSONObject> listener, Response.ErrorListener errorListener) {
+    public EmptyJsonObjectRequest(String url, JSONObject jsonRequest, Response.Listener<JSONObject> listener, Response.ErrorListener errorListener) {
         super(url, jsonRequest, listener, errorListener);
     }
 
