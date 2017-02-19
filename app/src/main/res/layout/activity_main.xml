@@ -48,6 +48,13 @@
         android:layout_margin="@dimen/fab_margin">
 
         <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/main_fab_menu_refresh"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            fab:fab_size="mini"
+            fab:fab_label="@string/refresh" />
+
+        <com.github.clans.fab.FloatingActionButton
             android:id="@+id/main_fab_menu_settings"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

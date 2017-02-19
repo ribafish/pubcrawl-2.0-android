@@ -1,8 +1,10 @@
 package com.ws1617.iosl.pubcrawl20.Details;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -33,9 +35,11 @@ import android.widget.Toast;
 
 import com.ws1617.iosl.pubcrawl20.DataModels.Person;
 import com.ws1617.iosl.pubcrawl20.Database.DatabaseException;
+import com.ws1617.iosl.pubcrawl20.Database.DatabaseHelper;
 import com.ws1617.iosl.pubcrawl20.Database.EventDbHelper;
 import com.ws1617.iosl.pubcrawl20.Database.PersonDbHelper;
 import com.ws1617.iosl.pubcrawl20.Database.PubDbHelper;
+import com.ws1617.iosl.pubcrawl20.Database.RequestQueueHelper;
 import com.ws1617.iosl.pubcrawl20.R;
 
 import java.util.ArrayList;
@@ -61,7 +65,7 @@ public class PersonDetailsActivity extends AppCompatActivity implements AppBarLa
     private Context context;
 
     private Person person;
-    private ArrayList<Bitmap> images;
+    private ArrayList<Bitmap> images = new ArrayList<>();;
 
     private ArrayList<PersonMini> friends = new ArrayList<>();
     private PersonAdapter friendsAdapter;
@@ -83,6 +87,8 @@ public class PersonDetailsActivity extends AppCompatActivity implements AppBarLa
     private EventAdapter ownedEventsAdapter;
     private ListView ownedEventsListView;
 
+    private BroadcastReceiver receiver;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,7 +96,7 @@ public class PersonDetailsActivity extends AppCompatActivity implements AppBarLa
         setContentView(R.layout.activity_person_details);
         context = getApplicationContext();
 
-        long id = getIntent().getIntExtra("id", -1);
+        long id = getIntent().getLongExtra("id", -1);
 
         getPerson(id);
 
@@ -106,6 +112,28 @@ public class PersonDetailsActivity extends AppCompatActivity implements AppBarLa
         initDescriptionExpanding();
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        receiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                if (intent.getAction().equals(RequestQueueHelper.BROADCAST_INTENT)) {
+                    Log.d(TAG, "Got database refreshed broadcast");
+                    getPerson(person.getId());
+                }
+            }
+        };
+        IntentFilter filter = new IntentFilter(RequestQueueHelper.BROADCAST_INTENT);
+        registerReceiver(receiver, filter);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        unregisterReceiver(receiver);
+    }
+
     private void populateFields() {
         Log.d(TAG, "populateFields()");
 
@@ -114,6 +142,11 @@ public class PersonDetailsActivity extends AppCompatActivity implements AppBarLa
             mTitle.setText(person.getName());
             mSubtitle.setText("Id: " + String.valueOf(person.getId()));
             mToolbar.setTitle(person.getName());
+            if (person.getImage() != null) {
+                images.clear();
+                images.add(person.getImage());
+                imageCarouselPager.notifyDataSetChanged();
+            }
 
             // Description card
             ((TextView) findViewById(R.id.person_details_description)).setText(person.getDescription());
@@ -459,8 +492,6 @@ public class PersonDetailsActivity extends AppCompatActivity implements AppBarLa
 
         } catch (Exception e) { e.printStackTrace(); }
 
-        ArrayList<Bitmap> images = new ArrayList<Bitmap>();
-        images.add(BitmapFactory.decodeResource(getResources(), R.mipmap.bestpub));
         images.add(BitmapFactory.decodeResource(getResources(), R.mipmap.bestpub));
         imageCarouselPager = new ImageCarouselPager(this, images);
         viewPager.setAdapter(imageCarouselPager);
@@ -480,6 +511,9 @@ public class PersonDetailsActivity extends AppCompatActivity implements AppBarLa
                         return true;
                     case R.id.person_details_menu_remove:
                         addFriend(false);
+                        return true;
+                    case R.id.person_details_menu_refresh:
+                        DatabaseHelper.resetWholeDatabase(context);
                         return true;
                 }
                 return true;
@@ -671,11 +705,31 @@ public class PersonDetailsActivity extends AppCompatActivity implements AppBarLa
             return;
         }
 
-        getFriends();
-        getEvents();
-        getFavouritePubs();
-        getOwnedPubs();
-        getOwnedEvents();
+        try {
+            getFriends();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            getEvents();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            getFavouritePubs();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            getOwnedPubs();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            getOwnedEvents();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private PersonMini getPersonMini(long id) throws DatabaseException {

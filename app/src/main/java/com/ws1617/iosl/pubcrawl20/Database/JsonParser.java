@@ -270,16 +270,26 @@ public class JsonParser {
                 .getString(HREF));
         Person person = new Person(id);
 
-        person.setName(jsonPerson.getString(PERSON_NAME));
-        person.setEmail(jsonPerson.getString(PERSON_PROFILE));
+        try {
+            person.setName(jsonPerson.getString(PERSON_NAME));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        try {
+            person.setEmail(jsonPerson.getString(PERSON_PROFILE));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         try {
             person.setDescription(jsonPerson.getString(PERSON_DESCRIPTION));
-            person.setImage(decodeBitmapBase64(jsonPerson.getString(PERSON_IMAGE)));
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
-        catch (JSONException e) {
-            Log.d(TAG, e.getLocalizedMessage());
+        try {
+            person.setImageUrl(jsonPerson.getString(PERSON_IMAGE));
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
-
 
         Log.d(TAG, "Parsed person: " + person);
 

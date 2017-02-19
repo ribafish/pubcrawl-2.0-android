@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -27,8 +28,10 @@ import com.ws1617.iosl.pubcrawl20.DataModels.TimeSlot;
 import com.ws1617.iosl.pubcrawl20.Database.DatabaseException;
 import com.ws1617.iosl.pubcrawl20.Database.DatabaseHelper;
 import com.ws1617.iosl.pubcrawl20.Database.EventDbHelper;
+import com.ws1617.iosl.pubcrawl20.Database.PersonDbHelper;
 import com.ws1617.iosl.pubcrawl20.Database.PubDbHelper;
 import com.ws1617.iosl.pubcrawl20.Database.RequestQueueHelper;
+import com.ws1617.iosl.pubcrawl20.MainActivity;
 import com.ws1617.iosl.pubcrawl20.R;
 
 import java.sql.Time;
@@ -48,6 +51,7 @@ public class CurrentFragment extends Fragment {
     private LinearLayout noEventsLayout;
     private View rootView;
     private BroadcastReceiver receiver;
+    private long userId = -1;
 
     @Nullable
     @Override
@@ -70,13 +74,20 @@ public class CurrentFragment extends Fragment {
         recyclerView.setLayoutManager(glm);
         recyclerView.setHasFixedSize(true);
 
+        Context context = getContext();
+        SharedPreferences sharedPref = context.getSharedPreferences(context.getString(R.string.preference_user), Context.MODE_PRIVATE);
+        userId = sharedPref.getLong(context.getString(R.string.user_id), -1);
         getEvents();
 
         Button findEvents = (Button) rootView.findViewById(R.id.current_find_events_btn);
         findEvents.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                try {
+                    ((MainActivity)getActivity()).setTab(0);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         });
 
@@ -86,32 +97,39 @@ public class CurrentFragment extends Fragment {
     private void getEvents() {
         events.clear();
         ArrayList<Event> allEvents = new ArrayList<>();
+        PersonDbHelper personDbHelper = new PersonDbHelper();
         EventDbHelper eventDbHelper = new EventDbHelper();
         PubDbHelper pubDbHelper = new PubDbHelper();
         try {
-            allEvents.addAll(eventDbHelper.getAllEvents());
+            for (Long eventId : personDbHelper.getEventIds(userId)) {
+                Event event = null;
+                try {
+                    event = eventDbHelper.getEvent(eventId);
+                } catch (DatabaseException e) {
+                    e.printStackTrace();
+                }
+                if (true) { //TODO: check with todays date
+                    EventMini em = new EventMini(event);
+                    ArrayList<Long> pubIds = event.getPubIds();
+                    ArrayList<TimeSlot> timeSlots = event.getTimeSlotList();
+                    for (Long id : pubIds) {
+                        try {
+                            Pub p = pubDbHelper.getPub(id);
+                            for (TimeSlot ts : timeSlots) {
+                                if (ts.getPubId() == p.getId()) em.addPub(new PubMini(p, ts));
+                            }
+                        } catch (DatabaseException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    events.add(em);
+                }
+
+            }
         } catch (DatabaseException e) {
             e.printStackTrace();
         }
 
-
-        for (Event event : allEvents) {
-            //TODO: Filter events for current user and current date
-            EventMini em = new EventMini(event);
-            ArrayList<Long> pubIds = event.getPubIds();
-            ArrayList<TimeSlot> timeSlots = event.getTimeSlotList();
-            for (Long id : pubIds) {
-                try {
-                    Pub p = pubDbHelper.getPub(id);
-                    for (TimeSlot ts : timeSlots){
-                        if (ts.getPubId() == p.getId()) em.addPub(new PubMini(p, ts));
-                    }
-                } catch (DatabaseException e) {
-                    e.printStackTrace();
-                }
-            }
-            events.add(em);
-        }
         if (events.size() > 0) {
             recyclerView.setVisibility(View.VISIBLE);
             noEventsLayout.setVisibility(View.GONE);

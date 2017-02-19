@@ -1,8 +1,11 @@
 package com.ws1617.iosl.pubcrawl20.Details;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -34,9 +37,11 @@ import android.widget.Toast;
 
 import com.ws1617.iosl.pubcrawl20.DataModels.Pub;
 import com.ws1617.iosl.pubcrawl20.Database.DatabaseException;
+import com.ws1617.iosl.pubcrawl20.Database.DatabaseHelper;
 import com.ws1617.iosl.pubcrawl20.Database.EventDbHelper;
 import com.ws1617.iosl.pubcrawl20.Database.PersonDbHelper;
 import com.ws1617.iosl.pubcrawl20.Database.PubDbHelper;
+import com.ws1617.iosl.pubcrawl20.Database.RequestQueueHelper;
 import com.ws1617.iosl.pubcrawl20.R;
 
 import java.util.ArrayList;
@@ -80,6 +85,9 @@ public class PubDetailsActivity extends AppCompatActivity implements AppBarLayou
     private EventAdapter pastEventsAdapter;
     private ListView pastEventsListView;
 
+    private BroadcastReceiver receiver;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,6 +106,28 @@ public class PubDetailsActivity extends AppCompatActivity implements AppBarLayou
         populateFields();
 
         initOpeningTimesExpanding();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        receiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                if (intent.getAction().equals(RequestQueueHelper.BROADCAST_INTENT)) {
+                    Log.d(TAG, "Got database refreshed broadcast");
+                    getPub(pub.getId());
+                }
+            }
+        };
+        IntentFilter filter = new IntentFilter(RequestQueueHelper.BROADCAST_INTENT);
+        registerReceiver(receiver, filter);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        unregisterReceiver(receiver);
     }
 
     private void populateFields() {
@@ -256,9 +286,21 @@ public class PubDetailsActivity extends AppCompatActivity implements AppBarLayou
         });
     }
 
-    public void addFavourite(boolean favourite) {
+    public void addFavourite(final boolean favourite) {
         //TODO
-        updateAddButtons(favourite);
+        final Context context = this;
+        DatabaseHelper.addFavouritePub(this, pub.getId(), favourite, new DetailsCallback() {
+            @Override
+            public void onSuccess() {
+                updateAddButtons(favourite);
+            }
+
+            @Override
+            public void onFail() {
+                Toast.makeText(context, "Can't connect to server", Toast.LENGTH_SHORT).show();
+            }
+        });
+
     }
 
     public void updateAddButtons(boolean favourite) {
@@ -533,9 +575,21 @@ public class PubDetailsActivity extends AppCompatActivity implements AppBarLayou
         try {
             pub = new PubDbHelper().getPub(id);
 
-            getTopPeople(pub.getTopsListIds());
-            getEvents(pub.getEventsListIds());
-            owner = getPersonMini(pub.getOwnerId());
+            try {
+                getTopPeople(pub.getTopsListIds());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            try {
+                getEvents(pub.getEventsListIds());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            try {
+                owner = getPersonMini(pub.getOwnerId());
+            } catch (DatabaseException e) {
+                e.printStackTrace();
+            }
         } catch (DatabaseException e) {
             e.printStackTrace();
             Toast.makeText(getApplicationContext(),

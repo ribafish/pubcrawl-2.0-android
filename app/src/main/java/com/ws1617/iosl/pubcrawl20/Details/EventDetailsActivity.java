@@ -1,8 +1,11 @@
 package com.ws1617.iosl.pubcrawl20.Details;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -39,9 +42,11 @@ import com.ws1617.iosl.pubcrawl20.DataModels.Event;
 import com.ws1617.iosl.pubcrawl20.DataModels.PubMiniModel;
 import com.ws1617.iosl.pubcrawl20.DataModels.TimeSlot;
 import com.ws1617.iosl.pubcrawl20.Database.DatabaseException;
+import com.ws1617.iosl.pubcrawl20.Database.DatabaseHelper;
 import com.ws1617.iosl.pubcrawl20.Database.EventDbHelper;
 import com.ws1617.iosl.pubcrawl20.Database.PersonDbHelper;
 import com.ws1617.iosl.pubcrawl20.Database.PubDbHelper;
+import com.ws1617.iosl.pubcrawl20.Database.RequestQueueHelper;
 import com.ws1617.iosl.pubcrawl20.R;
 
 import java.text.SimpleDateFormat;
@@ -87,6 +92,9 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
     private PersonAdapter personAdapter;
     private ListView participantListView;
 
+    private BroadcastReceiver receiver;
+    private long userId = -1;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,11 +113,44 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
         //  setupMap();
         //setupPubsListView();
 
+        SharedPreferences sharedPref = context.getSharedPreferences(context.getString(R.string.preference_user), Context.MODE_PRIVATE);
+        userId = sharedPref.getLong(context.getString(R.string.user_id), -1);
+
 
         // TODO: change to the data load listener or smtn when database is ready
         populateFields();
         initDescriptionExpanding();
         setupParticipants();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        receiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                if (intent.getAction().equals(RequestQueueHelper.BROADCAST_INTENT)) {
+                    Log.d(TAG, "Got database refreshed broadcast");
+                    getEvent(event.getId());
+                    if (participants.size() == 0) {
+                        setupParticipants();
+                    } else {
+                        participants.clear();
+                        getParticipants(event.getParticipantIds());
+                        personAdapter.notifyDataSetChanged();
+                    }
+                    updateJoinButtons(event.getParticipantIds().contains(userId));
+                }
+            }
+        };
+        IntentFilter filter = new IntentFilter(RequestQueueHelper.BROADCAST_INTENT);
+        registerReceiver(receiver, filter);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        unregisterReceiver(receiver);
     }
 
 
@@ -182,6 +223,9 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
                     case R.id.event_details_menu_remove:
                         joinEvent(false);
                         return true;
+                    case R.id.event_details_menu_refresh:
+                        DatabaseHelper.resetWholeDatabase(context);
+                        return true;
                 }
                 return true;
             }
@@ -200,7 +244,7 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
         });
     }
 
-    public void joinEvent(boolean join) {
+    public void joinEvent(final boolean join) {
         AlertDialog dialog = new AlertDialog.Builder(this).create();
         if (join){
             dialog.setTitle(getString(R.string.alert_join_event_title));
@@ -218,8 +262,7 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
                     new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            // TODO: join event
-                            updateJoinButtons(true);
+                            databaseJoinEvent(join);
                             dialogInterface.dismiss();
                         }
                     });
@@ -240,14 +283,34 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
                     new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            // TODO: join event
-                            updateJoinButtons(false);
+                            databaseJoinEvent(join);
                             dialogInterface.dismiss();
                         }
                     });
             dialog.show();
         }
     }
+
+    private void databaseJoinEvent (final boolean join) {
+        try {
+            DatabaseHelper.joinEvent(context, event.getId(), join, new DetailsCallback() {
+                @Override
+                public void onSuccess() {
+                    DatabaseHelper.resetEventsDatabase(context);
+                    DatabaseHelper.resetPersonsDatabase(context);
+                    updateJoinButtons(join);
+                }
+
+                @Override
+                public void onFail() {
+                    Toast.makeText(context, "Can't connect to server", Toast.LENGTH_SHORT).show();
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 
     public void updateJoinButtons(boolean joined) {
         ImageView appBarJoinButton = (ImageView) findViewById(R.id.event_details_layout_add_button);
@@ -394,29 +457,11 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
             ((TextView) findViewById(R.id.event_details_id)).setText(String.valueOf(event.getId()));
             ((TextView) findViewById(R.id.event_details_tracked)).setText(event.isTracked() ? "Tracked" : "Not tracked");
             ((TextView) findViewById(R.id.event_details_description)).setText(event.getDescription());
-        }
-
-        if (pubs.size() > 0) {
-            //pubAdapter.notifyDataSetChanged();
-            //setListViewHeightBasedOnItems(pubListView);
+            updateJoinButtons(event.getParticipantIds().contains(userId));
         }
 
     }
 
- /*   private void setupPubsListView() {
-        pubAdapter = new PubAdapter(this, mSelectedPupsList);
-        pubListView = (ListView) findViewById(R.id.event_details_pubListView);
-        pubListView.setAdapter(pubAdapter);
-        pubListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Intent intent = new Intent(context, PubDetailsActivity.class);
-                intent.putExtra("name", mSelectedPupsList.get(i).getName());
-                intent.putExtra("id", mSelectedPupsList.get(i).getId());
-                startActivity(intent);
-            }
-        });
-    }*/
 
     /**
      * Sets ListView height to show all items
@@ -456,160 +501,6 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
 
     }
 
-    /*
-
-        Map functions
-
-     */
-
-  /*  private void setupMap() {
-        Log.d(TAG, "setupMap");
-        FrameLayout mapContainer = (FrameLayout) findViewById(R.id.event_details_map_map);
-//        mapContainer.getLayoutParams().height = mapContainer.getLayoutParams().width;
-
-        GoogleMapOptions options = new GoogleMapOptions();
-        options.mapType(GoogleMap.MAP_TYPE_NORMAL)
-                .compassEnabled(false)
-                .rotateGesturesEnabled(false)
-                .scrollGesturesEnabled(false)
-                .zoomGesturesEnabled(true)
-                .liteMode(true);
-        mapFragment = SupportMapFragment.newInstance(options);
-        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.add(R.id.event_details_map_map, mapFragment).commit();
-        mapFragment.getMapAsync(new OnMapReadyCallback() {
-            @Override
-            public void onMapReady(GoogleMap googleMap) {
-                Log.d(TAG, "onMapReady()");
-                map = googleMap;
-                map.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {    // Sometimes wouldn't load the map
-                    @Override
-                    public void onMapLoaded() {
-                        // googleMap.setPadding(left, top, right, bottom)
-                        map.setPadding(20, 140, 20, 20);
-                        drawOnMap(map, 0);
-                        map.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
-                            @Override
-                            public void onMapClick(LatLng latLng) {
-                                FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-                                MapDialogFragment mapDialogFragment = new MapDialogFragment();
-                                mapDialogFragment.show(ft, "map_dialog_fragment");
-                            }
-                        });
-                        map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
-                            @Override
-                            public boolean onMarkerClick(Marker marker) {
-                                FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-                                MapDialogFragment mapDialogFragment = new MapDialogFragment();
-                                mapDialogFragment.show(ft, "map_dialog_fragment");
-                                return true;
-                            }
-                        });
-                    }
-                });
-
-            }
-        });
-
-    }*/
-
-
-   /* public HashMap<Marker, Long> drawOnMap(GoogleMap map, float unzoom) {
-        Log.d(TAG, "drawOnMap()");
-<<<<<<< HEAD
-        if (mSelectedPupsList.size() > 0 && map != null) {
-=======
-        if (this.event == null) {
-            Log.e(TAG, "drawOnMap: event == null");
-            return null;
-        }
-        if (pubs.size() > 0 && map != null) {
->>>>>>> master
-            map.clear();
-            HashMap<Marker, Long> markerLongHashMap = new HashMap<>();
-            ArrayList<LatLng> latLngs = new ArrayList<>();
-            LatLngBounds.Builder builder = new LatLngBounds.Builder();
-            for (int i = 0; i < mSelectedPupsList.size(); i++) {
-                PubMini pub = mSelectedPupsList.get(i);
-
-                Marker marker = map.addMarker(new MarkerOptions()
-                        .position(pub.getLatLng())
-                        .draggable(false)
-                        .title(pub.getName())
-                        .icon(getCustomMarkerIcon(i+1))
-                        .snippet(pub.getTimeSlotTimeString()));
-                pub.setMarker(marker);
-                latLngs.add(pub.getLatLng());
-                builder.include(pub.getLatLng());
-
-                markerLongHashMap.put(marker, pub.getId());
-            }
-            map.addPolyline(new PolylineOptions()
-                    .addAll(latLngs)
-                    .color(Color.BLUE)
-                    .width(10)
-                    .clickable(false));
-
-            map.moveCamera(CameraUpdateFactory.newLatLngBounds(builder.build(), 0));
-            map.moveCamera(CameraUpdateFactory.newLatLngZoom(map.getCameraPosition().target, map.getCameraPosition().zoom-unzoom));
-            return markerLongHashMap;
-        }
-        return null;
-    }
-
-    public long getPubIdFromMarker(Marker marker) throws ArrayIndexOutOfBoundsException{
-        for (PubMini pub : mSelectedPupsList) {
-            if(marker == pub.getMarker()) return pub.getId();
-        }
-        throw new ArrayIndexOutOfBoundsException("Can't find pub");
-    }
-
-    private BitmapDescriptor getCustomMarkerIcon(int i) {
-        Bitmap.Config conf = ARGB_8888;
-        Bitmap bmp = Bitmap.createBitmap(80, 80, conf);
-        Canvas canvas = new Canvas(bmp);
-
-// modify canvas
-        Bitmap icon = drawableToBitmap(context.getResources().getDrawable(R.drawable.ic_location_on_24dp), 80);
-        if (icon == null) Log.e(TAG, "icon is null");
-        canvas.drawBitmap(icon, 0,0, new Paint());
-
-        // paint defines the text color, stroke width and size
-        Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        paint.setTextSize(36);
-        paint.setColor(Color.WHITE);
-        paint.setTextAlign(Paint.Align.CENTER);
-
-        String text = String.valueOf(i);
-        Rect r = new Rect();
-        canvas.getClipBounds(r);
-        int cHeight = r.height();
-        int cWidth = r.width();
-        paint.setTextAlign(Paint.Align.LEFT);
-        paint.getTextBounds(text, 0, text.length(), r);
-        float x =  cWidth / 2f - r.width() / 2f - r.left - 1;
-        float y = cHeight / 2f + r.height() / 2f - r.bottom - 8;
-
-        canvas.drawText(text, x, y, paint);
-
-        return BitmapDescriptorFactory.fromBitmap(bmp);
-    }
-
-    public static Bitmap drawableToBitmap (Drawable drawable, int size) {
-
-        if (drawable instanceof BitmapDrawable) {
-            return ((BitmapDrawable)drawable).getBitmap();
-        }
-
-//        Bitmap bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
-        Bitmap bitmap = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(bitmap);
-        drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
-        drawable.draw(canvas);
-
-        return bitmap;
-    }
-*/
     /*
 
         Expandable / Collapsable toolbar animation functions
@@ -680,9 +571,21 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
         try {
             this.event = new EventDbHelper().getEvent(id);
 
-            getPubMinis(this.event.getPubIds(), this.event.getTimeSlotList());
-            getParticipants(this.event.getParticipantIds());
-            getOwner(this.event.getOwnerId());
+            try {
+                getPubMinis(this.event.getPubIds(), this.event.getTimeSlotList());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            try {
+                getParticipants(this.event.getParticipantIds());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            try {
+                getOwner(this.event.getOwnerId());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         } catch (DatabaseException e) {
             e.printStackTrace();
             Toast.makeText(getApplicationContext(),
@@ -693,23 +596,28 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
     }
 
     private void getPubMinis (ArrayList<Long> ids, ArrayList<TimeSlot> slots) {
+        PubDbHelper pubDbHelper = new PubDbHelper();
         ArrayList<Long> mIds = new ArrayList<>(ids);
         for (TimeSlot t : slots) {
             try {
                 long id = t.getPubId();
-                this.pubs.add(new PubMini(new PubDbHelper().getPub(id), t));
+                this.pubs.add(new PubMini(pubDbHelper.getPub(id), t));
                 mIds.remove(id);
             } catch (DatabaseException de) {
                 de.printStackTrace();
             }
         }
 
-        Collections.sort(this.pubs, new PubMiniModelComparator());
+        try {
+            Collections.sort(this.pubs, new PubMiniModelComparator());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         for (Long id : mIds) {
 
             try {
-                this.pubs.add(new PubMini(new PubDbHelper().getPub(id), null));
+                this.pubs.add(new PubMini(pubDbHelper.getPub(id), null));
             } catch (DatabaseException de) {
                 de.printStackTrace();
             }
@@ -717,9 +625,10 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
     }
 
     private void getParticipants(ArrayList<Long> ids) {
+        PersonDbHelper personDbHelper = new PersonDbHelper();
         for (long id : ids) {
             try {
-                this.participants.add(new PersonMini(new PersonDbHelper().getPerson(id)));
+                this.participants.add(new PersonMini(personDbHelper.getPerson(id)));
             } catch (DatabaseException e) {
                 e.printStackTrace();
             }

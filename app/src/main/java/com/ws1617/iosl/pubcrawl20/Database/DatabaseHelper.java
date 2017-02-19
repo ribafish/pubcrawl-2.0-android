@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -16,12 +17,14 @@ import com.android.volley.Response;
 import com.android.volley.ServerError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.HttpHeaderParser;
+import com.android.volley.toolbox.ImageRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.ws1617.iosl.pubcrawl20.App;
 import com.ws1617.iosl.pubcrawl20.DataModels.Event;
 import com.ws1617.iosl.pubcrawl20.DataModels.Person;
 import com.ws1617.iosl.pubcrawl20.DataModels.Pub;
 import com.ws1617.iosl.pubcrawl20.DataModels.TimeSlot;
+import com.ws1617.iosl.pubcrawl20.Details.DetailsCallback;
 import com.ws1617.iosl.pubcrawl20.NewEvent.NewEventActivity;
 import com.ws1617.iosl.pubcrawl20.R;
 
@@ -87,7 +90,6 @@ public class DatabaseHelper {
         resetEventsDatabase(context);
     }
 
-    @Deprecated
     public static void resetEventsDatabase(Context context) {
         //EventDbHelper db = new EventDbHelper();
         //TODO
@@ -159,7 +161,7 @@ public class DatabaseHelper {
         }
         JSONObject object = prepareEventObj(event,context);
 
-        PubJsonObjectRequest jsonObjectRequest = new PubJsonObjectRequest(Request.Method.POST, url,
+        EmptyJsonObjectRequest jsonObjectRequest = new EmptyJsonObjectRequest(Request.Method.POST, url,
                 object, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
@@ -194,7 +196,7 @@ public class DatabaseHelper {
         }
         JSONObject mainObject = preparePubsListObje(event);
 
-        PubJsonObjectRequest jsonObjectRequest = new PubJsonObjectRequest(Request.Method.PATCH, url,
+        EmptyJsonObjectRequest jsonObjectRequest = new EmptyJsonObjectRequest(Request.Method.PATCH, url,
                 mainObject, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
@@ -437,7 +439,6 @@ public class DatabaseHelper {
 
     }
 
-    @Deprecated
     public static void resetPubsDatabase(Context context) {
         //PubDbHelper db = new PubDbHelper();
         //TODO
@@ -594,7 +595,6 @@ public class DatabaseHelper {
         requestQueue.add(pubsRequest);
     }
 
-    @Deprecated
     public static void resetPersonsDatabase(Context context) {
         //PersonDbHelper db = new PersonDbHelper();
         //TODO
@@ -627,6 +627,7 @@ public class DatabaseHelper {
                             ArrayList<Person> persons = parseJsonResponsePersons(response);
                             for (final Person person : persons) {
                                 db.addPerson(person);
+                                downloadExternalPersonImage(context, person);
 
                                 String ownEventsListURL = url + "/" + person.getId() + "/" + PERSON_OWNED_EVENTS;
                                 JsonObjectRequest ownEventsRequest = new JsonObjectRequest(Request.Method.GET, ownEventsListURL, null,
@@ -861,6 +862,26 @@ public class DatabaseHelper {
         requestQueue.add(personsRequest);
     }
 
+    public static void downloadExternalPersonImage(final Context context, final Person person) {
+        String url = person.getImageUrl();
+        if (url == null || url.length() == 0) return;
+        final PersonDbHelper personDbHelper = new PersonDbHelper();
+        final RequestQueueHelper requestQueue = new RequestQueueHelper(context);
+        ImageRequest imageRequest = new ImageRequest(url, new Response.Listener<Bitmap>() {
+            @Override
+            public void onResponse(Bitmap response) {
+                person.setImage(response);
+                personDbHelper.updatePerson(person);
+            }
+        }, 600, 400, ImageView.ScaleType.FIT_CENTER, Bitmap.Config.RGB_565, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+            }
+        });
+        requestQueue.add(imageRequest);
+    }
+
     public static String getServerUrl(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         String url;
@@ -877,6 +898,100 @@ public class DatabaseHelper {
         if (!url.startsWith("http")) url = "http://" + url;
 
         return url;
+    }
+
+    public static void addFavouritePub(final Context context, final long pubId, final boolean favourite, DetailsCallback detailsCallback) {
+        SharedPreferences sharedPref = context.getSharedPreferences(context.getString(R.string.preference_user), Context.MODE_PRIVATE);
+        long id = sharedPref.getLong(context.getString(R.string.user_id), -1);
+        if (id == -1) {
+            detailsCallback.onFail();
+            return;
+        }
+        final RequestQueueHelper requestQueue = new RequestQueueHelper(context);
+        final String url;
+        try {
+            url = getServerUrl(context) + EVENTS;
+        } catch (StringIndexOutOfBoundsException e) {
+            Log.e(TAG, e.getLocalizedMessage());
+            detailsCallback.onFail();
+            return;
+        }
+
+        //TODO: make it happen
+        detailsCallback.onFail();
+    }
+
+    public static void joinEvent(final Context context, final long eventId, final boolean join, final DetailsCallback detailsCallback) {
+        SharedPreferences sharedPref = context.getSharedPreferences(context.getString(R.string.preference_user), Context.MODE_PRIVATE);
+        long id = sharedPref.getLong(context.getString(R.string.user_id), -1);
+        if (id == -1) {
+            detailsCallback.onFail();
+            return;
+        }
+        final RequestQueueHelper requestQueue = new RequestQueueHelper(context);
+        final String url;
+        try {
+            url = getServerUrl(context) + PERSONS + "/" + id + "/" + PERSON_EVENTS;
+        } catch (StringIndexOutOfBoundsException e) {
+            Log.e(TAG, e.getLocalizedMessage());
+            detailsCallback.onFail();
+            return;
+        }
+
+        ArrayList<Long> events = new ArrayList<>();
+        if (join) {
+            events.add(eventId);
+            EmptyJsonObjectRequest jsonObjectRequest = new EmptyJsonObjectRequest(Request.Method.PATCH, url,
+                    eventsListToJson(context, events), new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    detailsCallback.onSuccess();
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    detailsCallback.onFail();
+                    Log.e(TAG, "JoinEvent:onErrorResponse: " + error.toString());
+                    error.printStackTrace();
+                }
+            })
+            {
+                @Override
+                public Map<String, String> getHeaders() throws AuthFailureError {
+                    Map<String, String> params = new HashMap<String, String>();
+                    params.put("Authorization", "Bearer " + App.getToken());
+                    return params;
+                }
+            };
+            requestQueue.add(jsonObjectRequest);
+        } else {
+            // TODO
+            detailsCallback.onFail();
+        }
+
+    }
+
+    private static JSONObject eventsListToJson (Context context, ArrayList<Long> events) {
+        JSONObject object = new JSONObject();
+        try {
+            JSONArray items = new JSONArray();
+            for (Long id : events) {
+                String link = getServerUrl(context) + EVENTS + "/" + id;
+                JSONObject o = new JSONObject();
+                try {
+                    o.put("href" , link);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                items.put(o);
+            }
+            JSONObject links = new JSONObject();
+            links.put("items", items);
+            object.put("_links", links);
+        } catch (JSONException jsonException) {
+            jsonException.printStackTrace();
+        }
+        return object;
     }
 
 }
