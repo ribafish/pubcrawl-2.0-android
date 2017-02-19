@@ -90,8 +90,8 @@ public class EventDbHelper {
             values.put(LAT_MAX, event.getMaxLatLng().latitude);
             values.put(LONG_MAX, event.getMaxLatLng().longitude);
         } catch (Exception e) {
-            e.printStackTrace();
-
+            Log.v(TAG, "Event " + event.getEventName() + " id " + event.getId() + ": Can't write boundary box: " + e.getLocalizedMessage());
+//            e.printStackTrace();
         }
 
 
@@ -305,7 +305,7 @@ public class EventDbHelper {
             } while (c.moveToNext());
             c.close();
         } else {
-            Log.w(TAG, "getTimeSlots: Cursor is null or database empty");
+            Log.v(TAG, "event id " + event_id + " getTimeSlots: Cursor is null or database empty");
         }
 
         return timeSlots;
@@ -326,7 +326,7 @@ public class EventDbHelper {
             } while (c.moveToNext());
             c.close();
         } else {
-            Log.w(TAG, "getParticipantIds: Cursor is null or database empty");
+            Log.v(TAG, "event id " + event_id + " getParticipantIds: Cursor is null or database empty");
         }
 
         return list;
@@ -347,7 +347,7 @@ public class EventDbHelper {
             } while (c.moveToNext());
             c.close();
         } else {
-            Log.w(TAG, "getPubIds: Cursor is null or database empty");
+            Log.v(TAG, "event id " + event_id + " getPubIds: Cursor is null or database empty");
         }
 
         return list;

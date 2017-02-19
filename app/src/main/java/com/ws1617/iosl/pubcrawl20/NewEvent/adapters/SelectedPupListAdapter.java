@@ -37,7 +37,6 @@ public class SelectedPupListAdapter extends RecyclerView.Adapter<SelectedPupList
     public void onBindViewHolder(pupViewHolder holder, int position) {
         PubMiniModel pub = selectedPups.get(position);
         holder.setPubData(pub);
-
     }
 
     @Override
