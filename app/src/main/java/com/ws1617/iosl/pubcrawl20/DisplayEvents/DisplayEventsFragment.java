@@ -252,7 +252,11 @@ public class DisplayEventsFragment extends Fragment implements OnMapReadyCallbac
 
         prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
-        getEvents();
+        try {
+            getEvents();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         resetWholeDatabase(getContext());
     }
 
@@ -281,6 +285,8 @@ public class DisplayEventsFragment extends Fragment implements OnMapReadyCallbac
             }
         } catch (DatabaseException ex) {
             ex.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         if (eventAdapter != null) {
             Log.d(TAG, "eventAdapter.notifyDataSetChanged()");
