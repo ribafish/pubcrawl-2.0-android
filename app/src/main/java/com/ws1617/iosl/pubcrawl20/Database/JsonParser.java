@@ -295,7 +295,7 @@ public class JsonParser {
         return person;
     }
 
-    private static long parseIdFromHref(String href) {
+    public static long parseIdFromHref(String href) {
         return Long.parseLong(href.split("\\/+")[3]);
     }
 

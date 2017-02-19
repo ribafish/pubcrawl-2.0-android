@@ -44,6 +44,8 @@ import static com.ws1617.iosl.pubcrawl20.Database.JsonParser.EVENTS;
 import static com.ws1617.iosl.pubcrawl20.Database.JsonParser.EVENT_OWNER;
 import static com.ws1617.iosl.pubcrawl20.Database.JsonParser.EVENT_PARTICIPANTS;
 import static com.ws1617.iosl.pubcrawl20.Database.JsonParser.EVENT_PUBS;
+import static com.ws1617.iosl.pubcrawl20.Database.JsonParser.HREF;
+import static com.ws1617.iosl.pubcrawl20.Database.JsonParser.LINKS;
 import static com.ws1617.iosl.pubcrawl20.Database.JsonParser.PERSONS;
 import static com.ws1617.iosl.pubcrawl20.Database.JsonParser.PERSON_EVENTS;
 import static com.ws1617.iosl.pubcrawl20.Database.JsonParser.PERSON_FAVOURITE_PUBS;
@@ -54,6 +56,8 @@ import static com.ws1617.iosl.pubcrawl20.Database.JsonParser.PUBS;
 import static com.ws1617.iosl.pubcrawl20.Database.JsonParser.PUB_EVENTS;
 import static com.ws1617.iosl.pubcrawl20.Database.JsonParser.PUB_OWNER;
 import static com.ws1617.iosl.pubcrawl20.Database.JsonParser.PUB_TOP_PERSONS;
+import static com.ws1617.iosl.pubcrawl20.Database.JsonParser.SELF;
+import static com.ws1617.iosl.pubcrawl20.Database.JsonParser.parseIdFromHref;
 import static com.ws1617.iosl.pubcrawl20.Database.JsonParser.parseJSONEvent;
 import static com.ws1617.iosl.pubcrawl20.Database.JsonParser.parseJSONResponseEvents;
 import static com.ws1617.iosl.pubcrawl20.Database.JsonParser.parseJsonResponsePersons;
@@ -826,10 +830,10 @@ public class DatabaseHelper {
             return;
         }
 
-        ArrayList<Long> events = new ArrayList<>();
+        final ArrayList<Long> events = new ArrayList<>();
         if (join) {
             events.add(eventId);
-            EmptyJsonObjectRequest jsonObjectRequest = new EmptyJsonObjectRequest(Request.Method.PATCH, url,
+            JsonObjectRequest jsonObjectRequest = new EmptyJsonObjectRequest(Request.Method.PATCH, url,
                     eventsListToJson(context, events), new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
@@ -845,8 +849,53 @@ public class DatabaseHelper {
             });
             requestQueue.add(jsonObjectRequest);
         } else {
-            // TODO
-            detailsCallback.onFail();
+            JsonObjectRequest getEventsListRequest = new SecureJsonObjectRequest(Request.Method.GET, url,
+                    null, new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    JSONArray jsonEvents;
+                    try {
+                        jsonEvents  = response.getJSONObject(EMBEDDED).getJSONArray(EVENTS);
+                        for (int i=0;i<jsonEvents.length(); i++) {
+                            try {
+                                JSONObject event = jsonEvents.getJSONObject(i);
+                                JSONObject jsonLinks = event.getJSONObject(LINKS);
+                                long id = parseIdFromHref(jsonLinks.getJSONObject(SELF).getString(HREF));
+                                if (eventId != id) {
+                                    events.add(id);
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    JsonObjectRequest jsonObjectRequest = new EmptyJsonObjectRequest(Request.Method.PUT, url,
+                            eventsListToJson(context, events), new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+                                    detailsCallback.onSuccess();
+                                }
+                            }, new Response.ErrorListener() {
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
+                                    detailsCallback.onFail();
+                                    Log.e(TAG, "JoinEvent:onErrorResponse: " + error.toString());
+                                    error.printStackTrace();
+                                }
+                            });
+                            requestQueue.add(jsonObjectRequest);
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    detailsCallback.onFail();
+                    Log.e(TAG, "JoinEvent:onErrorResponse: " + error.toString());
+                    error.printStackTrace();
+                }
+            });
+            requestQueue.add(getEventsListRequest);
         }
 
     }

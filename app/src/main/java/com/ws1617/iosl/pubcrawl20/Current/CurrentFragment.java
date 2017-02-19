@@ -113,11 +113,16 @@ public class CurrentFragment extends Fragment {
                     ArrayList<Long> pubIds = event.getPubIds();
                     ArrayList<TimeSlot> timeSlots = event.getTimeSlotList();
                     for (Long id : pubIds) {
+                        boolean added = false;
                         try {
                             Pub p = pubDbHelper.getPub(id);
                             for (TimeSlot ts : timeSlots) {
-                                if (ts.getPubId() == p.getId()) em.addPub(new PubMini(p, ts));
+                                if (ts.getPubId() == p.getId()){
+                                    em.addPub(new PubMini(p, ts));
+                                    added = true;
+                                }
                             }
+                            if (!added) em.addPub(new PubMini(p, null));
                         } catch (DatabaseException e) {
                             e.printStackTrace();
                         }
