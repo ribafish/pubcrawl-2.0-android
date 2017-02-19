@@ -1,27 +1,32 @@
 package com.ws1617.iosl.pubcrawl20.Database;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkResponse;
 import com.android.volley.ParseError;
 import com.android.volley.Response;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.ws1617.iosl.pubcrawl20.App;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by Haneen on 17/01/2017.
+ * Allows empty responses from server (useful on some PATH or POST requests)
  */
 
-public class PubJsonObjectRequest extends JsonObjectRequest {
+public class EmptyJsonObjectRequest extends JsonObjectRequest {
 
-    public PubJsonObjectRequest(int method, String url, JSONObject jsonRequest, Response.Listener<JSONObject> listener, Response.ErrorListener errorListener) {
+    public EmptyJsonObjectRequest(int method, String url, JSONObject jsonRequest, Response.Listener<JSONObject> listener, Response.ErrorListener errorListener) {
         super(method, url, jsonRequest, listener, errorListener);
     }
 
-    public PubJsonObjectRequest(String url, JSONObject jsonRequest, Response.Listener<JSONObject> listener, Response.ErrorListener errorListener) {
+    public EmptyJsonObjectRequest(String url, JSONObject jsonRequest, Response.Listener<JSONObject> listener, Response.ErrorListener errorListener) {
         super(url, jsonRequest, listener, errorListener);
     }
 
@@ -43,6 +48,13 @@ public class PubJsonObjectRequest extends JsonObjectRequest {
         } catch (JSONException je) {
             return Response.error(new ParseError(je));
         }
+    }
+
+    @Override
+    public Map<String, String> getHeaders() throws AuthFailureError {
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("Authorization", "Bearer " + App.getToken());
+        return params;
     }
 
 

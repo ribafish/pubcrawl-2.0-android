@@ -23,7 +23,8 @@ public class Person {
     private String name;
     private String email;
     private String description = "";
-    private ArrayList<Bitmap> images = new ArrayList<>();
+    private Bitmap image;
+    private String imageUrl;
     private ArrayList<Long> friendIds = new ArrayList<>();
     private ArrayList<Long> eventIds = new ArrayList<>();
     private ArrayList<Long> favouritePubIds = new ArrayList<>();
@@ -49,7 +50,7 @@ public class Person {
 
 
     public Person(long id, String name, String email, String description,
-                  @NonNull ArrayList<Bitmap> images,
+                  Bitmap image,
                   @NonNull ArrayList<Long> friendIds,
                   @NonNull ArrayList<Long> eventIds,
                   @NonNull ArrayList<Long> favouritePubIds,
@@ -59,7 +60,7 @@ public class Person {
         this.name = name;
         this.email = email;
         this.description = description;
-        this.images = images;
+        this.image = image;
         this.friendIds = friendIds;
         this.eventIds = eventIds;
         this.favouritePubIds = favouritePubIds;
@@ -108,33 +109,19 @@ public class Person {
                 '}';
     }
 
-    public ArrayList<Bitmap> getImages() {
-        return images;
+    public Bitmap getImage() {
+        return image;
     }
 
     public byte[] getImageInBytes(int pos) {
-        if(images.isEmpty()) return null;
-        Bitmap bmp = images.get(pos);
-        if (bmp == null) return null;
+        if (image == null) return null;
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        bmp.compress(Bitmap.CompressFormat.PNG, 0, stream);
+        image.compress(Bitmap.CompressFormat.PNG, 0, stream);
         return stream.toByteArray();
     }
 
-    public void setImages(ArrayList<Bitmap> images) {
-        this.images = images;
-    }
-
-    public void addImage(Bitmap image) {
-        images.add(image);
-    }
-
-    public void removeImage(Bitmap image) {
-        images.remove(image);
-    }
-
-    public void removeImage(int imageId) {
-        images.remove(imageId);
+    public void setImage(Bitmap image) {
+        this.image = image;
     }
 
     public ArrayList<Long> getFriendIds() {
@@ -177,15 +164,12 @@ public class Person {
         this.ownedEventIds = ownedEventIds;
     }
 
-    public Bitmap getImage() {
-        if (images == null) return null;
-        else if (images.size() == 0) return null;
-        else return images.get(0);
+    public String getImageUrl() {
+        return imageUrl;
     }
 
-    public void setImage(Bitmap image) {
-        if (images == null) images = new ArrayList<>();
-        this.images.add(image);
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     public ContentValues getContentValues() {

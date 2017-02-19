@@ -22,6 +22,7 @@ import com.ws1617.iosl.pubcrawl20.Database.DatabaseException;
 import com.ws1617.iosl.pubcrawl20.Database.DatabaseHelper;
 import com.ws1617.iosl.pubcrawl20.Database.PersonDbHelper;
 import com.ws1617.iosl.pubcrawl20.Database.RequestQueueHelper;
+import com.ws1617.iosl.pubcrawl20.Database.SecureJsonObjectRequest;
 import com.ws1617.iosl.pubcrawl20.R;
 import com.ws1617.iosl.pubcrawl20.StartActivity;
 
@@ -98,7 +99,7 @@ public class SignInHelper {
   private void setCrawlerID(final GoogleSignInAccount acc) {
     final RequestQueueHelper requestQueue = new RequestQueueHelper(activity);
     String url = DatabaseHelper.getServerUrl(activity)+ "/crawlers/";
-    JsonObjectRequest personrequest = new JsonObjectRequest(Request.Method.GET, url, null,
+    JsonObjectRequest personrequest = new SecureJsonObjectRequest(Request.Method.GET, url, null,
       new Response.Listener<JSONObject>() {
         @Override
         public void onResponse(JSONObject response) {
@@ -129,15 +130,7 @@ public class SignInHelper {
           Log.e(TAG, "eventsRequest error: " + error.getLocalizedMessage());
           requestQueue.gotResponse();
         }
-      })
-    {
-      @Override
-      public Map<String, String> getHeaders() throws AuthFailureError {
-        Map<String, String> params = new HashMap<String, String>();
-        params.put("Authorization", "Bearer " + App.getToken());
-        return params;
-      }
-    };
+      });
     requestQueue.add(personrequest);
   }
 
@@ -211,7 +204,7 @@ public class SignInHelper {
 
   private void getCrawler(final GoogleSignInAccount acc) {
     SharedPreferences sharedPref = activity.getSharedPreferences(activity.getString(R.string.preference_user), Context.MODE_PRIVATE);
-    int id = sharedPref.getInt(activity.getString(R.string.user_id), -1);
+    long id = sharedPref.getLong(activity.getString(R.string.user_id), -1);
     if(id == -1) {
       setCrawlerID(acc);
     }
@@ -224,7 +217,7 @@ public class SignInHelper {
    * @param acc
    * @param id
    */
-  private void checkUser(GoogleSignInAccount acc, int id) {
+  private void checkUser(GoogleSignInAccount acc, long id) {
     Person person = null;
     try {
       person = new PersonDbHelper().getPerson(id);
@@ -243,7 +236,7 @@ public class SignInHelper {
       JSONObject selfJSON = linksJSON.getJSONObject("self");
       String link = selfJSON.getString("href");
       Log.i(TAG, link);
-      sharedPref.edit().putInt(activity.getString(R.string.user_id), getIDfromURL(link)).apply();
+      sharedPref.edit().putLong(activity.getString(R.string.user_id), getIDfromURL(link)).apply();
     } catch (JSONException e) {
       e.printStackTrace();
       return false;

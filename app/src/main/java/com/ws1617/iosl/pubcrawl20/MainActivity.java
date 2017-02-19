@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -62,14 +63,29 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     private GoogleApiClient mGoogleApiClient;
     private static Location mLastLocation;
     private long _mBackTime = 0L;
+    private ViewPager mViewPager;
+    private Context context;
+    private static final int RC_BARCODE_CAPTURE = 9001;
+    private Handler handler;
+    private Runnable updateDatabaseRunnable = new Runnable() {
+        @Override
+        public void run() {
+            try {
+                DatabaseHelper.resetWholeDatabase(context);
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
+                long delay = Long.parseLong(pref.getString("sync_frequency", "180")) * 60 * 1000;
+                if (delay > 0) handler.postDelayed(updateDatabaseRunnable, System.currentTimeMillis() + delay);
+            }
+        }
+    };
 
 
     /**
      * The {@link ViewPager} that will host the section contents.
      */
-    private ViewPager mViewPager;
-    private Context context;
-    private static final int RC_BARCODE_CAPTURE = 9001;
 
     QRScannerDialog qrScannerDialog = new QRScannerDialog();
 
@@ -125,6 +141,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         fabScanQR.setImageDrawable(AppCompatDrawableManager.get().getDrawable(this, R.drawable.qrcode));
         FloatingActionButton fabSearch = (FloatingActionButton) findViewById(R.id.main_fab_menu_search);
         fabSearch.setImageDrawable(AppCompatDrawableManager.get().getDrawable(this, R.drawable.ic_search_24dp));
+        FloatingActionButton fabRefresh = (FloatingActionButton) findViewById(R.id.main_fab_menu_refresh);
+        fabRefresh.setImageResource(R.drawable.ic_sync_24dp);
 
         fabSettings.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -165,8 +183,31 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                 fabMenu.close(true);
             }
         });
+        fabRefresh.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DatabaseHelper.resetWholeDatabase(context);
+                fabMenu.close(true);
+            }
+        });
+
+        handler = new Handler();
 
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
+        long delay = Long.parseLong(pref.getString("sync_frequency", "180")) * 60 * 1000;
+        if (delay > 0) handler.postDelayed(updateDatabaseRunnable, System.currentTimeMillis() + delay);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        handler.removeCallbacks(updateDatabaseRunnable);
     }
 
     @Override
@@ -278,5 +319,9 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         if (mLastLocation != null)
             return mLastLocation;
         throw new NullPointerException();
+    }
+
+    public void setTab(int num) {
+        mViewPager.setCurrentItem(num);
     }
 }
