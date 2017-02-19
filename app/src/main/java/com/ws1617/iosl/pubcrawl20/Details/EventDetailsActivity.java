@@ -88,6 +88,8 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
 
     private PubAdapter pubAdapter;
     private ListView pubListView;
+    private ArrayList<Bitmap> images = new ArrayList<>();
+
 
     private PersonAdapter personAdapter;
     private ListView participantListView;
@@ -202,8 +204,6 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
             }
         });
 
-        ArrayList<Bitmap> images = new ArrayList<Bitmap>();
-        images.add(BitmapFactory.decodeResource(getResources(), R.mipmap.bestpub));
         images.add(BitmapFactory.decodeResource(getResources(), R.mipmap.bestpub));
         imageCarouselPager = new ImageCarouselPager(this, images);
         viewPager.setAdapter(imageCarouselPager);
@@ -457,6 +457,11 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
             ((TextView) findViewById(R.id.event_details_id)).setText(String.valueOf(event.getId()));
             ((TextView) findViewById(R.id.event_details_tracked)).setText(event.isTracked() ? "Tracked" : "Not tracked");
             ((TextView) findViewById(R.id.event_details_description)).setText(event.getDescription());
+            if (event.getImage() != null) {
+                images.clear();
+                images.add(event.getImage());
+                imageCarouselPager.notifyDataSetChanged();
+            }
             updateJoinButtons(event.getParticipantIds().contains(userId));
         }
 
