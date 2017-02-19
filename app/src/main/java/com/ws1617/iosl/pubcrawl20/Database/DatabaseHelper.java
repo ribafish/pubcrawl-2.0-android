@@ -504,8 +504,7 @@ public class DatabaseHelper {
                                         new Response.ErrorListener() {
                                             @Override
                                             public void onErrorResponse(VolleyError error) {
-                                                Log.e(TAG, "VolleyError for pub id " + pub.getId());
-                                                Log.e(TAG, "ownerRequest: " + error.getLocalizedMessage());
+                                                Log.e(TAG, "VolleyError for pub " + pub.getPubName() + " id " + pub.getId() + " ownerRequest: " + error.getLocalizedMessage());
                                                 requestQueue.gotResponse();
                                             }
                                         });

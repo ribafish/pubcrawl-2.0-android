@@ -90,8 +90,8 @@ public class EventDbHelper {
             values.put(LAT_MAX, event.getMaxLatLng().latitude);
             values.put(LONG_MAX, event.getMaxLatLng().longitude);
         } catch (Exception e) {
-            e.printStackTrace();
-
+            Log.v(TAG, "Event " + event.getEventName() + " id " + event.getId() + ": Can't write boundary box: " + e.getLocalizedMessage());
+//            e.printStackTrace();
         }
 
 
