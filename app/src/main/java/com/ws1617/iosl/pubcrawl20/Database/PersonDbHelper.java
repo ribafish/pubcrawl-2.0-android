@@ -244,7 +244,7 @@ public class PersonDbHelper {
             } while (c.moveToNext());
             c.close();
         } else {
-            Log.w(TAG, "getEventIds: Cursor is null or database empty");
+            Log.v(TAG, "person id " + person_id + " getEventIds: Cursor is null or database empty");
         }
 
         return list;
@@ -265,7 +265,7 @@ public class PersonDbHelper {
             } while (c.moveToNext());
             c.close();
         } else {
-            Log.w(TAG, "getFriendIds: Cursor is null or database empty");
+            Log.v(TAG, "person id " + person_id + " getFriendIds: Cursor is null or database empty");
         }
 
         return list;
@@ -286,7 +286,7 @@ public class PersonDbHelper {
             } while (c.moveToNext());
             c.close();
         } else {
-            Log.w(TAG, "getFavouritePubIds: Cursor is null or database empty");
+            Log.v(TAG, "person id " + person_id + " getFavouritePubIds: Cursor is null or database empty");
         }
 
         return list;
@@ -307,7 +307,7 @@ public class PersonDbHelper {
             } while (c.moveToNext());
             c.close();
         } else {
-            Log.w(TAG, "getFavouritePubIds: Cursor is null or database empty");
+            Log.v(TAG, "person id " + person_id + " getOwnedEventIds: Cursor is null or database empty");
         }
 
         return list;
@@ -328,7 +328,7 @@ public class PersonDbHelper {
             } while (c.moveToNext());
             c.close();
         } else {
-            Log.w(TAG, "getFavouritePubIds: Cursor is null or database empty");
+            Log.v(TAG, "person id " + person_id + " getOwnedPubIds: Cursor is null or database empty");
         }
 
         return list;

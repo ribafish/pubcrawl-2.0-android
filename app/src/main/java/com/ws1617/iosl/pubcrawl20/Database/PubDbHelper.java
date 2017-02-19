@@ -261,7 +261,7 @@ public class PubDbHelper  {
             } while (c.moveToNext());
             c.close();
         } else {
-            Log.w(TAG, "getTopPersonIds: Cursor is null or database empty");
+            Log.v(TAG, "pub id " + pub_id + " getTopPersonIds: Cursor is null or database empty");
         }
 
         return list;
@@ -283,7 +283,7 @@ public class PubDbHelper  {
             } while (c.moveToNext());
             c.close();
         } else {
-            Log.w(TAG, "getPubEventIds: Cursor is null or database empty");
+            Log.v(TAG, "pub id " + pub_id + " getPubEventIds: Cursor is null or database empty");
         }
 
         return list;
@@ -305,7 +305,7 @@ public class PubDbHelper  {
             } while (c.moveToNext());
             c.close();
         } else {
-            Log.w(TAG, "getPubImages: Cursor is null or database empty");
+            Log.v(TAG, "pub id " + pub_id + " getPubImages: Cursor is null or database empty");
         }
 
         return list;
