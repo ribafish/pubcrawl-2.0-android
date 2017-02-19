@@ -213,16 +213,16 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     private void prepareSharedEvent(Barcode barcode) {
 
         //TODO update local event database
-        DatabaseHelper databaseHelper = new DatabaseHelper();
-        databaseHelper.resetEventsDatabase(getApplicationContext());
+        // DatabaseHelper databaseHelper = new DatabaseHelper();
+        //databaseHelper.resetEventsDatabase(getApplicationContext());
 
-        //TODO extract event name from the row data
+        //extract event name from the row data
         String eventName = barcode.displayValue.substring(mBarcodeData.length(), barcode.displayValue.length());
 
-        //TODO get event with the same name, get its id ..
+        // get event with the same name, get its id ..
         Event event = null;
         try {
-            new EventDbHelper().getEvent(eventName);
+            event = new EventDbHelper().getEvent("Awesome");
         } catch (DatabaseException e) {
             e.printStackTrace();
         }

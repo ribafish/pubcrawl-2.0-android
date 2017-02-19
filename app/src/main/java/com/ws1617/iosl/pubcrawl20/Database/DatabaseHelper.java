@@ -87,7 +87,6 @@ public class DatabaseHelper {
         resetEventsDatabase(context);
     }
 
-    @Deprecated
     public static void resetEventsDatabase(Context context) {
         //EventDbHelper db = new EventDbHelper();
         //TODO
@@ -437,7 +436,6 @@ public class DatabaseHelper {
 
     }
 
-    @Deprecated
     public static void resetPubsDatabase(Context context) {
         //PubDbHelper db = new PubDbHelper();
         //TODO
@@ -594,7 +592,6 @@ public class DatabaseHelper {
         requestQueue.add(pubsRequest);
     }
 
-    @Deprecated
     public static void resetPersonsDatabase(Context context) {
         //PersonDbHelper db = new PersonDbHelper();
         //TODO

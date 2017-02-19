@@ -230,8 +230,7 @@ public class EventDbHelper {
         Event event;
 
         String query = "SELECT * FROM " +
-                TABLE_EVENTS + " WHERE " +
-                EVENT_ID + " = " + event_id;
+                TABLE_EVENTS+ " WHERE " +EVENT_ID + " = " + event_id;
 
         Cursor c = db.rawQuery(query, null);
         if (c != null && c.moveToFirst()) {
@@ -251,21 +250,16 @@ public class EventDbHelper {
     public Event getFirstMatchEvent(String event_name) throws DatabaseException {
         SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
         Event event;
-
-        String query = "SELECT * FROM " +
-                TABLE_EVENTS ;//+ " WHERE " + EVENT_NAME + " = \""+event_name+"\" ";
+        String query = "SELECT * FROM " + TABLE_EVENTS + " WHERE " + EVENT_NAME + " = \""+event_name+"\" ";
 
         Cursor c = db.rawQuery(query, null);
         if (c != null && c.moveToFirst()) {
-
             event = getListlessEventFromCursor(c);
-
             c.close();
         } else {
             Log.e(TAG, "Can't find event with name " + event_name);
             return null;
         }
-
         return event;
     }
 
@@ -280,7 +274,7 @@ public class EventDbHelper {
 
 
     public Event getEvent(String event_name) throws DatabaseException {
-        Event event = getEvent(19);
+        Event event = getFirstMatchEvent(event_name);
         if (event == null) return null;
         Long event_id = event.getId();
         event.setTimeSlotList(getTimeSlots(event_id));
