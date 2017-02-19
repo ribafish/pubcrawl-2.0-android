@@ -45,6 +45,7 @@ import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.vision.MultiProcessor;
 import com.google.android.gms.vision.barcode.Barcode;
 import com.google.android.gms.vision.barcode.BarcodeDetector;
+import com.ws1617.iosl.pubcrawl20.Database.DatabaseHelper;
 import com.ws1617.iosl.pubcrawl20.R;
 import com.ws1617.iosl.pubcrawl20.ScanQR.ui.CameraSource;
 import com.ws1617.iosl.pubcrawl20.ScanQR.ui.CameraSourcePreview;
@@ -109,6 +110,10 @@ public final class BarcodeCaptureActivity extends AppCompatActivity {
         Snackbar.make(mGraphicOverlay, "Tap to capture. Pinch/Stretch to zoom",
                 Snackbar.LENGTH_LONG)
                 .show();
+
+
+        DatabaseHelper databaseHelper = new DatabaseHelper();
+        databaseHelper.resetEventsDatabase(getApplicationContext());
     }
 
     /**

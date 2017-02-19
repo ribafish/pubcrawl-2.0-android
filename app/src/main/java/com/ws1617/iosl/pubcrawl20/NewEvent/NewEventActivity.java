@@ -1,5 +1,7 @@
 package com.ws1617.iosl.pubcrawl20.NewEvent;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -11,7 +13,9 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.ws1617.iosl.pubcrawl20.DataModels.Event;
+import com.ws1617.iosl.pubcrawl20.Database.DatabaseException;
 import com.ws1617.iosl.pubcrawl20.Database.DatabaseHelper;
+import com.ws1617.iosl.pubcrawl20.Database.PersonDbHelper;
 import com.ws1617.iosl.pubcrawl20.NewEvent.adapters.NewEventPagerAdapter;
 import com.ws1617.iosl.pubcrawl20.R;
 
@@ -81,6 +85,14 @@ public class NewEventActivity extends AppCompatActivity {
         ((NewEventGeneralFragment) fragmentsList.get(0)).updateGeneralInfo(event);
         ((NewEventRouteFragment) fragmentsList.get(1)).updatePubListInfo(event);
 
+
+        SharedPreferences sharedPref = getApplicationContext().getSharedPreferences(getApplicationContext().getString(R.string.preference_user), Context.MODE_PRIVATE);
+        Long userId = sharedPref.getLong(getApplicationContext().getString(R.string.user_id), -1);
+
+        event.setOwnerId(userId);
+
+
+
         if (!checkSatisfyMinReq(event))
             return;
         else {
@@ -104,7 +116,6 @@ public class NewEventActivity extends AppCompatActivity {
             });
         }
     }
-
 
     private boolean checkSatisfyMinReq(Event event) {
         if (event.getEventName() == null || event.getEventName().trim().length() == 0) {
