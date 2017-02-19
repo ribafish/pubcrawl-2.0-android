@@ -198,44 +198,6 @@ public class SignInHelper {
     } catch (JSONException e) {
       e.printStackTrace();
     }
-    /*try {
-      final RequestQueueHelper requestQueue = new RequestQueueHelper(activity);
-      String url = DatabaseHelper.getServerUrl(activity) + "/crawlers/";
-      JsonObjectRequest createRequest = new JsonObjectRequest(Request.Method.POST, url, null,
-        new Response.Listener<JSONObject>() {
-          @Override
-          public void onResponse(JSONObject response) {
-            handleResponse(response, acc, true);
-            requestQueue.gotResponse();
-          }
-        },
-        new Response.ErrorListener() {
-          @Override
-          public void onErrorResponse(VolleyError error) {
-            Log.e(TAG, "eventsRequest error: " + error.getLocalizedMessage());
-            requestQueue.gotResponse();
-          }
-        }) {
-        @Override
-        public Map<String, String> getHeaders() throws AuthFailureError {
-          Map<String, String> params = new HashMap<String, String>();
-          params.put("Authorization", "Bearer " + App.getToken());
-          return params;
-        }
-
-        @Override
-        protected Map<String, String> getParams()
-        {
-          Map<String, String>  params = new HashMap<String, String>();
-          params.put(PERSON_NAME, acc.getDisplayName());
-          params.put(PERSON_PROFILE, acc.getId());
-          return params;
-        }
-      };
-      requestQueue.add(createRequest);
-    } catch (Exception e) {
-      Log.e(TAG, "eventsRequest error: " + e.getLocalizedMessage());
-    }*/
   }
 
   public void deleteCrawler(final int id) {
