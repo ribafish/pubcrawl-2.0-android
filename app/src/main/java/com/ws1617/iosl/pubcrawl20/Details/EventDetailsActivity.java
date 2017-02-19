@@ -571,9 +571,21 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
         try {
             this.event = new EventDbHelper().getEvent(id);
 
-            getPubMinis(this.event.getPubIds(), this.event.getTimeSlotList());
-            getParticipants(this.event.getParticipantIds());
-            getOwner(this.event.getOwnerId());
+            try {
+                getPubMinis(this.event.getPubIds(), this.event.getTimeSlotList());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            try {
+                getParticipants(this.event.getParticipantIds());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            try {
+                getOwner(this.event.getOwnerId());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         } catch (DatabaseException e) {
             e.printStackTrace();
             Toast.makeText(getApplicationContext(),

@@ -705,11 +705,31 @@ public class PersonDetailsActivity extends AppCompatActivity implements AppBarLa
             return;
         }
 
-        getFriends();
-        getEvents();
-        getFavouritePubs();
-        getOwnedPubs();
-        getOwnedEvents();
+        try {
+            getFriends();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            getEvents();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            getFavouritePubs();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            getOwnedPubs();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            getOwnedEvents();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private PersonMini getPersonMini(long id) throws DatabaseException {

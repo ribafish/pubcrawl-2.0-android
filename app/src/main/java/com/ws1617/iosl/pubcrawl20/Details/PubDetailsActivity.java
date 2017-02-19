@@ -575,9 +575,21 @@ public class PubDetailsActivity extends AppCompatActivity implements AppBarLayou
         try {
             pub = new PubDbHelper().getPub(id);
 
-            getTopPeople(pub.getTopsListIds());
-            getEvents(pub.getEventsListIds());
-            owner = getPersonMini(pub.getOwnerId());
+            try {
+                getTopPeople(pub.getTopsListIds());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            try {
+                getEvents(pub.getEventsListIds());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            try {
+                owner = getPersonMini(pub.getOwnerId());
+            } catch (DatabaseException e) {
+                e.printStackTrace();
+            }
         } catch (DatabaseException e) {
             e.printStackTrace();
             Toast.makeText(getApplicationContext(),
