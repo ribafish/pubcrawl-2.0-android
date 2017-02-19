@@ -22,6 +22,7 @@ import com.ws1617.iosl.pubcrawl20.Database.DatabaseException;
 import com.ws1617.iosl.pubcrawl20.Database.DatabaseHelper;
 import com.ws1617.iosl.pubcrawl20.Database.PersonDbHelper;
 import com.ws1617.iosl.pubcrawl20.Database.RequestQueueHelper;
+import com.ws1617.iosl.pubcrawl20.Database.SecureJsonObjectRequest;
 import com.ws1617.iosl.pubcrawl20.R;
 import com.ws1617.iosl.pubcrawl20.StartActivity;
 
@@ -98,7 +99,7 @@ public class SignInHelper {
   private void setCrawlerID(final GoogleSignInAccount acc) {
     final RequestQueueHelper requestQueue = new RequestQueueHelper(activity);
     String url = DatabaseHelper.getServerUrl(activity)+ "/crawlers/";
-    JsonObjectRequest personrequest = new JsonObjectRequest(Request.Method.GET, url, null,
+    JsonObjectRequest personrequest = new SecureJsonObjectRequest(Request.Method.GET, url, null,
       new Response.Listener<JSONObject>() {
         @Override
         public void onResponse(JSONObject response) {
@@ -129,15 +130,7 @@ public class SignInHelper {
           Log.e(TAG, "eventsRequest error: " + error.getLocalizedMessage());
           requestQueue.gotResponse();
         }
-      })
-    {
-      @Override
-      public Map<String, String> getHeaders() throws AuthFailureError {
-        Map<String, String> params = new HashMap<String, String>();
-        params.put("Authorization", "Bearer " + App.getToken());
-        return params;
-      }
-    };
+      });
     requestQueue.add(personrequest);
   }
 
