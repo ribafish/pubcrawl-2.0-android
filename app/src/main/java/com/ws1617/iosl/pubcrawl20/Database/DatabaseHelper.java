@@ -902,7 +902,7 @@ public class DatabaseHelper {
 
     public static void addFavouritePub(final Context context, final long pubId, final boolean favourite, DetailsCallback detailsCallback) {
         SharedPreferences sharedPref = context.getSharedPreferences(context.getString(R.string.preference_user), Context.MODE_PRIVATE);
-        int id = sharedPref.getInt(context.getString(R.string.user_id), -1);
+        long id = sharedPref.getLong(context.getString(R.string.user_id), -1);
         if (id == -1) {
             detailsCallback.onFail();
             return;
@@ -923,7 +923,7 @@ public class DatabaseHelper {
 
     public static void joinEvent(final Context context, final long eventId, final boolean join, final DetailsCallback detailsCallback) {
         SharedPreferences sharedPref = context.getSharedPreferences(context.getString(R.string.preference_user), Context.MODE_PRIVATE);
-        int id = sharedPref.getInt(context.getString(R.string.user_id), -1);
+        long id = sharedPref.getLong(context.getString(R.string.user_id), -1);
         if (id == -1) {
             detailsCallback.onFail();
             return;

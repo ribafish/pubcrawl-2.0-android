@@ -142,7 +142,7 @@ public class DisplayEventsFragment extends Fragment implements OnMapReadyCallbac
             @Override
             public void onClick(View view) {
                 SharedPreferences sharedPref = view.getContext().getSharedPreferences(getString(R.string.preference_user), Context.MODE_PRIVATE);
-                int id = sharedPref.getInt(getString(R.string.user_id), -1);
+                long id = sharedPref.getLong(getString(R.string.user_id), -1);
                 Intent intent = new Intent(getContext(), PersonDetailsActivity.class);
                 intent.putExtra("id", id);
                 startActivity(intent);

@@ -114,7 +114,7 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
         //setupPubsListView();
 
         SharedPreferences sharedPref = context.getSharedPreferences(context.getString(R.string.preference_user), Context.MODE_PRIVATE);
-        userId = sharedPref.getInt(context.getString(R.string.user_id), -1);
+        userId = sharedPref.getLong(context.getString(R.string.user_id), -1);
 
 
         // TODO: change to the data load listener or smtn when database is ready
@@ -581,11 +581,12 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
     }
 
     private void getPubMinis (ArrayList<Long> ids, ArrayList<TimeSlot> slots) {
+        PubDbHelper pubDbHelper = new PubDbHelper();
         ArrayList<Long> mIds = new ArrayList<>(ids);
         for (TimeSlot t : slots) {
             try {
                 long id = t.getPubId();
-                this.pubs.add(new PubMini(new PubDbHelper().getPub(id), t));
+                this.pubs.add(new PubMini(pubDbHelper.getPub(id), t));
                 mIds.remove(id);
             } catch (DatabaseException de) {
                 de.printStackTrace();
@@ -597,7 +598,7 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
         for (Long id : mIds) {
 
             try {
-                this.pubs.add(new PubMini(new PubDbHelper().getPub(id), null));
+                this.pubs.add(new PubMini(pubDbHelper.getPub(id), null));
             } catch (DatabaseException de) {
                 de.printStackTrace();
             }
@@ -605,9 +606,10 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
     }
 
     private void getParticipants(ArrayList<Long> ids) {
+        PersonDbHelper personDbHelper = new PersonDbHelper();
         for (long id : ids) {
             try {
-                this.participants.add(new PersonMini(new PersonDbHelper().getPerson(id)));
+                this.participants.add(new PersonMini(personDbHelper.getPerson(id)));
             } catch (DatabaseException e) {
                 e.printStackTrace();
             }

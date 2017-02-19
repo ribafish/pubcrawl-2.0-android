@@ -76,7 +76,7 @@ public class CurrentFragment extends Fragment {
 
         Context context = getContext();
         SharedPreferences sharedPref = context.getSharedPreferences(context.getString(R.string.preference_user), Context.MODE_PRIVATE);
-        userId = sharedPref.getInt(context.getString(R.string.user_id), -1);
+        userId = sharedPref.getLong(context.getString(R.string.user_id), -1);
         getEvents();
 
         Button findEvents = (Button) rootView.findViewById(R.id.current_find_events_btn);
