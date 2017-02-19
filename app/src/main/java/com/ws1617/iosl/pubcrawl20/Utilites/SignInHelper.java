@@ -204,7 +204,8 @@ public class SignInHelper {
 
   private void getCrawler(final GoogleSignInAccount acc) {
     SharedPreferences sharedPref = activity.getSharedPreferences(activity.getString(R.string.preference_user), Context.MODE_PRIVATE);
-    long id = sharedPref.getLong(activity.getString(R.string.user_id), -1);
+  //  int id3 = sharedPref.getInt(activity.getString(R.string.user_id), 0);
+    long id = sharedPref.getLong(activity.getString(R.string.user_id), 0);
     if(id == -1) {
       setCrawlerID(acc);
     }

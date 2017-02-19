@@ -41,6 +41,7 @@ import com.ws1617.iosl.pubcrawl20.ScanQR.QRScannerDialog;
 import com.ws1617.iosl.pubcrawl20.Search.SearchActivity;
 
 import java.lang.reflect.Array;
+import java.util.List;
 
 import static com.ws1617.iosl.pubcrawl20.NewEvent.ShareEventDialog.mBarcodeData;
 
@@ -77,7 +78,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             } finally {
                 SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
                 long delay = Long.parseLong(pref.getString("sync_frequency", "180")) * 60 * 1000;
-                if (delay > 0) handler.postDelayed(updateDatabaseRunnable, System.currentTimeMillis() + delay);
+                if (delay > 0)
+                    handler.postDelayed(updateDatabaseRunnable, System.currentTimeMillis() + delay);
             }
         }
     };
@@ -201,7 +203,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         super.onResume();
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
         long delay = Long.parseLong(pref.getString("sync_frequency", "180")) * 60 * 1000;
-        if (delay > 0) handler.postDelayed(updateDatabaseRunnable, System.currentTimeMillis() + delay);
+        if (delay > 0)
+            handler.postDelayed(updateDatabaseRunnable, System.currentTimeMillis() + delay);
     }
 
     @Override
@@ -251,12 +254,22 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         }
     }
 
-    private void prepareSharedEvent(Barcode barcode) {
+
+    public interface ResetDataDone {
+        void onResetDone();
+    }
+
+    private void prepareSharedEvent(final Barcode barcode) {
 
         //TODO update local event database
-        // DatabaseHelper databaseHelper = new DatabaseHelper();
-        //databaseHelper.resetEventsDatabase(getApplicationContext());
 
+        try {
+            List<Event> eventsList = new EventDbHelper().getAllEvents();
+        } catch (DatabaseException e) {
+            e.printStackTrace();
+        }
+
+        Log.d("scanqr", "onResetDone");
         //extract event name from the row data
         String eventName = barcode.displayValue.substring(mBarcodeData.length(), barcode.displayValue.length());
 
@@ -282,6 +295,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             qrScannerDialog.initNotFoundLayout(true);
 
         }
+
 
     }
 
