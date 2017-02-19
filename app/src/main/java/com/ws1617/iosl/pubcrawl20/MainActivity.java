@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -53,14 +54,29 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     private GoogleApiClient mGoogleApiClient;
     private static Location mLastLocation;
     private long _mBackTime = 0L;
+    private ViewPager mViewPager;
+    private Context context;
+    private static final int RC_BARCODE_CAPTURE = 9001;
+    private Handler handler;
+    private Runnable updateDatabaseRunnable = new Runnable() {
+        @Override
+        public void run() {
+            try {
+                DatabaseHelper.resetWholeDatabase(context);
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
+                long delay = Long.parseLong(pref.getString("sync_frequency", "180")) * 60 * 1000;
+                if (delay > 0) handler.postDelayed(updateDatabaseRunnable, System.currentTimeMillis() + delay);
+            }
+        }
+    };
 
 
     /**
      * The {@link ViewPager} that will host the section contents.
      */
-    private ViewPager mViewPager;
-    private Context context;
-    private static final int RC_BARCODE_CAPTURE = 9001;
 
 
     @Override
@@ -165,6 +181,22 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             }
         });
 
+        handler = new Handler();
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
+        long delay = Long.parseLong(pref.getString("sync_frequency", "180")) * 60 * 1000;
+        if (delay > 0) handler.postDelayed(updateDatabaseRunnable, System.currentTimeMillis() + delay);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        handler.removeCallbacks(updateDatabaseRunnable);
     }
 
     @Override
