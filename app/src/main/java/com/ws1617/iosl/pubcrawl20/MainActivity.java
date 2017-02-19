@@ -116,7 +116,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         FloatingActionButton fabSearch = (FloatingActionButton) findViewById(R.id.main_fab_menu_search);
         fabSearch.setImageDrawable(AppCompatDrawableManager.get().getDrawable(this, R.drawable.ic_search_24dp));
         FloatingActionButton fabRefresh = (FloatingActionButton) findViewById(R.id.main_fab_menu_refresh);
-        fabRefresh.setImageResource(R.drawable.ic_sync_black_24dp);
+        fabRefresh.setImageResource(R.drawable.ic_sync_24dp);
 
         fabSettings.setOnClickListener(new View.OnClickListener() {
             @Override

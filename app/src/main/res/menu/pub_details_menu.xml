@@ -17,7 +17,7 @@
 
     <item
         android:id="@+id/pub_details.menu.refresh"
-        android:icon="@drawable/ic_sync_black_24dp"
+        android:icon="@drawable/ic_sync_24dp"
         android:visible="true"
         app:showAsAction="ifRoom"
         android:title="@string/refresh"/>

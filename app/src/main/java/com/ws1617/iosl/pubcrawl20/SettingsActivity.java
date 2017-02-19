@@ -4,6 +4,7 @@ package com.ws1617.iosl.pubcrawl20;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
@@ -25,6 +26,8 @@ import android.view.MenuItem;
 import android.support.v4.app.NavUtils;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.ws1617.iosl.pubcrawl20.Details.PersonDetailsActivity;
 
 import java.util.List;
 
@@ -164,7 +167,15 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
     public void onBuildHeaders(List<Header> target) {
         loadHeadersFromResource(R.xml.pref_headers, target);
 
-        
+        for (Header h: target) {
+            if (h.id == R.id.pref_header_my_profile) {
+                SharedPreferences sharedPref = getSharedPreferences(getString(R.string.preference_user), Context.MODE_PRIVATE);
+                long id = sharedPref.getLong(getString(R.string.user_id), -1);
+                Intent intent = new Intent(this, PersonDetailsActivity.class);
+                intent.putExtra("id", id);
+                h.intent = intent;
+            }
+        }
     }
 
     /**
