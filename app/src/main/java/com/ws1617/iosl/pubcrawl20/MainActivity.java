@@ -260,9 +260,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     }
 
     private void prepareSharedEvent(final Barcode barcode) {
-
-        //TODO update local event database
-
         try {
             List<Event> eventsList = new EventDbHelper().getAllEvents();
         } catch (DatabaseException e) {
@@ -276,7 +273,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         // get event with the same name, get its id ..
         Event event = null;
         try {
-            event = new EventDbHelper().getEvent("Awesome");
+            event = new EventDbHelper().getEvent(eventName);
         } catch (DatabaseException e) {
             e.printStackTrace();
         }
