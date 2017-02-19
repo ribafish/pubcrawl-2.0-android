@@ -112,6 +112,7 @@ public class StartActivity extends AppCompatActivity implements
 				GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
 				handleSignInResult(result);
 			} else {
+				showError();
 				Log.d(TAG, "Result from on activity result is not ok " + resultCode);
 			}
 		}
@@ -126,6 +127,8 @@ public class StartActivity extends AppCompatActivity implements
 			GoogleSignInAccount acct = result.getSignInAccount();
 			SignInHelper signIn = new SignInHelper(this);
 			signIn.getToken(acct);
+			//signIn.deleteCrawler(55);
+			//signIn.deleteCrawler(56);
 		} else {
 			hideProgressDialog();
 			showLogin();
@@ -146,6 +149,7 @@ public class StartActivity extends AppCompatActivity implements
 	public void onConnectionFailed(ConnectionResult connectionResult) {
 		// An unresolvable error has occurred and Google APIs (including Sign-In) will not
 		// be available.
+		showError();
 		Log.d(TAG, "onConnectionFailed:" + connectionResult);
 	}
 
@@ -156,13 +160,18 @@ public class StartActivity extends AppCompatActivity implements
 				@Override
 				public void onResult(Status status) {
 					// [START_EXCLUDE]
-					textViewFailed.setVisibility(View.VISIBLE);
-					signInButton.setVisibility(View.GONE);
+					showError();
 					// [END_EXCLUDE]
 				}
 			});
 	}
 	// [END signOut]
+
+	private void showError() {
+		hideProgressDialog();
+		textViewFailed.setVisibility(View.VISIBLE);
+		signInButton.setVisibility(View.GONE);
+	}
 
 	private void showProgressDialog() {
 		if (mProgressDialog == null) {

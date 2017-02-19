@@ -98,13 +98,15 @@ public class SignInHelper {
   }
 
   private void setCrawlerID(final GoogleSignInAccount acc) {
+    resetPersonsDatabase(activity);
     final RequestQueueHelper requestQueue = new RequestQueueHelper(activity);
     String url = DatabaseHelper.getServerUrl(activity)+ "/crawlers/";
     JsonObjectRequest personRequest = new JsonObjectRequest(Request.Method.GET, url, null,
       new Response.Listener<JSONObject>() {
         @Override
         public void onResponse(JSONObject response) {
-          handleResponse(response, acc, false);
+          Log.i(TAG, "reset Person database to add crawler " +acc.getId());
+          handleResponse(response, acc, true);
           requestQueue.gotResponse();
         }
       },
@@ -132,6 +134,7 @@ public class SignInHelper {
       for (int i = 0; i < crawlersJSON.length(); i++) {
         JSONObject jsonCrawler = crawlersJSON.getJSONObject(i);
         if(jsonCrawler.getString(PERSON_PROFILE).equals(acc.getId()) && setCrawlerInApp(jsonCrawler)) {
+          activity.showApp();
           return;
         }
       }
@@ -149,6 +152,53 @@ public class SignInHelper {
 
   private void createCrawler(final GoogleSignInAccount acc) {
     try {
+      RequestQueueHelper requestQueue = new RequestQueueHelper(activity);
+      String url = DatabaseHelper.getServerUrl(activity)+ "/crawlers/";
+      JSONObject jsonBody = new JSONObject();
+      jsonBody.put(PERSON_NAME, acc.getDisplayName());
+      jsonBody.put(PERSON_PROFILE, acc.getId());
+      final String requestBody = jsonBody.toString();
+
+      JsonObjectRequest stringRequest = new JsonObjectRequest(Request.Method.POST, url, null, new Response.Listener<JSONObject>() {
+        @Override
+        public void onResponse(JSONObject response) {
+          resetPersonsDatabase(activity);
+          handleResponse(response, acc, false);
+        }
+      }, new Response.ErrorListener() {
+        @Override
+        public void onErrorResponse(VolleyError error) {
+          Log.e("VOLLEY", error.toString());
+        }
+      }) {
+        @Override
+        public String getBodyContentType() {
+          return "application/json; charset=utf-8";
+        }
+
+        @Override
+        public byte[] getBody()  {
+          try {
+            return requestBody == null ? null : requestBody.getBytes("utf-8");
+          } catch (UnsupportedEncodingException uee) {
+            VolleyLog.wtf("Unsupported Encoding while trying to get the bytes of %s using %s", requestBody, "utf-8");
+            return null;
+          }
+        }
+
+        @Override
+        public Map<String, String> getHeaders() throws AuthFailureError {
+          Map<String, String> params = new HashMap<String, String>();
+          params.put("Authorization", "Bearer " + App.getToken());
+          return params;
+        }
+      };
+
+      requestQueue.add(stringRequest);
+    } catch (JSONException e) {
+      e.printStackTrace();
+    }
+    /*try {
       final RequestQueueHelper requestQueue = new RequestQueueHelper(activity);
       String url = DatabaseHelper.getServerUrl(activity) + "/crawlers/";
       JsonObjectRequest createRequest = new JsonObjectRequest(Request.Method.POST, url, null,
@@ -185,10 +235,10 @@ public class SignInHelper {
       requestQueue.add(createRequest);
     } catch (Exception e) {
       Log.e(TAG, "eventsRequest error: " + e.getLocalizedMessage());
-    }
+    }*/
   }
 
-  public void deleteCrawler(int id) {
+  public void deleteCrawler(final int id) {
     try {
       final RequestQueueHelper requestQueue = new RequestQueueHelper(activity);
       String url = DatabaseHelper.getServerUrl(activity) + "/crawlers/" +id;
@@ -196,12 +246,14 @@ public class SignInHelper {
         new Response.Listener<JSONObject>() {
           @Override
           public void onResponse(JSONObject response) {
+            resetPersonsDatabase(activity);
+            Log.i(TAG, "deleted crawler: " +id);
           }
         },
         new Response.ErrorListener() {
           @Override
           public void onErrorResponse(VolleyError error) {
-            Log.e(TAG, "eventsRequest error: " + error.getLocalizedMessage());
+            Log.e(TAG, "error while deleting crawler: " +id+ " error: " +error.getLocalizedMessage());
             requestQueue.gotResponse();
           }
         }) {
