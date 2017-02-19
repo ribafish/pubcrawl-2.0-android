@@ -21,4 +21,11 @@
         android:visible="true"
         app:showAsAction="ifRoom"
         android:title="@string/refresh"/>
+
+    <item
+        android:id="@+id/event_details.menu.edit"
+        android:icon="@drawable/ic_edit_24dp"
+        android:visible="false"
+        app:showAsAction="ifRoom"
+        android:title="@string/refresh"/>
 </menu>

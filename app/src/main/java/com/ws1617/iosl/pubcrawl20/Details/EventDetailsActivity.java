@@ -107,17 +107,14 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
         setContentView(R.layout.activity_event_details);
         rootView = (CoordinatorLayout) findViewById(R.id.event_details_root);
 
+        SharedPreferences sharedPref = context.getSharedPreferences(context.getString(R.string.preference_user), Context.MODE_PRIVATE);
+        userId = sharedPref.getLong(context.getString(R.string.user_id), -1);
 
         initRouteFragment();
 
         initDescriptionExpanding();
 
         setupToolbar();
-        //  setupMap();
-        //setupPubsListView();
-
-        SharedPreferences sharedPref = context.getSharedPreferences(context.getString(R.string.preference_user), Context.MODE_PRIVATE);
-        userId = sharedPref.getLong(context.getString(R.string.user_id), -1);
 
 
         // TODO: change to the data load listener or smtn when database is ready
@@ -226,6 +223,11 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
         startAlphaAnimation(mToolbar, 0, View.INVISIBLE);
 
         mToolbar.inflateMenu(R.menu.event_details_menu);
+        try {
+            mToolbar.getMenu().findItem(R.id.event_details_menu_edit).setVisible(event.getOwnerId() == userId);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         mToolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
@@ -238,6 +240,9 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
                         return true;
                     case R.id.event_details_menu_refresh:
                         DatabaseHelper.resetWholeDatabase(context);
+                        return true;
+                    case R.id.event_details_menu_edit:
+                        // TODO
                         return true;
                 }
                 return true;
