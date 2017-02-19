@@ -37,6 +37,7 @@ import com.ws1617.iosl.pubcrawl20.R;
 import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 
 /**
  * Created by Gasper Kojek on 9. 11. 2016.
@@ -108,10 +109,12 @@ public class CurrentFragment extends Fragment {
                 } catch (DatabaseException e) {
                     e.printStackTrace();
                 }
-                if (true) { //TODO: check with todays date
+                ArrayList<TimeSlot> timeSlots = event.getTimeSlotList();
+                // Check that the event is current or in the future
+                if (event.getDate().after(new Date(System.currentTimeMillis()-24*60*60*1000)) ||
+                        TimeSlot.getCombinedTimeSlot(timeSlots).isDateIncluded(new Date(System.currentTimeMillis()))) {
                     EventMini em = new EventMini(event);
                     ArrayList<Long> pubIds = event.getPubIds();
-                    ArrayList<TimeSlot> timeSlots = event.getTimeSlotList();
                     for (Long id : pubIds) {
                         boolean added = false;
                         try {
