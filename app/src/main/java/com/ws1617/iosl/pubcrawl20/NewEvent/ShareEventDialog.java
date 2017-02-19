@@ -2,11 +2,13 @@ package com.ws1617.iosl.pubcrawl20.NewEvent;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.DialogFragment;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -36,13 +38,20 @@ public class ShareEventDialog extends DialogFragment {
     LinearLayout inProcessView;
     LinearLayout qrCodeView;
 
-    public ShareEventDialog() {
+    boolean isDialog = false;
+
+    public static ShareEventDialog newInstance() {
+        Bundle args = new Bundle();
+        ShareEventDialog fragment = new ShareEventDialog();
+        fragment.setArguments(args);
+        return fragment;
     }
 
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
+        isDialog = true;
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
         rootView = LayoutInflater.from(getActivity()).inflate(R.layout.view_invite_dialog
                 , null);
@@ -62,17 +71,44 @@ public class ShareEventDialog extends DialogFragment {
         return alertDialog.create();
     }
 
-    /*@Override
-    public void onDismiss(DialogInterface dialog) {
-        super.onDismiss(dialog);
-        // end current activity and switch to MainActivity
-        Intent intent = new Intent(getActivity(), MainActivity.class);
-        getActivity().startActivity(intent);
-    }*/
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
+        if (isDialog) {
+            isDialog = false;
+            return super.onCreateView(inflater, container, savedInstanceState);
+        }
+
+        rootView = LayoutInflater.from(getActivity()).inflate(R.layout.view_invite_dialog
+                , null);
+        closeBtn = (Button) rootView.findViewById(R.id.invite_dialog_pub_done);
+       closeBtn.setVisibility(View.GONE);
+
+        inProcessView = (LinearLayout) rootView.findViewById(R.id.spinner_placeholder);
+        qrCodeView = (LinearLayout) rootView.findViewById(R.id.qrcode_placeholder);
+        return rootView;
+
+    }
+
+    boolean showCodeWhenReady = false;
+    String eventName;
+
+    public void showCodeWhenReady(String eventName) {
+        showCodeWhenReady = true;
+        this.eventName = eventName;
+    }
+
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        if (showCodeWhenReady) {
+            initQRCodeView(eventName);
+            showCodeWhenReady = false;
+        }
 
     }
 
@@ -85,7 +121,7 @@ public class ShareEventDialog extends DialogFragment {
         Bitmap bmp = null;
         try {
 
-            bmp = encodeAsBitmap(mBarcodeData+event_name);
+            bmp = encodeAsBitmap(mBarcodeData + event_name);
             mQrCodeImg.setImageBitmap(bmp);
 
         } catch (WriterException e) {

@@ -1,19 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/event_details.root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/event_details.root"
-    android:fitsSystemWindows="true" >
+    android:fitsSystemWindows="true">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/event_details_appbar"
         android:layout_width="match_parent"
         android:layout_height="350dp"
         android:fitsSystemWindows="true"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" >
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
         <android.support.design.widget.CollapsingToolbarLayout
             android:id="@+id/event_details_collapsing_toolbar"
@@ -24,98 +23,97 @@
             app:expandedTitleMarginBottom="32dp"
             app:expandedTitleMarginEnd="64dp"
             app:expandedTitleMarginStart="48dp"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed" >
+            app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="270dp"
-                android:fitsSystemWindows="true"
                 android:layout_weight="1"
+                android:fitsSystemWindows="true"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior"
                 app:layout_collapseMode="parallax"
-                app:layout_collapseParallaxMultiplier="0.9"
-                app:layout_behavior="@string/appbar_scrolling_view_behavior" >
+                app:layout_collapseParallaxMultiplier="0.9">
 
-                <android.support.v4.view.ViewPager
-                    xmlns:android="http://schemas.android.com/apk/res/android"
-                    android:visibility="visible"
+                <android.support.v4.view.ViewPager xmlns:android="http://schemas.android.com/apk/res/android"
                     android:id="@+id/event_details.pager"
                     android:layout_width="match_parent"
                     android:layout_height="270dp"
-                    app:layout_collapseMode="parallax"
-                    app:layout_collapseParallaxMultiplier="0.9"
+                    android:visibility="visible"
                     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-                     />
+                    app:layout_collapseMode="parallax"
+                    app:layout_collapseParallaxMultiplier="0.9" />
 
                 <android.support.design.widget.TabLayout
                     android:id="@+id/event_details.tabDots"
-                    android:layout_alignParentBottom="true"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
                     android:alpha="0.9"
                     app:tabBackground="@drawable/tab_selector"
                     app:tabGravity="center"
-                    app:tabIndicatorHeight="0dp"
-                    />
+                    app:tabIndicatorHeight="0dp" />
 
                 <ImageButton
                     android:id="@+id/event_details.collapsable.back"
-                    android:visibility="gone"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginTop="36dp"
-                    android:alpha="0.9"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    app:srcCompat="@drawable/ic_arrow_back"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="36dp"
+                    android:alpha="0.9"
                     android:fitsSystemWindows="true"
                     android:scaleType="centerCrop"
+                    android:visibility="gone"
                     app:layout_collapseMode="parallax"
-                    app:layout_collapseParallaxMultiplier="0.7" />
+                    app:layout_collapseParallaxMultiplier="0.7"
+                    app:srcCompat="@drawable/ic_arrow_back" />
 
 
             </RelativeLayout>
 
             <LinearLayout
+                android:id="@+id/event_details.layout.title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|bottom"
                 android:layout_weight="1"
-                android:id="@+id/event_details.layout.title"
-                android:padding="8dp"
-                android:orientation="horizontal"
                 android:background="@color/colorPrimary"
+                android:orientation="horizontal"
+                android:padding="8dp"
                 app:layout_collapseMode="parallax"
                 app:layout_collapseParallaxMultiplier="0.3">
+
                 <LinearLayout
                     android:layout_width="0dp"
+                    android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:orientation="vertical"
-                    android:layout_height="wrap_content">
+                    android:orientation="vertical">
+
                     <TextView
+                        android:id="@+id/event_details.title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="@android:color/white"
                         android:text="Title"
-                        android:textSize="30sp"
-                        android:id="@+id/event_details.title" />
+                        android:textColor="@android:color/white"
+                        android:textSize="30sp" />
+
                     <TextView
+                        android:id="@+id/event_details.subtitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="@android:color/white"
-                        android:layout_marginTop="4dp"
                         android:layout_marginBottom="4dp"
+                        android:layout_marginTop="4dp"
                         android:text="Subtitle"
-                        android:id="@+id/event_details.subtitle" />
+                        android:textColor="@android:color/white" />
                 </LinearLayout>
 
                 <ImageView
-                android:layout_margin="6dp"
-                android:layout_width="36dp"
-                android:layout_height="36dp"
-                android:id="@+id/event_details.layout.add_button"
-                app:srcCompat="@drawable/ic_event_add_black_24dp"
-                android:tint="@android:color/white"
-                />
+                    android:id="@+id/event_details.layout.add_button"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:layout_margin="6dp"
+                    android:tint="@android:color/white"
+                    app:srcCompat="@drawable/ic_event_add_black_24dp" />
 
             </LinearLayout>
 
@@ -129,33 +127,32 @@
         android:layout_height="wrap_content"
         android:layout_gravity="top"
         app:layout_collapseMode="pin"
-        app:navigationIcon="@drawable/ic_arrow_back"
-        />
+        app:navigationIcon="@drawable/ic_arrow_back" />
 
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="4dp"
-        android:scrollbars="none"
         android:animateLayoutChanges="true"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" >
+        android:scrollbars="none"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
-            android:orientation="vertical"
-            android:animateLayoutChanges="true"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:animateLayoutChanges="true"
+            android:orientation="vertical">
 
             <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 app:cardElevation="8dp"
-                app:contentPadding="16dp" >
+                app:contentPadding="16dp">
 
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" >
+                    android:layout_height="match_parent">
 
                     <TextView
                         android:id="@+id/event_details.info.title"
@@ -164,133 +161,123 @@
                         android:layout_alignParentLeft="true"
                         android:layout_alignParentStart="true"
                         android:layout_alignParentTop="true"
-                        android:text="@string/info"
                         android:layout_marginBottom="8dp"
-                        android:textSize="20sp"
-                        />
+                        android:text="@string/info"
+                        android:textSize="20sp" />
 
                     <TextView
                         android:id="@+id/event_details.id.title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/event_details.info.title"
-                        android:text="@string/id"
                         android:layout_marginBottom="6dp"
-                        android:textSize="16sp"
-                        />
+                        android:text="@string/id"
+                        android:textSize="16sp" />
 
                     <TextView
                         android:id="@+id/event_details.id"
-                        android:layout_marginLeft="8dp"
-                        android:layout_marginRight="8dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignBottom="@+id/event_details.id.title"
                         android:layout_alignParentEnd="true"
                         android:layout_alignParentRight="true"
-                        android:text="@string/unknown"
-                        />
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginRight="8dp"
+                        android:text="@string/unknown" />
 
                     <TextView
                         android:id="@+id/event_details.starts.title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/event_details.id.title"
-                        android:text="@string/starts"
                         android:layout_marginBottom="6dp"
-                        android:textSize="16sp"
-                        />
+                        android:text="@string/starts"
+                        android:textSize="16sp" />
 
                     <TextView
                         android:id="@+id/event_details.starts"
-                        android:layout_marginLeft="8dp"
-                        android:layout_marginRight="8dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignBottom="@+id/event_details.starts.title"
                         android:layout_alignParentEnd="true"
                         android:layout_alignParentRight="true"
-                        android:text="@string/unknown"
-                        />
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginRight="8dp"
+                        android:text="@string/unknown" />
 
                     <TextView
                         android:id="@+id/event_details.owner.title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@+id/event_details.starts.title"
                         android:layout_alignParentLeft="true"
                         android:layout_alignParentStart="true"
-                        android:text="@string/owner"
-                        android:textSize="16sp"
+                        android:layout_below="@+id/event_details.starts.title"
                         android:layout_marginBottom="6dp"
-                        />
+                        android:text="@string/owner"
+                        android:textSize="16sp" />
+
                     <TextView
                         android:id="@+id/event_details.owner"
-                        android:layout_marginLeft="8dp"
-                        android:layout_marginRight="8dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignBottom="@+id/event_details.owner.title"
                         android:layout_alignParentEnd="true"
                         android:layout_alignParentRight="true"
-                        android:text="@string/unknown"
-                        />
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginRight="8dp"
+                        android:text="@string/unknown" />
 
                     <TextView
                         android:id="@+id/event_details.tracked.title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@+id/event_details.owner.title"
                         android:layout_alignParentLeft="true"
                         android:layout_alignParentStart="true"
+                        android:layout_below="@+id/event_details.owner.title"
+                        android:layout_marginBottom="6dp"
                         android:text="@string/tracked"
                         android:textSize="16sp"
-                        android:layout_marginBottom="6dp"
-                        android:visibility="gone"
-                        />
+                        android:visibility="gone" />
 
                     <TextView
                         android:id="@+id/event_details.tracked"
-                        android:layout_marginLeft="8dp"
-                        android:layout_marginRight="8dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignBottom="@+id/event_details.tracked.title"
                         android:layout_alignParentEnd="true"
                         android:layout_alignParentRight="true"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginRight="8dp"
                         android:text="@string/unknown"
-                        android:visibility="gone"
-                        />
+                        android:visibility="gone" />
 
                 </RelativeLayout>
             </android.support.v7.widget.CardView>
 
             <android.support.v7.widget.CardView
-                android:animateLayoutChanges="true"
+                android:id="@+id/event_details.description.card"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                app:cardElevation="8dp"
-                android:id="@+id/event_details.description.card"
-                >
+                android:animateLayoutChanges="true"
+                app:cardElevation="8dp">
 
                 <RelativeLayout
-                    android:animateLayoutChanges="true"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:animateLayoutChanges="true">
 
                     <RelativeLayout
                         android:id="@+id/event_details.description.layout"
-                        android:animateLayoutChanges="true"
                         android:layout_width="match_parent"
                         android:layout_height="200dp"
+                        android:animateLayoutChanges="true"
                         android:maxHeight="200dp"
-                        android:paddingTop="16dp"
-                        android:paddingLeft="16dp"
-                        android:paddingStart="16dp"
-                        android:paddingRight="16dp"
                         android:paddingEnd="16dp"
-                        >
+                        android:paddingLeft="16dp"
+                        android:paddingRight="16dp"
+                        android:paddingStart="16dp"
+                        android:paddingTop="16dp">
 
                         <TextView
                             android:id="@+id/event_details.description.title"
@@ -299,133 +286,83 @@
                             android:layout_alignParentLeft="true"
                             android:layout_alignParentStart="true"
                             android:layout_alignParentTop="true"
-                            android:text="@string/description"
                             android:layout_marginBottom="8dp"
-                            android:textSize="20sp"
-                            />
+                            android:text="@string/description"
+                            android:textSize="20sp" />
 
                         <TextView
                             android:id="@+id/event_details.description"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_below="@+id/event_details.description.title"
                             android:layout_alignParentLeft="true"
                             android:layout_alignParentStart="true"
-                            android:text="@string/no_description"
-                            android:ellipsize="end"
+                            android:layout_below="@+id/event_details.description.title"
                             android:layout_margin="4dp"
-                            />
+                            android:ellipsize="end"
+                            android:text="@string/no_description" />
 
                     </RelativeLayout>
 
                     <ImageView
-                        android:visibility="visible"
                         android:id="@+id/event_details.description.gradient"
                         android:layout_width="match_parent"
                         android:layout_height="28dp"
                         android:layout_alignParentBottom="true"
                         android:alpha="1"
-                        android:src="@drawable/text_truncate_shadow"/>
+                        android:src="@drawable/text_truncate_shadow"
+                        android:visibility="visible" />
 
                     <ImageView
-                        android:visibility="visible"
                         android:id="@+id/event_details.description.arrow"
                         android:layout_width="match_parent"
                         android:layout_height="22dp"
                         android:layout_alignParentBottom="true"
                         android:alpha="1"
-                        app:srcCompat="@drawable/ic_expand_more"/>
+                        android:visibility="visible"
+                        app:srcCompat="@drawable/ic_expand_more" />
 
                 </RelativeLayout>
 
             </android.support.v7.widget.CardView>
 
             <android.support.v7.widget.CardView
-                android:animateLayoutChanges="true"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
+                android:animateLayoutChanges="true"
                 app:cardElevation="8dp"
-                app:contentPadding="16dp"
-                >
+                app:contentPadding="16dp">
 
                 <FrameLayout
                     android:id="@+id/route_place_holder"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"/>
+                    android:layout_height="match_parent" />
             </android.support.v7.widget.CardView>
-
-          <!--  <android.support.v7.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:id="@+id/event_details.map.card"
-                app:cardElevation="8dp"
-                app:contentPadding="16dp" >
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <TextView
-                        android:id="@+id/event_details.map.title"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentLeft="true"
-                        android:layout_alignParentStart="true"
-                        android:layout_alignParentTop="true"
-                        android:text="@string/route"
-                        android:layout_marginBottom="8dp"
-                        android:textSize="20sp"
-                        />
-
-                    <FrameLayout
-                        android:id="@+id/event_details.map.map"
-                        android:layout_width="match_parent"
-                        android:layout_height="200dp"
-                        android:layout_below="@id/event_details.map.title"
-                        android:animateLayoutChanges="true"
-                        class="com.google.android.gms.maps.SupportMapFragment"/>
-
-                    <ListView
-                        android:id="@+id/event_details.pubListView"
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight="1"
-                        android:layout_below="@+id/event_details.map.map"
-                        />
-
-                </RelativeLayout>
-
-            </android.support.v7.widget.CardView>-->
-
 
 
             <android.support.v7.widget.CardView
-                android:animateLayoutChanges="true"
+                android:id="@+id/event_details.participants.card"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                app:cardElevation="8dp"
-                android:id="@+id/event_details.participants.card"
-                >
+                android:animateLayoutChanges="true"
+                app:cardElevation="8dp">
 
                 <RelativeLayout
-                    android:animateLayoutChanges="true"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:animateLayoutChanges="true">
 
                     <RelativeLayout
                         android:id="@+id/event_details.participants.layout"
-                        android:animateLayoutChanges="true"
                         android:layout_width="match_parent"
                         android:layout_height="280dp"
-                        android:paddingTop="16dp"
-                        android:paddingLeft="16dp"
-                        android:paddingStart="16dp"
-                        android:paddingRight="16dp"
+                        android:animateLayoutChanges="true"
                         android:paddingEnd="16dp"
-                        >
+                        android:paddingLeft="16dp"
+                        android:paddingRight="16dp"
+                        android:paddingStart="16dp"
+                        android:paddingTop="16dp">
 
                         <TextView
                             android:id="@+id/event_details.participants.title"
@@ -434,57 +371,70 @@
                             android:layout_alignParentLeft="true"
                             android:layout_alignParentStart="true"
                             android:layout_alignParentTop="true"
-                            android:text="@string/participants"
                             android:layout_marginBottom="8dp"
-                            android:textSize="20sp"
-                            />
+                            android:text="@string/participants"
+                            android:textSize="20sp" />
 
                         <ListView
                             android:id="@+id/event_details.participants.listView"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_below="@+id/event_details.participants.title"
                             android:layout_alignParentLeft="true"
                             android:layout_alignParentStart="true"
+                            android:layout_below="@+id/event_details.participants.title"
                             android:layout_margin="4dp"
-                            android:scrollbars="none"
-                            />
+                            android:scrollbars="none" />
 
                     </RelativeLayout>
 
                     <ImageView
-                        android:visibility="visible"
                         android:id="@+id/event_details.participants.gradient"
                         android:layout_width="match_parent"
                         android:layout_height="28dp"
                         android:layout_alignParentBottom="true"
                         android:alpha="1"
-                        android:src="@drawable/text_truncate_shadow"/>
+                        android:src="@drawable/text_truncate_shadow"
+                        android:visibility="visible" />
 
                     <Button
-                        android:visibility="visible"
                         android:id="@+id/event_details.participants.show_all_btn"
+                        style="@style/Widget.AppCompat.Button.Borderless"
                         android:layout_width="match_parent"
                         android:layout_height="36dp"
-                        android:gravity="center"
-                        android:textAlignment="center"
                         android:layout_alignParentBottom="true"
-                        android:background="?android:attr/selectableItemBackground"
-                        android:textAllCaps="true"
-                        android:text="@string/show_all"
-                        android:textColor="#2196F3"
                         android:layout_marginBottom="8dp"
+                        android:background="?android:attr/selectableItemBackground"
                         android:clickable="true"
-                        style="@style/Widget.AppCompat.Button.Borderless" />
+                        android:gravity="center"
+                        android:text="@string/show_all"
+                        android:textAlignment="center"
+                        android:textAllCaps="true"
+                        android:textColor="#2196F3"
+                        android:visibility="visible" />
 
                 </RelativeLayout>
 
             </android.support.v7.widget.CardView>
 
+            <android.support.v7.widget.CardView
+                android:id="@+id/event_details.qrcode.card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:animateLayoutChanges="true"
+                app:cardElevation="8dp">
+
+                <FrameLayout
+                    android:id="@+id/qrcode_place_holder"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+            </android.support.v7.widget.CardView>
+
+
             <View
                 android:layout_width="match_parent"
-                android:layout_height="8dp"
-                />
+                android:layout_height="8dp" />
 
         </LinearLayout>
 
@@ -496,7 +446,7 @@
         android:layout_height="?attr/actionBarSize"
         android:background="@color/colorPrimary"
         app:layout_collapseMode="pin"
-        app:theme="@style/ThemeOverlay.AppCompat.Dark" >
+        app:theme="@style/ThemeOverlay.AppCompat.Dark">
 
     </android.support.v7.widget.Toolbar>
 

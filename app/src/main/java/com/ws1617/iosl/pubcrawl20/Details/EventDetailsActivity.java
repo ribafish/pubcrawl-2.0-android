@@ -47,6 +47,7 @@ import com.ws1617.iosl.pubcrawl20.Database.EventDbHelper;
 import com.ws1617.iosl.pubcrawl20.Database.PersonDbHelper;
 import com.ws1617.iosl.pubcrawl20.Database.PubDbHelper;
 import com.ws1617.iosl.pubcrawl20.Database.RequestQueueHelper;
+import com.ws1617.iosl.pubcrawl20.NewEvent.ShareEventDialog;
 import com.ws1617.iosl.pubcrawl20.R;
 
 import java.text.SimpleDateFormat;
@@ -123,6 +124,18 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
         populateFields();
         initDescriptionExpanding();
         setupParticipants();
+
+        initQRCode();
+    }
+
+
+
+    private void initQRCode(){
+        ShareEventDialog qrCodeFragment = ShareEventDialog.newInstance();
+        getSupportFragmentManager().beginTransaction().add(R.id.qrcode_place_holder,qrCodeFragment,"code").commit();
+       // qrCodeFragment.show(getSupportFragmentManager(),"code");
+        qrCodeFragment.showCodeWhenReady(event.getEventName());
+
     }
 
     @Override

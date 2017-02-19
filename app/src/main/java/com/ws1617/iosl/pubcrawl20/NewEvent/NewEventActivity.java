@@ -81,6 +81,8 @@ public class NewEventActivity extends AppCompatActivity {
 
 
     public void onCollectDataClicked() {
+
+
         final Event event = new Event();
         ((NewEventGeneralFragment) fragmentsList.get(0)).updateGeneralInfo(event);
         ((NewEventRouteFragment) fragmentsList.get(1)).updatePubListInfo(event);
@@ -91,13 +93,11 @@ public class NewEventActivity extends AppCompatActivity {
 
         event.setOwnerId(userId);
 
-
-
-        if (!checkSatisfyMinReq(event))
+       if (!checkSatisfyMinReq(event))
             return;
         else {
             final ShareEventDialog shareEventDialog = new ShareEventDialog();
-            shareEventDialog.show(getFragmentManager(), "shareEventDialog");
+            shareEventDialog.show(getSupportFragmentManager(), "shareEventDialog");
 
             DatabaseHelper.addEvent(this, event, new EventCreation() {
                 @Override
