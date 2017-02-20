@@ -120,6 +120,9 @@ public class JsonParser {
 
     public static Event parseJSONEvent (JSONObject jsonEvent) throws JSONException, ParseException {
         final Event event = new Event();
+        JSONObject jsonLinks = jsonEvent.getJSONObject(LINKS);
+        long eventId = parseIdFromHref(jsonLinks.getJSONObject(SELF).getString(HREF));
+        event.setId(eventId);
         DateFormat dateFormat = new SimpleDateFormat(EVENT_DATE_FORMAT, Locale.ENGLISH);
         try {
 //            event.setDate(dateFormat.parse(jsonEvent.getString(EVENT_DATE)));
@@ -157,8 +160,7 @@ public class JsonParser {
                     jsonEvent.getDouble(EVENT_LAT_MAX),
                     jsonEvent.getDouble(EVENT_LONG_MAX)));
         } catch (Exception e) {
-            Log.e(TAG, "Can't parse event boundary box");
-            Log.e(TAG, "Error message: " + e.getLocalizedMessage());
+            Log.w(TAG, "Can't parse event " + event.getEventName() + " id " + event.getId() + " boundary box:" + e.getLocalizedMessage());
         }
 
         try {
@@ -188,13 +190,8 @@ public class JsonParser {
             }
             event.setTimeSlotList(timeSlots);
         } catch (Exception e) {
-            Log.e(TAG, "Can't parse event timeslot list");
-            Log.e(TAG, "Error message: " + e.getLocalizedMessage());
+            Log.e(TAG, "Can't parse event " + event.getEventName() + " id " + event.getId() + " timeslot list:" + e.getLocalizedMessage());
         }
-
-        JSONObject jsonLinks = jsonEvent.getJSONObject(LINKS);
-        long eventId = parseIdFromHref(jsonLinks.getJSONObject(SELF).getString(HREF));
-        event.setId(eventId);
 
         Log.d(TAG, "Parsed event: " + event);
 
@@ -283,12 +280,14 @@ public class JsonParser {
         try {
             person.setDescription(jsonPerson.getString(PERSON_DESCRIPTION));
         } catch (JSONException e) {
-            e.printStackTrace();
+            Log.v(TAG, "Can't person event " + person.getName() + " id " + person.getId() + " description:" + e.getLocalizedMessage());
+//            e.printStackTrace();
         }
         try {
             person.setImageUrl(jsonPerson.getString(PERSON_IMAGE));
         } catch (JSONException e) {
-            e.printStackTrace();
+            Log.v(TAG, "Can't person event " + person.getName() + " id " + person.getId() + " image:" + e.getLocalizedMessage());
+//            e.printStackTrace();
         }
 
         Log.d(TAG, "Parsed person: " + person);
@@ -296,7 +295,7 @@ public class JsonParser {
         return person;
     }
 
-    private static long parseIdFromHref(String href) {
+    public static long parseIdFromHref(String href) {
         return Long.parseLong(href.split("\\/+")[3]);
     }
 

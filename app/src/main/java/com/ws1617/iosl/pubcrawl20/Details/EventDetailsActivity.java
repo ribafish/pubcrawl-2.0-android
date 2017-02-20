@@ -47,6 +47,7 @@ import com.ws1617.iosl.pubcrawl20.Database.EventDbHelper;
 import com.ws1617.iosl.pubcrawl20.Database.PersonDbHelper;
 import com.ws1617.iosl.pubcrawl20.Database.PubDbHelper;
 import com.ws1617.iosl.pubcrawl20.Database.RequestQueueHelper;
+import com.ws1617.iosl.pubcrawl20.NewEvent.ShareEventDialog;
 import com.ws1617.iosl.pubcrawl20.R;
 
 import java.text.SimpleDateFormat;
@@ -106,23 +107,31 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
         setContentView(R.layout.activity_event_details);
         rootView = (CoordinatorLayout) findViewById(R.id.event_details_root);
 
+        SharedPreferences sharedPref = context.getSharedPreferences(context.getString(R.string.preference_user), Context.MODE_PRIVATE);
+        userId = sharedPref.getLong(context.getString(R.string.user_id), -1);
 
         initRouteFragment();
 
         initDescriptionExpanding();
 
         setupToolbar();
-        //  setupMap();
-        //setupPubsListView();
-
-        SharedPreferences sharedPref = context.getSharedPreferences(context.getString(R.string.preference_user), Context.MODE_PRIVATE);
-        userId = sharedPref.getLong(context.getString(R.string.user_id), -1);
 
 
-        // TODO: change to the data load listener or smtn when database is ready
         populateFields();
         initDescriptionExpanding();
         setupParticipants();
+
+        initQRCode();
+    }
+
+
+
+    private void initQRCode(){
+        ShareEventDialog qrCodeFragment = ShareEventDialog.newInstance();
+        getSupportFragmentManager().beginTransaction().add(R.id.qrcode_place_holder,qrCodeFragment,"code").commit();
+       // qrCodeFragment.show(getSupportFragmentManager(),"code");
+        qrCodeFragment.showCodeWhenReady(event.getEventName());
+
     }
 
     @Override
@@ -188,7 +197,7 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
 
             mToolbar.setTitle(eventName);
             mTitle.setText(eventName);
-            mSubtitle.setText("Loading...");  //TODO
+            mSubtitle.setText("Loading...");
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -213,6 +222,11 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
         startAlphaAnimation(mToolbar, 0, View.INVISIBLE);
 
         mToolbar.inflateMenu(R.menu.event_details_menu);
+        try {
+            mToolbar.getMenu().findItem(R.id.event_details_menu_edit).setVisible(event.getOwnerId() == userId);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         mToolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
@@ -225,6 +239,9 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
                         return true;
                     case R.id.event_details_menu_refresh:
                         DatabaseHelper.resetWholeDatabase(context);
+                        return true;
+                    case R.id.event_details_menu_edit:
+                        // TODO
                         return true;
                 }
                 return true;

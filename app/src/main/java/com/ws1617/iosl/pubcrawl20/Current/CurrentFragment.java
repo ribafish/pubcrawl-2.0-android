@@ -37,6 +37,7 @@ import com.ws1617.iosl.pubcrawl20.R;
 import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 
 /**
  * Created by Gasper Kojek on 9. 11. 2016.
@@ -76,7 +77,7 @@ public class CurrentFragment extends Fragment {
 
         Context context = getContext();
         SharedPreferences sharedPref = context.getSharedPreferences(context.getString(R.string.preference_user), Context.MODE_PRIVATE);
-        userId = sharedPref.getLong(context.getString(R.string.user_id), -1);
+        userId = sharedPref.getLong(context.getString(R.string.user_id), 0);
         getEvents();
 
         Button findEvents = (Button) rootView.findViewById(R.id.current_find_events_btn);
@@ -85,6 +86,18 @@ public class CurrentFragment extends Fragment {
             public void onClick(View view) {
                 try {
                     ((MainActivity)getActivity()).setTab(0);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        Button scanQr = (Button) rootView.findViewById(R.id.current_scan_qr_btn);
+        scanQr.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try {
+                    ((MainActivity)getActivity()).startQrScan();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -108,16 +121,23 @@ public class CurrentFragment extends Fragment {
                 } catch (DatabaseException e) {
                     e.printStackTrace();
                 }
-                if (true) { //TODO: check with todays date
+                ArrayList<TimeSlot> timeSlots = event.getTimeSlotList();
+                // Check that the event is current or in the future
+                if (event.getDate().after(new Date(System.currentTimeMillis()-24*60*60*1000)) ||
+                        TimeSlot.getCombinedTimeSlot(timeSlots).isDateIncluded(new Date(System.currentTimeMillis()))) {
                     EventMini em = new EventMini(event);
                     ArrayList<Long> pubIds = event.getPubIds();
-                    ArrayList<TimeSlot> timeSlots = event.getTimeSlotList();
                     for (Long id : pubIds) {
+                        boolean added = false;
                         try {
                             Pub p = pubDbHelper.getPub(id);
                             for (TimeSlot ts : timeSlots) {
-                                if (ts.getPubId() == p.getId()) em.addPub(new PubMini(p, ts));
+                                if (ts.getPubId() == p.getId()){
+                                    em.addPub(new PubMini(p, ts));
+                                    added = true;
+                                }
                             }
+                            if (!added) em.addPub(new PubMini(p, null));
                         } catch (DatabaseException e) {
                             e.printStackTrace();
                         }

@@ -104,7 +104,6 @@ public class EventViewHolder extends RecyclerView.ViewHolder implements OnMapRea
         card.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //TODO: test
                 Intent intent = new Intent(mContext, EventDetailsActivity.class);
                 intent.putExtra("name", name.getText());
                 intent.putExtra("id", Long.parseLong(eventId.getText().toString()));

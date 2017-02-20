@@ -18,6 +18,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatDrawableManager;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -28,12 +29,21 @@ import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.vision.barcode.Barcode;
+import com.ws1617.iosl.pubcrawl20.DataModels.Event;
+import com.ws1617.iosl.pubcrawl20.Database.DatabaseException;
 import com.ws1617.iosl.pubcrawl20.Database.DatabaseHelper;
+import com.ws1617.iosl.pubcrawl20.Database.EventDbHelper;
 import com.ws1617.iosl.pubcrawl20.Details.EventDetailsActivity;
 import com.ws1617.iosl.pubcrawl20.Details.PubDetailsActivity;
 import com.ws1617.iosl.pubcrawl20.NewEvent.NewEventActivity;
 import com.ws1617.iosl.pubcrawl20.ScanQR.BarcodeCaptureActivity;
+import com.ws1617.iosl.pubcrawl20.ScanQR.QRScannerDialog;
 import com.ws1617.iosl.pubcrawl20.Search.SearchActivity;
+
+import java.lang.reflect.Array;
+import java.util.List;
+
+import static com.ws1617.iosl.pubcrawl20.NewEvent.ShareEventDialog.mBarcodeData;
 
 /**
  * Created by Gasper Kojek on 9. 11. 2016.
@@ -68,7 +78,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             } finally {
                 SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
                 long delay = Long.parseLong(pref.getString("sync_frequency", "180")) * 60 * 1000;
-                if (delay > 0) handler.postDelayed(updateDatabaseRunnable, System.currentTimeMillis() + delay);
+                if (delay > 0)
+                    handler.postDelayed(updateDatabaseRunnable, System.currentTimeMillis() + delay);
             }
         }
     };
@@ -78,6 +89,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
      * The {@link ViewPager} that will host the section contents.
      */
 
+    QRScannerDialog qrScannerDialog = new QRScannerDialog();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,17 +104,17 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, 2);
 
 
-       if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
-               && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             // Create an instance of GoogleAPIClient.
             if (mGoogleApiClient == null) {
                 mGoogleApiClient = new GoogleApiClient.Builder(this)
-                  .addConnectionCallbacks(this)
-                  .addOnConnectionFailedListener(this)
-                  .addApi(LocationServices.API)
-                  .build();
+                        .addConnectionCallbacks(this)
+                        .addOnConnectionFailedListener(this)
+                        .addApi(LocationServices.API)
+                        .build();
             }
-       }
+        }
 
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.main_toolbar);
@@ -152,7 +164,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             }
         });
 
-        fabSearch.setOnClickListener(new View.OnClickListener(){
+        fabSearch.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View view) {
@@ -162,14 +174,10 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             }
         });
 
-        final SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
         fabScanQR.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(context, BarcodeCaptureActivity.class);
-                intent.putExtra(BarcodeCaptureActivity.AutoFocus, sharedPrefs.getBoolean("barcode_focus", false));
-                intent.putExtra(BarcodeCaptureActivity.UseFlash, sharedPrefs.getBoolean("barcode_flash", false));
-                startActivityForResult(intent, RC_BARCODE_CAPTURE);
+                startQrScan();
                 fabMenu.close(true);
             }
         });
@@ -183,6 +191,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
         handler = new Handler();
 
+        setTab(1);
     }
 
     @Override
@@ -190,7 +199,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         super.onResume();
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
         long delay = Long.parseLong(pref.getString("sync_frequency", "180")) * 60 * 1000;
-        if (delay > 0) handler.postDelayed(updateDatabaseRunnable, System.currentTimeMillis() + delay);
+        if (delay > 0)
+            handler.postDelayed(updateDatabaseRunnable, System.currentTimeMillis() + delay);
     }
 
     @Override
@@ -201,28 +211,34 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
     @Override
     public void onBackPressed() {
-      long tm = System.currentTimeMillis();
-      if (tm - _mBackTime < 60000)
-        finish();
-      _mBackTime = tm;
-      Toast.makeText(this, R.string.App_Exit, Toast.LENGTH_SHORT).show();
-      return;
+        long tm = System.currentTimeMillis();
+        if (tm - _mBackTime < 60000)
+            finish();
+        _mBackTime = tm;
+        Toast.makeText(this, R.string.App_Exit, Toast.LENGTH_SHORT).show();
+        return;
+    }
+
+    public void startQrScan() {
+        final SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+        Intent intent = new Intent(context, BarcodeCaptureActivity.class);
+        intent.putExtra(BarcodeCaptureActivity.AutoFocus, sharedPrefs.getBoolean("barcode_focus", false));
+        intent.putExtra(BarcodeCaptureActivity.UseFlash, sharedPrefs.getBoolean("barcode_flash", false));
+        startActivityForResult(intent, RC_BARCODE_CAPTURE);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == RC_BARCODE_CAPTURE) {
             if (resultCode == CommonStatusCodes.SUCCESS) {
+                Log.d("Barcode-reader", "result was received in main activity correctly");
                 if (data != null) {
                     Barcode barcode = data.getParcelableExtra(BarcodeCaptureActivity.BarcodeObject);
                     if (barcode.displayValue.isEmpty())
                         Toast.makeText(this, "failed", Toast.LENGTH_LONG).show();
                     else {
-                        if (barcode.displayValue.contains("/event/")) {
-                            Intent intent = new Intent(context, EventDetailsActivity.class);
-                            intent.putExtra("name", "Test Event");
-                            intent.putExtra("id", (long) 14);
-                            startActivity(intent);
+                        if (barcode.displayValue.contains(mBarcodeData)) {
+                            prepareSharedEvent(barcode);
                         }
                         if (barcode.displayValue.contains("/pub/")) {
                             Intent intent = new Intent(context, PubDetailsActivity.class);
@@ -242,15 +258,57 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         }
     }
 
+
+    public interface ResetDataDone {
+        void onResetDone();
+    }
+
+    private void prepareSharedEvent(final Barcode barcode) {
+        try {
+            List<Event> eventsList = new EventDbHelper().getAllEvents();
+        } catch (DatabaseException e) {
+            e.printStackTrace();
+        }
+
+        Log.d("scanqr", "onResetDone");
+        //extract event name from the row data
+        String eventName = barcode.displayValue.substring(mBarcodeData.length(), barcode.displayValue.length());
+
+        // get event with the same name, get its id ..
+        Event event = null;
+        try {
+            event = new EventDbHelper().getEvent(eventName);
+        } catch (DatabaseException e) {
+            e.printStackTrace();
+        }
+
+        //TODO start activity if id is founded
+        if (event != null) {
+            //TODO hide the dialog
+            qrScannerDialog.initNotFoundLayout(false);
+            Long id = event.getId();
+            Intent intent = new Intent(context, EventDetailsActivity.class);
+            // local db should be updated before starting the activity, event might be on server but not on local db
+            intent.putExtra("id", id);
+            startActivity(intent);
+        } else {
+            //TODO show it on the dialog
+            qrScannerDialog.initNotFoundLayout(true);
+
+        }
+
+
+    }
+
     @Override
     protected void onStart() {
-        if(mGoogleApiClient != null)mGoogleApiClient.connect();
+        if (mGoogleApiClient != null) mGoogleApiClient.connect();
         super.onStart();
     }
 
     @Override
     protected void onStop() {
-        if(mGoogleApiClient != null)  mGoogleApiClient.disconnect();
+        if (mGoogleApiClient != null) mGoogleApiClient.disconnect();
         super.onStop();
     }
 
@@ -273,7 +331,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     }
 
     public static Location getLocation() throws NullPointerException {
-        if(mLastLocation != null)
+        if (mLastLocation != null)
             return mLastLocation;
         throw new NullPointerException();
     }

@@ -90,8 +90,8 @@ public class EventDbHelper {
             values.put(LAT_MAX, event.getMaxLatLng().latitude);
             values.put(LONG_MAX, event.getMaxLatLng().longitude);
         } catch (Exception e) {
-            e.printStackTrace();
-
+            Log.v(TAG, "Event " + event.getEventName() + " id " + event.getId() + ": Can't write boundary box: " + e.getLocalizedMessage());
+//            e.printStackTrace();
         }
 
 
@@ -230,8 +230,7 @@ public class EventDbHelper {
         Event event;
 
         String query = "SELECT * FROM " +
-                TABLE_EVENTS + " WHERE " +
-                EVENT_ID + " = " + event_id;
+                TABLE_EVENTS+ " WHERE " +EVENT_ID + " = " + event_id;
 
         Cursor c = db.rawQuery(query, null);
         if (c != null && c.moveToFirst()) {
@@ -247,15 +246,44 @@ public class EventDbHelper {
         return event;
     }
 
+
+    public Event getFirstMatchEvent(String event_name) throws DatabaseException {
+        SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
+        Event event;
+        String query = "SELECT * FROM " + TABLE_EVENTS + " WHERE " + EVENT_NAME + " = \""+event_name+"\" ";
+
+        Cursor c = db.rawQuery(query, null);
+        if (c != null && c.moveToFirst()) {
+            event = getListlessEventFromCursor(c);
+            c.close();
+        } else {
+            Log.e(TAG, "Can't find event with name " + event_name);
+            return null;
+        }
+        return event;
+    }
+
     public Event getEvent(long event_id) throws DatabaseException {
         Event event = getListlessEvent(event_id);
-
         event.setTimeSlotList(getTimeSlots(event_id));
         event.setParticipantIds(getParticipantIds(event_id));
         event.setPubIds(getPubIds(event_id));
 
         return event;
     }
+
+
+    public Event getEvent(String event_name) throws DatabaseException {
+        Event event = getFirstMatchEvent(event_name);
+        if (event == null) return null;
+        Long event_id = event.getId();
+        event.setTimeSlotList(getTimeSlots(event_id));
+        event.setParticipantIds(getParticipantIds(event_id));
+        event.setPubIds(getPubIds(event_id));
+
+        return event;
+    }
+
 
     public ArrayList<TimeSlot> getTimeSlots(long event_id) {
         SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
@@ -277,7 +305,7 @@ public class EventDbHelper {
             } while (c.moveToNext());
             c.close();
         } else {
-            Log.w(TAG, "getTimeSlots: Cursor is null or database empty");
+            Log.v(TAG, "event id " + event_id + " getTimeSlots: Cursor is null or database empty");
         }
 
         return timeSlots;
@@ -298,7 +326,7 @@ public class EventDbHelper {
             } while (c.moveToNext());
             c.close();
         } else {
-            Log.w(TAG, "getParticipantIds: Cursor is null or database empty");
+            Log.v(TAG, "event id " + event_id + " getParticipantIds: Cursor is null or database empty");
         }
 
         return list;
@@ -319,12 +347,11 @@ public class EventDbHelper {
             } while (c.moveToNext());
             c.close();
         } else {
-            Log.w(TAG, "getPubIds: Cursor is null or database empty");
+            Log.v(TAG, "event id " + event_id + " getPubIds: Cursor is null or database empty");
         }
 
         return list;
     }
-
 
 
     public ArrayList<Event> getAllEvents() throws DatabaseException {
@@ -355,15 +382,7 @@ public class EventDbHelper {
     public ArrayList<Event> getEventsBoundryBox(long event_id, LatLng minLatLng, LatLng maxLatLng) {
         ArrayList<Event> events = new ArrayList<>();
 
-        //TODO
-
-        return null;
-    }
-
-    public ArrayList<Event> getEventsBoundryBoxTimeFrame(long event_id, LatLng minLatLng, LatLng maxLatLng, Date min, Date max) {
-        ArrayList<Event> events = new ArrayList<>();
-
-        //TODO
+        //TODO: get events that are in the specified min/max LatLng
 
         return null;
     }
