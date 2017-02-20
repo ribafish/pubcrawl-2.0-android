@@ -100,7 +100,7 @@ public class DatabaseHelper {
         downloadEvents(context);
     }
 
-    private static JSONObject prepareEventObj(Event event, Context context) {
+    private static JSONObject prepareEventObj(Event event, Context context, Long currentUserID) {
         JSONObject object = new JSONObject();
         try {
             object.put("eventName", event.getEventName());
@@ -114,6 +114,7 @@ public class DatabaseHelper {
             object.put("eventImage", null);
             object.put("timeslotList", timeSlotToJsonArray(event.getTimeSlotList()));
             object.put("pubsList", pubLinksToJsonArray(event.getPubIds(), context));
+            object.put("eventOwner", "https://vm-74243.lal.in2p3.fr:8443/crawlers/" + currentUserID);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -160,7 +161,14 @@ public class DatabaseHelper {
             Log.e(TAG, e.getLocalizedMessage());
             return;
         }
-        JSONObject object = prepareEventObj(event, context);
+
+        SharedPreferences sharedPref = context.getSharedPreferences(context.getString(R.string.preference_user), Context.MODE_PRIVATE);
+        long currentUserID = sharedPref.getLong(context.getString(R.string.user_id), -1);
+        if (currentUserID == -1) {
+            eventCreation.onFail();
+            return;
+        }
+        JSONObject object = prepareEventObj(event, context, currentUserID);
 
         EmptyJsonObjectRequest jsonObjectRequest = new EmptyJsonObjectRequest(Request.Method.POST, url,
                 object, new Response.Listener<JSONObject>() {
@@ -178,46 +186,6 @@ public class DatabaseHelper {
         requestQueue.add(jsonObjectRequest);
     }
 
-
-
-
-    private static JSONObject preparePubsListObje(Event event) {
-        JSONObject mainObject = new JSONObject();
-        try {
-            JSONArray pubsJsonArray = new JSONArray();
-            List<Long> pubsListID = event.getPubIds();
-            for (Long pubID : pubsListID) {
-                PubDbHelper pubDbHelper = new PubDbHelper();
-                try {
-                    Pub pub = pubDbHelper.getPub(pubID);
-                    JSONObject pubJsonObj = new JSONObject();
-                    pubJsonObj.put("pubName", pub.getPubName());
-                    pubJsonObj.put("pubImage", pub.getImages());
-                    pubJsonObj.put("price", pub.getPrices());
-                    pubJsonObj.put("rating", pub.getRating());
-                    pubJsonObj.put("lat", pub.getLatLng().latitude);
-                    pubJsonObj.put("lng", pub.getLatLng().longitude);
-                    pubJsonObj.put("description", pub.getDescription());
-                    pubJsonObj.put("adress", "null");
-                    pubJsonObj.put("size", pub.getSize());
-                    pubJsonObj.put("closingTime", "null");
-                    pubJsonObj.put("openingTime", "null");
-
-                  /*  pubJsonObj.put("_links", pub.getRating());*/
-
-                    pubsJsonArray.put(pubJsonObj);
-                } catch (DatabaseException e) {
-                    e.printStackTrace();
-                }
-            }
-            JSONObject embeddedObj = new JSONObject();
-            embeddedObj.put("pubs", pubsJsonArray);
-            mainObject.put("_embedded", embeddedObj);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return mainObject;
-    }
 
     public static JSONArray timeSlotToJsonArray(List<TimeSlot> timeSlotList) {
         JSONArray timeSlot = new JSONArray();
@@ -879,7 +847,7 @@ public class DatabaseHelper {
         final String url;
         try {
             //url = getServerUrl(context) + PERSONS + "/" + id + "/" + PERSON_OWNED_EVENTS;
-            url =  getServerUrl(context)+EVENTS + "/" + eventId + "/" + EVENT_OWNER;
+            url = getServerUrl(context) + EVENTS + "/" + eventId + "/" + EVENT_OWNER;
         } catch (StringIndexOutOfBoundsException e) {
             Log.e(TAG, e.getLocalizedMessage());
             setOwnerInterface.onFail();
@@ -910,7 +878,7 @@ public class DatabaseHelper {
         JSONObject jsonObject = new JSONObject();
 
         try {
-            jsonObject.put("","https://vm-74243.lal.in2p3.fr:8443/crawlers/13");
+            jsonObject.put("", "https://vm-74243.lal.in2p3.fr:8443/crawlers/13");
         } catch (JSONException e) {
             e.printStackTrace();
         }

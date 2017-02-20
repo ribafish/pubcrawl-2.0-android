@@ -101,21 +101,7 @@ public class NewEventActivity extends AppCompatActivity {
         ((NewEventGeneralFragment) fragmentsList.get(0)).collectGeneralInfo(event);
         ((NewEventRouteFragment) fragmentsList.get(1)).collectPubListInfo(event);
 
-
-        new DatabaseHelper().addEventOwner(getApplicationContext(), 19, new SetOwner() {
-            @Override
-            public void onSuccess() {
-                DatabaseHelper.resetEventsDatabase(getApplicationContext());
-            }
-
-            @Override
-            public void onFail() {
-                Toast.makeText(getApplicationContext(), "Error while creating the Event .. ", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-
-      /*    if (!checkSatisfyMinReq(event))
+        if (!checkSatisfyMinReq(event))
             return;
         else {
             final ShareEventDialog shareEventDialog = new ShareEventDialog();
@@ -125,22 +111,8 @@ public class NewEventActivity extends AppCompatActivity {
                 @Override
                 public void onSuccess() {
                     //refresh the whole DB
-
-                    new DatabaseHelper().addEventOwner(getApplicationContext(), event.getId(), new SetOwner() {
-                        @Override
-                        public void onSuccess() {
-                            DatabaseHelper.resetEventsDatabase(getApplicationContext());
-                            shareEventDialog.initQRCodeView(event.getEventName());
-                        }
-
-                        @Override
-                        public void onFail() {
-                            Toast.makeText(getApplicationContext(), "Error while creating the Event .. ", Toast.LENGTH_SHORT).show();
-                            shareEventDialog.dismiss();
-                        }
-                    });
-
-
+                    DatabaseHelper.resetEventsDatabase(getApplicationContext());
+                    shareEventDialog.initQRCodeView(event.getEventName());
                 }
 
                 @Override
@@ -150,7 +122,7 @@ public class NewEventActivity extends AppCompatActivity {
                     shareEventDialog.dismiss();
                 }
             });
-        }*/
+        }
     }
 
     private boolean checkSatisfyMinReq(Event event) {

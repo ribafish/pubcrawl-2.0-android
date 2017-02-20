@@ -108,12 +108,10 @@ public class NewEventGeneralFragment extends Fragment {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        boolean tracked = mTrackedSwitch.isChecked() ? true : false;
 
         event.setDate(date);
         event.setEventName(eventTitle);
         event.setDescription(eventDesc);
-        event.setTracked(tracked);
         return event;
     }
 }

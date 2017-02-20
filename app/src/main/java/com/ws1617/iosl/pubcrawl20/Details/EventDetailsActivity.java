@@ -47,6 +47,7 @@ import com.ws1617.iosl.pubcrawl20.Database.EventDbHelper;
 import com.ws1617.iosl.pubcrawl20.Database.PersonDbHelper;
 import com.ws1617.iosl.pubcrawl20.Database.PubDbHelper;
 import com.ws1617.iosl.pubcrawl20.Database.RequestQueueHelper;
+import com.ws1617.iosl.pubcrawl20.NewEvent.NewEventActivity;
 import com.ws1617.iosl.pubcrawl20.NewEvent.ShareEventDialog;
 import com.ws1617.iosl.pubcrawl20.R;
 
@@ -125,11 +126,10 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
     }
 
 
-
-    private void initQRCode(){
+    private void initQRCode() {
         ShareEventDialog qrCodeFragment = ShareEventDialog.newInstance();
-        getSupportFragmentManager().beginTransaction().add(R.id.qrcode_place_holder,qrCodeFragment,"code").commit();
-       // qrCodeFragment.show(getSupportFragmentManager(),"code");
+        getSupportFragmentManager().beginTransaction().add(R.id.qrcode_place_holder, qrCodeFragment, "code").commit();
+        // qrCodeFragment.show(getSupportFragmentManager(),"code");
         qrCodeFragment.showCodeWhenReady(event.getEventName());
 
     }
@@ -241,7 +241,7 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
                         DatabaseHelper.resetWholeDatabase(context);
                         return true;
                     case R.id.event_details_menu_edit:
-                        // TODO
+                        editEvent();
                         return true;
                 }
                 return true;
@@ -252,7 +252,7 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
         appBarJoinButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(mToolbar.getMenu().findItem(R.id.event_details_menu_add).isVisible()) {
+                if (mToolbar.getMenu().findItem(R.id.event_details_menu_add).isVisible()) {
                     joinEvent(true);
                 } else {
                     joinEvent(false);
@@ -261,9 +261,16 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
         });
     }
 
+
+    private void editEvent() {
+        Intent intent = new Intent(this, NewEventActivity.class);
+        intent.putExtra("id", event.getId());
+        startActivity(intent);
+    }
+
     public void joinEvent(final boolean join) {
         AlertDialog dialog = new AlertDialog.Builder(this).create();
-        if (join){
+        if (join) {
             dialog.setTitle(getString(R.string.alert_join_event_title));
             dialog.setMessage(getString(R.string.alert_join_event_message));
             dialog.setButton(AlertDialog.BUTTON_NEGATIVE,
@@ -308,7 +315,7 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
         }
     }
 
-    private void databaseJoinEvent (final boolean join) {
+    private void databaseJoinEvent(final boolean join) {
         try {
             DatabaseHelper.joinEvent(context, event.getId(), join, new DetailsCallback() {
                 @Override
@@ -617,7 +624,7 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
         }
     }
 
-    private void getPubMinis (ArrayList<Long> ids, ArrayList<TimeSlot> slots) {
+    private void getPubMinis(ArrayList<Long> ids, ArrayList<TimeSlot> slots) {
         PubDbHelper pubDbHelper = new PubDbHelper();
         ArrayList<Long> mIds = new ArrayList<>(ids);
         for (TimeSlot t : slots) {
@@ -658,7 +665,7 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
     }
 
 
-    private void getOwner (long id) {
+    private void getOwner(long id) {
         try {
             owner = new PersonMini(new PersonDbHelper().getPerson(id));
         } catch (DatabaseException e) {
