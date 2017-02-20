@@ -174,14 +174,10 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             }
         });
 
-        final SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
         fabScanQR.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(context, BarcodeCaptureActivity.class);
-                intent.putExtra(BarcodeCaptureActivity.AutoFocus, sharedPrefs.getBoolean("barcode_focus", false));
-                intent.putExtra(BarcodeCaptureActivity.UseFlash, sharedPrefs.getBoolean("barcode_flash", false));
-                startActivityForResult(intent, RC_BARCODE_CAPTURE);
+                startQrScan();
                 fabMenu.close(true);
             }
         });
@@ -195,7 +191,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
         handler = new Handler();
 
-
+        setTab(1);
     }
 
     @Override
@@ -221,6 +217,14 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         _mBackTime = tm;
         Toast.makeText(this, R.string.App_Exit, Toast.LENGTH_SHORT).show();
         return;
+    }
+
+    public void startQrScan() {
+        final SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+        Intent intent = new Intent(context, BarcodeCaptureActivity.class);
+        intent.putExtra(BarcodeCaptureActivity.AutoFocus, sharedPrefs.getBoolean("barcode_focus", false));
+        intent.putExtra(BarcodeCaptureActivity.UseFlash, sharedPrefs.getBoolean("barcode_flash", false));
+        startActivityForResult(intent, RC_BARCODE_CAPTURE);
     }
 
     @Override

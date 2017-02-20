@@ -1,5 +1,6 @@
 package com.ws1617.iosl.pubcrawl20.DisplayEvents;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
@@ -11,6 +12,11 @@ import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.ws1617.iosl.pubcrawl20.Details.EventDetailsActivity;
 import com.ws1617.iosl.pubcrawl20.R;
 
@@ -24,6 +30,8 @@ import java.util.List;
 public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHolder> {
     private List<EventMini> eventList;
     private final static String TAG = "EventAdapter";
+    private GoogleMap map;
+    private final Context context;
 
 
     public class EventViewHolder extends RecyclerView.ViewHolder  {
@@ -42,8 +50,13 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
 
     }
 
-    public EventAdapter(List<EventMini> eventList) {
+    public EventAdapter(List<EventMini> eventList, Context context) {
         this.eventList = eventList;
+        this.context = context;
+    }
+
+    public void setMap(GoogleMap map) {
+        this.map = map;
     }
 
     @Override
@@ -76,12 +89,24 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
 
                 for (EventMini e : eventList) {
                     if (e.getEventId() == event.getEventId()) {
-                        e.setSelected(true);
+                        e.setSelected(true, context);
                     } else {
-                        e.setSelected(false);
+                        e.setSelected(false, context);
                     }
                 }
                 notifyDataSetChanged();
+                LatLngBounds.Builder builder = new LatLngBounds.Builder();
+                for (LatLng pos : event.getPolyline().getPoints()) {
+                    builder.include(pos);
+                }
+                LatLngBounds bounds = builder.build();
+                int padding = 40; // offset from edges of the map in pixels
+                CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, padding);
+                try {
+                    map.animateCamera(cu);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         });
 

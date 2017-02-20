@@ -48,6 +48,7 @@ import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.ws1617.iosl.pubcrawl20.DataModels.Event;
 import com.ws1617.iosl.pubcrawl20.DataModels.Pub;
+import com.ws1617.iosl.pubcrawl20.DataModels.TimeSlot;
 import com.ws1617.iosl.pubcrawl20.Database.DatabaseException;
 import com.ws1617.iosl.pubcrawl20.Database.EventDbHelper;
 import com.ws1617.iosl.pubcrawl20.Database.PubDbHelper;
@@ -60,6 +61,7 @@ import com.ws1617.iosl.pubcrawl20.R;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 
 import static com.ws1617.iosl.pubcrawl20.Database.DatabaseHelper.resetWholeDatabase;
 
@@ -158,7 +160,7 @@ public class DisplayEventsFragment extends Fragment implements OnMapReadyCallbac
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
         eventsRecyclerView.setLayoutManager(mLayoutManager);
         eventsRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        eventAdapter = new EventAdapter(eventList);
+        eventAdapter = new EventAdapter(eventList, getContext());
         eventsRecyclerView.addItemDecoration(new RecyclerViewDivider(getContext(), LinearLayoutManager.VERTICAL));
         eventsRecyclerView.setAdapter(eventAdapter);
         return rootView;
@@ -191,6 +193,7 @@ public class DisplayEventsFragment extends Fragment implements OnMapReadyCallbac
     @Override
     public void onMapReady(GoogleMap googleMap) {
         map = googleMap;
+        eventAdapter.setMap(map);
 
         LatLng startpos = new LatLng(52.525387, 13.38595);
 //        map.addMarker(new MarkerOptions().position(tub).title("TUB - TEL"));
@@ -226,15 +229,15 @@ public class DisplayEventsFragment extends Fragment implements OnMapReadyCallbac
 
             Polyline p = event.getPolyline();
             if (p == null) {
-                event.setSelected(false);
+                event.setSelected(false, getContext());
                 continue;
             }
             if (event.getPolyline().equals(polyline)) {
                 Log.d(TAG, "Clicked event: " + event);
-                event.setSelected(true);
+                event.setSelected(true, getContext());
                 i = eventList.indexOf(event);
             } else {
-                event.setSelected(false);
+                event.setSelected(false, getContext());
             }
         }
         eventAdapter.notifyDataSetChanged();
@@ -272,16 +275,20 @@ public class DisplayEventsFragment extends Fragment implements OnMapReadyCallbac
         try {
             ArrayList<Event> el = eventDbHelper.getAllEvents();
             for (Event e : el) {
-                EventMini eventMini = new EventMini(e);
-                for (long pubId : e.getPubIds()) {
-                    try {
-                        Pub p = pubDbHelper.getPub(pubId);
-                        eventMini.addPub(new PubMini(p));
-                    } catch (Exception exx) {
-                        exx.printStackTrace();
+                ArrayList<TimeSlot> timeSlots = e.getTimeSlotList();
+                if (e.getDate().after(new Date(System.currentTimeMillis()-24*60*60*1000)) ||
+                        TimeSlot.getCombinedTimeSlot(timeSlots).isDateIncluded(new Date(System.currentTimeMillis()))) {
+                    EventMini eventMini = new EventMini(e);
+                    for (long pubId : e.getPubIds()) {
+                        try {
+                            Pub p = pubDbHelper.getPub(pubId);
+                            eventMini.addPub(new PubMini(p));
+                        } catch (Exception exx) {
+                            exx.printStackTrace();
+                        }
                     }
+                    eventList.add(eventMini);
                 }
-                eventList.add(eventMini);
             }
         } catch (DatabaseException ex) {
             ex.printStackTrace();
@@ -318,7 +325,7 @@ public class DisplayEventsFragment extends Fragment implements OnMapReadyCallbac
                     .addAll(latLngs)
                     .width(10)
                     .clickable(true)
-                    .color(Color.GRAY));
+                    .color(ContextCompat.getColor(getContext(), R.color.polyline_gray)));
             for (EventMini e : eventList) {
                 if (e.getEventId() == eventId) {
                     eventList.get(eventList.indexOf(e)).setPolyline(polyline);

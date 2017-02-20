@@ -1,9 +1,12 @@
 package com.ws1617.iosl.pubcrawl20.DisplayEvents;
 
+import android.content.Context;
 import android.graphics.Color;
+import android.support.v4.content.ContextCompat;
 
 import com.google.android.gms.maps.model.Polyline;
 import com.ws1617.iosl.pubcrawl20.DataModels.Event;
+import com.ws1617.iosl.pubcrawl20.R;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -110,7 +113,7 @@ class EventMini {
         return selected;
     }
 
-    public void setSelected(boolean selected) {
+    public void setSelected(boolean selected, Context context) {
         if (polyline == null) {
             this.selected = selected;
             return;
@@ -118,10 +121,10 @@ class EventMini {
 
         if (selected && !this.selected) {
             this.selected = true;
-            this.polyline.setColor(Color.BLUE);
+            this.polyline.setColor(ContextCompat.getColor(context, R.color.polyline_blue));
         } else {
             this.selected = false;
-            this.polyline.setColor(Color.GRAY);
+            this.polyline.setColor(ContextCompat.getColor(context, R.color.polyline_gray));
         }
     }
 
