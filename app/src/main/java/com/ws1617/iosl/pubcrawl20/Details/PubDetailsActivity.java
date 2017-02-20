@@ -298,7 +298,7 @@ public class PubDetailsActivity extends AppCompatActivity implements AppBarLayou
     }
 
     public void addFavourite(final boolean favourite) {
-        //TODO
+        //TODO: Add favourite
         final Context context = this;
         DatabaseHelper.addFavouritePub(this, pub.getId(), favourite, new DetailsCallback() {
             @Override
