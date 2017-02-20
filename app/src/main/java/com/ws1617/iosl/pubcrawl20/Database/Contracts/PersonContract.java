@@ -29,7 +29,7 @@ public class PersonContract {
 
     public static final String ID = "_id";
 
-    public static final String CREATE_PERSONS_TABLE = "CREATE TABLE " +
+    public static final String CREATE_PERSONS_TABLE = "CREATE TABLE IF NOT EXISTS " +
             TABLE_PERSONS + "(" +
                     PERSON_ID + " INTEGER PRIMARY KEY," +
                     DESCRIPTION + " TEXT," +
@@ -38,35 +38,35 @@ public class PersonContract {
                     USERNAME + " TEXT" +
             ")";
 
-    public static final String CREATE_PERSON_EVENTS_TABLE = "CREATE TABLE " +
+    public static final String CREATE_PERSON_EVENTS_TABLE = "CREATE TABLE IF NOT EXISTS " +
             TABLE_PERSON_EVENTS + "(" +
             ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
             PERSON_ID + " INTEGER," +
             EVENT_ID + " INTEGER" +
             ")";
 
-    public static final String CREATE_PERSON_FRIENDS_TABLE = "CREATE TABLE " +
+    public static final String CREATE_PERSON_FRIENDS_TABLE = "CREATE TABLE IF NOT EXISTS " +
             TABLE_PERSON_FRIENDS + "(" +
             ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
             PERSON_ID + " INTEGER," +
             FRIEND_ID + " INTEGER" +
             ")";
 
-    public static final String CREATE_PERSON_PUBS_FAVOURITE_TABLE = "CREATE TABLE " +
+    public static final String CREATE_PERSON_PUBS_FAVOURITE_TABLE = "CREATE TABLE IF NOT EXISTS " +
             TABLE_PERSON_FAVOURITE_PUBS + "(" +
             ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
             PERSON_ID + " INTEGER," +
             PUB_ID + " INTEGER" +
             ")";
 
-    public static final String CREATE_PERSON_OWNED_EVENTS_TABLE = "CREATE TABLE " +
+    public static final String CREATE_PERSON_OWNED_EVENTS_TABLE = "CREATE TABLE IF NOT EXISTS " +
             TABLE_PERSON_OWNED_EVENTS + "(" +
             ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
             PERSON_ID + " INTEGER," +
             EVENT_ID + " INTEGER" +
             ")";
 
-    public static final String CREATE_PERSON_OWNED_PUBS_TABLE = "CREATE TABLE " +
+    public static final String CREATE_PERSON_OWNED_PUBS_TABLE = "CREATE TABLE IF NOT EXISTS " +
             TABLE_PERSON_OWNED_PUBS + "(" +
             ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
             PERSON_ID + " INTEGER," +

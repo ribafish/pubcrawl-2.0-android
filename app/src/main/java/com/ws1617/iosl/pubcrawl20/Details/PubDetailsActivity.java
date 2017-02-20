@@ -105,7 +105,7 @@ public class PubDetailsActivity extends AppCompatActivity implements AppBarLayou
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pub_details);
-        context = getApplicationContext();
+        context = this;
 
         long id = getIntent().getLongExtra("id", -1);
         getPub(id);

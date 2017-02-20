@@ -74,6 +74,7 @@ public class EventDbHelper {
     //TODO the returned state doesnt reflect the correct event addition state .. it doesnt return false at all
     public void addEvent(Event event) {
         SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
+        onCreate(db);
 
         // Add to event table
         ContentValues values = new ContentValues();
@@ -107,6 +108,7 @@ public class EventDbHelper {
 
     public void addTimeslots(Event event) {
         SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
+        onCreate(db);
         ContentValues values;
 
         for (TimeSlot ts : event.getTimeSlotList()) {
@@ -121,6 +123,7 @@ public class EventDbHelper {
 
     public void addParticipants(Event event) {
         SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
+        onCreate(db);
         ContentValues values;
 
         for (long id : event.getParticipantIds()) {
@@ -133,6 +136,7 @@ public class EventDbHelper {
 
     public void addPubs(Event event) {
         SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
+        onCreate(db);
         ContentValues values;
 
         for (long id : event.getPubIds()) {
@@ -146,6 +150,7 @@ public class EventDbHelper {
 
     public void updateEvent(Event event) {
         SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
+        onCreate(db);
         ContentValues values = new ContentValues();
         values.put(EVENT_ID, event.getId());
         values.put(EVENT_NAME, event.getEventName());
@@ -168,6 +173,7 @@ public class EventDbHelper {
 
     public void updateEventOwner(long event_id, long owner_id) {
         SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
+        onCreate(db);
         ContentValues values = new ContentValues();
         values.put(OWNER, owner_id);
 
@@ -187,6 +193,7 @@ public class EventDbHelper {
 
     public void deleteLists(long event_id) {
         SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
+        onCreate(db);
 
         String selection = EVENT_ID + " =?";
         String[] selectionArgs = {String.valueOf(event_id)};
@@ -198,6 +205,7 @@ public class EventDbHelper {
 
     public void deleteEvent(long event_id) {
         SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
+        onCreate(db);
 
         String selection = EVENT_ID + " =?";
         String[] selectionArgs = {String.valueOf(event_id)};
@@ -227,6 +235,7 @@ public class EventDbHelper {
 
     public Event getListlessEvent(long event_id) throws DatabaseException {
         SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
+        onCreate(db);
         Event event;
 
         String query = "SELECT * FROM " +
@@ -249,6 +258,7 @@ public class EventDbHelper {
 
     public Event getFirstMatchEvent(String event_name) throws DatabaseException {
         SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
+        onCreate(db);
         Event event;
         String query = "SELECT * FROM " + TABLE_EVENTS + " WHERE " + EVENT_NAME + " = \""+event_name+"\" ";
 
@@ -287,6 +297,7 @@ public class EventDbHelper {
 
     public ArrayList<TimeSlot> getTimeSlots(long event_id) {
         SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
+        onCreate(db);
         ArrayList<TimeSlot> timeSlots = new ArrayList<>();
 
         String query = "SELECT * FROM " +
@@ -313,6 +324,7 @@ public class EventDbHelper {
 
     public ArrayList<Long> getParticipantIds(long event_id) {
         SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
+        onCreate(db);
         ArrayList<Long> list = new ArrayList<>();
 
         String query = "SELECT * FROM " +
@@ -334,6 +346,7 @@ public class EventDbHelper {
 
     public ArrayList<Long> getPubIds(long event_id) {
         SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
+        onCreate(db);
         ArrayList<Long> list = new ArrayList<>();
 
         String query = "SELECT * FROM " +
@@ -356,6 +369,7 @@ public class EventDbHelper {
 
     public ArrayList<Event> getAllEvents() throws DatabaseException {
         SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
+        onCreate(db);
         ArrayList<Event> events = new ArrayList<>();
 
         String query = "SELECT * FROM " + TABLE_EVENTS;

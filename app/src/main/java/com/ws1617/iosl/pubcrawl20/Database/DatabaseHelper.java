@@ -1,10 +1,12 @@
 package com.ws1617.iosl.pubcrawl20.Database;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.ImageView;
@@ -88,17 +90,12 @@ public class DatabaseHelper {
         else return BitmapFactory.decodeByteArray(image, 0, image.length);
     }
 
-    public static void resetWholeDatabase(Context context) {
-        resetPubsDatabase(context);
-        resetPersonsDatabase(context);
-        resetEventsDatabase(context);
-    }
-
-    public static void resetEventsDatabase(Context context) {
+    protected static void resetEventsDatabase(Context context) {
         SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
         EventDbHelper.onUpgrade(db, 0, 0);
         downloadEvents(context);
     }
+
 
     private static JSONObject prepareEventObj(Event event,Context context) {
         JSONObject object = new JSONObject();
@@ -392,7 +389,7 @@ public class DatabaseHelper {
 
     }
 
-    public static void resetPubsDatabase(Context context) {
+    protected static void resetPubsDatabase(Context context) {
         SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
         PubDbHelper.onUpgrade(db, 0, 0);
         downloadPubs(context);
@@ -528,7 +525,7 @@ public class DatabaseHelper {
         requestQueue.add(pubsRequest);
     }
 
-    public static void resetPersonsDatabase(Context context) {
+    protected static void resetPersonsDatabase(Context context) {
         SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
         PersonDbHelper.onUpgrade(db, 0, 0);
         downloadPersons(context);
@@ -771,7 +768,7 @@ public class DatabaseHelper {
         int size = prefs.getString("server_ip", "").length();
 
         if (prefs.getString("server_ip", null) == null || prefs.getString("server_ip", "").length() < 10) {
-            Log.e(TAG, "Server url not set, setting default");
+            Log.w(TAG, "Server url not set, setting default");
             url = context.getResources().getString(R.string.url);
         } else {
             url = prefs.getString("server_ip", "").replace(" ", "") + "/";

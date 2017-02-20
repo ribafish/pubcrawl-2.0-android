@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.database.sqlite.SQLiteException;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -110,10 +111,10 @@ public class CurrentFragment extends Fragment {
     private void getEvents() {
         events.clear();
         ArrayList<Event> allEvents = new ArrayList<>();
-        PersonDbHelper personDbHelper = new PersonDbHelper();
-        EventDbHelper eventDbHelper = new EventDbHelper();
-        PubDbHelper pubDbHelper = new PubDbHelper();
         try {
+            PersonDbHelper personDbHelper = new PersonDbHelper();
+            EventDbHelper eventDbHelper = new EventDbHelper();
+            PubDbHelper pubDbHelper = new PubDbHelper();
             for (Long eventId : personDbHelper.getEventIds(userId)) {
                 Event event = null;
                 try {
@@ -148,6 +149,8 @@ public class CurrentFragment extends Fragment {
             }
         } catch (DatabaseException e) {
             e.printStackTrace();
+        } catch (SQLiteException ee) {
+            return;
         }
 
         if (events.size() > 0) {
@@ -191,6 +194,7 @@ public class CurrentFragment extends Fragment {
                 m.onResume();
             }
         }
+        getEvents();
     }
 
     @Override

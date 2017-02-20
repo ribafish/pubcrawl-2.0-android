@@ -16,6 +16,7 @@ import com.ws1617.iosl.pubcrawl20.DataModels.Event;
 import com.ws1617.iosl.pubcrawl20.Database.DatabaseException;
 import com.ws1617.iosl.pubcrawl20.Database.DatabaseHelper;
 import com.ws1617.iosl.pubcrawl20.Database.PersonDbHelper;
+import com.ws1617.iosl.pubcrawl20.Database.resetDbTask;
 import com.ws1617.iosl.pubcrawl20.NewEvent.adapters.NewEventPagerAdapter;
 import com.ws1617.iosl.pubcrawl20.R;
 
@@ -27,6 +28,7 @@ public class NewEventActivity extends AppCompatActivity {
     FloatingActionButton mCreateEventBtn;
     NewEventPagerAdapter mFragmentPagerAdapter;
     private List<Fragment> fragmentsList;
+    private Context context;
     final static String EVENT_TAG = "EVENT_TAG";
 
 
@@ -41,6 +43,7 @@ public class NewEventActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        context = this;
         setContentView(R.layout.activity_new_event);
 
         initFragmentList();
@@ -103,7 +106,7 @@ public class NewEventActivity extends AppCompatActivity {
                 @Override
                 public void onSuccess() {
                     //refresh the whole DB
-                    DatabaseHelper.resetEventsDatabase(getApplicationContext());
+                    new resetDbTask(context, resetDbTask.EVENTS_DB).execute();
                     shareEventDialog.initQRCodeView(event.getEventName());
                 }
 
