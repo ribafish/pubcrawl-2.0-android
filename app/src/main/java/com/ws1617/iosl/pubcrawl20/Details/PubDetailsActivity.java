@@ -77,12 +77,13 @@ public class PubDetailsActivity extends AppCompatActivity implements AppBarLayou
     private AppBarLayout mAppBarLayout;
     private Toolbar mToolbar;
     private ImageCarouselPager imageCarouselPager;
+    private ArrayList<Bitmap> images = new ArrayList<>();
 
     private Context context;
 
     private Pub pub;
     private PersonMini owner;
-    private String address = "Unknown";
+    private String address = "Location unknown";
     private ArrayList<PersonMini> topPersonsList = new ArrayList<>();
     private ArrayList<EventMini> futureEventsList = new ArrayList<>();
     private ArrayList<EventMini> pastEventsList = new ArrayList<>();
@@ -205,6 +206,12 @@ public class PubDetailsActivity extends AppCompatActivity implements AppBarLayou
 
             // Opening times card
             ((TextView) findViewById(R.id.pub_details_times)).setText(pub.getOpeningTimes());
+
+            if (pub.getImages() != null) {
+                images.clear();
+                images.addAll(pub.getImages());
+                imageCarouselPager.notifyDataSetChanged();
+            }
         }
 
         if (topPersonsList.size() > 0) {
@@ -257,8 +264,7 @@ public class PubDetailsActivity extends AppCompatActivity implements AppBarLayou
 
         } catch (Exception e) { e.printStackTrace(); }
 
-        ArrayList<Bitmap> images = new ArrayList<Bitmap>();
-        images.add(BitmapFactory.decodeResource(getResources(), R.mipmap.bestpub));
+
         images.add(BitmapFactory.decodeResource(getResources(), R.mipmap.bestpub));
         imageCarouselPager = new ImageCarouselPager(this, images);
         viewPager.setAdapter(imageCarouselPager);
@@ -630,13 +636,11 @@ public class PubDetailsActivity extends AppCompatActivity implements AppBarLayou
                     ((TextView) findViewById(R.id.pub_details_address)).setText(address);
                 } catch (Exception e) {
                     e.printStackTrace();
-                    address = "Unknown";
                 }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                address = "Unknown";
                 Log.e(TAG, "getAddressFromLatLng:onErrorResponse: " + error.toString());
                 error.printStackTrace();
             }
