@@ -566,7 +566,8 @@ public class DatabaseHelper {
                                                     JSONArray eventsJson = response.getJSONObject(EMBEDDED).getJSONArray(EVENTS);
                                                     for (int i = 0; i < eventsJson.length(); i++) {
                                                         JSONObject jsonEvent = eventsJson.getJSONObject(i);
-                                                        events.add(parseJSONEvent(jsonEvent).getId());
+                                                        long id = parseJSONEvent(jsonEvent).getId();
+                                                        if (!db.getPerson(person.getId()).getEventIds().contains(id)) events.add(id);
                                                     }
                                                     Person p = new Person(person.getId());
                                                     p.setOwnedEventIds(events);
@@ -597,8 +598,8 @@ public class DatabaseHelper {
                                                     JSONArray pubsJson = response.getJSONObject(EMBEDDED).getJSONArray(PUBS);
                                                     for (int i = 0; i < pubsJson.length(); i++) {
                                                         JSONObject jsonPub = pubsJson.getJSONObject(i);
-                                                        Pub p = parsePubJson(jsonPub);
-                                                        pubs.add(p.getId());
+                                                        long id = parsePubJson(jsonPub).getId();
+                                                        if (!db.getPerson(person.getId()).getFavouritePubIds().contains(id)) pubs.add(id);
                                                     }
                                                     Person p = new Person(person.getId());
                                                     p.setFavouritePubIds(pubs);
@@ -629,8 +630,8 @@ public class DatabaseHelper {
                                                     JSONArray pubsJson = response.getJSONObject(EMBEDDED).getJSONArray(PUBS);
                                                     for (int i = 0; i < pubsJson.length(); i++) {
                                                         JSONObject jsonPub = pubsJson.getJSONObject(i);
-                                                        Pub p = parsePubJson(jsonPub);
-                                                        pubs.add(p.getId());
+                                                        long id = parsePubJson(jsonPub).getId();
+                                                        if (!db.getPerson(person.getId()).getOwnedPubIds().contains(id)) pubs.add(id);
                                                     }
                                                     Person p = new Person(person.getId());
                                                     p.setOwnedPubIds(pubs);
@@ -662,7 +663,8 @@ public class DatabaseHelper {
                                                     JSONArray participantsJson = response.getJSONObject(EMBEDDED).getJSONArray(PERSONS);
                                                     for (int i = 0; i < participantsJson.length(); i++) {
                                                         JSONObject jsonParticipant = participantsJson.getJSONObject(i);
-                                                        topPersonIds.add(parsePersonJson(jsonParticipant).getId());
+                                                        long id = parsePersonJson(jsonParticipant).getId();
+                                                        if (!db.getPerson(person.getId()).getFriendIds().contains(id)) topPersonIds.add(id);
                                                     }
                                                     Person p = new Person(person.getId());
                                                     p.setFriendIds(topPersonIds);
@@ -693,7 +695,8 @@ public class DatabaseHelper {
                                                     JSONArray eventsJson = response.getJSONObject(EMBEDDED).getJSONArray(EVENTS);
                                                     for (int i = 0; i < eventsJson.length(); i++) {
                                                         JSONObject jsonEvent = eventsJson.getJSONObject(i);
-                                                        events.add(parseJSONEvent(jsonEvent).getId());
+                                                        long id = parseJSONEvent(jsonEvent).getId();
+                                                        if (!db.getPerson(person.getId()).getEventIds().contains(id)) events.add(id);
                                                     }
                                                     Person p = new Person(person.getId());
                                                     p.setEventIds(events);

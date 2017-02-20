@@ -115,7 +115,8 @@ public class CurrentFragment extends Fragment {
             PersonDbHelper personDbHelper = new PersonDbHelper();
             EventDbHelper eventDbHelper = new EventDbHelper();
             PubDbHelper pubDbHelper = new PubDbHelper();
-            for (Long eventId : personDbHelper.getEventIds(userId)) {
+            ArrayList<Long> allEventIds = personDbHelper.getEventIds(userId);
+            for (Long eventId : allEventIds) {
                 Event event = null;
                 try {
                     event = eventDbHelper.getEvent(eventId);
