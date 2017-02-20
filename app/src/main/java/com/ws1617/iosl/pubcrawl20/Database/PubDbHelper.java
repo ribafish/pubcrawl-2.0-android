@@ -98,13 +98,14 @@ public class PubDbHelper  {
     public void addPubImages(Pub pub) {
         SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
         ContentValues values;
+        if (pub.getImages()== null || pub.getImages().size() == 0) return;
 
-        for (int i = 0; i < pub.getTopsListIds().size(); i++) {
+        for (int i = 0; i < pub.getImages().size(); i++) {
             values = new ContentValues();
             values.put(PUB_ID, pub.getId());
             values.put(ITERATOR, i);
             values.put(IMAGE, bitmapToBytes(pub.getImages().get(i)));
-            db.insert(TABLE_TOP_PERSONS, null, values);
+            db.insert(TABLE_PUB_IMAGES, null, values);
         }
     }
 

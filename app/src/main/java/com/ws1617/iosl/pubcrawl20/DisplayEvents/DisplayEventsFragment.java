@@ -160,7 +160,7 @@ public class DisplayEventsFragment extends Fragment implements OnMapReadyCallbac
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
         eventsRecyclerView.setLayoutManager(mLayoutManager);
         eventsRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        eventAdapter = new EventAdapter(eventList);
+        eventAdapter = new EventAdapter(eventList, getContext());
         eventsRecyclerView.addItemDecoration(new RecyclerViewDivider(getContext(), LinearLayoutManager.VERTICAL));
         eventsRecyclerView.setAdapter(eventAdapter);
         return rootView;
@@ -193,6 +193,7 @@ public class DisplayEventsFragment extends Fragment implements OnMapReadyCallbac
     @Override
     public void onMapReady(GoogleMap googleMap) {
         map = googleMap;
+        eventAdapter.setMap(map);
 
         LatLng startpos = new LatLng(52.525387, 13.38595);
 //        map.addMarker(new MarkerOptions().position(tub).title("TUB - TEL"));
@@ -228,15 +229,15 @@ public class DisplayEventsFragment extends Fragment implements OnMapReadyCallbac
 
             Polyline p = event.getPolyline();
             if (p == null) {
-                event.setSelected(false);
+                event.setSelected(false, getContext());
                 continue;
             }
             if (event.getPolyline().equals(polyline)) {
                 Log.d(TAG, "Clicked event: " + event);
-                event.setSelected(true);
+                event.setSelected(true, getContext());
                 i = eventList.indexOf(event);
             } else {
-                event.setSelected(false);
+                event.setSelected(false, getContext());
             }
         }
         eventAdapter.notifyDataSetChanged();
@@ -324,7 +325,7 @@ public class DisplayEventsFragment extends Fragment implements OnMapReadyCallbac
                     .addAll(latLngs)
                     .width(10)
                     .clickable(true)
-                    .color(Color.GRAY));
+                    .color(ContextCompat.getColor(getContext(), R.color.polyline_gray)));
             for (EventMini e : eventList) {
                 if (e.getEventId() == eventId) {
                     eventList.get(eventList.indexOf(e)).setPolyline(polyline);
