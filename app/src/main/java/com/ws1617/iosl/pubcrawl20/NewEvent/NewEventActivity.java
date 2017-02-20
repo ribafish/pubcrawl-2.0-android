@@ -81,19 +81,25 @@ public class NewEventActivity extends AppCompatActivity {
 
 
     public void onCollectDataClicked() {
-
-
         final Event event = new Event();
         ((NewEventGeneralFragment) fragmentsList.get(0)).updateGeneralInfo(event);
         ((NewEventRouteFragment) fragmentsList.get(1)).updatePubListInfo(event);
 
 
-        SharedPreferences sharedPref = getApplicationContext().getSharedPreferences(getApplicationContext().getString(R.string.preference_user), Context.MODE_PRIVATE);
-        Long userId = sharedPref.getLong(getApplicationContext().getString(R.string.user_id), -1);
+      new DatabaseHelper().addEventOwner(getApplicationContext(), 19, new SetOwner() {
+            @Override
+            public void onSuccess() {
+                DatabaseHelper.resetEventsDatabase(getApplicationContext());
+            }
 
-        event.setOwnerId(userId);
+            @Override
+            public void onFail() {
+                Toast.makeText(getApplicationContext(), "Error while creating the Event .. ", Toast.LENGTH_SHORT).show();
+            }
+        });
 
-       if (!checkSatisfyMinReq(event))
+
+      /*    if (!checkSatisfyMinReq(event))
             return;
         else {
             final ShareEventDialog shareEventDialog = new ShareEventDialog();
@@ -103,8 +109,22 @@ public class NewEventActivity extends AppCompatActivity {
                 @Override
                 public void onSuccess() {
                     //refresh the whole DB
-                    DatabaseHelper.resetEventsDatabase(getApplicationContext());
-                    shareEventDialog.initQRCodeView(event.getEventName());
+
+                    new DatabaseHelper().addEventOwner(getApplicationContext(), event.getId(), new SetOwner() {
+                        @Override
+                        public void onSuccess() {
+                            DatabaseHelper.resetEventsDatabase(getApplicationContext());
+                            shareEventDialog.initQRCodeView(event.getEventName());
+                        }
+
+                        @Override
+                        public void onFail() {
+                            Toast.makeText(getApplicationContext(), "Error while creating the Event .. ", Toast.LENGTH_SHORT).show();
+                            shareEventDialog.dismiss();
+                        }
+                    });
+
+
                 }
 
                 @Override
@@ -114,7 +134,7 @@ public class NewEventActivity extends AppCompatActivity {
                     shareEventDialog.dismiss();
                 }
             });
-        }
+        }*/
     }
 
     private boolean checkSatisfyMinReq(Event event) {
@@ -129,15 +149,16 @@ public class NewEventActivity extends AppCompatActivity {
     }
 
     public interface EventCreation {
-        public void onSuccess();
+        void onSuccess();
 
-        public void onFail();
+        void onFail();
     }
 
 
-    interface InsertNewEventListener {
-        void onSuccessfulInsert();
+    public interface SetOwner {
+        void onSuccess();
 
-        void onFaildInsert();
+        void onFail();
     }
+
 }
