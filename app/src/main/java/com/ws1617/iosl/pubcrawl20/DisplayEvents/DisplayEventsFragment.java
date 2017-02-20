@@ -48,6 +48,7 @@ import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.ws1617.iosl.pubcrawl20.DataModels.Event;
 import com.ws1617.iosl.pubcrawl20.DataModels.Pub;
+import com.ws1617.iosl.pubcrawl20.DataModels.TimeSlot;
 import com.ws1617.iosl.pubcrawl20.Database.DatabaseException;
 import com.ws1617.iosl.pubcrawl20.Database.EventDbHelper;
 import com.ws1617.iosl.pubcrawl20.Database.PubDbHelper;
@@ -60,6 +61,7 @@ import com.ws1617.iosl.pubcrawl20.R;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 
 import static com.ws1617.iosl.pubcrawl20.Database.DatabaseHelper.resetWholeDatabase;
 
@@ -272,16 +274,20 @@ public class DisplayEventsFragment extends Fragment implements OnMapReadyCallbac
         try {
             ArrayList<Event> el = eventDbHelper.getAllEvents();
             for (Event e : el) {
-                EventMini eventMini = new EventMini(e);
-                for (long pubId : e.getPubIds()) {
-                    try {
-                        Pub p = pubDbHelper.getPub(pubId);
-                        eventMini.addPub(new PubMini(p));
-                    } catch (Exception exx) {
-                        exx.printStackTrace();
+                ArrayList<TimeSlot> timeSlots = e.getTimeSlotList();
+                if (e.getDate().after(new Date(System.currentTimeMillis()-24*60*60*1000)) ||
+                        TimeSlot.getCombinedTimeSlot(timeSlots).isDateIncluded(new Date(System.currentTimeMillis()))) {
+                    EventMini eventMini = new EventMini(e);
+                    for (long pubId : e.getPubIds()) {
+                        try {
+                            Pub p = pubDbHelper.getPub(pubId);
+                            eventMini.addPub(new PubMini(p));
+                        } catch (Exception exx) {
+                            exx.printStackTrace();
+                        }
                     }
+                    eventList.add(eventMini);
                 }
-                eventList.add(eventMini);
             }
         } catch (DatabaseException ex) {
             ex.printStackTrace();

@@ -35,6 +35,16 @@
             android:id="@+id/current_find_events_btn"
             android:textColor="@color/colorPrimary"
             style="@style/Widget.AppCompat.Button.Borderless" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="@string/scan_qr"
+            android:id="@+id/current_scan_qr_btn"
+            android:textColor="@color/colorPrimary"
+            style="@style/Widget.AppCompat.Button.Borderless" />
+
     </LinearLayout>
 
     <android.support.v7.widget.RecyclerView

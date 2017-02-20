@@ -92,6 +92,18 @@ public class CurrentFragment extends Fragment {
             }
         });
 
+        Button scanQr = (Button) rootView.findViewById(R.id.current_scan_qr_btn);
+        scanQr.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try {
+                    ((MainActivity)getActivity()).startQrScan();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
         return rootView;
     }
 
