@@ -488,7 +488,7 @@ public class PersonDetailsActivity extends AppCompatActivity implements AppBarLa
 
             mToolbar.setTitle(personName);
             mTitle.setText(personName);
-            mSubtitle.setText("Loading...");  //TODO
+            mSubtitle.setText("Loading...");
 
         } catch (Exception e) { e.printStackTrace(); }
 

@@ -382,15 +382,7 @@ public class EventDbHelper {
     public ArrayList<Event> getEventsBoundryBox(long event_id, LatLng minLatLng, LatLng maxLatLng) {
         ArrayList<Event> events = new ArrayList<>();
 
-        //TODO
-
-        return null;
-    }
-
-    public ArrayList<Event> getEventsBoundryBoxTimeFrame(long event_id, LatLng minLatLng, LatLng maxLatLng, Date min, Date max) {
-        ArrayList<Event> events = new ArrayList<>();
-
-        //TODO
+        //TODO: get events that are in the specified min/max LatLng
 
         return null;
     }

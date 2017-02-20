@@ -1,6 +1,9 @@
 package com.ws1617.iosl.pubcrawl20.DataModels;
 
+import android.util.Log;
+
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 /**
@@ -20,6 +23,7 @@ public class TimeSlot {
     }
 
     public long getPubId() {
+        if (pubId == -1) Log.e("TimeSlot", "Invalid pubId");
         return pubId;
     }
 
@@ -50,5 +54,19 @@ public class TimeSlot {
 
     public void setEndTime(Date endTime) {
         this.endTime = endTime;
+    }
+
+    public static TimeSlot getCombinedTimeSlot(ArrayList<TimeSlot> slots) {
+        TimeSlot timeSlot = slots.get(0);
+        timeSlot.setPubId(-1);
+        for (TimeSlot ts : slots) {
+            if (ts.startTime.before(timeSlot.startTime)) timeSlot.setStartTime(ts.startTime);
+            if (ts.endTime.after(timeSlot.endTime)) timeSlot.setEndTime(ts.endTime);
+        }
+        return timeSlot;
+    }
+
+    public boolean isDateIncluded(Date date) {
+        return date.after(startTime) && date.before(endTime);
     }
 }

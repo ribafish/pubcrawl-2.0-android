@@ -8,6 +8,8 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.location.Address;
+import android.location.Geocoder;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
@@ -35,6 +37,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.ws1617.iosl.pubcrawl20.DataModels.Pub;
 import com.ws1617.iosl.pubcrawl20.Database.DatabaseException;
 import com.ws1617.iosl.pubcrawl20.Database.DatabaseHelper;
@@ -44,9 +50,14 @@ import com.ws1617.iosl.pubcrawl20.Database.PubDbHelper;
 import com.ws1617.iosl.pubcrawl20.Database.RequestQueueHelper;
 import com.ws1617.iosl.pubcrawl20.R;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 public class PubDetailsActivity extends AppCompatActivity implements AppBarLayout.OnOffsetChangedListener {
@@ -242,7 +253,7 @@ public class PubDetailsActivity extends AppCompatActivity implements AppBarLayou
 
             mToolbar.setTitle(pubName);
             mTitle.setText(pubName);
-            mSubtitle.setText("Loading...");  //TODO
+            mSubtitle.setText("");
 
         } catch (Exception e) { e.printStackTrace(); }
 
@@ -287,7 +298,7 @@ public class PubDetailsActivity extends AppCompatActivity implements AppBarLayou
     }
 
     public void addFavourite(final boolean favourite) {
-        //TODO
+        //TODO: Add favourite
         final Context context = this;
         DatabaseHelper.addFavouritePub(this, pub.getId(), favourite, new DetailsCallback() {
             @Override
@@ -590,6 +601,7 @@ public class PubDetailsActivity extends AppCompatActivity implements AppBarLayou
             } catch (DatabaseException e) {
                 e.printStackTrace();
             }
+            getAddressFromLatLng();
         } catch (DatabaseException e) {
             e.printStackTrace();
             Toast.makeText(getApplicationContext(),
@@ -598,8 +610,38 @@ public class PubDetailsActivity extends AppCompatActivity implements AppBarLayou
             Log.e(TAG, "getPub: id " + id + ", pub == null");
             return;
         }
+    }
 
-        address = "TODO: get address from LatLng"; // TODO: get address
+    /**
+     * Geocoder way didn't work, so this is a workaround
+      */
+    private void getAddressFromLatLng() {
+        final RequestQueueHelper requestQueue = new RequestQueueHelper(context);
+        String url = "http://maps.googleapis.com/maps/api/geocode/json?latlng=" +
+                pub.getLatLng().latitude + ","+ pub.getLatLng().longitude + "&sensor=true";
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url,
+                null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    JSONObject first = response.getJSONArray("results").getJSONObject(0);
+                    address = first.getString("formatted_address");
+                    mSubtitle.setText(address);
+                    ((TextView) findViewById(R.id.pub_details_address)).setText(address);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    address = "Unknown";
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                address = "Unknown";
+                Log.e(TAG, "getAddressFromLatLng:onErrorResponse: " + error.toString());
+                error.printStackTrace();
+            }
+        });
+        requestQueue.add(jsonObjectRequest);
 
 
     }
