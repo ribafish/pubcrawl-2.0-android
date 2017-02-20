@@ -1,7 +1,5 @@
 package com.ws1617.iosl.pubcrawl20.NewEvent;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -15,7 +13,7 @@ import android.widget.Toast;
 import com.ws1617.iosl.pubcrawl20.DataModels.Event;
 import com.ws1617.iosl.pubcrawl20.Database.DatabaseException;
 import com.ws1617.iosl.pubcrawl20.Database.DatabaseHelper;
-import com.ws1617.iosl.pubcrawl20.Database.PersonDbHelper;
+import com.ws1617.iosl.pubcrawl20.Database.EventDbHelper;
 import com.ws1617.iosl.pubcrawl20.NewEvent.adapters.NewEventPagerAdapter;
 import com.ws1617.iosl.pubcrawl20.R;
 
@@ -27,11 +25,11 @@ public class NewEventActivity extends AppCompatActivity {
     FloatingActionButton mCreateEventBtn;
     NewEventPagerAdapter mFragmentPagerAdapter;
     private List<Fragment> fragmentsList;
-    final static String EVENT_TAG = "EVENT_TAG";
+    final static String TAG = "EVENT_TAG";
 
+    Event oldEvent;
 
     public void initFragmentList() {
-
         fragmentsList = new ArrayList<>();
         fragmentsList.add(new NewEventGeneralFragment());
         fragmentsList.add(new NewEventRouteFragment());
@@ -45,6 +43,24 @@ public class NewEventActivity extends AppCompatActivity {
 
         initFragmentList();
         initView();
+
+
+        long id = getIntent().getLongExtra("id", -1);
+        if (id != -1) {
+            //Edit mode
+            showOldEvent(id);
+        }
+
+    }
+
+    private void showOldEvent(long id) {
+        try {
+            oldEvent = new EventDbHelper().getEvent(id);
+            ((NewEventGeneralFragment) fragmentsList.get(0)).setOldEvent(oldEvent);
+            ((NewEventRouteFragment) fragmentsList.get(1)).setOldEvent(oldEvent);
+        } catch (DatabaseException e) {
+            e.printStackTrace();
+        }
 
     }
 
@@ -82,11 +98,11 @@ public class NewEventActivity extends AppCompatActivity {
 
     public void onCollectDataClicked() {
         final Event event = new Event();
-        ((NewEventGeneralFragment) fragmentsList.get(0)).updateGeneralInfo(event);
-        ((NewEventRouteFragment) fragmentsList.get(1)).updatePubListInfo(event);
+        ((NewEventGeneralFragment) fragmentsList.get(0)).collectGeneralInfo(event);
+        ((NewEventRouteFragment) fragmentsList.get(1)).collectPubListInfo(event);
 
 
-      new DatabaseHelper().addEventOwner(getApplicationContext(), 19, new SetOwner() {
+        new DatabaseHelper().addEventOwner(getApplicationContext(), 19, new SetOwner() {
             @Override
             public void onSuccess() {
                 DatabaseHelper.resetEventsDatabase(getApplicationContext());
