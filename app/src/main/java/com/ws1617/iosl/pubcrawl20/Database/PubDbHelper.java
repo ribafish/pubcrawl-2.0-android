@@ -119,14 +119,14 @@ public class PubDbHelper  {
 
         ContentValues values = new ContentValues();
         values.put(PUB_ID, pub.getId());
-        values.put(PUB_NAME, pub.getPubName());
-        values.put(LATITUDE, pub.getLatLng().latitude);
-        values.put(LONGITUDE, pub.getLatLng().longitude);
-        values.put(SIZE, pub.getSize());
-        values.put(PRICES, pub.getPrices());
-        values.put(RATING, pub.getRating());
-        values.put(OPENING_TIMES, pub.getOpeningTimes());
-        values.put(OWNER, pub.getOwnerId());
+        if (pub.getPubName() != null) values.put(PUB_NAME, pub.getPubName());
+        if (pub.getLatLng() != null) values.put(LATITUDE, pub.getLatLng().latitude);
+        if (pub.getLatLng() != null) values.put(LONGITUDE, pub.getLatLng().longitude);
+        if (pub.getSize() != null) values.put(SIZE, pub.getSize());
+        if (pub.getPrices() != null) values.put(PRICES, pub.getPrices());
+        if (pub.getRating() != null) values.put(RATING, pub.getRating());
+        if (pub.getOpeningTimes() != null) values.put(OPENING_TIMES, pub.getOpeningTimes());
+        if (pub.getOwnerId() != null) values.put(OWNER, pub.getOwnerId());
 
         String selection = PUB_ID + " =?";
         String[] selectionArgs = {String.valueOf(pub.getId())};

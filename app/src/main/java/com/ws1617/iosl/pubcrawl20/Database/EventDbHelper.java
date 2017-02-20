@@ -153,16 +153,16 @@ public class EventDbHelper {
         onCreate(db);
         ContentValues values = new ContentValues();
         values.put(EVENT_ID, event.getId());
-        values.put(EVENT_NAME, event.getEventName());
-        values.put(DATE, event.getDate().getTime());    // epoch time in ms
-        values.put(DESCRIPTION, event.getDescription());
-        values.put(TRACKED, event.isTracked() ? 1 : 0);
-        values.put(OWNER, event.getOwnerId());
-        values.put(IMAGE, bitmapToBytes(event.getImage()));
-        values.put(LAT_MIN, event.getMinLatLng().latitude);
-        values.put(LONG_MIN, event.getMinLatLng().longitude);
-        values.put(LAT_MAX, event.getMaxLatLng().latitude);
-        values.put(LONG_MAX, event.getMaxLatLng().longitude);
+        if (event.getEventName() != null) values.put(EVENT_NAME, event.getEventName());
+        if (event.getDate() != null) values.put(DATE, event.getDate().getTime());    // epoch time in ms
+        if (event.getDescription() != null) values.put(DESCRIPTION, event.getDescription());
+        if (event.isTracked() != null) values.put(TRACKED, event.isTracked() ? 1 : 0);
+        if (event.getOwnerId() != null) values.put(OWNER, event.getOwnerId());
+        if (event.getImage() != null) values.put(IMAGE, bitmapToBytes(event.getImage()));
+        if (event.getMinLatLng() != null) values.put(LAT_MIN, event.getMinLatLng().latitude);
+        if (event.getMinLatLng() != null) values.put(LONG_MIN, event.getMinLatLng().longitude);
+        if (event.getMaxLatLng() != null) values.put(LAT_MAX, event.getMaxLatLng().latitude);
+        if (event.getMaxLatLng() != null) values.put(LONG_MAX, event.getMaxLatLng().longitude);
 
         String selection = EVENT_ID + " =?";
         String[] selectionArgs = {String.valueOf(event.getId())};

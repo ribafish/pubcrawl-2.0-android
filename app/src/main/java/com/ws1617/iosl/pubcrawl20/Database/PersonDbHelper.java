@@ -154,10 +154,10 @@ public class PersonDbHelper {
 
         ContentValues values = new ContentValues();
         values.put(PERSON_ID, person.getId());
-        values.put(DESCRIPTION, person.getDescription());
-        values.put(EMAIL, person.getMail());
-        values.put(IMAGE, bitmapToBytes(person.getImage()));
-        values.put(USERNAME, person.getName());
+        if (person.getDescription() != null) values.put(DESCRIPTION, person.getDescription());
+        if (person.getMail() != null) values.put(EMAIL, person.getMail());
+        if (person.getImage() != null) values.put(IMAGE, bitmapToBytes(person.getImage()));
+        if (person.getName() != null) values.put(USERNAME, person.getName());
 
         String selection = PERSON_ID + " =?";
         String[] selectionArgs = {String.valueOf(person.getId())};
