@@ -156,6 +156,7 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
         };
         IntentFilter filter = new IntentFilter(RequestQueueHelper.BROADCAST_INTENT);
         registerReceiver(receiver, filter);
+        DatabaseHelper.resetWholeDatabase(this);
     }
 
     @Override

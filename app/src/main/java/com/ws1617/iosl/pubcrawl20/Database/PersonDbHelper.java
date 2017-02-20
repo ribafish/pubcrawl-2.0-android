@@ -135,10 +135,10 @@ public class PersonDbHelper {
     public void addOwnedPubIds(Person person) {
         SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
         ContentValues values;
-        for (long event_id : person.getOwnedEventIds()) {
+        for (long pub_id : person.getOwnedPubIds()) {
             values = new ContentValues();
             values.put(PERSON_ID, person.getId());
-            values.put(PUB_ID, event_id);
+            values.put(PUB_ID, pub_id);
             db.insert(TABLE_PERSON_OWNED_PUBS, null, values);
         }
     }
