@@ -117,7 +117,6 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
         setupToolbar();
 
 
-        // TODO: change to the data load listener or smtn when database is ready
         populateFields();
         initDescriptionExpanding();
         setupParticipants();
@@ -198,7 +197,7 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
 
             mToolbar.setTitle(eventName);
             mTitle.setText(eventName);
-            mSubtitle.setText("Loading...");  //TODO
+            mSubtitle.setText("Loading...");
 
         } catch (Exception e) {
             e.printStackTrace();

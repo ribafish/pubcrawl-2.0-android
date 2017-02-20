@@ -95,9 +95,6 @@ public class DatabaseHelper {
     }
 
     public static void resetEventsDatabase(Context context) {
-        //EventDbHelper db = new EventDbHelper();
-        //TODO
-        //db.onUpgrade(db.getWritableDatabase(), 0, 0);   // resets database
         SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
         EventDbHelper.onUpgrade(db, 0, 0);
         downloadEvents(context);
@@ -396,9 +393,6 @@ public class DatabaseHelper {
     }
 
     public static void resetPubsDatabase(Context context) {
-        //PubDbHelper db = new PubDbHelper();
-        //TODO
-        //db.onUpgrade(db.getWritableDatabase(), 0, 0);   // resets database
         SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
         PubDbHelper.onUpgrade(db, 0, 0);
         downloadPubs(context);
@@ -535,9 +529,6 @@ public class DatabaseHelper {
     }
 
     public static void resetPersonsDatabase(Context context) {
-        //PersonDbHelper db = new PersonDbHelper();
-        //TODO
-        //db.onUpgrade(db.getWritableDatabase(), 0, 0);   // resets database
         SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
         PersonDbHelper.onUpgrade(db, 0, 0);
         downloadPersons(context);
