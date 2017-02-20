@@ -1,6 +1,7 @@
 package com.ws1617.iosl.pubcrawl20;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -20,8 +21,7 @@ import com.google.android.gms.common.api.OptionalPendingResult;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Scope;
 import com.google.android.gms.common.api.Status;
-import com.google.android.gms.vision.text.Text;
-import com.ws1617.iosl.pubcrawl20.Utilites.SignInHelper;
+import com.ws1617.iosl.pubcrawl20.Utilites.AccountManager;
 
 
 /**
@@ -29,7 +29,7 @@ import com.ws1617.iosl.pubcrawl20.Utilites.SignInHelper;
  */
 public class StartActivity extends AppCompatActivity implements
 	GoogleApiClient.OnConnectionFailedListener,
-	View.OnClickListener {
+	View.OnClickListener, AccountManager.IAccManager {
 
 	private static final String TAG = "StartActivity";
 	private static final int RC_SIGN_IN = 9008;
@@ -124,11 +124,12 @@ public class StartActivity extends AppCompatActivity implements
 		Log.d(TAG, "handleSignInResult:" + result.isSuccess());
 		if (result.isSuccess()) {
 			// Signed in successfully, show authenticated UI.
-			GoogleSignInAccount acct = result.getSignInAccount();
-			SignInHelper signIn = new SignInHelper(this);
-			signIn.getToken(acct);
-			//signIn.deleteCrawler(55);
-			//signIn.deleteCrawler(56);
+			GoogleSignInAccount acc = result.getSignInAccount();
+			AccountManager accountManager = new AccountManager(this,acc);
+			accountManager.startLogin();
+			showProgressDialog();
+			//accountManager.deleteCrawler(25);
+			//accountManager.deleteCrawler(26);
 		} else {
 			hideProgressDialog();
 			showLogin();
@@ -140,8 +141,17 @@ public class StartActivity extends AppCompatActivity implements
 
 	// [START signIn]
 	private void signIn() {
-		Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
-		startActivityForResult(signInIntent, RC_SIGN_IN);
+		Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
+			new ResultCallback<Status>() {
+				@Override
+				public void onResult(Status status) {
+					// [START_EXCLUDE]
+					Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
+					startActivityForResult(signInIntent, RC_SIGN_IN);
+					// [END_EXCLUDE]
+				}
+			});
+
 	}
 	// [END signIn]
 
@@ -179,7 +189,6 @@ public class StartActivity extends AppCompatActivity implements
 			mProgressDialog.setMessage(getString(R.string.loading));
 			mProgressDialog.setIndeterminate(true);
 		}
-
 		mProgressDialog.show();
 	}
 
@@ -209,6 +218,7 @@ public class StartActivity extends AppCompatActivity implements
 	}
 
 	private void showLogin() {
+		hideProgressDialog();
 		signInButton.setVisibility(View.VISIBLE);
 	}
 
@@ -226,5 +236,25 @@ public class StartActivity extends AppCompatActivity implements
 	public void onClick(View v) {
 		if(v.getId() == R.id.sign_in_button)
 			signIn();
+	}
+
+	@Override
+	public Context getContext() {
+		return this;
+	}
+
+	@Override
+	public void loginFinished() {
+		showApp();
+	}
+
+	@Override
+	public void loginFailed() {
+		showLogin();
+	}
+
+	@Override
+	public void loginError() {
+		showError();
 	}
 }

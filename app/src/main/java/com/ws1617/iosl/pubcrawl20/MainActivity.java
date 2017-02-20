@@ -40,7 +40,6 @@ import com.ws1617.iosl.pubcrawl20.ScanQR.BarcodeCaptureActivity;
 import com.ws1617.iosl.pubcrawl20.ScanQR.QRScannerDialog;
 import com.ws1617.iosl.pubcrawl20.Search.SearchActivity;
 
-import java.lang.reflect.Array;
 import java.util.List;
 
 import static com.ws1617.iosl.pubcrawl20.NewEvent.ShareEventDialog.mBarcodeData;

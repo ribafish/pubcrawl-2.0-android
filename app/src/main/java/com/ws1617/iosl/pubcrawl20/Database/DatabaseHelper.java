@@ -10,7 +10,6 @@ import android.util.Log;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -19,7 +18,6 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.ImageRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.ws1617.iosl.pubcrawl20.App;
 import com.ws1617.iosl.pubcrawl20.DataModels.Event;
 import com.ws1617.iosl.pubcrawl20.DataModels.Person;
 import com.ws1617.iosl.pubcrawl20.DataModels.Pub;
@@ -35,9 +33,7 @@ import org.json.JSONObject;
 import java.io.ByteArrayOutputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static com.ws1617.iosl.pubcrawl20.Database.JsonParser.EMBEDDED;
 import static com.ws1617.iosl.pubcrawl20.Database.JsonParser.EVENTS;
@@ -723,7 +719,6 @@ public class DatabaseHelper {
                                 requestQueue.add(eventsRequest);
 
                             }
-
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
