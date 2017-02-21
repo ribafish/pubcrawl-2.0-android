@@ -287,16 +287,16 @@
                             android:layout_marginBottom="6dp"
                             />
 
-                        <TextView
+                        <LinearLayout
                             android:id="@+id/pub_details.size"
                             android:layout_marginLeft="8dp"
                             android:layout_marginRight="8dp"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_height="16dp"
                             android:layout_alignBottom="@+id/pub_details.size.title"
                             android:layout_alignParentEnd="true"
                             android:layout_alignParentRight="true"
-                            android:text="@string/unknown"
+                            android:orientation="horizontal"
                             />
                     </RelativeLayout>
 
@@ -315,16 +315,16 @@
                             android:layout_marginBottom="6dp"
                             />
 
-                        <TextView
+                        <LinearLayout
                             android:id="@+id/pub_details.prices"
                             android:layout_marginLeft="8dp"
                             android:layout_marginRight="8dp"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_height="16dp"
                             android:layout_alignBottom="@+id/pub_details.prices.title"
                             android:layout_alignParentEnd="true"
                             android:layout_alignParentRight="true"
-                            android:text="@string/unknown"
+                            android:orientation="horizontal"
                             />
                     </RelativeLayout>
 
