@@ -10,6 +10,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -66,20 +67,15 @@ public class NewEventActivity extends AppCompatActivity {
 
     }
 
-
-    private void setEditToolBar(Toolbar editToolBar) {
-        editToolBar.inflateMenu(R.menu.event_details_menu);
-        /*mAppBarLayout = (AppBarLayout) findViewById(R.id.event_details_appbar);
-        mTitle = (TextView) findViewById(R.id.event_details_title);
-         try {
-            String eventName = getIntent().getStringExtra("name");
-            editToolBar.setTitle(eventName);
-            mTitle.setText(eventName);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }*/
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        if (currentMode == VIEW_MODE.EDIT) {
+            getMenuInflater().inflate(R.menu.event_ops_menu, menu);
+            return true;
+        } else
+            return super.onCreateOptionsMenu(menu);
     }
+
 
     private void showOldEvent(long id) {
         try {
@@ -100,11 +96,6 @@ public class NewEventActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-
-        if (currentMode == VIEW_MODE.EDIT) {
-            setEditToolBar(toolbar);
-        }
-
 
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
@@ -150,7 +141,7 @@ public class NewEventActivity extends AppCompatActivity {
             shareEventDialog.show(getSupportFragmentManager(), "shareEventDialog");
 
             if (currentMode == VIEW_MODE.ADD) {
-                addEvent(shareEventDialog,event);
+                addEvent(shareEventDialog, event);
             } else if (currentMode == VIEW_MODE.EDIT) {
                 deleteEvent(event);
                 //editEvent(shareEventDialog,event);
@@ -160,7 +151,7 @@ public class NewEventActivity extends AppCompatActivity {
     }
 
 
-    private void editEvent(final ShareEventDialog shareEventDialog, final Event event){
+    private void editEvent(final ShareEventDialog shareEventDialog, final Event event) {
         event.setId(oldEvent.getId());
         DatabaseHelper.updateEvent(this, event, new EventCreation() {
             @Override
@@ -180,7 +171,7 @@ public class NewEventActivity extends AppCompatActivity {
     }
 
 
-    private void addEvent(final ShareEventDialog shareEventDialog, final Event event){
+    private void addEvent(final ShareEventDialog shareEventDialog, final Event event) {
 
         DatabaseHelper.addEvent(this, event, new EventCreation() {
             @Override
