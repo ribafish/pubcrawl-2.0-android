@@ -122,7 +122,7 @@ public class CurrentFragment extends Fragment {
                     event = eventDbHelper.getEvent(eventId);
                 } catch (DatabaseException e) {
                     e.printStackTrace();
-                    return;
+                    continue;
                 }
                 ArrayList<TimeSlot> timeSlots = event.getTimeSlotList();
                 // Check that the event is current or in the future
