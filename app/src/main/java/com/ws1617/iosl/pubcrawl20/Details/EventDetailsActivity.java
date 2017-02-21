@@ -474,7 +474,8 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
         if (event != null) {
             mTitle.setText(event.getEventName());
             mToolbar.setTitle(event.getEventName());
-            SimpleDateFormat localDateFormat = new SimpleDateFormat("E, MMM d, yyyy 'at' HH:mm");
+//            SimpleDateFormat localDateFormat = new SimpleDateFormat("E, MMM d, yyyy 'at' HH:mm");
+            SimpleDateFormat localDateFormat = new SimpleDateFormat("E, MMM d, yyyy");
             mSubtitle.setText(localDateFormat.format(event.getDate()));
             ((TextView) findViewById(R.id.event_details_starts)).setText(localDateFormat.format(event.getDate()));
             ((TextView) findViewById(R.id.event_details_id)).setText(String.valueOf(event.getId()));
