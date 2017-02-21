@@ -67,6 +67,7 @@ public class CurrentFragment extends Fragment {
         FragmentManager fm = getActivity().getSupportFragmentManager();
         adapter = new EventAdapter(getActivity(), events, metrics, fm);
 
+
         LinearLayoutManager llm = new LinearLayoutManager(getContext());
         GridLayoutManager glm = new GridLayoutManager(getContext(), 1, GridLayoutManager.VERTICAL, false);
 
@@ -76,9 +77,8 @@ public class CurrentFragment extends Fragment {
         recyclerView.setLayoutManager(glm);
         recyclerView.setHasFixedSize(true);
 
-        Context context = getContext();
-        SharedPreferences sharedPref = context.getSharedPreferences(context.getString(R.string.preference_user), Context.MODE_PRIVATE);
-        userId = sharedPref.getLong(context.getString(R.string.user_id), 0);
+        userId = getContext().getSharedPreferences(getContext().getString(R.string.preference_user), Context.MODE_PRIVATE)
+                .getLong(getContext().getString(R.string.user_id), -1);
         getEvents();
 
         Button findEvents = (Button) rootView.findViewById(R.id.current_find_events_btn);
@@ -109,6 +109,8 @@ public class CurrentFragment extends Fragment {
     }
 
     private void getEvents() {
+        userId = getContext().getSharedPreferences(getContext().getString(R.string.preference_user), Context.MODE_PRIVATE)
+                .getLong(getContext().getString(R.string.user_id), -1);
         events.clear();
         ArrayList<Event> allEvents = new ArrayList<>();
         try {
@@ -156,10 +158,12 @@ public class CurrentFragment extends Fragment {
         }
 
         if (events.size() > 0) {
+            Log.d(TAG, "events.size = " + events.size());
             recyclerView.setVisibility(View.VISIBLE);
             noEventsLayout.setVisibility(View.GONE);
             Collections.sort(events, new EventMiniComparator());
         } else {
+            Log.d(TAG, "events.size == 0");
             recyclerView.setVisibility(View.GONE);
             noEventsLayout.setVisibility(View.VISIBLE);
         }
