@@ -316,6 +316,11 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
                 @Override
                 public void onSuccess() {
                     new resetDbTask(context, resetDbTask.EVENTS_DB + resetDbTask.PERSONS_DB).execute();
+                    String s = "Joined event";
+                    if (!join) s = "Left event";
+                    Toast.makeText(context,
+                            s, Toast.LENGTH_LONG)
+                            .show();
                     updateJoinButtons(join);
                 }
 
@@ -611,9 +616,9 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
             }
         } catch (DatabaseException e) {
             e.printStackTrace();
-            Toast.makeText(getApplicationContext(),
-                    "Can't find data for Event with ID " + id, Toast.LENGTH_LONG)
-                    .show();
+//            Toast.makeText(getApplicationContext(),
+//                    "Can't find data for Event with ID " + id, Toast.LENGTH_LONG)
+//                    .show();
             Log.e(TAG, "getEvent: id " + id + ", event == null");
         }
     }

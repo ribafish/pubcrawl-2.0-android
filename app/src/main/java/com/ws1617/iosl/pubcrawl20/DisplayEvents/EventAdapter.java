@@ -1,8 +1,11 @@
 package com.ws1617.iosl.pubcrawl20.DisplayEvents;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,16 +14,21 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.ws1617.iosl.pubcrawl20.Database.DatabaseHelper;
+import com.ws1617.iosl.pubcrawl20.Database.resetDbTask;
+import com.ws1617.iosl.pubcrawl20.Details.DetailsCallback;
 import com.ws1617.iosl.pubcrawl20.Details.EventDetailsActivity;
 import com.ws1617.iosl.pubcrawl20.R;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -32,6 +40,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
     private final static String TAG = "EventAdapter";
     private GoogleMap map;
     private final Context context;
+    private long userId = -1;
 
 
     public class EventViewHolder extends RecyclerView.ViewHolder  {
@@ -53,6 +62,8 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
     public EventAdapter(List<EventMini> eventList, Context context) {
         this.eventList = eventList;
         this.context = context;
+        SharedPreferences sharedPref = context.getSharedPreferences(context.getString(R.string.preference_user), Context.MODE_PRIVATE);
+        userId = sharedPref.getLong(context.getString(R.string.user_id), -1);
     }
 
     public void setMap(GoogleMap map) {
@@ -107,6 +118,63 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+            }
+        });
+
+        holder.relativeLayout.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(final View view) {
+                final EventMini event = eventList.get(holder.getAdapterPosition());
+                String[] options = {view.getContext().getString(R.string.join),
+                        view.getContext().getString(R.string.details)};
+                if (event.getParticipantIds().contains(userId)) options[0] = view.getContext().getString(R.string.leave);   // if we're already joined show leave option
+                AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
+                builder.setTitle(event.getName())
+                        .setItems(options, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                switch (which) {
+                                    case 0: // join
+                                        try {
+                                            DatabaseHelper.joinEvent(context, event.getEventId(), !event.getParticipantIds().contains(userId), new DetailsCallback() {
+                                                @Override
+                                                public void onSuccess() {
+                                                    new resetDbTask(context, resetDbTask.EVENTS_DB + resetDbTask.PERSONS_DB).execute();
+                                                    String s = "Joined event";
+                                                    if (event.getParticipantIds().contains(userId)) s = "Left event";
+                                                    Toast.makeText(context,
+                                                            s, Toast.LENGTH_LONG)
+                                                            .show();
+                                                }
+
+                                                @Override
+                                                public void onFail() {
+                                                    Toast.makeText(context, "Can't connect to server", Toast.LENGTH_SHORT).show();
+                                                }
+                                            });
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
+                                        }
+                                        dialog.dismiss();
+                                        break;
+                                    case 1:
+                                        Intent intent = new Intent(view.getContext(), EventDetailsActivity.class);
+
+                                        intent.putExtra("id", event.getEventId());
+                                        intent.putExtra("name", event.getName());
+
+                                        Log.d(TAG, "onPubItemClicked event details: " + event);
+                                        dialog.dismiss();
+                                        view.getContext().startActivity(intent);
+                                        break;
+                                    default:
+                                        dialog.dismiss();
+                                        break;
+                                }
+                            }
+                        });
+                builder.create().show();
+
+                return true;
             }
         });
 
