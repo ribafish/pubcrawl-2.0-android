@@ -1,5 +1,7 @@
 package com.ws1617.iosl.pubcrawl20.NewEvent;
 
+import android.content.Intent;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -8,12 +10,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ws1617.iosl.pubcrawl20.DataModels.Event;
 import com.ws1617.iosl.pubcrawl20.Database.DatabaseException;
 import com.ws1617.iosl.pubcrawl20.Database.DatabaseHelper;
 import com.ws1617.iosl.pubcrawl20.Database.EventDbHelper;
+import com.ws1617.iosl.pubcrawl20.MainActivity;
 import com.ws1617.iosl.pubcrawl20.NewEvent.adapters.NewEventPagerAdapter;
 import com.ws1617.iosl.pubcrawl20.R;
 
@@ -28,6 +32,10 @@ public class NewEventActivity extends AppCompatActivity {
     final static String TAG = "EVENT_TAG";
 
     Event oldEvent;
+    VIEW_MODE currentMode = VIEW_MODE.ADD;
+    ;
+
+    enum VIEW_MODE {EDIT, ADD}
 
     public void initFragmentList() {
         fragmentsList = new ArrayList<>();
@@ -42,7 +50,6 @@ public class NewEventActivity extends AppCompatActivity {
         setContentView(R.layout.activity_new_event);
 
         initFragmentList();
-        initView();
 
 
         long id = getIntent().getLongExtra("id", -1);
@@ -50,15 +57,34 @@ public class NewEventActivity extends AppCompatActivity {
             //Edit mode
             showOldEvent(id);
         }
+        initView();
 
+
+    }
+
+
+    private void setEditToolBar(Toolbar editToolBar) {
+        editToolBar.inflateMenu(R.menu.event_details_menu);
+        /*mAppBarLayout = (AppBarLayout) findViewById(R.id.event_details_appbar);
+        mTitle = (TextView) findViewById(R.id.event_details_title);
+         try {
+            String eventName = getIntent().getStringExtra("name");
+            editToolBar.setTitle(eventName);
+            mTitle.setText(eventName);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }*/
     }
 
     private void showOldEvent(long id) {
         try {
             oldEvent = new EventDbHelper().getEvent(id);
+            currentMode = VIEW_MODE.EDIT;
             ((NewEventGeneralFragment) fragmentsList.get(0)).setOldEvent(oldEvent);
             ((NewEventRouteFragment) fragmentsList.get(1)).setOldEvent(oldEvent);
         } catch (DatabaseException e) {
+            currentMode = VIEW_MODE.ADD;
             e.printStackTrace();
         }
 
@@ -70,6 +96,11 @@ public class NewEventActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
+
+        if (currentMode == VIEW_MODE.EDIT) {
+            setEditToolBar(toolbar);
+        }
+
 
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
@@ -85,7 +116,14 @@ public class NewEventActivity extends AppCompatActivity {
         tabLayout.setupWithViewPager(viewPager);
 
         mCreateEventBtn = (FloatingActionButton) findViewById(R.id.new_event_create_new);
-        mCreateEventBtn.setOnClickListener(newEventClickListener);
+        if (currentMode == VIEW_MODE.EDIT) {
+            //TODO to be changed
+            mCreateEventBtn.setVisibility(View.VISIBLE);
+            mCreateEventBtn.setOnClickListener(newEventClickListener);
+        } else {
+            mCreateEventBtn.setVisibility(View.VISIBLE);
+            mCreateEventBtn.setOnClickListener(newEventClickListener);
+        }
     }
 
     View.OnClickListener newEventClickListener = new View.OnClickListener() {
@@ -107,22 +145,78 @@ public class NewEventActivity extends AppCompatActivity {
             final ShareEventDialog shareEventDialog = new ShareEventDialog();
             shareEventDialog.show(getSupportFragmentManager(), "shareEventDialog");
 
-            DatabaseHelper.addEvent(this, event, new EventCreation() {
-                @Override
-                public void onSuccess() {
-                    //refresh the whole DB
-                    DatabaseHelper.resetEventsDatabase(getApplicationContext());
-                    shareEventDialog.initQRCodeView(event.getEventName());
-                }
-
-                @Override
-                public void onFail() {
-                    // show error
-                    Toast.makeText(getApplicationContext(), "Error while creating the Event .. ", Toast.LENGTH_SHORT).show();
-                    shareEventDialog.dismiss();
-                }
-            });
+            if (currentMode == VIEW_MODE.ADD) {
+                addEvent(shareEventDialog,event);
+            } else if (currentMode == VIEW_MODE.EDIT) {
+                deleteEvent(event);
+                //editEvent(shareEventDialog,event);
+            }
         }
+    }
+
+
+    private void editEvent(final ShareEventDialog shareEventDialog, final Event event){
+        event.setId(oldEvent.getId());
+        DatabaseHelper.updateEvent(this, event, new EventCreation() {
+            @Override
+            public void onSuccess() {
+                //refresh the whole DB
+                DatabaseHelper.resetEventsDatabase(getApplicationContext());
+                shareEventDialog.initQRCodeView(event.getEventName());
+            }
+
+            @Override
+            public void onFail() {
+                // show error
+                Toast.makeText(getApplicationContext(), "Error while creating the Event .. ", Toast.LENGTH_SHORT).show();
+                shareEventDialog.dismiss();
+            }
+        });
+    }
+
+
+    private void addEvent(final ShareEventDialog shareEventDialog, final Event event){
+
+        DatabaseHelper.addEvent(this, event, new EventCreation() {
+            @Override
+            public void onSuccess() {
+                //refresh the whole DB
+                DatabaseHelper.resetEventsDatabase(getApplicationContext());
+                shareEventDialog.initQRCodeView(event.getEventName());
+            }
+
+            @Override
+            public void onFail() {
+                // show error
+                Toast.makeText(getApplicationContext(), "Error while creating the Event .. ", Toast.LENGTH_SHORT).show();
+                shareEventDialog.dismiss();
+            }
+        });
+
+
+    }
+
+    private void deleteEvent(Event event) {
+        event.setId(oldEvent.getId());
+        DatabaseHelper.deleteEvent(this, event, new EventCreation() {
+            @Override
+            public void onSuccess() {
+                //refresh the whole DB
+                DatabaseHelper.resetEventsDatabase(getApplicationContext());
+                closeActivity();
+            }
+
+            @Override
+            public void onFail() {
+                // show error
+                Toast.makeText(getApplicationContext(), "Error while Updating the Event .. ", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void closeActivity() {
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
     }
 
     private boolean checkSatisfyMinReq(Event event) {
