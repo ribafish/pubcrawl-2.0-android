@@ -112,9 +112,7 @@ public class NewEventActivity extends AppCompatActivity {
 
         mCreateEventBtn = (FloatingActionButton) findViewById(R.id.new_event_create_new);
         if (currentMode == VIEW_MODE.EDIT) {
-            //TODO to be changed
-            mCreateEventBtn.setVisibility(View.VISIBLE);
-            mCreateEventBtn.setOnClickListener(newEventClickListener);
+            mCreateEventBtn.setVisibility(View.GONE);
         } else {
             mCreateEventBtn.setVisibility(View.VISIBLE);
             mCreateEventBtn.setOnClickListener(newEventClickListener);

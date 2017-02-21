@@ -4,14 +4,14 @@
     >
     <item
         android:id="@+id/done_event"
-        android:icon="@drawable/ic_event_add_black_24dp"
+        android:icon="@drawable/check_menu"
         android:title="Done"
         android:visible="true"
         app:showAsAction="always" />
 
     <item
         android:id="@+id/delete_event"
-        android:icon="@drawable/ic_event_joined_black_24dp"
+        android:icon="@drawable/delete"
         android:title="Delete"
         android:visible="true"
         app:showAsAction="always" />
