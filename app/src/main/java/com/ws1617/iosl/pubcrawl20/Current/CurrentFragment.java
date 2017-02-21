@@ -117,11 +117,12 @@ public class CurrentFragment extends Fragment {
             PubDbHelper pubDbHelper = new PubDbHelper();
             ArrayList<Long> allEventIds = personDbHelper.getEventIds(userId);
             for (Long eventId : allEventIds) {
-                Event event = null;
+                Event event;
                 try {
                     event = eventDbHelper.getEvent(eventId);
                 } catch (DatabaseException e) {
                     e.printStackTrace();
+                    return;
                 }
                 ArrayList<TimeSlot> timeSlots = event.getTimeSlotList();
                 // Check that the event is current or in the future
@@ -177,6 +178,7 @@ public class CurrentFragment extends Fragment {
 
     @Override
     public void onResume() {
+        Log.v(TAG, "onResume");
         super.onResume();
         receiver = new BroadcastReceiver() {
             @Override

@@ -150,8 +150,8 @@
     <string name="sync_now">Sync now</string>
     <string name="App_Exit">Press again to exit</string>
     <string name="server_client_id">649804390923-7mov7q7g42kbod1do8ikvhtgdu0m58ai.apps.googleusercontent.com</string>
-    <string name="join">JOIN</string>
-    <string name="leave">LEAVE</string>
+    <string name="join">Join</string>
+    <string name="leave">Leave</string>
     <string name="alert_join_event_title">Join event?</string>
     <string name="alert_join_event_message">Are you sure you want to join this event?</string>
     <string name="alert_leave_event_title">Leave event?</string>
