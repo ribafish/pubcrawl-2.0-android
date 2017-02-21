@@ -128,6 +128,8 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
 
 
     private void initQRCode() {
+        if (event == null) return;
+
         ShareEventDialog qrCodeFragment = ShareEventDialog.newInstance();
         getSupportFragmentManager().beginTransaction().add(R.id.qrcode_place_holder, qrCodeFragment, "code").commit();
         // qrCodeFragment.show(getSupportFragmentManager(),"code");
@@ -152,6 +154,7 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
                         personAdapter.notifyDataSetChanged();
                     }
                     updateJoinButtons(event.getParticipantIds().contains(userId));
+                    initQRCode();
                 }
             }
         };
