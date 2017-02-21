@@ -113,6 +113,7 @@
                     android:layout_height="36dp"
                     android:id="@+id/pub_details.layout.add_button"
                     app:srcCompat="@drawable/ic_favorite_border_black_24dp"
+                    android:visibility="gone"
                     android:tint="@android:color/white"
                     />
 
@@ -440,6 +441,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 app:cardElevation="8dp"
+                android:visibility="gone"
                 android:id="@+id/pub_details.top.participants.card"
                 >
 
