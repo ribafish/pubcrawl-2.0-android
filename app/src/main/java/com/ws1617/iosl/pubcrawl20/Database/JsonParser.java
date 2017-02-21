@@ -74,7 +74,8 @@ public class JsonParser {
     private static final String PUB_LONG = "lng";
     private static final String PUB_DESCRIPTION = "description";
     private static final String PUB_SIZE = "size";
-    private static final String PUB_OPENING_TIME = "closingTime";
+    private static final String PUB_OPENING_TIME = "openingTime";
+    private static final String PUB_CLOSING_TIME = "closingTime";
 
     public static final String PUB = "pub";
     public static final String PUB_OWNER = "pubOwner";
@@ -257,7 +258,10 @@ public class JsonParser {
             e.printStackTrace();
         }
         try {
-            pub.setOpeningTimes(jsonPub.getString(PUB_OPENING_TIME));
+            String s = jsonPub.getString(PUB_OPENING_TIME) +
+                    " - " +
+                    jsonPub.getString(PUB_CLOSING_TIME);
+            pub.setOpeningTimes(s);
         } catch (JSONException e) {
             e.printStackTrace();
         }
