@@ -27,11 +27,10 @@ import android.support.v4.app.NavUtils;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.ws1617.iosl.pubcrawl20.Database.resetDbTask;
 import com.ws1617.iosl.pubcrawl20.Details.PersonDetailsActivity;
 
 import java.util.List;
-
-import static com.ws1617.iosl.pubcrawl20.Database.DatabaseHelper.resetWholeDatabase;
 
 /**
  * Created by Gasper Kojek on 9. 11. 2016.
@@ -297,7 +296,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             findPreference("sync_now").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
-                    resetWholeDatabase(context);
+                    new resetDbTask(context, resetDbTask.ALL_DB).execute();
                     return true;
                 }
             });

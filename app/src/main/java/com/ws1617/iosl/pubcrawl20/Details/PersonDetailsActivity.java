@@ -40,6 +40,7 @@ import com.ws1617.iosl.pubcrawl20.Database.EventDbHelper;
 import com.ws1617.iosl.pubcrawl20.Database.PersonDbHelper;
 import com.ws1617.iosl.pubcrawl20.Database.PubDbHelper;
 import com.ws1617.iosl.pubcrawl20.Database.RequestQueueHelper;
+import com.ws1617.iosl.pubcrawl20.Database.resetDbTask;
 import com.ws1617.iosl.pubcrawl20.R;
 
 import java.util.ArrayList;
@@ -94,7 +95,7 @@ public class PersonDetailsActivity extends AppCompatActivity implements AppBarLa
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_person_details);
-        context = getApplicationContext();
+        context = this;
 
         long id = getIntent().getLongExtra("id", -1);
 
@@ -513,7 +514,7 @@ public class PersonDetailsActivity extends AppCompatActivity implements AppBarLa
                         addFriend(false);
                         return true;
                     case R.id.person_details_menu_refresh:
-                        DatabaseHelper.resetWholeDatabase(context);
+                        new resetDbTask(context, resetDbTask.ALL_DB).execute();
                         return true;
                 }
                 return true;

@@ -15,6 +15,7 @@ import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -77,12 +78,13 @@ public class PubDetailsActivity extends AppCompatActivity implements AppBarLayou
     private AppBarLayout mAppBarLayout;
     private Toolbar mToolbar;
     private ImageCarouselPager imageCarouselPager;
+    private ArrayList<Bitmap> images = new ArrayList<>();
 
     private Context context;
 
     private Pub pub;
     private PersonMini owner;
-    private String address = "Unknown";
+    private String address = "Location unknown";
     private ArrayList<PersonMini> topPersonsList = new ArrayList<>();
     private ArrayList<EventMini> futureEventsList = new ArrayList<>();
     private ArrayList<EventMini> pastEventsList = new ArrayList<>();
@@ -104,7 +106,7 @@ public class PubDetailsActivity extends AppCompatActivity implements AppBarLayou
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pub_details);
-        context = getApplicationContext();
+        context = this;
 
         long id = getIntent().getLongExtra("id", -1);
         getPub(id);
@@ -169,8 +171,44 @@ public class PubDetailsActivity extends AppCompatActivity implements AppBarLayou
                     String.format(Locale.ENGLISH, "%.2f, %.2f",
                             pub.getLatLng().latitude,
                             pub.getLatLng().longitude));
-            ((TextView) findViewById(R.id.pub_details_size)).setText(String.valueOf(pub.getSize()));
-            ((TextView) findViewById(R.id.pub_details_prices)).setText(String.valueOf(pub.getPrices()));
+            LinearLayout size = (LinearLayout) findViewById(R.id.pub_details_size);
+            size.removeAllViews();
+            if (pub.getSize() > 0) {
+                for (int i = 0; i < pub.getSize(); i++) {
+                    ImageView v = new ImageView(context);
+                    v.setImageResource(R.drawable.ic_person);
+                    v.setColorFilter(ContextCompat.getColor(context, R.color.dark_gray));
+                    v.setMaxHeight(16);
+                    v.setMaxWidth(16);
+                    size.addView(v);
+                }
+            } else {
+                ImageView v = new ImageView(context);
+                v.setImageResource(R.drawable.question_mark);
+                v.setColorFilter(ContextCompat.getColor(context, R.color.dark_gray));
+                v.setMaxHeight(16);
+                v.setMaxWidth(16);
+                size.addView(v);
+            }
+            LinearLayout prices = (LinearLayout) findViewById(R.id.pub_details_prices);
+            prices.removeAllViews();
+            if (pub.getPrices() > 0) {
+                for (int i = 0; i < pub.getPrices(); i++) {
+                    ImageView v = new ImageView(context);
+                    v.setImageResource(R.drawable.ic_euro_money);
+                    v.setColorFilter(ContextCompat.getColor(context, R.color.dark_gray));
+                    v.setMaxHeight(16);
+                    v.setMaxWidth(16);
+                    prices.addView(v);
+                }
+            } else {
+                ImageView v = new ImageView(context);
+                v.setImageResource(R.drawable.question_mark);
+                v.setColorFilter(ContextCompat.getColor(context, R.color.dark_gray));
+                v.setMaxHeight(16);
+                v.setMaxWidth(16);
+                prices.addView(v);
+            }
             ((TextView) findViewById(R.id.pub_details_rating)).setText(String.valueOf(pub.getRating()));
 
             ((TextView) findViewById(R.id.pub_details_address)).setOnClickListener(new View.OnClickListener() {
@@ -205,6 +243,12 @@ public class PubDetailsActivity extends AppCompatActivity implements AppBarLayou
 
             // Opening times card
             ((TextView) findViewById(R.id.pub_details_times)).setText(pub.getOpeningTimes());
+
+            if (pub.getImages() != null) {
+                images.clear();
+                images.addAll(pub.getImages());
+                imageCarouselPager.notifyDataSetChanged();
+            }
         }
 
         if (topPersonsList.size() > 0) {
@@ -257,8 +301,7 @@ public class PubDetailsActivity extends AppCompatActivity implements AppBarLayou
 
         } catch (Exception e) { e.printStackTrace(); }
 
-        ArrayList<Bitmap> images = new ArrayList<Bitmap>();
-        images.add(BitmapFactory.decodeResource(getResources(), R.mipmap.bestpub));
+
         images.add(BitmapFactory.decodeResource(getResources(), R.mipmap.bestpub));
         imageCarouselPager = new ImageCarouselPager(this, images);
         viewPager.setAdapter(imageCarouselPager);
@@ -630,13 +673,11 @@ public class PubDetailsActivity extends AppCompatActivity implements AppBarLayou
                     ((TextView) findViewById(R.id.pub_details_address)).setText(address);
                 } catch (Exception e) {
                     e.printStackTrace();
-                    address = "Unknown";
                 }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                address = "Unknown";
                 Log.e(TAG, "getAddressFromLatLng:onErrorResponse: " + error.toString());
                 error.printStackTrace();
             }

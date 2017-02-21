@@ -48,6 +48,7 @@ public class PubDbHelper  {
 
     public void addPub(Pub pub) {
         SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
+        onCreate(db);
 
         ContentValues values = new ContentValues();
         values.put(PUB_ID, pub.getId());
@@ -72,6 +73,7 @@ public class PubDbHelper  {
 
     public void addTopPersons(Pub pub) {
         SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
+        onCreate(db);
         ContentValues values;
 
         for (int i = 0; i < pub.getTopsListIds().size(); i++) {
@@ -85,6 +87,7 @@ public class PubDbHelper  {
 
     public void addPubEvents(Pub pub) {
         SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
+        onCreate(db);
         ContentValues values;
 
         for (long id : pub.getEventsListIds()) {
@@ -97,30 +100,33 @@ public class PubDbHelper  {
 
     public void addPubImages(Pub pub) {
         SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
+        onCreate(db);
         ContentValues values;
+        if (pub.getImages()== null || pub.getImages().size() == 0) return;
 
-        for (int i = 0; i < pub.getTopsListIds().size(); i++) {
+        for (int i = 0; i < pub.getImages().size(); i++) {
             values = new ContentValues();
             values.put(PUB_ID, pub.getId());
             values.put(ITERATOR, i);
             values.put(IMAGE, bitmapToBytes(pub.getImages().get(i)));
-            db.insert(TABLE_TOP_PERSONS, null, values);
+            db.insert(TABLE_PUB_IMAGES, null, values);
         }
     }
 
     public void updatePub(Pub pub) {
         SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
+        onCreate(db);
 
         ContentValues values = new ContentValues();
         values.put(PUB_ID, pub.getId());
-        values.put(PUB_NAME, pub.getPubName());
-        values.put(LATITUDE, pub.getLatLng().latitude);
-        values.put(LONGITUDE, pub.getLatLng().longitude);
-        values.put(SIZE, pub.getSize());
-        values.put(PRICES, pub.getPrices());
-        values.put(RATING, pub.getRating());
-        values.put(OPENING_TIMES, pub.getOpeningTimes());
-        values.put(OWNER, pub.getOwnerId());
+        if (pub.getPubName() != null) values.put(PUB_NAME, pub.getPubName());
+        if (pub.getLatLng() != null) values.put(LATITUDE, pub.getLatLng().latitude);
+        if (pub.getLatLng() != null) values.put(LONGITUDE, pub.getLatLng().longitude);
+        if (pub.getSize() != null) values.put(SIZE, pub.getSize());
+        if (pub.getPrices() != null) values.put(PRICES, pub.getPrices());
+        if (pub.getRating() != null) values.put(RATING, pub.getRating());
+        if (pub.getOpeningTimes() != null) values.put(OPENING_TIMES, pub.getOpeningTimes());
+        if (pub.getOwnerId() != null) values.put(OWNER, pub.getOwnerId());
 
         String selection = PUB_ID + " =?";
         String[] selectionArgs = {String.valueOf(pub.getId())};
@@ -132,6 +138,7 @@ public class PubDbHelper  {
 
     public void updatePubOwner(long event_id, long owner_id) {
         SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
+        onCreate(db);
         ContentValues values = new ContentValues();
         values.put(OWNER, owner_id);
 
@@ -151,6 +158,7 @@ public class PubDbHelper  {
 
     public void deleteLists(long pub_id) {
         SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
+        onCreate(db);
 
         String selection = PUB_ID + " =?";
         String[] selectionArgs = {String.valueOf(pub_id)};
@@ -162,6 +170,7 @@ public class PubDbHelper  {
 
     public void deletePub(long pub_id) {
         SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
+        onCreate(db);
 
         String selection = PUB_ID + " =?";
         String[] selectionArgs = {String.valueOf(pub_id)};
@@ -173,6 +182,7 @@ public class PubDbHelper  {
 
     public Pub getListlessPub (long pub_id) throws DatabaseException {
         SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
+        onCreate(db);
 
         Pub pub = new Pub(pub_id);
 
@@ -247,6 +257,7 @@ public class PubDbHelper  {
 
     public ArrayList<Long> getTopPersonIds(long pub_id) {
         SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
+        onCreate(db);
         ArrayList<Long> list = new ArrayList<>();
 
         String query = "SELECT * FROM " +
@@ -269,6 +280,7 @@ public class PubDbHelper  {
 
     public ArrayList<Long> getPubEventIds (long pub_id) {
         SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
+        onCreate(db);
 
         ArrayList<Long> list = new ArrayList<>();
 
@@ -291,6 +303,7 @@ public class PubDbHelper  {
 
     public ArrayList<Bitmap> getPubImages (long pub_id) {
         SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
+        onCreate(db);
 
         ArrayList<Bitmap> list = new ArrayList<>();
 

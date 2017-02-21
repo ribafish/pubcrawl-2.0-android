@@ -53,6 +53,7 @@ import com.ws1617.iosl.pubcrawl20.Database.DatabaseException;
 import com.ws1617.iosl.pubcrawl20.Database.EventDbHelper;
 import com.ws1617.iosl.pubcrawl20.Database.PubDbHelper;
 import com.ws1617.iosl.pubcrawl20.Database.RequestQueueHelper;
+import com.ws1617.iosl.pubcrawl20.Database.resetDbTask;
 import com.ws1617.iosl.pubcrawl20.Details.EventDetailsActivity;
 import com.ws1617.iosl.pubcrawl20.Details.PersonDetailsActivity;
 import com.ws1617.iosl.pubcrawl20.Details.PubDetailsActivity;
@@ -62,8 +63,6 @@ import com.ws1617.iosl.pubcrawl20.R;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
-
-import static com.ws1617.iosl.pubcrawl20.Database.DatabaseHelper.resetWholeDatabase;
 
 /**
  * Created by gaspe on 8. 11. 2016.
@@ -100,7 +99,7 @@ public class DisplayEventsFragment extends Fragment implements OnMapReadyCallbac
         refresh.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                resetWholeDatabase(getContext());
+                new resetDbTask(getContext(), resetDbTask.ALL_DB).execute();
                 getEvents();
             }
         });
@@ -260,7 +259,8 @@ public class DisplayEventsFragment extends Fragment implements OnMapReadyCallbac
         } catch (Exception e) {
             e.printStackTrace();
         }
-        resetWholeDatabase(getContext());
+
+        new resetDbTask(getContext(), resetDbTask.ALL_DB).execute();
     }
 
     private void getEvents () {

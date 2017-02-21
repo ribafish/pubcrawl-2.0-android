@@ -1,5 +1,6 @@
 package com.ws1617.iosl.pubcrawl20.NewEvent;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -18,6 +19,7 @@ import com.ws1617.iosl.pubcrawl20.Database.DatabaseException;
 import com.ws1617.iosl.pubcrawl20.Database.DatabaseHelper;
 import com.ws1617.iosl.pubcrawl20.Database.EventDbHelper;
 import com.ws1617.iosl.pubcrawl20.MainActivity;
+import com.ws1617.iosl.pubcrawl20.Database.resetDbTask;
 import com.ws1617.iosl.pubcrawl20.NewEvent.adapters.NewEventPagerAdapter;
 import com.ws1617.iosl.pubcrawl20.R;
 
@@ -29,7 +31,8 @@ public class NewEventActivity extends AppCompatActivity {
     FloatingActionButton mCreateEventBtn;
     NewEventPagerAdapter mFragmentPagerAdapter;
     private List<Fragment> fragmentsList;
-    final static String TAG = "EVENT_TAG";
+    private Context context;
+    final static String EVENT_TAG = "EVENT_TAG";
 
     Event oldEvent;
     VIEW_MODE currentMode = VIEW_MODE.ADD;
@@ -47,6 +50,7 @@ public class NewEventActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        context = this;
         setContentView(R.layout.activity_new_event);
 
         initFragmentList();
@@ -151,6 +155,7 @@ public class NewEventActivity extends AppCompatActivity {
                 deleteEvent(event);
                 //editEvent(shareEventDialog,event);
             }
+
         }
     }
 
@@ -161,7 +166,7 @@ public class NewEventActivity extends AppCompatActivity {
             @Override
             public void onSuccess() {
                 //refresh the whole DB
-                DatabaseHelper.resetEventsDatabase(getApplicationContext());
+                new resetDbTask(getApplicationContext(), resetDbTask.ALL_DB).execute();
                 shareEventDialog.initQRCodeView(event.getEventName());
             }
 
@@ -181,7 +186,7 @@ public class NewEventActivity extends AppCompatActivity {
             @Override
             public void onSuccess() {
                 //refresh the whole DB
-                DatabaseHelper.resetEventsDatabase(getApplicationContext());
+                new resetDbTask(getApplicationContext(), resetDbTask.ALL_DB).execute();
                 shareEventDialog.initQRCodeView(event.getEventName());
             }
 
@@ -202,7 +207,7 @@ public class NewEventActivity extends AppCompatActivity {
             @Override
             public void onSuccess() {
                 //refresh the whole DB
-                DatabaseHelper.resetEventsDatabase(getApplicationContext());
+                new resetDbTask(getApplicationContext(), resetDbTask.ALL_DB).execute();
                 closeActivity();
             }
 

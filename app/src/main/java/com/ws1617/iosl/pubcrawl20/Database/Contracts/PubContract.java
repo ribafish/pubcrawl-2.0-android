@@ -32,7 +32,7 @@ public class PubContract {
     public static final String EVENT_ID = "event_id";
     public static final String IMAGE = "image";
 
-    public static final String CREATE_PUBS_TABLE = "CREATE TABLE " +
+    public static final String CREATE_PUBS_TABLE = "CREATE TABLE IF NOT EXISTS " +
             TABLE_PUBS + "(" +
             PUB_ID + " INTEGER PRIMARY KEY," +
             PUB_NAME + " TEXT," +
@@ -45,7 +45,7 @@ public class PubContract {
             OWNER + " INTEGER" +
             ")";
 
-    public static final String CREATE_TOP_PERSONS_TABLE = "CREATE TABLE " +
+    public static final String CREATE_TOP_PERSONS_TABLE = "CREATE TABLE IF NOT EXISTS " +
             TABLE_TOP_PERSONS + "(" +
             ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
             PUB_ID + " INTEGER," +
@@ -53,14 +53,14 @@ public class PubContract {
             ITERATOR + " INTEGER" +
             ")";
 
-    public static final String CREATE_PUB_EVENTS_TABLE = "CREATE TABLE " +
+    public static final String CREATE_PUB_EVENTS_TABLE = "CREATE TABLE IF NOT EXISTS " +
             TABLE_PUB_EVENTS + "(" +
             ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
             PUB_ID + " INTEGER," +
             EVENT_ID + " INTEGER" +
             ")";
 
-    public static final String CREATE_PUB_IMAGES_TABLE = "CREATE TABLE " +
+    public static final String CREATE_PUB_IMAGES_TABLE = "CREATE TABLE IF NOT EXISTS " +
             TABLE_PUB_IMAGES + "(" +
             ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
             PUB_ID + " INTEGER," +

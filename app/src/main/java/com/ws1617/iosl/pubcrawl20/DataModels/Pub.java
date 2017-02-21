@@ -16,9 +16,9 @@ public class Pub {
     private long id;
     private String pubName;
     private LatLng latLng;
-    private int size;
-    private int prices;
-    private double rating;
+    private Integer size;
+    private Integer prices;
+    private Double rating;
     private String description;
     private String openingTimes;
     private ArrayList<Long> topsListIds = new ArrayList<>();
@@ -66,7 +66,7 @@ public class Pub {
         return latLng;
     }
 
-    public int getSize() {
+    public Integer getSize() {
         return size;
     }
 
@@ -90,7 +90,7 @@ public class Pub {
         this.id = id;
     }
 
-    public int getPrices() {
+    public Integer getPrices() {
         return prices;
     }
 
@@ -98,7 +98,7 @@ public class Pub {
         this.prices = prices;
     }
 
-    public double getRating() {
+    public Double getRating() {
         return rating;
     }
 

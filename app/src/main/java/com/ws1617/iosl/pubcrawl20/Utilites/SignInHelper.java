@@ -23,6 +23,7 @@ import com.ws1617.iosl.pubcrawl20.Database.DatabaseHelper;
 import com.ws1617.iosl.pubcrawl20.Database.PersonDbHelper;
 import com.ws1617.iosl.pubcrawl20.Database.RequestQueueHelper;
 import com.ws1617.iosl.pubcrawl20.Database.SecureJsonObjectRequest;
+import com.ws1617.iosl.pubcrawl20.Database.resetDbTask;
 import com.ws1617.iosl.pubcrawl20.R;
 import com.ws1617.iosl.pubcrawl20.StartActivity;
 
@@ -34,7 +35,6 @@ import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.ws1617.iosl.pubcrawl20.Database.DatabaseHelper.resetPersonsDatabase;
 import static com.ws1617.iosl.pubcrawl20.Database.JsonParser.EMBEDDED;
 import static com.ws1617.iosl.pubcrawl20.Database.JsonParser.PERSONS;
 import static com.ws1617.iosl.pubcrawl20.Database.JsonParser.PERSON_NAME;
@@ -153,7 +153,7 @@ public class SignInHelper {
         @Override
         public void onResponse(String response) {
           setCrawlerID(acc);
-          resetPersonsDatabase(activity);
+          new resetDbTask(activity, resetDbTask.PERSONS_DB).execute();
           Log.i(TAG, "reset Person database to add crawler " +acc.getId());
           Log.i("VOLLEY", response);
         }

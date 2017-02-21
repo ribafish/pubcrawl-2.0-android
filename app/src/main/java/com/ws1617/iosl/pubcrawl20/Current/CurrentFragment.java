@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.database.sqlite.SQLiteException;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -110,16 +111,18 @@ public class CurrentFragment extends Fragment {
     private void getEvents() {
         events.clear();
         ArrayList<Event> allEvents = new ArrayList<>();
-        PersonDbHelper personDbHelper = new PersonDbHelper();
-        EventDbHelper eventDbHelper = new EventDbHelper();
-        PubDbHelper pubDbHelper = new PubDbHelper();
         try {
-            for (Long eventId : personDbHelper.getEventIds(userId)) {
-                Event event = null;
+            PersonDbHelper personDbHelper = new PersonDbHelper();
+            EventDbHelper eventDbHelper = new EventDbHelper();
+            PubDbHelper pubDbHelper = new PubDbHelper();
+            ArrayList<Long> allEventIds = personDbHelper.getEventIds(userId);
+            for (Long eventId : allEventIds) {
+                Event event;
                 try {
                     event = eventDbHelper.getEvent(eventId);
                 } catch (DatabaseException e) {
                     e.printStackTrace();
+                    continue;
                 }
                 ArrayList<TimeSlot> timeSlots = event.getTimeSlotList();
                 // Check that the event is current or in the future
@@ -148,6 +151,8 @@ public class CurrentFragment extends Fragment {
             }
         } catch (DatabaseException e) {
             e.printStackTrace();
+        } catch (SQLiteException ee) {
+            return;
         }
 
         if (events.size() > 0) {
@@ -173,6 +178,7 @@ public class CurrentFragment extends Fragment {
 
     @Override
     public void onResume() {
+        Log.v(TAG, "onResume");
         super.onResume();
         receiver = new BroadcastReceiver() {
             @Override
@@ -191,6 +197,7 @@ public class CurrentFragment extends Fragment {
                 m.onResume();
             }
         }
+        getEvents();
     }
 
     @Override

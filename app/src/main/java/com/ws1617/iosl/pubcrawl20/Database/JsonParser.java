@@ -74,13 +74,16 @@ public class JsonParser {
     private static final String PUB_LONG = "lng";
     private static final String PUB_DESCRIPTION = "description";
     private static final String PUB_SIZE = "size";
-    private static final String PUB_OPENING_TIME = "closingTime";
+    private static final String PUB_OPENING_TIME = "openingTime";
+    private static final String PUB_CLOSING_TIME = "closingTime";
 
     public static final String PUB = "pub";
     public static final String PUB_OWNER = "pubOwner";
     public static final String PUB_TOP_PERSONS = "topsList";
     public static final String PUB_EVENTS = "eventsList";
     public static final String PUB_IMAGES = "images";
+    public static final String PUB_IMAGE = "pubImage";
+
 
 
     // Person
@@ -96,7 +99,6 @@ public class JsonParser {
     public static final String PERSON_FRIENDS = "friendsList";
     public static final String PERSON_EVENTS = "eventsList";
     public static final String PERSON_FAVOURITE_PUBS = "favourites";
-
 
 
     public static ArrayList<Event> parseJSONResponseEvents (JSONObject response) throws JSONException  {
@@ -222,16 +224,53 @@ public class JsonParser {
     public static Pub parsePubJson (JSONObject jsonPub) throws JSONException {
         Pub pub = new Pub();
 
-        pub.setId(parseIdFromHref(jsonPub.getJSONObject(LINKS).getJSONObject(SELF).getString(HREF)));
+        try {
+            pub.setId(parseIdFromHref(jsonPub.getJSONObject(LINKS).getJSONObject(SELF).getString(HREF)));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         pub.setPubName(jsonPub.getString(PUB_NAME));
-        pub.setPrices(jsonPub.getInt(PUB_PRICES));
-        pub.setRating(jsonPub.getInt(PUB_RATING));
-        pub.setLatLng(new LatLng(
-                jsonPub.getDouble(PUB_LAT),
-                jsonPub.getDouble(PUB_LONG)));
-        pub.setDescription(jsonPub.getString(PUB_DESCRIPTION));
-        pub.setSize(jsonPub.getInt(PUB_SIZE));
-        pub.setOpeningTimes(jsonPub.getString(PUB_OPENING_TIME));
+        try {
+            pub.setPrices(jsonPub.getInt(PUB_PRICES));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        try {
+            pub.setRating(jsonPub.getInt(PUB_RATING));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        try {
+            pub.setLatLng(new LatLng(
+                    jsonPub.getDouble(PUB_LAT),
+                    jsonPub.getDouble(PUB_LONG)));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        try {
+            pub.setDescription(jsonPub.getString(PUB_DESCRIPTION));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        try {
+            pub.setSize(jsonPub.getInt(PUB_SIZE));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        try {
+            String s = jsonPub.getString(PUB_OPENING_TIME) +
+                    " - " +
+                    jsonPub.getString(PUB_CLOSING_TIME);
+            pub.setOpeningTimes(s);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            pub.addImage(decodeBitmapBase64(jsonPub.getString(PUB_IMAGE)));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
         Log.d(TAG, "Parsed Pub: " + pub);
 

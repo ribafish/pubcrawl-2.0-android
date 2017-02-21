@@ -48,6 +48,7 @@ import com.ws1617.iosl.pubcrawl20.Database.PersonDbHelper;
 import com.ws1617.iosl.pubcrawl20.Database.PubDbHelper;
 import com.ws1617.iosl.pubcrawl20.Database.RequestQueueHelper;
 import com.ws1617.iosl.pubcrawl20.NewEvent.NewEventActivity;
+import com.ws1617.iosl.pubcrawl20.Database.resetDbTask;
 import com.ws1617.iosl.pubcrawl20.NewEvent.ShareEventDialog;
 import com.ws1617.iosl.pubcrawl20.R;
 
@@ -156,6 +157,7 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
         };
         IntentFilter filter = new IntentFilter(RequestQueueHelper.BROADCAST_INTENT);
         registerReceiver(receiver, filter);
+        new resetDbTask(this, resetDbTask.ALL_DB).execute();
     }
 
     @Override
@@ -238,7 +240,7 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
                         joinEvent(false);
                         return true;
                     case R.id.event_details_menu_refresh:
-                        DatabaseHelper.resetWholeDatabase(context);
+                        new resetDbTask(context, resetDbTask.ALL_DB).execute();
                         return true;
                     case R.id.event_details_menu_edit:
                         editEvent();
@@ -320,8 +322,12 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
             DatabaseHelper.joinEvent(context, event.getId(), join, new DetailsCallback() {
                 @Override
                 public void onSuccess() {
-                    DatabaseHelper.resetEventsDatabase(context);
-                    DatabaseHelper.resetPersonsDatabase(context);
+                    new resetDbTask(context, resetDbTask.EVENTS_DB + resetDbTask.PERSONS_DB).execute();
+                    String s = "Joined event";
+                    if (!join) s = "Left event";
+                    Toast.makeText(context,
+                            s, Toast.LENGTH_LONG)
+                            .show();
                     updateJoinButtons(join);
                 }
 
@@ -617,9 +623,9 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
             }
         } catch (DatabaseException e) {
             e.printStackTrace();
-            Toast.makeText(getApplicationContext(),
-                    "Can't find data for Event with ID " + id, Toast.LENGTH_LONG)
-                    .show();
+//            Toast.makeText(getApplicationContext(),
+//                    "Can't find data for Event with ID " + id, Toast.LENGTH_LONG)
+//                    .show();
             Log.e(TAG, "getEvent: id " + id + ", event == null");
         }
     }
