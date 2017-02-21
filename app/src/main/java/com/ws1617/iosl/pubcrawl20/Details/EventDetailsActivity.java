@@ -47,6 +47,7 @@ import com.ws1617.iosl.pubcrawl20.Database.EventDbHelper;
 import com.ws1617.iosl.pubcrawl20.Database.PersonDbHelper;
 import com.ws1617.iosl.pubcrawl20.Database.PubDbHelper;
 import com.ws1617.iosl.pubcrawl20.Database.RequestQueueHelper;
+import com.ws1617.iosl.pubcrawl20.Database.resetDbTask;
 import com.ws1617.iosl.pubcrawl20.NewEvent.ShareEventDialog;
 import com.ws1617.iosl.pubcrawl20.R;
 
@@ -156,7 +157,7 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
         };
         IntentFilter filter = new IntentFilter(RequestQueueHelper.BROADCAST_INTENT);
         registerReceiver(receiver, filter);
-        DatabaseHelper.resetWholeDatabase(this);
+        new resetDbTask(this, resetDbTask.ALL_DB).execute();
     }
 
     @Override
@@ -239,7 +240,7 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
                         joinEvent(false);
                         return true;
                     case R.id.event_details_menu_refresh:
-                        DatabaseHelper.resetWholeDatabase(context);
+                        new resetDbTask(context, resetDbTask.ALL_DB).execute();
                         return true;
                     case R.id.event_details_menu_edit:
                         // TODO
@@ -314,8 +315,7 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
             DatabaseHelper.joinEvent(context, event.getId(), join, new DetailsCallback() {
                 @Override
                 public void onSuccess() {
-                    DatabaseHelper.resetEventsDatabase(context);
-                    DatabaseHelper.resetPersonsDatabase(context);
+                    new resetDbTask(context, resetDbTask.EVENTS_DB + resetDbTask.PERSONS_DB).execute();
                     updateJoinButtons(join);
                 }
 

@@ -21,8 +21,8 @@ public class Event {
     private String eventName;
     private Date date;
     private String description;
-    private boolean tracked;
-    private long ownerId;
+    private Boolean tracked;
+    private Long ownerId;
     private Bitmap image;
     private LatLng minLatLng, maxLatLng;
 
@@ -101,7 +101,7 @@ public class Event {
         else return description;
     }
 
-    public boolean isTracked() {
+    public Boolean isTracked() {
         return tracked;
     }
 
@@ -129,7 +129,7 @@ public class Event {
         this.pubIds = pubIds;
     }
 
-    public long getOwnerId() {
+    public Long getOwnerId() {
         return ownerId;
     }
 

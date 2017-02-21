@@ -50,7 +50,6 @@ public class PersonDbHelper {
         db.execSQL(CREATE_PERSON_PUBS_FAVOURITE_TABLE);
         db.execSQL(CREATE_PERSON_OWNED_EVENTS_TABLE);
         db.execSQL(CREATE_PERSON_OWNED_PUBS_TABLE);
-
     }
 
     public static void onUpgrade(SQLiteDatabase db, int i, int i1) {
@@ -71,6 +70,7 @@ public class PersonDbHelper {
 
     public void addPerson(Person person) {
         SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
+        onCreate(db);
         long row_id;
 
         // add to person table
@@ -90,6 +90,7 @@ public class PersonDbHelper {
 
     public void addEventIds(Person person) {
         SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
+        onCreate(db);
         ContentValues values;
         for (long event_id : person.getEventIds()) {
             values = new ContentValues();
@@ -101,6 +102,7 @@ public class PersonDbHelper {
 
     public void addFriendIds(Person person) {
         SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
+        onCreate(db);
         ContentValues values;
         for (long event_id : person.getFriendIds()) {
             values = new ContentValues();
@@ -112,6 +114,7 @@ public class PersonDbHelper {
 
     public void addFavouritePubIds(Person person) {
         SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
+        onCreate(db);
         ContentValues values;
         for (long event_id : person.getFavouritePubIds()) {
             values = new ContentValues();
@@ -123,6 +126,7 @@ public class PersonDbHelper {
 
     public void addOwnedEventIds(Person person) {
         SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
+        onCreate(db);
         ContentValues values;
         for (long event_id : person.getOwnedEventIds()) {
             values = new ContentValues();
@@ -134,6 +138,7 @@ public class PersonDbHelper {
 
     public void addOwnedPubIds(Person person) {
         SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
+        onCreate(db);
         ContentValues values;
         for (long pub_id : person.getOwnedPubIds()) {
             values = new ContentValues();
@@ -145,13 +150,14 @@ public class PersonDbHelper {
 
     public void updatePerson(Person person) {
         SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
+        onCreate(db);
 
         ContentValues values = new ContentValues();
         values.put(PERSON_ID, person.getId());
-        values.put(DESCRIPTION, person.getDescription());
-        values.put(EMAIL, person.getMail());
-        values.put(IMAGE, bitmapToBytes(person.getImage()));
-        values.put(USERNAME, person.getName());
+        if (person.getDescription() != null) values.put(DESCRIPTION, person.getDescription());
+        if (person.getMail() != null) values.put(EMAIL, person.getMail());
+        if (person.getImage() != null) values.put(IMAGE, bitmapToBytes(person.getImage()));
+        if (person.getName() != null) values.put(USERNAME, person.getName());
 
         String selection = PERSON_ID + " =?";
         String[] selectionArgs = {String.valueOf(person.getId())};
@@ -172,6 +178,7 @@ public class PersonDbHelper {
 
     public void deleteLists(Person person) {
         SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
+        onCreate(db);
 
         String selection = PERSON_ID + " =?";
         String[] selectionArgs = {String.valueOf(person.getId())};
@@ -185,6 +192,7 @@ public class PersonDbHelper {
 
     public void deletePerson(Person person) {
         SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
+        onCreate(db);
 
         String selection = PERSON_ID + " =?";
         String[] selectionArgs = {String.valueOf(person.getId())};
@@ -206,6 +214,7 @@ public class PersonDbHelper {
 
     public Person getListlessPerson(long person_id) throws DatabaseException {
         SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
+        onCreate(db);
         Person person = new Person(person_id);
 
         String query = "SELECT * FROM " +
@@ -231,6 +240,7 @@ public class PersonDbHelper {
 
     public ArrayList<Long> getEventIds(long person_id) throws DatabaseException {
         SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
+        onCreate(db);
         ArrayList<Long> list = new ArrayList<>();
 
         String query = "SELECT * FROM " +
@@ -252,6 +262,7 @@ public class PersonDbHelper {
 
     public ArrayList<Long> getFriendIds(long person_id) {
         SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
+        onCreate(db);
         ArrayList<Long> list = new ArrayList<>();
 
         String query = "SELECT * FROM " +
@@ -273,6 +284,7 @@ public class PersonDbHelper {
 
     public ArrayList<Long> getFavouritePubIds(long person_id) {
         SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
+        onCreate(db);
         ArrayList<Long> list = new ArrayList<>();
 
         String query = "SELECT * FROM " +
@@ -294,6 +306,7 @@ public class PersonDbHelper {
 
     public ArrayList<Long> getOwnedEventIds(long person_id) {
         SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
+        onCreate(db);
         ArrayList<Long> list = new ArrayList<>();
 
         String query = "SELECT * FROM " +
@@ -315,6 +328,7 @@ public class PersonDbHelper {
 
     public ArrayList<Long> getOwnedPubIds(long person_id) {
         SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
+        onCreate(db);
         ArrayList<Long> list = new ArrayList<>();
 
         String query = "SELECT * FROM " +
@@ -337,6 +351,7 @@ public class PersonDbHelper {
     public List<Person> getAllPersons() {
 
         SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
+        onCreate(db);
         ArrayList<Person> list = new ArrayList<>();
 
         String query = "SELECT " + PERSON_ID + " FROM " +

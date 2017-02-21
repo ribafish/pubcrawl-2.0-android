@@ -33,6 +33,7 @@ import com.ws1617.iosl.pubcrawl20.DataModels.Event;
 import com.ws1617.iosl.pubcrawl20.Database.DatabaseException;
 import com.ws1617.iosl.pubcrawl20.Database.DatabaseHelper;
 import com.ws1617.iosl.pubcrawl20.Database.EventDbHelper;
+import com.ws1617.iosl.pubcrawl20.Database.resetDbTask;
 import com.ws1617.iosl.pubcrawl20.Details.EventDetailsActivity;
 import com.ws1617.iosl.pubcrawl20.Details.PubDetailsActivity;
 import com.ws1617.iosl.pubcrawl20.NewEvent.NewEventActivity;
@@ -71,7 +72,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         @Override
         public void run() {
             try {
-                DatabaseHelper.resetWholeDatabase(context);
+                new resetDbTask(context, resetDbTask.ALL_DB).execute();
             } catch (Exception e) {
                 e.printStackTrace();
             } finally {
@@ -183,7 +184,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         fabRefresh.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DatabaseHelper.resetWholeDatabase(context);
+                new resetDbTask(context, resetDbTask.ALL_DB).execute();
                 fabMenu.close(true);
             }
         });

@@ -35,7 +35,7 @@ public class EventContract {
 
     public static final String ID = "_id";
 
-    public static final String CREATE_EVENTS_TABLE = "CREATE TABLE " +
+    public static final String CREATE_EVENTS_TABLE = "CREATE TABLE IF NOT EXISTS " +
             TABLE_EVENTS + "(" +
             EVENT_ID + " INTEGER PRIMARY KEY," +
             EVENT_NAME + " TEXT," +
@@ -50,7 +50,7 @@ public class EventContract {
             LONG_MAX + " REAL" +
             ")";
 
-    public static final String CREATE_TIMESLOTS_TABLE = "CREATE TABLE " +
+    public static final String CREATE_TIMESLOTS_TABLE = "CREATE TABLE IF NOT EXISTS " +
             TABLE_EVENT_TIMESLOTS + "(" +
             ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + 
             EVENT_ID + " INTEGER," +
@@ -59,14 +59,14 @@ public class EventContract {
             END_TIME + " INTEGER" +         // epoch time in ms
             ")";
 
-    public static final String CREATE_PARTICIPANTS_TABLE = "CREATE TABLE " +
+    public static final String CREATE_PARTICIPANTS_TABLE = "CREATE TABLE IF NOT EXISTS " +
             TABLE_EVENT_PARTICIPANTS + "(" +
             ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
             EVENT_ID + " INTEGER," +
             PARTICIPANT_ID + " INTEGER" +
             ")";
 
-    public static final String CREATE_PUBS_TABLE = "CREATE TABLE " +
+    public static final String CREATE_PUBS_TABLE = "CREATE TABLE IF NOT EXISTS " +
             TABLE_EVENT_PUBS + "(" +
             ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
             EVENT_ID + " INTEGER," +
