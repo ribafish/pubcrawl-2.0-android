@@ -180,12 +180,12 @@ public class DatabaseHelper {
 
 
 
-    public static void deleteEvent(final Context context, final Event event,
+    public static void deleteEvent(final Context context, final long eventID,
                                    final NewEventActivity.EventCreation eventCreation) {
         final RequestQueueHelper requestQueue = new RequestQueueHelper(context);
         final String url;
         try {
-            url = getServerUrl(context) + EVENTS +"/"+ event.getId();
+            url = getServerUrl(context) + EVENTS +"/"+ eventID;
         } catch (StringIndexOutOfBoundsException e) {
             Log.e(TAG, e.getLocalizedMessage());
             return;
