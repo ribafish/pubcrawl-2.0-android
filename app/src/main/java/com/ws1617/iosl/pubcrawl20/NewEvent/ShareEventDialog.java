@@ -45,6 +45,7 @@ public class ShareEventDialog extends DialogFragment {
 
     boolean isDialog = false;
     boolean showCodeWhenReady = false;
+    boolean showShare = false;
     String eventName;
 
     public static ShareEventDialog newInstance() {
@@ -95,6 +96,7 @@ public class ShareEventDialog extends DialogFragment {
 
         if (getDialog() != null) {
             getDialog().setCanceledOnTouchOutside(false);
+            showShare = true;
             getDialog().setOnKeyListener(new DialogInterface.OnKeyListener()
             {
                 @Override
@@ -111,11 +113,19 @@ public class ShareEventDialog extends DialogFragment {
                     else return false;
                 }
             });
+            return super.onCreateView(inflater, container, savedInstanceState);
         }
-        return super.onCreateView(inflater, container, savedInstanceState);
+
+        rootView = LayoutInflater.from(getActivity()).inflate(R.layout.view_invite_dialog
+                , null);
+        closeBtn = (Button) rootView.findViewById(R.id.invite_dialog_pub_done);
+        closeBtn.setVisibility(View.GONE);
+        shareBtn = (Button) rootView.findViewById(R.id.invite_dialog_share);
+
+        inProcessView = (LinearLayout) rootView.findViewById(R.id.spinner_placeholder);
+        qrCodeView = (LinearLayout) rootView.findViewById(R.id.qrcode_placeholder);
+        return rootView;
     }
-
-
 
     public void showCodeWhenReady(String eventName) {
         showCodeWhenReady = true;
@@ -131,13 +141,12 @@ public class ShareEventDialog extends DialogFragment {
             initQRCodeView(eventName);
             showCodeWhenReady = false;
         }
-
     }
 
     public void initQRCodeView(final String event_name) {
 
 
-        shareBtn.setVisibility(View.VISIBLE);
+        shareBtn.setVisibility(showShare ? View.VISIBLE: View.INVISIBLE);
         shareBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
