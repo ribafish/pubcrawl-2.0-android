@@ -141,6 +141,7 @@
                 android:layout_marginTop="8dp"
                 app:cardElevation="8dp"
                 android:id="@+id/person_details.description.card"
+                android:visibility="gone"
                 >
 
                 <RelativeLayout
