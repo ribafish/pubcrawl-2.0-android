@@ -92,7 +92,8 @@
                 android:resource="@xml/searchable" />
         </activity>
 
-        <activity android:name=".Details.EventDetailsActivity">
+        <activity android:name=".Details.EventDetailsActivity"
+                  android:parentActivityName=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -105,7 +106,9 @@
                     android:scheme="http" />
             </intent-filter>
         </activity>
-        <activity android:name=".Details.PubDetailsActivity">
+        <activity android:name=".Details.PubDetailsActivity"
+                  android:parentActivityName=".MainActivity">
+
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -118,7 +121,7 @@
                     android:scheme="http" />
             </intent-filter>
         </activity>
-        <activity android:name=".Details.PersonDetailsActivity" />
+        <activity android:name=".Details.PersonDetailsActivity"/>
     </application>
 
 </manifest>
