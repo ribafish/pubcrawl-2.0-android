@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -99,7 +100,8 @@ public class PersonDetailsActivity extends AppCompatActivity implements AppBarLa
         context = this;
 
         long id = getIntent().getLongExtra("id", -1);
-        loggedInUser = getIntent().getBooleanExtra("user", false);
+        SharedPreferences sharedPref = context.getSharedPreferences(context.getString(R.string.preference_user), Context.MODE_PRIVATE);
+        loggedInUser = id == sharedPref.getLong(context.getString(R.string.user_id), -2);
 
         setContentView(loggedInUser ? R.layout.activity_own_person_details : R.layout.activity_person_details);
 
