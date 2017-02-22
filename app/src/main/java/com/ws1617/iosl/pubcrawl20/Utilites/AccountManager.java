@@ -17,6 +17,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.ws1617.iosl.pubcrawl20.App;
 import com.ws1617.iosl.pubcrawl20.Database.DatabaseHelper;
 import com.ws1617.iosl.pubcrawl20.Database.RequestQueueHelper;
+import com.ws1617.iosl.pubcrawl20.Database.resetDbTask;
 import com.ws1617.iosl.pubcrawl20.R;
 
 import org.json.JSONArray;
@@ -27,7 +28,6 @@ import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.ws1617.iosl.pubcrawl20.Database.DatabaseHelper.resetPersonsDatabase;
 import static com.ws1617.iosl.pubcrawl20.Database.JsonParser.EMBEDDED;
 import static com.ws1617.iosl.pubcrawl20.Database.JsonParser.PERSONS;
 import static com.ws1617.iosl.pubcrawl20.Database.JsonParser.PERSON_NAME;
@@ -39,7 +39,7 @@ import static com.ws1617.iosl.pubcrawl20.Database.JsonParser.PERSON_PROFILE;
  * Created by phahne on 20.02.2017.
  */
 
-public class AccountManager {
+public class AccountManager implements resetDbTask.IResetDb{
 
 	private static final String TAG = "AccountManager";
 	private final IAccManager manager;
@@ -87,7 +87,7 @@ public class AccountManager {
 				@Override
 				public void onErrorResponse(VolleyError error) {
 					// error
-					Log.d("Error.Response", error.getMessage());
+					Log.d(TAG, error.getMessage() == null ? "Error receiving acces token" : error.getMessage());
 				}
 			}
 		) {
@@ -142,12 +142,16 @@ public class AccountManager {
 	 */
 	private void handleResponse(JSONObject json, GoogleSignInAccount acc, boolean newCrawler) {
 		try {
+			final AccountManager am = this;
 			JSONArray crawlersJSON = json.getJSONObject(EMBEDDED).getJSONArray(PERSONS);
 			for (int i = 0; i < crawlersJSON.length(); i++) {
 				JSONObject jsonCrawler = crawlersJSON.getJSONObject(i);
 				if(jsonCrawler.getString(PERSON_PROFILE).equals(acc.getId())) {
 					if(setCrawlerInApp(jsonCrawler)) {
-						if(newCrawler) resetPersonsDatabase(context);
+						if(newCrawler) {
+							new resetDbTask(am, resetDbTask.PERSONS_DB).execute();
+							return;
+						}
 						manager.loginFinished();
 					}
 					else {
@@ -246,7 +250,7 @@ public class AccountManager {
 				new Response.Listener<JSONObject>() {
 					@Override
 					public void onResponse(JSONObject response) {
-						resetPersonsDatabase(context);
+						new resetDbTask(context, resetDbTask.PERSONS_DB).execute();
 						Log.i(TAG, "deleted crawler: " +id);
 					}
 				},
@@ -268,6 +272,22 @@ public class AccountManager {
 		} catch (Exception e) {
 			Log.e(TAG, "eventsRequest error: " + e.getLocalizedMessage());
 		}
+	}
+
+	@Override
+	public void onResetFinished() {
+		manager.loginFinished();
+		Log.i(TAG, "Updated Database");
+	}
+
+	@Override
+	public void onResetError() {
+		Log.d(TAG, "Failed to update Database");
+	}
+
+	@Override
+	public Context getContext() {
+		return context;
 	}
 
 	/**

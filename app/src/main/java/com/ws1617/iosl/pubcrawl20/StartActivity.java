@@ -1,9 +1,12 @@
 package com.ws1617.iosl.pubcrawl20;
 
+import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -33,6 +36,7 @@ public class StartActivity extends AppCompatActivity implements
 
 	private static final String TAG = "StartActivity";
 	private static final int RC_SIGN_IN = 9008;
+	private boolean logout;
 
 	private GoogleApiClient mGoogleApiClient;
 	private ProgressDialog mProgressDialog;
@@ -43,6 +47,12 @@ public class StartActivity extends AppCompatActivity implements
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_sign_in);
+
+		logout = getIntent().getBooleanExtra("logout", false);
+
+		if (Build.VERSION.SDK_INT >= 23) {
+			ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
+		}
 
 		// Button listeners
 		signInButton = (SignInButton) findViewById(R.id.sign_in_button);
@@ -57,6 +67,7 @@ public class StartActivity extends AppCompatActivity implements
 		GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
 			.requestScopes(new Scope(Scopes.DRIVE_APPFOLDER))
 			.requestServerAuthCode(serverClientId, false)
+			.requestEmail()
 			.build();
 		// [END configure_signin]
 
@@ -124,12 +135,15 @@ public class StartActivity extends AppCompatActivity implements
 		Log.d(TAG, "handleSignInResult:" + result.isSuccess());
 		if (result.isSuccess()) {
 			// Signed in successfully, show authenticated UI.
-			GoogleSignInAccount acc = result.getSignInAccount();
-			AccountManager accountManager = new AccountManager(this,acc);
-			accountManager.startLogin();
-			showProgressDialog();
-			//accountManager.deleteCrawler(25);
-			//accountManager.deleteCrawler(26);
+			if(logout) signOut();
+			else {
+				GoogleSignInAccount acc = result.getSignInAccount();
+				AccountManager accountManager = new AccountManager(this, acc);
+				accountManager.startLogin();
+				showProgressDialog();
+				//accountManager.deleteCrawler(25);
+				//accountManager.deleteCrawler(26);
+			}
 		} else {
 			hideProgressDialog();
 			showLogin();
@@ -170,7 +184,9 @@ public class StartActivity extends AppCompatActivity implements
 				@Override
 				public void onResult(Status status) {
 					// [START_EXCLUDE]
-					showError();
+					if(status.isSuccess())
+						showLogin();
+					else showError();
 					// [END_EXCLUDE]
 				}
 			});
@@ -179,8 +195,8 @@ public class StartActivity extends AppCompatActivity implements
 
 	private void showError() {
 		hideProgressDialog();
-		textViewFailed.setVisibility(View.VISIBLE);
-		signInButton.setVisibility(View.GONE);
+		showLoginView(false);
+		logout = false;
 	}
 
 	private void showProgressDialog() {
@@ -211,6 +227,9 @@ public class StartActivity extends AppCompatActivity implements
 	}
 
 	public void showApp() {
+		/**
+		 * Check for Location permissions
+		 */
 		Intent intent = new Intent(this, MainActivity.class);
 		this.startActivity(intent);
 		hideProgressDialog();
@@ -218,8 +237,22 @@ public class StartActivity extends AppCompatActivity implements
 	}
 
 	private void showLogin() {
+		showLoginView(true);
+		logout = false;
+	}
+
+	private void showLoginView(boolean show) {
 		hideProgressDialog();
-		signInButton.setVisibility(View.VISIBLE);
+		textViewFailed.setVisibility(show ? View.INVISIBLE :View.VISIBLE);
+		signInButton.setVisibility(show ? View.VISIBLE : View.INVISIBLE);
+	}
+
+	@Override
+	public void onBackPressed() {
+		Intent intent = new Intent(Intent.ACTION_MAIN);
+		intent.addCategory(Intent.CATEGORY_HOME);
+		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		startActivity(intent);
 	}
 
 	@Override

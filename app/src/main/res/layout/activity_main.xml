@@ -47,19 +47,6 @@
         android:layout_gravity="end|bottom"
         android:layout_margin="@dimen/fab_margin">
 
-        <com.github.clans.fab.FloatingActionButton
-            android:id="@+id/main_fab_menu_refresh"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            fab:fab_size="mini"
-            fab:fab_label="@string/refresh" />
-
-        <com.github.clans.fab.FloatingActionButton
-            android:id="@+id/main_fab_menu_settings"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            fab:fab_size="mini"
-            fab:fab_label="@string/settings" />
 
         <com.github.clans.fab.FloatingActionButton
             android:id="@+id/main_fab_menu_create_event"
@@ -74,13 +61,6 @@
             android:layout_height="wrap_content"
             fab:fab_size="mini"
             fab:fab_label="@string/scan_qr" />
-
-        <com.github.clans.fab.FloatingActionButton
-            android:id="@+id/main_fab_menu_search"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            fab:fab_size="mini"
-            fab:fab_label="@string/search" />
 
     </com.github.clans.fab.FloatingActionMenu>
 

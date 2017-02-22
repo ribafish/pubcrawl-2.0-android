@@ -14,18 +14,12 @@ import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
-import android.support.annotation.NonNull;
-import android.support.v7.app.ActionBar;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.RingtonePreference;
-import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
-import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.support.v4.app.NavUtils;
-import android.view.View;
-import android.view.ViewGroup;
+import android.text.TextUtils;
+import android.view.MenuItem;
 
 import com.ws1617.iosl.pubcrawl20.Database.resetDbTask;
 import com.ws1617.iosl.pubcrawl20.Details.PersonDetailsActivity;
@@ -172,6 +166,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                 long id = sharedPref.getLong(getString(R.string.user_id), -1);
                 Intent intent = new Intent(this, PersonDetailsActivity.class);
                 intent.putExtra("id", id);
+                intent.putExtra("user", true);
                 h.intent = intent;
             }
         }

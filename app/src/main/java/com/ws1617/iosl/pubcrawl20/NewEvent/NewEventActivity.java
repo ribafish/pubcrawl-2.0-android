@@ -2,20 +2,18 @@ package com.ws1617.iosl.pubcrawl20.NewEvent;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Toast;
 
 import com.ws1617.iosl.pubcrawl20.DataModels.Event;
-import com.ws1617.iosl.pubcrawl20.Database.DatabaseException;
 import com.ws1617.iosl.pubcrawl20.Database.DatabaseHelper;
-import com.ws1617.iosl.pubcrawl20.Database.PersonDbHelper;
 import com.ws1617.iosl.pubcrawl20.Database.resetDbTask;
 import com.ws1617.iosl.pubcrawl20.NewEvent.adapters.NewEventPagerAdapter;
 import com.ws1617.iosl.pubcrawl20.R;
