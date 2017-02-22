@@ -101,7 +101,7 @@
                 style="@style/Widget.AppCompat.Button.Borderless.Colored"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="11:00" />
+                android:text="00:00" />
         </LinearLayout>
 
         <LinearLayout
@@ -124,7 +124,7 @@
                 style="@style/Widget.AppCompat.Button.Borderless.Colored"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="12:00" />
+                android:text="00:00" />
         </LinearLayout>
 
         <Button

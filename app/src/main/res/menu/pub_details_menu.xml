@@ -4,7 +4,7 @@
     <item
         android:id="@+id/pub_details.menu.add"
         android:icon="@drawable/ic_favorite_border_black_24dp"
-        android:visible="true"
+        android:visible="false"
         app:showAsAction="always"
         android:title="@string/favourite"/>
 

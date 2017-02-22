@@ -3,6 +3,7 @@ package com.ws1617.iosl.pubcrawl20.NewEvent;
 
 import android.app.DatePickerDialog;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.SwitchCompat;
 import android.view.LayoutInflater;
@@ -31,7 +32,6 @@ public class NewEventGeneralFragment extends Fragment {
     SwitchCompat mTrackedSwitch;
     Event mEventPublicInfo;
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_new_event_generals, container, false);
@@ -40,15 +40,32 @@ public class NewEventGeneralFragment extends Fragment {
         return rootView;
     }
 
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        if (oldEvent != null) {
+            mEventTitleTxt.setText(oldEvent.getEventName());
+            mEventDescription.setText(oldEvent.getDescription());
+            datePickerButton.setText(oldEvent.getShortDate());
+        }
+    }
 
     public void initView() {
         mEventTitleTxt = (EditText) rootView.findViewById(R.id.event_new_title);
         mEventDescription = (EditText) rootView.findViewById(R.id.event_new_description);
-        mTrackedSwitch = (SwitchCompat) rootView.findViewById(R.id.event_new_tracked);
         datePickerButton = (Button) rootView.findViewById(R.id.event_new_date_picker);
         datePickerButton.setOnClickListener(datePickerEventListener);
         datePickerButton.setText(DateTimeTools.getCurrentDate());
 
+    }
+
+
+
+    Event oldEvent;
+
+    public void setOldEvent(Event oldEvent) {
+        this.oldEvent = oldEvent;
     }
 
     View.OnClickListener datePickerEventListener = new View.OnClickListener() {
@@ -77,7 +94,7 @@ public class NewEventGeneralFragment extends Fragment {
         super.onSaveInstanceState(outState);
     }
 
-    public Event updateGeneralInfo(Event event) {
+    public Event collectGeneralInfo(Event event) {
 
         String eventTitle = mEventTitleTxt.getText().toString().trim();
         String eventDesc = mEventDescription.getText().toString();
@@ -91,12 +108,10 @@ public class NewEventGeneralFragment extends Fragment {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        boolean tracked = mTrackedSwitch.isChecked() ? true : false;
 
         event.setDate(date);
         event.setEventName(eventTitle);
         event.setDescription(eventDesc);
-        event.setTracked(tracked);
         return event;
     }
 }

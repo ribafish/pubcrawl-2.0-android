@@ -113,6 +113,7 @@
                     android:id="@+id/person_details.layout.add_button"
                     app:srcCompat="@drawable/ic_person_add_black_24dp"
                     android:tint="@android:color/white"
+                    android:visibility="gone"
                     />
 
             </LinearLayout>
@@ -142,6 +143,7 @@
                 android:layout_marginTop="8dp"
                 app:cardElevation="8dp"
                 android:id="@+id/person_details.description.card"
+                android:visibility="gone"
                 >
 
                 <RelativeLayout

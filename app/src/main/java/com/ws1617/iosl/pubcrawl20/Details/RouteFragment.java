@@ -116,15 +116,12 @@ public class RouteFragment extends DialogFragment implements NewEventRouteFragme
     }
 
 
-    private void addPub(PubMiniModel pub) {
+    @Override
+    public void onNewValues() {
         adapter.notifyDataSetChanged();
         refreshMap();
     }
 
-    @Override
-    public void onNewPub(PubMiniModel pub) {
-        addPub(pub);
-    }
 
     // initViews
     private void initMapView() {
@@ -173,7 +170,7 @@ public class RouteFragment extends DialogFragment implements NewEventRouteFragme
         @Override
         public void addPubToList(PubMiniModel newPub) {
             mSelectedPupsList.add(newPub);
-            onNewPub(newPub);
+            onNewValues();
         }
     };
 

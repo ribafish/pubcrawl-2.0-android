@@ -92,8 +92,7 @@ public class DatabaseHelper {
         downloadEvents(context);
     }
 
-
-    private static JSONObject prepareEventObj(Event event,Context context) {
+    private static JSONObject prepareEventObj(Event event, Context context, Long currentUserID) {
         JSONObject object = new JSONObject();
         try {
             object.put("eventName", event.getEventName());
@@ -106,17 +105,18 @@ public class DatabaseHelper {
             object.put("tracked", false);
             object.put("eventImage", null);
             object.put("timeslotList", timeSlotToJsonArray(event.getTimeSlotList()));
-            object.put("pubsList", pubLinksToJsonArray(event.getPubIds(),context));
+            object.put("pubsList", pubLinksToJsonArray(event.getPubIds(), context));
+           if(currentUserID != null) object.put("eventOwner", "https://vm-74243.lal.in2p3.fr:8443/crawlers/" + currentUserID);
         } catch (JSONException e) {
             e.printStackTrace();
         }
         return object;
     }
 
-    private static JSONArray pubLinksToJsonArray(ArrayList<Long> PubIds,Context context) {
+    private static JSONArray pubLinksToJsonArray(ArrayList<Long> PubIds, Context context) {
         JSONArray pubsList = new JSONArray();
         for (Long id : PubIds) {
-            String link = getServerUrl(context)+PUBS +"/"+id;
+            String link = getServerUrl(context) + PUBS + "/" + id;
             pubsList.put(link);
         }
         return pubsList;
@@ -143,6 +143,65 @@ public class DatabaseHelper {
         }
     }
 
+    public static void updateEvent(final Context context, final Event event,
+                                final NewEventActivity.EventCreation eventCreation) {
+        final RequestQueueHelper requestQueue = new RequestQueueHelper(context);
+        final String url;
+        try {
+            url = getServerUrl(context) + EVENTS + "/" +event.getId();
+        } catch (StringIndexOutOfBoundsException e) {
+            Log.e(TAG, e.getLocalizedMessage());
+            return;
+        }
+
+       //owner wont be changed
+         JSONObject object = prepareEventObj(event, context, null);
+
+        EmptyJsonObjectRequest jsonObjectRequest = new EmptyJsonObjectRequest(Request.Method.PUT, url,
+                object, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                eventCreation.onSuccess();
+                //patchPubsListToEvent(context,event,eventCreation);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                onLocalErrorResponse(error, eventCreation);
+            }
+        });
+        requestQueue.add(jsonObjectRequest);
+    }
+
+
+
+
+    public static void deleteEvent(final Context context, final long eventID,
+                                   final NewEventActivity.EventCreation eventCreation) {
+        final RequestQueueHelper requestQueue = new RequestQueueHelper(context);
+        final String url;
+        try {
+            url = getServerUrl(context) + EVENTS +"/"+ eventID;
+        } catch (StringIndexOutOfBoundsException e) {
+            Log.e(TAG, e.getLocalizedMessage());
+            return;
+        }
+        EmptyJsonObjectRequest jsonObjectRequest = new EmptyJsonObjectRequest(Request.Method.DELETE, url,
+                 null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                eventCreation.onSuccess();
+                //patchPubsListToEvent(context,event,eventCreation);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                onLocalErrorResponse(error, eventCreation);
+            }
+        });
+        requestQueue.add(jsonObjectRequest);
+    }
+
     public static void addEvent(final Context context, final Event event,
                                 final NewEventActivity.EventCreation eventCreation) {
         final RequestQueueHelper requestQueue = new RequestQueueHelper(context);
@@ -153,7 +212,14 @@ public class DatabaseHelper {
             Log.e(TAG, e.getLocalizedMessage());
             return;
         }
-        JSONObject object = prepareEventObj(event,context);
+
+        SharedPreferences sharedPref = context.getSharedPreferences(context.getString(R.string.preference_user), Context.MODE_PRIVATE);
+        long currentUserID = sharedPref.getLong(context.getString(R.string.user_id), -1);
+        if (currentUserID == -1) {
+            eventCreation.onFail();
+            return;
+        }
+        JSONObject object = prepareEventObj(event, context, currentUserID);
 
         EmptyJsonObjectRequest jsonObjectRequest = new EmptyJsonObjectRequest(Request.Method.POST, url,
                 object, new Response.Listener<JSONObject>() {
@@ -171,70 +237,7 @@ public class DatabaseHelper {
         requestQueue.add(jsonObjectRequest);
     }
 
-    public static void patchPubsListToEvent(Context context, Event event, final NewEventActivity.EventCreation eventCreation) {
-        final RequestQueueHelper requestQueue = new RequestQueueHelper(context);
-        final String url;
-        try {
-            url = getServerUrl(context) + EVENTS + "/" + event.getId() + "/" + "pubsList";
-        } catch (StringIndexOutOfBoundsException e) {
-            Log.e(TAG, e.getLocalizedMessage());
-            return;
-        }
-        JSONObject mainObject = preparePubsListObje(event);
 
-        EmptyJsonObjectRequest jsonObjectRequest = new EmptyJsonObjectRequest(Request.Method.PATCH, url,
-                mainObject, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                eventCreation.onSuccess();
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                onLocalErrorResponse(error, eventCreation);
-            }
-        });
-        requestQueue.add(jsonObjectRequest);
-    }
-
-
-    private static JSONObject preparePubsListObje(Event event) {
-        JSONObject mainObject = new JSONObject();
-        try {
-            JSONArray pubsJsonArray = new JSONArray();
-            List<Long> pubsListID = event.getPubIds();
-            for (Long pubID : pubsListID) {
-                PubDbHelper pubDbHelper = new PubDbHelper();
-                try {
-                    Pub pub = pubDbHelper.getPub(pubID);
-                    JSONObject pubJsonObj = new JSONObject();
-                    pubJsonObj.put("pubName", pub.getPubName());
-                    pubJsonObj.put("pubImage", pub.getImages());
-                    pubJsonObj.put("price", pub.getPrices());
-                    pubJsonObj.put("rating", pub.getRating());
-                    pubJsonObj.put("lat", pub.getLatLng().latitude);
-                    pubJsonObj.put("lng", pub.getLatLng().longitude);
-                    pubJsonObj.put("description", pub.getDescription());
-                    pubJsonObj.put("adress", "null");
-                    pubJsonObj.put("size", pub.getSize());
-                    pubJsonObj.put("closingTime", "null");
-                    pubJsonObj.put("openingTime", "null");
-
-                  /*  pubJsonObj.put("_links", pub.getRating());*/
-
-                    pubsJsonArray.put(pubJsonObj);
-                } catch (DatabaseException e) {
-                    e.printStackTrace();
-                }
-            }
-            JSONObject embeddedObj = new JSONObject();
-            embeddedObj.put("pubs", pubsJsonArray);
-            mainObject.put("_embedded", embeddedObj);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return mainObject;
-    }
 
     public static JSONArray timeSlotToJsonArray(List<TimeSlot> timeSlotList) {
         JSONArray timeSlot = new JSONArray();
@@ -841,8 +844,8 @@ public class DatabaseHelper {
                 public void onResponse(JSONObject response) {
                     JSONArray jsonEvents;
                     try {
-                        jsonEvents  = response.getJSONObject(EMBEDDED).getJSONArray(EVENTS);
-                        for (int i=0;i<jsonEvents.length(); i++) {
+                        jsonEvents = response.getJSONObject(EMBEDDED).getJSONArray(EVENTS);
+                        for (int i = 0; i < jsonEvents.length(); i++) {
                             try {
                                 JSONObject event = jsonEvents.getJSONObject(i);
                                 JSONObject jsonLinks = event.getJSONObject(LINKS);
@@ -861,17 +864,17 @@ public class DatabaseHelper {
                             eventsListToJson(context, events), new Response.Listener<JSONObject>() {
                         @Override
                         public void onResponse(JSONObject response) {
-                                    detailsCallback.onSuccess();
-                                }
-                            }, new Response.ErrorListener() {
-                                @Override
-                                public void onErrorResponse(VolleyError error) {
-                                    detailsCallback.onFail();
-                                    Log.e(TAG, "JoinEvent:onErrorResponse: " + error.toString());
-                                    error.printStackTrace();
-                                }
-                            });
-                            requestQueue.add(jsonObjectRequest);
+                            detailsCallback.onSuccess();
+                        }
+                    }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            detailsCallback.onFail();
+                            Log.e(TAG, "JoinEvent:onErrorResponse: " + error.toString());
+                            error.printStackTrace();
+                        }
+                    });
+                    requestQueue.add(jsonObjectRequest);
                 }
             }, new Response.ErrorListener() {
                 @Override
@@ -886,7 +889,71 @@ public class DatabaseHelper {
 
     }
 
-    private static JSONObject eventsListToJson (Context context, ArrayList<Long> events) {
+
+    public void addEventOwner(final Context context, final long eventId, final NewEventActivity.SetOwner setOwnerInterface) {
+        SharedPreferences sharedPref = context.getSharedPreferences(context.getString(R.string.preference_user), Context.MODE_PRIVATE);
+        long id = sharedPref.getLong(context.getString(R.string.user_id), -1);
+        if (id == -1) {
+            setOwnerInterface.onFail();
+            return;
+        }
+        final RequestQueueHelper requestQueue = new RequestQueueHelper(context);
+        final String url;
+        try {
+            //url = getServerUrl(context) + PERSONS + "/" + id + "/" + PERSON_OWNED_EVENTS;
+            url = getServerUrl(context) + EVENTS + "/" + eventId + "/" + EVENT_OWNER;
+        } catch (StringIndexOutOfBoundsException e) {
+            Log.e(TAG, e.getLocalizedMessage());
+            setOwnerInterface.onFail();
+            return;
+        }
+
+        JSONObject obj = prepareEventOwner(eventId);
+
+        JsonObjectRequest jsonObjectRequest = new EmptyJsonObjectRequest(Request.Method.PUT, url,
+                obj, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                setOwnerInterface.onSuccess();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                setOwnerInterface.onFail();
+                error.printStackTrace();
+            }
+        });
+        requestQueue.add(jsonObjectRequest);
+
+
+    }
+
+    private JSONObject prepareEventOwner(long eventid) {
+        JSONObject jsonObject = new JSONObject();
+
+        try {
+            jsonObject.put("", "https://vm-74243.lal.in2p3.fr:8443/crawlers/13");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+
+        /*
+        JSONArray jsonArray = new JSONArray();
+        jsonArray.put(eventid);
+
+
+        try {
+            jsonObject.put("events",jsonArray);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+*/
+        return jsonObject;
+
+    }
+
+    private static JSONObject eventsListToJson(Context context, ArrayList<Long> events) {
         JSONObject object = new JSONObject();
         try {
             JSONArray items = new JSONArray();
@@ -894,7 +961,7 @@ public class DatabaseHelper {
                 String link = getServerUrl(context) + EVENTS + "/" + id;
                 JSONObject o = new JSONObject();
                 try {
-                    o.put("href" , link);
+                    o.put("href", link);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -908,5 +975,6 @@ public class DatabaseHelper {
         }
         return object;
     }
+
 
 }

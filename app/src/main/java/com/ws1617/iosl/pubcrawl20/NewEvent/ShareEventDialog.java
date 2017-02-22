@@ -2,6 +2,7 @@ package com.ws1617.iosl.pubcrawl20.NewEvent;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -17,7 +18,11 @@ import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
+import com.ws1617.iosl.pubcrawl20.Database.resetDbTask;
+import com.ws1617.iosl.pubcrawl20.MainActivity;
 import com.ws1617.iosl.pubcrawl20.R;
+
+import java.lang.reflect.Array;
 
 import static android.graphics.Color.BLACK;
 import static android.graphics.Color.WHITE;
@@ -59,7 +64,9 @@ public class ShareEventDialog extends DialogFragment {
         closeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                getActivity().onBackPressed();
+               // new resetDbTask(getContext(), resetDbTask.EVENTS_DB).execute();
+                Intent intent = new Intent(getActivity(), MainActivity.class);
+                startActivity(intent);
             }
         });
         alertDialog.setView(rootView);
