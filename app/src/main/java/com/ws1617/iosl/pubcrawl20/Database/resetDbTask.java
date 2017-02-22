@@ -17,14 +17,50 @@ public class resetDbTask extends AsyncTask<Void, Void, Void> {
     private Context context;
     private ProgressDialog pd;
     private int which = 0;
+    private IResetDb caller;
     public static final int EVENTS_DB = 0x01;
     public static final int PUBS_DB = 0x02;
     public static final int PERSONS_DB = 0x04;
     public static final int ALL_DB = 0x07;
 
+    public interface IResetDb {
+
+        void onResetFinished();
+        void onResetError();
+        Context getContext();
+    }
+
+    private class DatabaseDummy implements IResetDb {
+
+        private Context context;
+
+        DatabaseDummy(Context context) {  this.context = context; }
+
+        @Override
+        public void onResetFinished() {
+        }
+
+        @Override
+        public void onResetError() {
+        }
+
+        @Override
+        public Context getContext() {
+            return context;
+        }
+    }
+
+    public resetDbTask(IResetDb caller, int which) {
+        super();
+        this.caller = caller;
+        this.context = caller.getContext();
+        this.which = which;
+    }
+
     public resetDbTask(Context context, int which) {
         super();
-        this.context = context;
+        this.caller = new DatabaseDummy(context);
+        this.context = caller.getContext();
         this.which = which;
     }
 
@@ -64,7 +100,9 @@ public class resetDbTask extends AsyncTask<Void, Void, Void> {
         super.onPostExecute(aVoid);
         try {
             pd.dismiss();
+            caller.onResetFinished();
         } catch (Exception e) {
+            caller.onResetError();
             e.printStackTrace();
         }
     }

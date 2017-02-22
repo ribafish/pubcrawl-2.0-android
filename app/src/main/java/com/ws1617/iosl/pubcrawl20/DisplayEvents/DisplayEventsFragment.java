@@ -9,11 +9,9 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -28,11 +26,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -193,8 +188,11 @@ public class DisplayEventsFragment extends Fragment implements OnMapReadyCallbac
     public void onMapReady(GoogleMap googleMap) {
         map = googleMap;
         eventAdapter.setMap(map);
-
-        LatLng startpos = new LatLng(52.525387, 13.38595);
+        LatLng startpos;
+        try {
+            startpos = new LatLng(MainActivity.getLocation().getLatitude(), MainActivity.getLocation().getLongitude());
+        }
+        catch(NullPointerException e) { startpos = new LatLng(52.525387, 13.38595); }
 //        map.addMarker(new MarkerOptions().position(tub).title("TUB - TEL"));
 
         map.moveCamera(CameraUpdateFactory.newCameraPosition(new CameraPosition.Builder().target(startpos).zoom(13).build()));

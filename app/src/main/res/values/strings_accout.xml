@@ -4,4 +4,6 @@
 
     <string name="loading">Loading</string>
     <string name="url">https://vm-74243.lal.in2p3.fr:8443/</string>
+    <string name="alert_logout_title">Log out?</string>
+    <string name="logout">Log out</string>
 </resources>

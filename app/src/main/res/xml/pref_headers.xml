@@ -6,11 +6,6 @@
             android:fragment="com.ws1617.iosl.pubcrawl20.SettingsActivity$GeneralPreferenceFragment"
             android:icon="@drawable/ic_info_black_24dp"
             android:title="@string/pref_header_general" />
-
-        <header
-            android:fragment="com.ws1617.iosl.pubcrawl20.SettingsActivity$CameraPreferenceFragment"
-            android:icon="@drawable/ic_camera_alt_black_24dp"
-            android:title="@string/pref_header_camera"/>
             -->
     <header
         android:id="@+id/pref_header_my_profile"
@@ -27,6 +22,11 @@
         android:fragment="com.ws1617.iosl.pubcrawl20.SettingsActivity$DataSyncPreferenceFragment"
         android:icon="@drawable/ic_sync_black_24dp"
         android:title="@string/pref_header_data_sync" />
+
+    <header
+        android:fragment="com.ws1617.iosl.pubcrawl20.SettingsActivity$CameraPreferenceFragment"
+        android:icon="@drawable/ic_camera_alt_black_24dp"
+        android:title="@string/pref_header_camera"/>
 
     <header
         android:fragment="com.ws1617.iosl.pubcrawl20.SettingsActivity$DevelopmentFragment"

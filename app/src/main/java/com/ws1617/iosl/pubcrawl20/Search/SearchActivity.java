@@ -3,7 +3,6 @@ package com.ws1617.iosl.pubcrawl20.Search;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -15,7 +14,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.ws1617.iosl.pubcrawl20.R;
@@ -26,7 +24,7 @@ import com.ws1617.iosl.pubcrawl20.R;
 
 public class SearchActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
 
-    static String TAG = SearchActivity.class.getName().toString();
+    static String TAG = SearchActivity.class.getName();
 
 
     RecyclerView.LayoutManager eventLayoutManager;

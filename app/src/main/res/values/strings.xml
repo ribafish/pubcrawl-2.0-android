@@ -167,4 +167,8 @@
     <string name="find_events">Find events</string>
     <string name="refresh">Refresh</string>
     <string name="my_profile">My profile</string>
+    <string name="error_creating_acc">Error creating account!</string>
+    <string name="login_failed">Login failed, please try again later</string>
+    <string name="alert_logout_text">Do you really want to log out</string>
+    <string name="search_event">Search Event</string>
 </resources>

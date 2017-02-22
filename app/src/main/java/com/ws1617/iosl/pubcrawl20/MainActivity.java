@@ -19,11 +19,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatDrawableManager;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
 import com.github.clans.fab.FloatingActionButton;
-import com.github.clans.fab.FloatingActionMenu;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -31,7 +33,6 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.vision.barcode.Barcode;
 import com.ws1617.iosl.pubcrawl20.DataModels.Event;
 import com.ws1617.iosl.pubcrawl20.Database.DatabaseException;
-import com.ws1617.iosl.pubcrawl20.Database.DatabaseHelper;
 import com.ws1617.iosl.pubcrawl20.Database.EventDbHelper;
 import com.ws1617.iosl.pubcrawl20.Database.resetDbTask;
 import com.ws1617.iosl.pubcrawl20.Details.EventDetailsActivity;
@@ -41,7 +42,6 @@ import com.ws1617.iosl.pubcrawl20.ScanQR.BarcodeCaptureActivity;
 import com.ws1617.iosl.pubcrawl20.ScanQR.QRScannerDialog;
 import com.ws1617.iosl.pubcrawl20.Search.SearchActivity;
 
-import java.lang.reflect.Array;
 import java.util.List;
 
 import static com.ws1617.iosl.pubcrawl20.NewEvent.ShareEventDialog.mBarcodeData;
@@ -98,28 +98,20 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         setContentView(R.layout.activity_main);
         context = this;
 
-        /**
-         * Check for Location permissions
-         */
-        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
-        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, 2);
-
+        Toolbar toolbar = (Toolbar) findViewById(R.id.main_toolbar);
+        setSupportActionBar(toolbar);
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+          && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             // Create an instance of GoogleAPIClient.
             if (mGoogleApiClient == null) {
                 mGoogleApiClient = new GoogleApiClient.Builder(this)
-                        .addConnectionCallbacks(this)
-                        .addOnConnectionFailedListener(this)
-                        .addApi(LocationServices.API)
-                        .build();
+                  .addConnectionCallbacks(this)
+                  .addOnConnectionFailedListener(this)
+                  .addApi(LocationServices.API)
+                  .build();
             }
         }
-
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.main_toolbar);
-        setSupportActionBar(toolbar);
 
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
@@ -133,66 +125,27 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
 
-        /**Set images for Floating Buttons in Fragment to support Floating Button Vector Drawables for pre Lollipop Devices
-         * see https://github.com/Clans/FloatingActionButton/issues/273 **/
-        final FloatingActionMenu fabMenu = (FloatingActionMenu) findViewById(R.id.fab_menu);
-        FloatingActionButton fabSettings = (FloatingActionButton) findViewById(R.id.main_fab_menu_settings);
-        fabSettings.setImageDrawable(AppCompatDrawableManager.get().getDrawable(this, R.drawable.ic_settings));
         FloatingActionButton fabNewEvent = (FloatingActionButton) findViewById(R.id.main_fab_menu_create_event);
         fabNewEvent.setImageDrawable(AppCompatDrawableManager.get().getDrawable(this, R.drawable.ic_action_beer_plus_white));
-        FloatingActionButton fabScanQR = (FloatingActionButton) findViewById(R.id.main_fab_menu_qr_scan);
-        fabScanQR.setImageDrawable(AppCompatDrawableManager.get().getDrawable(this, R.drawable.qrcode));
-        FloatingActionButton fabSearch = (FloatingActionButton) findViewById(R.id.main_fab_menu_search);
-        fabSearch.setImageDrawable(AppCompatDrawableManager.get().getDrawable(this, R.drawable.ic_search_24dp));
-        FloatingActionButton fabRefresh = (FloatingActionButton) findViewById(R.id.main_fab_menu_refresh);
-        fabRefresh.setImageResource(R.drawable.ic_sync_24dp);
-
-        fabSettings.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(context, SettingsActivity.class);
-                context.startActivity(intent);
-                fabMenu.close(false);
-            }
-        });
 
         fabNewEvent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(context, NewEventActivity.class);
                 context.startActivity(intent);
-                fabMenu.close(false);
-            }
-        });
-
-        fabSearch.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(context, SearchActivity.class);
-                context.startActivity(intent);
-                fabMenu.close(false);
-            }
-        });
-
-        fabScanQR.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startQrScan();
-                fabMenu.close(true);
-            }
-        });
-        fabRefresh.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                new resetDbTask(context, resetDbTask.ALL_DB).execute();
-                fabMenu.close(true);
             }
         });
 
         handler = new Handler();
 
         setTab(1);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main_menu, menu);
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
@@ -217,7 +170,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             finish();
         _mBackTime = tm;
         Toast.makeText(this, R.string.App_Exit, Toast.LENGTH_SHORT).show();
-        return;
     }
 
     public void startQrScan() {
@@ -259,11 +211,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         }
     }
 
-
-    public interface ResetDataDone {
-        void onResetDone();
-    }
-
     private void prepareSharedEvent(final Barcode barcode) {
         try {
             List<Event> eventsList = new EventDbHelper().getAllEvents();
@@ -297,8 +244,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             qrScannerDialog.initNotFoundLayout(true);
 
         }
-
-
     }
 
     @Override
@@ -339,5 +284,31 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
     public void setTab(int num) {
         mViewPager.setCurrentItem(num);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_settings:
+                Intent intentSettings = new Intent(context, SettingsActivity.class);
+                context.startActivity(intentSettings);
+                return true;
+
+            case R.id.action_refresh:
+                new resetDbTask(this, resetDbTask.ALL_DB).execute();
+                return true;
+            case R.id.action_search:
+                Intent intentSearch = new Intent(context, SearchActivity.class);
+                context.startActivity(intentSearch);
+                return true;
+            case  R.id.action_qrcode:
+                startQrScan();
+                return true;
+            default:
+                // If we got here, the user's action was not recognized.
+                // Invoke the superclass to handle it.
+                return super.onOptionsItemSelected(item);
+
+        }
     }
 }

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -35,13 +36,13 @@ import android.widget.Toast;
 
 import com.ws1617.iosl.pubcrawl20.DataModels.Person;
 import com.ws1617.iosl.pubcrawl20.Database.DatabaseException;
-import com.ws1617.iosl.pubcrawl20.Database.DatabaseHelper;
 import com.ws1617.iosl.pubcrawl20.Database.EventDbHelper;
 import com.ws1617.iosl.pubcrawl20.Database.PersonDbHelper;
 import com.ws1617.iosl.pubcrawl20.Database.PubDbHelper;
 import com.ws1617.iosl.pubcrawl20.Database.RequestQueueHelper;
 import com.ws1617.iosl.pubcrawl20.Database.resetDbTask;
 import com.ws1617.iosl.pubcrawl20.R;
+import com.ws1617.iosl.pubcrawl20.StartActivity;
 
 import java.util.ArrayList;
 
@@ -55,6 +56,7 @@ public class PersonDetailsActivity extends AppCompatActivity implements AppBarLa
 
     private boolean mIsTheTitleVisible          = false;
     private boolean mIsTheTitleContainerVisible = true;
+    private boolean loggedInUser = false;
 
     private LinearLayout mCollapasableTitleContainer;
     private TextView mTitle;
@@ -94,10 +96,14 @@ public class PersonDetailsActivity extends AppCompatActivity implements AppBarLa
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_person_details);
+
         context = this;
 
         long id = getIntent().getLongExtra("id", -1);
+        SharedPreferences sharedPref = context.getSharedPreferences(context.getString(R.string.preference_user), Context.MODE_PRIVATE);
+        loggedInUser = id == sharedPref.getLong(context.getString(R.string.user_id), -2);
+
+        setContentView(loggedInUser ? R.layout.activity_own_person_details : R.layout.activity_person_details);
 
         getPerson(id);
 
@@ -520,18 +526,56 @@ public class PersonDetailsActivity extends AppCompatActivity implements AppBarLa
                 return true;
             }
         });
-        ImageView appBarAddButton = (ImageView) findViewById(R.id.person_details_layout_add_button);
-        appBarAddButton.setClickable(true);
-        appBarAddButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(mToolbar.getMenu().findItem(R.id.person_details_menu_add).isVisible()) {
-                    addFriend(true);
-                } else {
-                    addFriend(false);
+
+        if(loggedInUser) {
+            ImageView appBarLogoutButton = (ImageView) findViewById(R.id.person_details_layout_logout_button);
+            appBarLogoutButton.setClickable(true);
+            appBarLogoutButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    logout();
                 }
-            }
-        });
+            });
+        }
+        else {
+            ImageView appBarAddButton = (ImageView) findViewById(R.id.person_details_layout_add_button);
+            appBarAddButton.setClickable(true);
+            appBarAddButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    addFriend(mToolbar.getMenu().findItem(R.id.person_details_menu_add).isVisible());
+                }
+            });
+        }
+    }
+
+    private void logout() {
+        AlertDialog dialog = new AlertDialog.Builder(this).create();
+        dialog.setTitle(getString(R.string.alert_logout_title));
+        dialog.setButton(AlertDialog.BUTTON_NEGATIVE,
+          getString(R.string.cancel),
+          new DialogInterface.OnClickListener() {
+              @Override
+              public void onClick(DialogInterface dialogInterface, int i) {
+                  dialogInterface.dismiss();
+              }
+          });
+        dialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.logout),
+          new DialogInterface.OnClickListener() {
+              @Override
+              public void onClick(DialogInterface dialogInterface, int i) {
+                  showStartActivity();
+                  dialogInterface.dismiss();
+              }
+          });
+        dialog.show();
+    }
+
+    private void showStartActivity() {
+        Intent intent = new Intent(this, StartActivity.class);
+        intent.putExtra("logout", true);
+        this.startActivity(intent);
+        finish();
     }
 
     public void addFriend(boolean add) {

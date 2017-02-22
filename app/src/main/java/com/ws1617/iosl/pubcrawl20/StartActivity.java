@@ -1,11 +1,16 @@
 package com.ws1617.iosl.pubcrawl20;
 
+import android.Manifest;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -18,7 +23,8 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.OptionalPendingResult;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Scope;
-import com.ws1617.iosl.pubcrawl20.Utilites.SignInHelper;
+import com.google.android.gms.common.api.Status;
+import com.ws1617.iosl.pubcrawl20.Utilites.AccountManager;
 
 
 /**
@@ -26,21 +32,33 @@ import com.ws1617.iosl.pubcrawl20.Utilites.SignInHelper;
  */
 public class StartActivity extends AppCompatActivity implements
 	GoogleApiClient.OnConnectionFailedListener,
-	View.OnClickListener {
+	View.OnClickListener, AccountManager.IAccManager {
 
 	private static final String TAG = "StartActivity";
 	private static final int RC_SIGN_IN = 9008;
+	private boolean logout;
 
 	private GoogleApiClient mGoogleApiClient;
 	private ProgressDialog mProgressDialog;
+	private SignInButton signInButton;
+	private TextView textViewFailed;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_sign_in);
 
+		logout = getIntent().getBooleanExtra("logout", false);
+
+		if (Build.VERSION.SDK_INT >= 23) {
+			ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
+		}
+
 		// Button listeners
-		findViewById(R.id.sign_in_button).setOnClickListener(this);
+		signInButton = (SignInButton) findViewById(R.id.sign_in_button);
+		signInButton.setOnClickListener(this);
+
+		textViewFailed = (TextView) findViewById(R.id.textViewFailed);
 
 		// [START configure_signin]
 		// Configure sign-in to request the user's ID, email address, and basic
@@ -49,6 +67,7 @@ public class StartActivity extends AppCompatActivity implements
 		GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
 			.requestScopes(new Scope(Scopes.DRIVE_APPFOLDER))
 			.requestServerAuthCode(serverClientId, false)
+			.requestEmail()
 			.build();
 		// [END configure_signin]
 
@@ -104,6 +123,7 @@ public class StartActivity extends AppCompatActivity implements
 				GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
 				handleSignInResult(result);
 			} else {
+				showError();
 				Log.d(TAG, "Result from on activity result is not ok " + resultCode);
 			}
 		}
@@ -115,11 +135,18 @@ public class StartActivity extends AppCompatActivity implements
 		Log.d(TAG, "handleSignInResult:" + result.isSuccess());
 		if (result.isSuccess()) {
 			// Signed in successfully, show authenticated UI.
-			GoogleSignInAccount acct = result.getSignInAccount();
-			SignInHelper signIn = new SignInHelper(this);
-			signIn.getToken(acct);
+			if(logout) signOut();
+			else {
+				GoogleSignInAccount acc = result.getSignInAccount();
+				AccountManager accountManager = new AccountManager(this, acc);
+				accountManager.startLogin();
+				showProgressDialog();
+				//accountManager.deleteCrawler(25);
+				//accountManager.deleteCrawler(26);
+			}
 		} else {
 			hideProgressDialog();
+			showLogin();
 			// Signed out, show unauthenticated UI.
 			Log.d(TAG, "No signin found!");
 		}
@@ -128,8 +155,17 @@ public class StartActivity extends AppCompatActivity implements
 
 	// [START signIn]
 	private void signIn() {
-		Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
-		startActivityForResult(signInIntent, RC_SIGN_IN);
+		Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
+			new ResultCallback<Status>() {
+				@Override
+				public void onResult(Status status) {
+					// [START_EXCLUDE]
+					Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
+					startActivityForResult(signInIntent, RC_SIGN_IN);
+					// [END_EXCLUDE]
+				}
+			});
+
 	}
 	// [END signIn]
 
@@ -137,7 +173,30 @@ public class StartActivity extends AppCompatActivity implements
 	public void onConnectionFailed(ConnectionResult connectionResult) {
 		// An unresolvable error has occurred and Google APIs (including Sign-In) will not
 		// be available.
+		showError();
 		Log.d(TAG, "onConnectionFailed:" + connectionResult);
+	}
+
+	// [START signOut]
+	public void signOut() {
+		Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
+			new ResultCallback<Status>() {
+				@Override
+				public void onResult(Status status) {
+					// [START_EXCLUDE]
+					if(status.isSuccess())
+						showLogin();
+					else showError();
+					// [END_EXCLUDE]
+				}
+			});
+	}
+	// [END signOut]
+
+	private void showError() {
+		hideProgressDialog();
+		showLoginView(false);
+		logout = false;
 	}
 
 	private void showProgressDialog() {
@@ -146,7 +205,6 @@ public class StartActivity extends AppCompatActivity implements
 			mProgressDialog.setMessage(getString(R.string.loading));
 			mProgressDialog.setIndeterminate(true);
 		}
-
 		mProgressDialog.show();
 	}
 
@@ -169,12 +227,33 @@ public class StartActivity extends AppCompatActivity implements
 	}
 
 	public void showApp() {
+		/**
+		 * Check for Location permissions
+		 */
 		Intent intent = new Intent(this, MainActivity.class);
 		this.startActivity(intent);
+		hideProgressDialog();
 		finish();
 	}
 
+	private void showLogin() {
+		showLoginView(true);
+		logout = false;
+	}
 
+	private void showLoginView(boolean show) {
+		hideProgressDialog();
+		textViewFailed.setVisibility(show ? View.INVISIBLE :View.VISIBLE);
+		signInButton.setVisibility(show ? View.VISIBLE : View.INVISIBLE);
+	}
+
+	@Override
+	public void onBackPressed() {
+		Intent intent = new Intent(Intent.ACTION_MAIN);
+		intent.addCategory(Intent.CATEGORY_HOME);
+		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		startActivity(intent);
+	}
 
 	@Override
 	protected void onPause() {
@@ -190,5 +269,25 @@ public class StartActivity extends AppCompatActivity implements
 	public void onClick(View v) {
 		if(v.getId() == R.id.sign_in_button)
 			signIn();
+	}
+
+	@Override
+	public Context getContext() {
+		return this;
+	}
+
+	@Override
+	public void loginFinished() {
+		showApp();
+	}
+
+	@Override
+	public void loginFailed() {
+		showLogin();
+	}
+
+	@Override
+	public void loginError() {
+		showError();
 	}
 }

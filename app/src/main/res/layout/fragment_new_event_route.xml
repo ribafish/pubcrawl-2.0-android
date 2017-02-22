@@ -4,7 +4,7 @@
 
     <RelativeLayout xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:background="@color/background_grey_50"
         android:orientation="vertical"
         android:padding="10dp"
@@ -14,7 +14,7 @@
             android:id="@+id/event_new_selected_pub_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"></FrameLayout>
+            android:layout_marginTop="8dp"/>
 
         <Button
             android:id="@+id/event_new_add_pub"
