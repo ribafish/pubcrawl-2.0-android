@@ -5,7 +5,7 @@ android {
         config {
             keyAlias 'pubcrawl'
             keyPassword 'pubcrawl'
-            storeFile file('D:/Dropbox/FAKS/Erasmus/IoSL/pubcrawl_2_0/pubcrawl-2.0-android/app/keystore.jks')
+            storeFile file('D:/TU_Berlin/Iosl/Android/pubcrawl-2.0-android/app/keystore.jks')
             storePassword 'iosl2017'
         }
     }
