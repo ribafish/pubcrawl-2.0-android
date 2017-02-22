@@ -27,6 +27,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
@@ -34,6 +35,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.ws1617.iosl.pubcrawl20.DataModels.Pub;
 import com.ws1617.iosl.pubcrawl20.DataModels.PubMiniModel;
+import com.ws1617.iosl.pubcrawl20.MainActivity;
 import com.ws1617.iosl.pubcrawl20.NewEvent.NewEventRouteFragment;
 import com.ws1617.iosl.pubcrawl20.NewEvent.SelectPubDialog;
 import com.ws1617.iosl.pubcrawl20.NewEvent.adapters.SelectedPupListAdapter;
@@ -188,6 +190,14 @@ public class RouteFragment extends DialogFragment implements NewEventRouteFragme
                 .scrollGesturesEnabled(false)
                 .zoomGesturesEnabled(true)
                 .liteMode(true);
+        LatLng startpos;
+        try {
+            startpos = new LatLng(MainActivity.getLocation().getLatitude(), MainActivity.getLocation().getLongitude());
+        }
+        catch(NullPointerException e) { startpos = new LatLng(52.525387, 13.38595); }
+//        map.addMarker(new MarkerOptions().position(tub).title("TUB - TEL"));
+
+        map.moveCamera(CameraUpdateFactory.newCameraPosition(new CameraPosition.Builder().target(startpos).zoom(13).build()));
         mapFragment = SupportMapFragment.newInstance(options);
         FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
         fragmentTransaction.add(R.id.route_fragment_map, mapFragment).commit();
