@@ -49,6 +49,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
         android:layout_gravity="end|bottom"
+        android:visibility="gone"
         fab:fab_label="@string/new_event" />
 
 

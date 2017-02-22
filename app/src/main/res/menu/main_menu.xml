@@ -3,9 +3,9 @@
       xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/action_qrcode"
-        android:icon="@drawable/qrcode"
-        android:title="@string/refresh"
+        android:id="@+id/action_search"
+        android:icon="@drawable/ic_search_24dp"
+        android:title="@string/search"
         app:showAsAction="ifRoom"/>
 
     <item
@@ -15,9 +15,14 @@
         app:showAsAction="ifRoom"/>
 
     <item
-        android:id="@+id/action_search"
-        android:icon="@drawable/ic_search_24dp"
-        android:title="@string/search"
+        android:id="@+id/action_qrcode"
+        android:icon="@drawable/qrcode"
+        android:title="@string/scan_qr"
+        app:showAsAction="ifRoom"/>
+
+    <item android:id="@+id/action_new_event"
+        android:icon="@drawable/ic_action_beer_plus_white"
+        android:title="@string/new_event"
         app:showAsAction="ifRoom"/>
 
     <!-- Settings, should always be in the overflow -->

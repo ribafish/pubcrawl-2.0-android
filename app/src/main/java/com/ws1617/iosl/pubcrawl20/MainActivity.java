@@ -304,6 +304,10 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             case  R.id.action_qrcode:
                 startQrScan();
                 return true;
+            case R.id.action_new_event:
+                Intent intent = new Intent(context, NewEventActivity.class);
+                context.startActivity(intent);
+                return true;
             default:
                 // If we got here, the user's action was not recognized.
                 // Invoke the superclass to handle it.
