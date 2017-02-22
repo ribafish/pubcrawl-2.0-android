@@ -218,7 +218,7 @@ public class EventDetailsActivity extends AppCompatActivity implements AppBarLay
             }
         });
 
-        images.add(BitmapFactory.decodeResource(getResources(), R.mipmap.bestpub));
+        images.add(BitmapFactory.decodeResource(getResources(), R.mipmap.lights));
         imageCarouselPager = new ImageCarouselPager(this, images);
         viewPager.setAdapter(imageCarouselPager);
         viewPager.setOffscreenPageLimit(2);
