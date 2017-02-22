@@ -9,20 +9,20 @@
         app:showAsAction="ifRoom"/>
 
     <item
-        android:id="@+id/action_refresh"
-        android:icon="@drawable/ic_sync_24dp"
-        android:title="@string/refresh"
-        app:showAsAction="ifRoom"/>
-
-    <item
         android:id="@+id/action_qrcode"
         android:icon="@drawable/qrcode"
         android:title="@string/scan_qr"
         app:showAsAction="ifRoom"/>
 
     <item android:id="@+id/action_new_event"
-        android:icon="@drawable/ic_action_beer_plus_white"
-        android:title="@string/new_event"
+          android:icon="@drawable/ic_action_beer_plus_white"
+          android:title="@string/new_event"
+          app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/action_refresh"
+        android:icon="@drawable/ic_sync_24dp"
+        android:title="@string/refresh"
         app:showAsAction="ifRoom"/>
 
     <!-- Settings, should always be in the overflow -->

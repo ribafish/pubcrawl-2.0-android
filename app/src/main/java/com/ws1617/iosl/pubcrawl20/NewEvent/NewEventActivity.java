@@ -204,6 +204,11 @@ public class NewEventActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onBackPressed() {
+        finish();
+    }
+
     private void deleteEvent() {
         DatabaseHelper.deleteEvent(this, oldEvent.getId(), new EventCreation() {
             @Override

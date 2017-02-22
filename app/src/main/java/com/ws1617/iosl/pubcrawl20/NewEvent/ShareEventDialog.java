@@ -2,6 +2,8 @@ package com.ws1617.iosl.pubcrawl20.NewEvent;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -18,11 +20,7 @@ import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
-import com.ws1617.iosl.pubcrawl20.Database.resetDbTask;
-import com.ws1617.iosl.pubcrawl20.MainActivity;
 import com.ws1617.iosl.pubcrawl20.R;
-
-import java.lang.reflect.Array;
 
 import static android.graphics.Color.BLACK;
 import static android.graphics.Color.WHITE;
@@ -38,12 +36,16 @@ public class ShareEventDialog extends DialogFragment {
     ImageView mQrCodeImg;
     View rootView;
     Button closeBtn;
+    Button shareBtn;
+
     public static String mBarcodeData = "/event/";
 
     LinearLayout inProcessView;
     LinearLayout qrCodeView;
 
     boolean isDialog = false;
+    boolean showCodeWhenReady = false;
+    String eventName;
 
     public static ShareEventDialog newInstance() {
         Bundle args = new Bundle();
@@ -65,10 +67,10 @@ public class ShareEventDialog extends DialogFragment {
             @Override
             public void onClick(View view) {
                // new resetDbTask(getContext(), resetDbTask.EVENTS_DB).execute();
-                Intent intent = new Intent(getActivity(), MainActivity.class);
-                startActivity(intent);
+                closeDialog();
             }
         });
+        shareBtn = (Button) rootView.findViewById(R.id.invite_dialog_share);
         alertDialog.setView(rootView);
 
         inProcessView = (LinearLayout) rootView.findViewById(R.id.spinner_placeholder);
@@ -78,29 +80,42 @@ public class ShareEventDialog extends DialogFragment {
         return alertDialog.create();
     }
 
+    private void closeDialog() {
+        getActivity().onBackPressed();
+    }
+
+    private String getShareText(String name) {
+        return "Enjoy a nice pubcrawl! Just click the link: " +"pubcrawl.de/event/"+ name;
+    }
+
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        if (isDialog) {
-            isDialog = false;
-            return super.onCreateView(inflater, container, savedInstanceState);
+        if (getDialog() != null) {
+            getDialog().setCanceledOnTouchOutside(false);
+            getDialog().setOnKeyListener(new DialogInterface.OnKeyListener()
+            {
+                @Override
+                public boolean onKey(android.content.DialogInterface dialog,
+                                     int keyCode,android.view.KeyEvent event)
+                {
+                    if ((keyCode ==  android.view.KeyEvent.KEYCODE_BACK))
+                    {
+                        // To dismiss the fragment when the back-button is pressed.
+                        closeDialog();
+                        return true;
+                    }
+                    // Otherwise, do nothing else
+                    else return false;
+                }
+            });
         }
-
-        rootView = LayoutInflater.from(getActivity()).inflate(R.layout.view_invite_dialog
-                , null);
-        closeBtn = (Button) rootView.findViewById(R.id.invite_dialog_pub_done);
-       closeBtn.setVisibility(View.GONE);
-
-        inProcessView = (LinearLayout) rootView.findViewById(R.id.spinner_placeholder);
-        qrCodeView = (LinearLayout) rootView.findViewById(R.id.qrcode_placeholder);
-        return rootView;
-
+        return super.onCreateView(inflater, container, savedInstanceState);
     }
 
-    boolean showCodeWhenReady = false;
-    String eventName;
+
 
     public void showCodeWhenReady(String eventName) {
         showCodeWhenReady = true;
@@ -119,8 +134,20 @@ public class ShareEventDialog extends DialogFragment {
 
     }
 
-    public void initQRCodeView(String event_name) {
+    public void initQRCodeView(final String event_name) {
 
+
+        shareBtn.setVisibility(View.VISIBLE);
+        shareBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent sendIntent = new Intent();
+                sendIntent.setAction(Intent.ACTION_SEND);
+                sendIntent.putExtra(Intent.EXTRA_TEXT, getShareText(event_name));
+                sendIntent.setType("text/plain");
+                startActivity(Intent.createChooser(sendIntent, "Share event with"));
+            }
+        });
         inProcessView.setVisibility(View.GONE);
         qrCodeView.setVisibility(View.VISIBLE);
 
@@ -140,7 +167,6 @@ public class ShareEventDialog extends DialogFragment {
         inProcessView.setVisibility(View.VISIBLE);
         qrCodeView.setVisibility(View.GONE);
     }
-
 
     Bitmap encodeAsBitmap(String str) throws WriterException {
         BitMatrix result;
