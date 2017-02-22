@@ -40,28 +40,16 @@
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
-    <com.github.clans.fab.FloatingActionMenu
-        android:id="@+id/fab_menu"
+
+    <com.github.clans.fab.FloatingActionButton
+        android:id="@+id/main_fab_menu_create_event"
+        fab:fab_colorNormal="@color/colorAccent"
+        fab:fab_colorPressed="@color/colorPressed"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_margin="10dp"
         android:layout_gravity="end|bottom"
-        android:layout_margin="@dimen/fab_margin">
+        fab:fab_label="@string/new_event" />
 
-
-        <com.github.clans.fab.FloatingActionButton
-            android:id="@+id/main_fab_menu_create_event"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            fab:fab_size="mini"
-            fab:fab_label="@string/new_event" />
-
-        <com.github.clans.fab.FloatingActionButton
-            android:id="@+id/main_fab_menu_qr_scan"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            fab:fab_size="mini"
-            fab:fab_label="@string/scan_qr" />
-
-    </com.github.clans.fab.FloatingActionMenu>
 
 </android.support.design.widget.CoordinatorLayout>

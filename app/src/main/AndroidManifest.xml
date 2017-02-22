@@ -106,8 +106,7 @@
                     android:scheme="http" />
             </intent-filter>
         </activity>
-        <activity android:name=".Details.PubDetailsActivity"
-                  android:parentActivityName=".MainActivity">
+        <activity android:name=".Details.PubDetailsActivity">
 
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />

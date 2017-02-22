@@ -26,7 +26,6 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.github.clans.fab.FloatingActionButton;
-import com.github.clans.fab.FloatingActionMenu;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -126,30 +125,17 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
 
-        /**Set images for Floating Buttons in Fragment to support Floating Button Vector Drawables for pre Lollipop Devices
-         * see https://github.com/Clans/FloatingActionButton/issues/273 **/
-        final FloatingActionMenu fabMenu = (FloatingActionMenu) findViewById(R.id.fab_menu);
         FloatingActionButton fabNewEvent = (FloatingActionButton) findViewById(R.id.main_fab_menu_create_event);
         fabNewEvent.setImageDrawable(AppCompatDrawableManager.get().getDrawable(this, R.drawable.ic_action_beer_plus_white));
-        FloatingActionButton fabScanQR = (FloatingActionButton) findViewById(R.id.main_fab_menu_qr_scan);
-        fabScanQR.setImageDrawable(AppCompatDrawableManager.get().getDrawable(this, R.drawable.qrcode));
 
         fabNewEvent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(context, NewEventActivity.class);
                 context.startActivity(intent);
-                fabMenu.close(false);
             }
         });
 
-        fabScanQR.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startQrScan();
-                fabMenu.close(true);
-            }
-        });
         handler = new Handler();
 
         setTab(1);
@@ -184,7 +170,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             finish();
         _mBackTime = tm;
         Toast.makeText(this, R.string.App_Exit, Toast.LENGTH_SHORT).show();
-        return;
     }
 
     public void startQrScan() {
@@ -315,6 +300,9 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             case R.id.action_search:
                 Intent intentSearch = new Intent(context, SearchActivity.class);
                 context.startActivity(intentSearch);
+                return true;
+            case  R.id.action_qrcode:
+                startQrScan();
                 return true;
             default:
                 // If we got here, the user's action was not recognized.

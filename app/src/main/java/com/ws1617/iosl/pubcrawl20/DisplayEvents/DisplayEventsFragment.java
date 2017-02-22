@@ -188,8 +188,11 @@ public class DisplayEventsFragment extends Fragment implements OnMapReadyCallbac
     public void onMapReady(GoogleMap googleMap) {
         map = googleMap;
         eventAdapter.setMap(map);
-
-        LatLng startpos = new LatLng(52.525387, 13.38595);
+        LatLng startpos;
+        try {
+            startpos = new LatLng(MainActivity.getLocation().getLatitude(), MainActivity.getLocation().getLongitude());
+        }
+        catch(NullPointerException e) { startpos = new LatLng(52.525387, 13.38595); }
 //        map.addMarker(new MarkerOptions().position(tub).title("TUB - TEL"));
 
         map.moveCamera(CameraUpdateFactory.newCameraPosition(new CameraPosition.Builder().target(startpos).zoom(13).build()));
